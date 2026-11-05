@@ -164,22 +164,22 @@ function Exam(root,opt={}){
     let h=`<div class="ex-pick">`+Object.entries(EXAMS).map(([k,x])=>{
       const H=hist(k),last=H[H.length-1],best=H.reduce((m,r)=>Math.max(m,pct(r.right,r.n)),0),st=streak(k);
       return`<div class="ex-card" style="--c:${x.c}"><span class="ui-eyebrow" style="--c:${x.c}">${x.short}</span><h3>${x.name}</h3>
-        <div class="big">${x.n}<small>questions</small></div><p>${x.desc}</p>
+        <div class="big">${x.n}<small>questions</small></div>
         <div class="row"><span>Last <b>${last?pct(last.right,last.n)+'%':'—'}</b></span><span>Best <b>${H.length?best+'%':'—'}</b></span><span>Attempts <b>${H.length}</b></span></div>
         <div class="row" style="align-items:center"><span class="ex-streak">${[0,1,2].map(i=>`<i class="${i<st?'on':''}"></i>`).join('')}</span><span>${st>=3?'<b class="ex-pass">Passed</b>':`≥80% streak: <b>${Math.min(st,3)}/3</b>`}</span></div>
         <button type="button" class="ui-btn primary" data-begin="${k}" style="${k!=='all'?`background:${x.c};border-color:${x.c}`:''}">Start · ${x.n} questions</button></div>`;}).join('')+`</div>
       <div class="ui-card" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:14px">
-        <div><b>Mistakes exam</b><div class="ui-note">Up to 50 questions taken from the list you are getting wrong (${nWrong} questions). Not graded for passing, review only.</div></div>
+        <div><b>Mistakes exam</b><div class="ui-note">${nWrong} questions</div></div>
         <button type="button" class="ui-btn" data-begin="wrong"${nWrong?'':' disabled'}>Take the mistakes exam</button></div>`;
     const H=hist().slice(-12).reverse();
-    h+=`<div class="ui-sec" style="margin-top:26px"><div class="ui-sec-h"><h3 class="ui-h2" style="font-size:19px">Exam history</h3><span class="ui-note">You pass when you reach ≥ 80% three times in a row on the same exam</span></div>`;
+    h+=`<div class="ui-sec" style="margin-top:26px"><div class="ui-sec-h"><h3 class="ui-h2" style="font-size:19px">Exam history</h3></div>`;
     h+=H.length?`<div class="ui-tablewrap"><table class="ex-hist"><thead><tr><th>When</th><th>Exam</th><th style="text-align:right">Points</th><th style="text-align:right">%</th><th style="text-align:right">Time</th></tr></thead><tbody>${H.map(r=>{const p=pct(r.right,r.n);return`<tr><td>${new Date(r.ts).toLocaleString('en-GB',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'})}</td><td>${meta(r.kind).name}</td><td class="num">${r.right}/${r.n}</td><td class="num ${p>=80?'ex-pass':'ex-fail'}">${p}%</td><td class="num">${fmtDur(r.dur)}</td></tr>`;}).join('')}</tbody></table></div>`:`<div class="ui-note">No attempts yet.</div>`;
     root.innerHTML=h+'</div>';
   }
   function renderRun(scroll){keepFocus(root,()=>{
     root.classList.add('qz');root.tabIndex=-1;const m=meta(run.kind);root.style.setProperty('--qc',m.c);
     const n=run.ids.length,done=run.ids.filter(id=>run.ans[id]!==undefined).length,idx=run.idx,id=run.ids[idx];
-    let h=`<div class="qz-head"><div class="qz-title"><span class="ui-eyebrow">Exam in progress · answers hidden until you submit</span><h3 class="qz-h">${m.name} · ${n} questions</h3></div>
+    let h=`<div class="qz-head"><div class="qz-title"><h3 class="qz-h">${m.name} · ${n} questions</h3></div>
       <div class="qz-score"><span class="ex-timer">${fmtDur(Date.now()-run.t0)}</span> · <b>${done}</b>/${n} answered</div>
       <div class="qz-actions"><button type="button" class="qz-mini${armed==='quit'?' warn':''}" data-act="quit">${armed==='quit'?'Press again to cancel':'Cancel exam'}</button></div></div>
       <div class="qz-meter"><i style="width:${done/n*100}%;background:var(--qc)"></i></div>`;
@@ -251,7 +251,7 @@ function mountCenter(){
   const box=$('#qz-practice');if(!box)return;
   let course='',mod='',open=false;
   const bar=$('#qz-filter');
-  const P=Practice(box,{ids:()=>ids(),title:'Question bank',eyebrow:'Practice · instant answers',c:'var(--c-quiz)'});
+  const P=Practice(box,{ids:()=>ids(),title:'Question bank',c:'var(--c-quiz)'});
   function ids(){let l=idsWhere(course||null,mod?[mod]:null);if(open)l=l.filter(id=>S.ans[id]===undefined);return l;}
   function chips(){
     const tot=c=>idsWhere(c||null).length;
@@ -268,7 +268,7 @@ function mountCenter(){
     chips();P.setIds(()=>ids());});
   chips();
   document.addEventListener('qz:change',chips);
-  const W=$('#qz-wrong')&&Practice($('#qz-wrong'),{ids:()=>BANK.map(q=>q.id),review:true,title:'Review mistakes',eyebrow:'Answer correctly and the question leaves the list',c:'var(--sell)'});
+  const W=$('#qz-wrong')&&Practice($('#qz-wrong'),{ids:()=>BANK.map(q=>q.id),review:true,title:'Review mistakes',c:'var(--sell)'});
   const E=$('#qz-exam')&&Exam($('#qz-exam'));
   document.addEventListener('ofs:chapter',e=>{const s=e.detail.slug;if(s==='cau-sai'&&W)W.refresh();if(s==='luyen-tap')P.refresh();if(s==='thi-thu'&&E)E.refresh();});
 }

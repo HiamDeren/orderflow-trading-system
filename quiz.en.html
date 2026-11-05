@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#080B10">
 <title>Quiz · Orderflow System</title>
-<meta name="description" content="180 TPO Level and Orderflow Tools quiz questions: practice, 50/100-question mock exams, review mistakes.">
+<meta name="description" content="TPO Level and Orderflow Tools quiz.">
 <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -22,37 +22,22 @@
 <div class="ui-content">
 
 <section data-chapter="luyen-tap" id="ch-luyen-tap">
-  <div class="ui-hero" style="--c:var(--c-quiz)">
-    <span class="ui-eyebrow">Quiz centre</span>
-    <h1 class="ui-h1">Practise 180 questions</h1>
-    <p class="ui-lede">Every question from both courses, with the original content and explanations. Pick an answer to see right or wrong instantly. Use keys 1–4 (or A–D) to answer, ← → to move between questions.</p>
-    <div class="facts"><span><b>93</b> TPO Level questions</span><span><b>87</b> Orderflow Tools questions</span><span><b>17</b> questions with footprint/DOM/tape visuals</span></div>
-    <div class="cta"><a class="ui-btn primary" href="#thi-thu">Mock exam 50 / 100 questions</a><a class="ui-btn" href="#cau-sai">Review mistakes</a></div>
-  </div>
+  <h1 class="ui-h2 qz-page-h">Practice</h1>
   <div style="display:grid;gap:8px;margin-bottom:14px" id="qz-filter"></div>
   <div id="qz-practice"></div>
 </section>
 
 <section data-chapter="thi-thu" id="ch-thi-thu" hidden>
-  <div style="display:grid;gap:8px;margin-bottom:18px">
-    <span class="ui-eyebrow" style="--c:var(--c-quiz)">Mock exam</span>
-    <h1 class="ui-h2" style="font-size:clamp(24px,3.6vw,32px)">50 questions per course, 100 for the full exam</h1>
-    <p class="ui-lede" style="font-size:15px">Answers stay hidden until you submit. An exam in progress is saved, so you can close the browser and continue. You pass with ≥ 80% three times in a row.</p>
-  </div>
+  <h1 class="ui-h2 qz-page-h">Mock exam</h1>
   <div id="qz-exam"></div>
 </section>
 
 <section data-chapter="cau-sai" id="ch-cau-sai" hidden>
-  <div style="display:grid;gap:8px;margin-bottom:18px">
-    <span class="ui-eyebrow" style="--c:var(--sell)">Review mistakes</span>
-    <h1 class="ui-h2" style="font-size:clamp(24px,3.6vw,32px)">Questions you are getting wrong</h1>
-    <p class="ui-lede" style="font-size:15px">Collected from both practice and mock exams. Answer correctly and the question leaves the list.</p>
-  </div>
+  <h1 class="ui-h2 qz-page-h">Review mistakes</h1>
   <div id="qz-wrong"></div>
 </section>
 
 </div>
-<footer class="ui-foot">Questions kept verbatim from the two original playbooks · Pass mark 80% · Progress saved in the browser, back up from the Overview page.</footer>
 </main>
 <script src="assets/js/en/fp.js?v=6"></script>
 <script src="assets/js/en/bank-levels.js?v=6"></script>
