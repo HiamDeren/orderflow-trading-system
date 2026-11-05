@@ -1,4 +1,4 @@
-/* Ngân hàng câu hỏi khoá TPO Level — 93 câu, giữ nguyên văn từ artifact gốc. */
+/* Ngân hàng câu hỏi khoá TPO Level — 86 câu, giữ nguyên văn từ artifact gốc. */
 (function(){
 'use strict';
 const PB={};
@@ -120,6 +120,7 @@ PB.quiz = [
   {m:"ib",q:"dPOC nằm nửa trên IB, giá giữ trên IB mid, VWAP dốc lên lúc 10:30. Gợi ý gì?",o:["Chắc chắn phá IBH","Thiên hướng breakout lên, nhưng vẫn cần acceptance + CVD xác nhận","Short IBH","Đứng ngoài cả ngày"],a:1,e:"Context nghiêng một phía, chưa phải tín hiệu."},
   {m:"ib",q:"IB mid nên được dùng chủ yếu như thế nào?",o:["Zone vào lệnh mạnh nhất","Đích của rotation và chỗ dời stop","Level Tier 1","Không dùng"],a:1,e:"IBH/IBL mới là biên chính; IB mid là trọng tâm."}
 ];
-window.QBANK=(window.QBANK||[]).concat(PB.quiz.map((q,i)=>({id:'L'+String(i+1).padStart(3,'0'),course:'levels',mod:q.m,q:q.q,o:q.o,a:q.a,e:q.e,vis:null})));
+/* id theo vị trí gốc; bỏ 7 câu case study template (recap cá nhân) sau khi gán id để id khác không đổi */
+window.QBANK=(window.QBANK||[]).concat(PB.quiz.map((q,i)=>({id:'L'+String(i+1).padStart(3,'0'),course:'levels',mod:q.m,q:q.q,o:q.o,a:q.a,e:q.e,vis:null})).filter(q=>q.mod!=='case'));
 window.QMODS=window.QMODS||{};window.QMODS.levels={tpo:'Nền tảng TPO',structure:'Day & Open types',case:'Case study',ib:'Initial Balance',levels:'Level map',vwap:'VWAP RTH',cvd:'CVD divergence'};
 })();

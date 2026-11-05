@@ -14,13 +14,28 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=7">
-<link rel="stylesheet" href="assets/css/levels.css?v=7">
+<link rel="stylesheet" href="assets/css/app.css?v=8">
+<link rel="stylesheet" href="assets/css/levels.css?v=8">
 </head>
 <body data-page="levels">
 <main class="ui-main">
 <div class="ui-content pg-levels">
-
+<fieldset><legend>Levels &amp; zones (one per line)</legend>
+          <textarea id="p-levels" aria-label="List of other levels" style="min-height:220px">[A12] 28628-28648 : POC pRTH naked · ORG · NDOG
+[B7] 28556-28580 : VAL composite · VAL pRTH
+[A8] 28384-28408 : VAL pETH · pRTH low · TPO POC pETH
+[B7] 28968-28984 : pW+1 low · pRTH/pETH high
+[T] 28720-28816 : Target 10 · VAH pRTH
+[T] 29104-29180 : Target 11 · VAL pW · nPOC 23/10
+[T] 28296-28328 : Target 8 · nPOC RTH 03/11
+[TK] 28232-28236 : pW low
+[GEX] Call Wall : 28903
+[GEX] Gamma Flip : 28459.5
+[TPO] TPO excess high pETH : 28968
+03/11 POC : 28330
+02/11 High : 28892</textarea>
+          <p class="small muted" style="margin-top:6px">Each line: <code>name : price</code> (reference), or add a tag at the start: <code>[A12] low-high : label</code> zone A (score 12), <code>[B7]</code> zone B, <code>[T]</code> target, <code>[TK]</code> liquidity high/low, <code>[GEX] name : price</code>, <code>[TPO] name : price</code>.</p>
+        </fieldset>
 
 
 <section class="tab" id="ch-nen-tang" data-chapter="nen-tang">
@@ -28,7 +43,7 @@
     <span class="ui-eyebrow">Course 1 · NQ · RTH 9:30–16:00 ET</span>
     <h1 class="ui-h1">TPO Level</h1>
     <p class="ui-lede">Context from TPO · Confluence from VWAP RTH + CVD · Trigger from orderflow.</p>
-    <div class="facts"><span><b>8</b> chapters</span><span><b>93</b> quiz questions</span><span>Plan Builder</span></div>
+    <div class="facts"><span><b>7</b> chapters</span><span><b>86</b> quiz questions</span><span>Plan Builder</span></div>
     <div class="cta"><a class="ui-btn primary" href="#nen-tang">Start learning →</a><a class="ui-btn" href="#plan">Open Plan Builder</a><a class="ui-btn ghost" href="quiz.en.html#thi-thu">50-question mock exam</a></div>
   </div>
 
@@ -538,6 +553,11 @@ Purple level : 28176</textarea>
     </div>
   </div>
 
+  <div class="panel stack" id="p-chart-panel">
+    <div class="qhead"><h3>Level map</h3><div class="row"><button id="p-chart-png">Download PNG</button><span class="small muted" id="p-chart-msg" role="status"></span></div></div>
+    <div class="svgwrap plan-chart" id="p-chart"></div>
+  </div>
+
   <div class="grid g2">
     <div class="panel stack">
       <h3>Pre-market checklist (before 9:25 ET)</h3>
@@ -563,52 +583,17 @@ Purple level : 28176</textarea>
   </div>
 </section>
 
-<!-- ============ 07 TEMPLATE ============ -->
-<section class="tab" id="ch-template" data-chapter="template">
-  <div class="head">
-    <span class="eyebrow">08 · Case study from your screenshot</span>
-    <h2>NQZ6 · Daily Profile RTH · 29/10 → 04/11/2026</h2>
-    <p class="lead">The numbers below are read from screenshot coordinates, so the error is about ±10–15 points. The 04/11 session was still running when captured (price 28,657.25), so the 04/11 VA/POC is <i>developing</i>. Use this tab to practise reading; take tradeable numbers directly from ATAS.</p>
-  </div>
-
-  <figure class="panel stack">
-    <h3>5-session value migration</h3>
-    <div class="svgwrap" id="migration"></div>
-    <figcaption>Thin bar = RTH range, pink box = VA, orange tick = POC, left/right ticks = open/close. Dashed grey zone = unfilled RTH gap, hatched zone = 29/10 single prints.</figcaption>
-  </figure>
-
-  <div class="stack" id="days"></div>
-
-  <div class="panel stack">
-    <h3>Where your template is already good, and what to add</h3>
-    <div class="grid g2">
-      <div class="card"><h4><span class="chip good">Already there</span></h4><ul class="clean small">
-        <li>TPO + volume profile overlaid: you can see presence vs participation.</li>
-        <li>Coloured VA and POC extended to the right: easy to see which levels are still "naked".</li>
-        <li>IB bar on the left of each day, open/close markers.</li>
-        <li>3 separate tabs Weekly / ETH / RTH.</li>
-      </ul></div>
-      <div class="card"><h4><span class="chip warn">Should add</span></h4><ul class="clean small">
-        <li>Turn on marking for <b>single prints</b> and <b>poor high/low</b> (or draw them by hand) so you never miss a magnet.</li>
-        <li>Only extend the POC/VA of the last 3–5 days and the levels still naked. The many faint horizontal bands in the screenshot make Tiers hard to tell apart.</li>
-        <li>Show <b>IB extension 1.5x/2x</b> on the M1 execution chart.</li>
-        <li>A 5–10 day composite chart when VAs overlap (like 30/10–04/11).</li>
-      </ul></div>
-    </div>
-  </div>
-  <div class="qz-slot" data-qz="levels:case" data-title="Quiz 08 · Case study template"></div>
-</section>
-
 
 </div>
 <footer class="ui-foot">Study playbook for NQ intraday. Not investment advice. Traditional statistics (80% rule, day-type frequencies) must be verified with your own backtests before trading real money.</footer>
 </main>
-<script src="assets/js/en/levels-data.js?v=7"></script>
-<script src="assets/js/en/fp.js?v=7"></script>
-<script src="assets/js/en/bank-levels.js?v=7"></script>
-<script src="assets/js/en/bank-tools.js?v=7"></script>
-<script src="assets/js/en/quiz.js?v=7"></script>
-<script src="assets/js/en/core.js?v=7"></script>
-<script src="assets/js/en/levels-page.js?v=7"></script>
+<script src="assets/js/en/levels-data.js?v=8"></script>
+<script src="assets/js/en/fp.js?v=8"></script>
+<script src="assets/js/en/bank-levels.js?v=8"></script>
+<script src="assets/js/en/bank-tools.js?v=8"></script>
+<script src="assets/js/en/quiz.js?v=8"></script>
+<script src="assets/js/en/core.js?v=8"></script>
+<script src="assets/js/en/levels-page.js?v=8"></script>
+<script src="assets/js/en/plan-chart.js?v=8"></script>
 </body>
 </html>

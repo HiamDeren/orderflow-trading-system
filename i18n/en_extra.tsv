@@ -300,3 +300,48 @@ Tiến độ (câu trả lời, lịch sử thi, checklist, số liệu Plan Bui
 01 · Nền tảng TPO · TPO Level	01 · TPO foundations · TPO Level
 TPO · Day &amp; Open types · Initial Balance · Level map · VWAP RTH · CVD · Plan mỗi ngày · Case study template ATAS.	TPO · Day &amp; Open types · Initial Balance · Level map · VWAP RTH · CVD · Daily plan · ATAS template case study.
 Context bằng TPO · Confluence bằng VWAP RTH + CVD · Trigger bằng orderflow.	Context from TPO · Confluence from VWAP RTH + CVD · Trigger from orderflow.
+Công cụ	Tools
+Plan + bản đồ level	Plan + level map
+vùng	zone
+Bản đồ level của plan	Plan level map
+Cam chấm = level TPO (PD VAH/POC/VAL)	Orange dotted = TPO level (PD VAH/POC/VAL)
+Giá 9:15 ·	Price 9:15 ·
+Không xuất được ảnh trên trình duyệt này.	Could not export the image in this browser.
+Nhập giá lúc 9:15 để vẽ bản đồ.	Enter the 9:15 price to draw the map.
+Phá lên	Break up
+Phá xuống	Break down
+Trắng = PD High/Low · xám đứt = ON High/Low	White = PD High/Low · grey dashed = ON High/Low
+Tím đứt = level GEX	Purple dashed = GEX level
+Vàng = vùng A, vào lệnh khi có trigger	Gold = zone A, enter on a trigger
+Xanh = vùng B, vào lệnh khi có trigger	Blue = zone B, enter on a trigger
+Xanh lá = giá hiện tại	Green = current price
+Xám = đỉnh/đáy thanh khoản · xám chấm = mốc tham chiếu	Grey = liquidity high/low · grey dotted = reference
+bán	sell
+Đã tải ảnh.	Image downloaded.
+Đỏ đậm = target, chốt lời, không vào lệnh	Dark red = target, take profit, no entry
+50 câu rút ngẫu nhiên từ 86 câu của khoá Level, giữ tỉ lệ theo chương.	50 questions drawn at random from the 86 of the Level course, keeping the chapter proportions.
+7 chương · 86 câu trắc nghiệm	7 chapters · 86 quiz questions
+9 chương · 87 câu trắc nghiệm	9 chapters · 87 quiz questions
+Công cụ tính IB, 5 kịch bản sau 10:30, 4 setup IB, thống kê IB của riêng bạn.	IB calculator, 5 scenarios after 10:30, 4 IB setups, your own IB statistics.
+Hệ thống học Orderflow + TPO cho NQ intraday: 2 khoá, 173 câu trắc nghiệm, thi thử 50/100 câu.	Orderflow + TPO study system for NQ intraday: 2 courses, 173 quiz questions, 50/100-question mock exams.
+Nhập số hôm qua, overnight và các vùng, ra open location, 2 kịch bản và hình bản đồ level.	Enter yesterday’s, overnight and zone numbers to get open location, 2 scenarios and a level map image.
+Plan Builder + bản đồ level	Plan Builder + level map
+(mốc tham chiếu), hoặc thêm nhãn ở đầu:	(reference), or add a tag at the start:
+Bản đồ level	Level map
+Level &amp; vùng (mỗi dòng một mục)	Levels &amp; zones (one per line)
+Mỗi dòng:	Each line:
+Tải ảnh PNG	Download PNG
+[A12] thấp-cao : nhãn	[A12] low-high : label
+[A8] 28384-28408 : VAL pETH · Đáy pRTH · TPO POC pETH	[A8] 28384-28408 : VAL pETH · pRTH low · TPO POC pETH
+[B7] 28968-28984 : Đáy pW+1 · Đỉnh pRTH/pETH	[B7] 28968-28984 : pW+1 low · pRTH/pETH high
+[GEX] tên : giá	[GEX] name : price
+[TK] 28232-28236 : Đáy pW	[TK] 28232-28236 : pW low
+[TPO] tên : giá	[TPO] name : price
+tên : giá	name : price
+vùng A (điểm 12),	zone A (score 12),
+vùng B,	zone B,
+đỉnh/đáy thanh khoản,	liquidity high/low,
+173 câu trắc nghiệm TPO Level và Orderflow Tools: luyện tập, thi thử 50/100 câu, ôn câu sai.	173 TPO Level and Orderflow Tools quiz questions: practice, 50/100-question mock exams, review mistakes.
+Luyện tập 173 câu	Practise 173 questions
+${dn.score} mua	${dn.score} buy
+Tin: ${d.news}	News: ${d.news}

@@ -1,6 +1,6 @@
 /* =========================================================
    Quiz engine: luyện tập từng câu, thi thử 50/100 câu, ôn câu sai.
-   Ngân hàng: window.QBANK (bank-tools.js 87 câu + bank-levels.js 93 câu).
+   Ngân hàng: window.QBANK (bank-tools.js 87 câu + bank-levels.js 86 câu).
    Tiến độ lưu localStorage, khoá theo id câu (T001…, L001…).
    ========================================================= */
 (function(){
@@ -127,7 +127,7 @@ function Practice(root,opt){
    EXAM
    ========================================================= */
 const EXAMS={
-  levels:{name:'Đề TPO Level',short:'Level',n:50,c:'var(--c-levels)',desc:'50 câu rút ngẫu nhiên từ 93 câu của khoá Level, giữ tỉ lệ theo chương.',pick:()=>sampleStrat('levels',50)},
+  levels:{name:'Đề TPO Level',short:'Level',n:50,c:'var(--c-levels)',desc:'50 câu rút ngẫu nhiên từ 86 câu của khoá Level, giữ tỉ lệ theo chương.',pick:()=>sampleStrat('levels',50)},
   tools:{name:'Đề Orderflow Tools',short:'Tools',n:50,c:'var(--c-tools)',desc:'50 câu rút ngẫu nhiên từ 87 câu của khoá Tools, giữ tỉ lệ theo chương.',pick:()=>sampleStrat('tools',50)},
   all:{name:'Đề tổng hợp',short:'Tổng',n:100,c:'var(--brand)',desc:'100 câu = 50 Level + 50 Tools, xáo trộn. Bài kiểm tra cuối của cả hệ thống.',pick:()=>shuffle(sampleStrat('levels',50).concat(sampleStrat('tools',50)))}
 };

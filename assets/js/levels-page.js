@@ -436,10 +436,22 @@ function readPlan(){
   const v = id => $("#"+id).value;
   const n = id => { const x = parseFloat(String(v(id)).replace(/,/g,"")); return isNaN(x) ? null : x; };
   const custom = v("p-levels").split("\n").map(line => {
-    const i = line.lastIndexOf(":"); if(i<0) return null;
-    const p = parseFloat(line.slice(i+1).replace(/,/g,"").trim());
-    const name = line.slice(0,i).trim();
-    return (name && !isNaN(p)) ? { n:name, p, t:"custom" } : null;
+    let s = line.trim(); if(!s) return null;
+    let tag = "", score = "";
+    const tm = s.match(/^\[([A-Za-z]+)\s*(\d*)\]\s*/);
+    if(tm){ tag = tm[1].toUpperCase(); score = tm[2]; s = s.slice(tm[0].length); }
+    const pre = tag && tag!=="TPO" ? tag+score+" · " : "";
+    const rm = s.match(/^([\d.,]+)\s*[-–]\s*([\d.,]+)\s*(?::\s*(.*))?$/);
+    if(rm){
+      const a = parseFloat(rm[1].replace(/,/g,"")), b = parseFloat(rm[2].replace(/,/g,""));
+      if(isNaN(a)||isNaN(b)) return null;
+      const lo = Math.min(a,b), hi = Math.max(a,b), lab = (rm[3]||"").trim();
+      return { n:pre+(lab||"vùng"), p:(lo+hi)/2, t:"custom", tag:tag||"Z", score, lo, hi, label:lab };
+    }
+    const i = s.lastIndexOf(":"); if(i<0) return null;
+    const p = parseFloat(s.slice(i+1).replace(/,/g,"").trim());
+    const name = s.slice(0,i).trim();
+    return (name && !isNaN(p)) ? { n:pre+name, p, t:"custom", tag, score, label:name } : null;
   }).filter(Boolean);
   return { date:v("p-date"), pdh:n("p-pdh"), pdl:n("p-pdl"), vah:n("p-vah"), poc:n("p-poc"), val:n("p-val"), close:n("p-close"),
     dtype:v("p-dtype"), shape:v("p-shape"), ph:v("p-ph")==="1", pl:v("p-pl")==="1", onh:n("p-onh"), onl:n("p-onl"), inv:v("p-inv"),
@@ -630,5 +642,5 @@ renderVWAP();
 renderCVD();
 renderPlanStatic();
 initPlan();
-renderMigration();
+window.PLAN_READ = readPlan;
 })();

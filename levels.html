@@ -14,13 +14,28 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=7">
-<link rel="stylesheet" href="assets/css/levels.css?v=7">
+<link rel="stylesheet" href="assets/css/app.css?v=8">
+<link rel="stylesheet" href="assets/css/levels.css?v=8">
 </head>
 <body data-page="levels">
 <main class="ui-main">
 <div class="ui-content pg-levels">
-
+<fieldset><legend>Level &amp; vùng (mỗi dòng một mục)</legend>
+          <textarea id="p-levels" aria-label="Danh sách level khác" style="min-height:220px">[A12] 28628-28648 : POC pRTH naked · ORG · NDOG
+[B7] 28556-28580 : VAL composite · VAL pRTH
+[A8] 28384-28408 : VAL pETH · Đáy pRTH · TPO POC pETH
+[B7] 28968-28984 : Đáy pW+1 · Đỉnh pRTH/pETH
+[T] 28720-28816 : Target 10 · VAH pRTH
+[T] 29104-29180 : Target 11 · VAL pW · nPOC 23/10
+[T] 28296-28328 : Target 8 · nPOC RTH 03/11
+[TK] 28232-28236 : Đáy pW
+[GEX] Call Wall : 28903
+[GEX] Gamma Flip : 28459.5
+[TPO] TPO excess high pETH : 28968
+03/11 POC : 28330
+02/11 High : 28892</textarea>
+          <p class="small muted" style="margin-top:6px">Mỗi dòng: <code>tên : giá</code> (mốc tham chiếu), hoặc thêm nhãn ở đầu: <code>[A12] thấp-cao : nhãn</code> vùng A (điểm 12), <code>[B7]</code> vùng B, <code>[T]</code> target, <code>[TK]</code> đỉnh/đáy thanh khoản, <code>[GEX] tên : giá</code>, <code>[TPO] tên : giá</code>.</p>
+        </fieldset>
 
 <!-- ============ 01 NỀN TẢNG ============ -->
 <section class="tab" id="ch-nen-tang" data-chapter="nen-tang">
@@ -28,7 +43,7 @@
     <span class="ui-eyebrow">Khoá 1 · NQ · RTH 9:30–16:00 ET</span>
     <h1 class="ui-h1">TPO Level</h1>
     <p class="ui-lede">Context bằng TPO · Confluence bằng VWAP RTH + CVD · Trigger bằng orderflow.</p>
-    <div class="facts"><span><b>8</b> chương</span><span><b>93</b> câu trắc nghiệm</span><span>Plan Builder</span></div>
+    <div class="facts"><span><b>7</b> chương</span><span><b>86</b> câu trắc nghiệm</span><span>Plan Builder</span></div>
     <div class="cta"><a class="ui-btn primary" href="#nen-tang">Bắt đầu học →</a><a class="ui-btn" href="#plan">Mở Plan Builder</a><a class="ui-btn ghost" href="quiz.html#thi-thu">Thi thử 50 câu</a></div>
   </div>
 
@@ -538,6 +553,11 @@ Level tím : 28176</textarea>
     </div>
   </div>
 
+  <div class="panel stack" id="p-chart-panel">
+    <div class="qhead"><h3>Bản đồ level</h3><div class="row"><button id="p-chart-png">Tải ảnh PNG</button><span class="small muted" id="p-chart-msg" role="status"></span></div></div>
+    <div class="svgwrap plan-chart" id="p-chart"></div>
+  </div>
+
   <div class="grid g2">
     <div class="panel stack">
       <h3>Pre-market checklist (trước 9:25 ET)</h3>
@@ -563,52 +583,17 @@ Level tím : 28176</textarea>
   </div>
 </section>
 
-<!-- ============ 07 TEMPLATE ============ -->
-<section class="tab" id="ch-template" data-chapter="template">
-  <div class="head">
-    <span class="eyebrow">08 · Case study từ ảnh của bạn</span>
-    <h2>NQZ6 · Daily Profile RTH · 29/10 → 04/11/2026</h2>
-    <p class="lead">Các số dưới đây đọc từ toạ độ trên ảnh chụp nên sai số khoảng ±10–15 điểm. Phiên 04/11 còn đang chạy lúc chụp (giá 28,657.25), nên VA/POC 04/11 là <i>developing</i>. Dùng tab này để luyện cách đọc, còn số để trade thì lấy trực tiếp trên ATAS.</p>
-  </div>
-
-  <figure class="panel stack">
-    <h3>Value migration 5 phiên</h3>
-    <div class="svgwrap" id="migration"></div>
-    <figcaption>Thanh mảnh = range RTH, hộp hồng = VA, vạch cam = POC, gạch trái/phải = open/close. Vùng xám nét đứt = RTH gap chưa lấp, vùng sọc = single prints 29/10.</figcaption>
-  </figure>
-
-  <div class="stack" id="days"></div>
-
-  <div class="panel stack">
-    <h3>Template của bạn đang tốt ở đâu, nên thêm gì</h3>
-    <div class="grid g2">
-      <div class="card"><h4><span class="chip good">Đã có</span></h4><ul class="clean small">
-        <li>TPO + volume profile chồng nhau: thấy được presence vs participation.</li>
-        <li>VA tô màu và POC kéo dài sang phải: dễ thấy level nào còn "naked".</li>
-        <li>IB bar bên trái mỗi ngày, marker open/close.</li>
-        <li>Tách 3 tab Weekly / ETH / RTH.</li>
-      </ul></div>
-      <div class="card"><h4><span class="chip warn">Nên thêm</span></h4><ul class="clean small">
-        <li>Bật đánh dấu <b>single prints</b> và <b>poor high/low</b> (hoặc vẽ tay) để không bỏ sót magnet.</li>
-        <li>Chỉ kéo dài POC/VA của 3–5 ngày gần nhất và các level còn naked. Nhiều dải ngang mờ trong ảnh làm khó phân biệt Tier.</li>
-        <li>Hiện <b>IB extension 1.5x/2x</b> trên chart M1 execution.</li>
-        <li>Một chart composite 5–10 ngày khi các VA chồng nhau (như 30/10–04/11).</li>
-      </ul></div>
-    </div>
-  </div>
-  <div class="qz-slot" data-qz="levels:case" data-title="Quiz 08 · Case study template"></div>
-</section>
-
 
 </div>
 <footer class="ui-foot">Playbook học tập cho NQ intraday. Không phải lời khuyên đầu tư. Các con số thống kê truyền thống (80% rule, tỉ lệ day type) cần được bạn tự kiểm chứng bằng backtest trước khi dùng với tiền thật.</footer>
 </main>
-<script src="assets/js/levels-data.js?v=7"></script>
-<script src="assets/js/fp.js?v=7"></script>
-<script src="assets/js/bank-levels.js?v=7"></script>
-<script src="assets/js/bank-tools.js?v=7"></script>
-<script src="assets/js/quiz.js?v=7"></script>
-<script src="assets/js/core.js?v=7"></script>
-<script src="assets/js/levels-page.js?v=7"></script>
+<script src="assets/js/levels-data.js?v=8"></script>
+<script src="assets/js/fp.js?v=8"></script>
+<script src="assets/js/bank-levels.js?v=8"></script>
+<script src="assets/js/bank-tools.js?v=8"></script>
+<script src="assets/js/quiz.js?v=8"></script>
+<script src="assets/js/core.js?v=8"></script>
+<script src="assets/js/levels-page.js?v=8"></script>
+<script src="assets/js/plan-chart.js?v=8"></script>
 </body>
 </html>

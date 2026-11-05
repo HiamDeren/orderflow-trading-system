@@ -104,3 +104,4 @@
 .pg-levels .flowstep .dot{width:28px;height:28px;border-radius:50%;background:#3b2d12;border:1px solid #6b5220;color:#ffe2ad;display:grid;place-items:center;font-family:var(--font-mono);font-size:.8rem;font-weight:700}
 .pg-levels section.tab{display:flex;flex-direction:column;gap:22px}
 .pg-levels section.tab > .ui-hero{margin-bottom:0}
+.pg-levels .plan-chart svg{max-width:none}

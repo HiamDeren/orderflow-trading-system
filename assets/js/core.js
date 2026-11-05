@@ -15,7 +15,7 @@ const NAV=[
   {k:'levels',href:'levels.html',label:'TPO Level',short:'Level',sub:'TPO · VWAP · CVD · Plan',c:'var(--c-levels)',icon:'tpo',chapters:[
     ['nen-tang','01','Nền tảng TPO'],['cau-truc','02','Day & Open types'],
     ['initial-balance','03','Initial Balance'],['levels','04','Level map'],['vwap','05','VWAP RTH'],
-    ['cvd','06','CVD divergence'],['plan','07','Lên plan mỗi ngày'],['template','08','Đọc template']]},
+    ['cvd','06','CVD divergence'],['plan','07','Lên plan mỗi ngày']]},
   {k:'tools',href:'tools.html',label:'Orderflow Tools',short:'Tools',sub:'DOM · Tape · Footprint · Delta',c:'var(--c-tools)',icon:'fp',chapters:[
     ['tong-quan','00','Tổng quan'],['nen-tang','01','Nền tảng'],['thuat-ngu','02','Thuật ngữ'],['dom','03','DOM'],
     ['tape','04','Tape'],['footprint','05','Footprint'],['delta','06','Delta & CVD'],['kich-ban','07','13 kịch bản'],
@@ -29,6 +29,7 @@ const ICON={
   tpo:'<path d="M4 4v16"/><path d="M4 6h5M4 9.5h10M4 13h16M4 16.5h11M4 20h6"/>',
   quiz:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12.2 2.4 2.4 4.7-5"/>',
   menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+  map:'<path d="M4 6h16M4 12h16M4 18h16" stroke-dasharray="3 2"/><rect x="6" y="9" width="12" height="6" rx="1"/>',
   close:'<path d="M6 6l12 12M18 6 6 18"/>'
 };
 const svg=(k,s=18)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
@@ -54,7 +55,7 @@ function buildShell(){
   let h=`<a class="ui-logo" href="index.html">${LOGO}<span><b>Orderflow System</b><small>NQ · ATAS · Rithmic</small></span></a><nav class="ui-nav">`;
   NAV.forEach((n,i)=>{
     if(i===1) h+=`<div class="ui-sec-label">Khoá học</div>`;
-    if(n.k==='quiz') h+=`<div class="ui-sec-label">Ôn luyện</div>`;
+    if(n.k==='quiz') h+=`<div class="ui-sec-label">Công cụ</div><a class="ui-item" href="levels.html#plan" style="--c:var(--warn)"><span class="ico">${svg('map')}</span><span class="lbl">Plan Builder<small>Plan + bản đồ level</small></span></a><div class="ui-sec-label">Ôn luyện</div>`;
     const on=n.k===page;
     h+=`<a class="ui-item${on?' on':''}" href="${n.href}" style="--c:${n.c}"${on?' aria-current="page"':''}><span class="ico">${svg(n.icon)}</span><span class="lbl">${n.label}<small>${n.sub}</small></span></a>`;
     if(on&&n.chapters){

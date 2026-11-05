@@ -66,12 +66,11 @@ function cont(){
 /* ---------- courses ---------- */
 function courses(){
   ['levels','tools'].forEach(k=>{
-    const el=$('#course-'+k);if(!el)return;const n=NAV.find(x=>x.k===k),s=QZ.stats(k);
-    el.querySelector('.chs').innerHTML=n.chapters.map(([sl,no,t])=>`<a href="${n.href}#${sl}"><span class="n">${no}</span>${t}</a>`).join('');
-    el.querySelector('.meters').innerHTML=`<div><div class="lbl"><span>Correct answers</span><b>${s.ok}/${s.n}</b></div><div class="ui-bar"><i style="width:${s.ok/s.n*100}%;background:var(--buy)"></i><i style="width:${(s.done-s.ok)/s.n*100}%;background:var(--sell)"></i></div></div>`;
+    const el=$('#course-'+k);if(!el)return;const s=QZ.stats(k);
+    el.querySelector('.v').textContent=`${s.ok}/${s.n}`;
+    el.querySelector('.ok').style.width=(s.n?s.ok/s.n*100:0)+'%';
+    el.querySelector('.bad').style.width=(s.n?(s.done-s.ok)/s.n*100:0)+'%';
   });
-  // roadmap ticks (levels)
-  const r=$('#rm-mini');if(r&&window.PBR){let done=0,all=0;PBR.forEach(([id,n])=>{all+=n;for(let i=0;i<n;i++)if(store.get(`rm-${id}-${i}`,false))done++;});r.textContent=`${done}/${all}`;}
 }
 
 /* ---------- quiz ---------- */

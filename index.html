@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#080B10">
 <title>Orderflow Trading System · NQ intraday</title>
-<meta name="description" content="Hệ thống học Orderflow + TPO cho NQ intraday: 2 khoá, 180 câu trắc nghiệm, thi thử 50/100 câu.">
+<meta name="description" content="Hệ thống học Orderflow + TPO cho NQ intraday: 2 khoá, 173 câu trắc nghiệm, thi thử 50/100 câu.">
 <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=7">
+<link rel="stylesheet" href="assets/css/app.css?v=8">
 
 </head>
 <body data-page="home">
@@ -25,13 +25,11 @@
   <div class="txt">
     <span class="ui-eyebrow">NQ intraday · PropFirm · 2–3 lệnh/ngày</span>
     <h1 class="ui-h1">Orderflow <span>Trading System</span></h1>
-    <div class="cta"><a class="ui-btn primary" id="cta-cont" href="levels.html#nen-tang">Bắt đầu học →</a><a class="ui-btn" href="quiz.html#thi-thu">Thi thử</a><a class="ui-btn ghost" href="levels.html#plan">Plan Builder</a></div>
     <div class="sess" id="sess"></div>
   </div>
   <div class="art" id="hero-art"></div>
 </section>
 
-<div style="margin-top:22px"><a class="cont" id="cont" href="levels.html#nen-tang"></a></div>
 
 <section class="ui-sec">
   <div class="ui-sec-h"><div><span class="ui-eyebrow">Cách hai khoá ghép với nhau</span><h2 class="ui-h2">Hệ thống 4 lớp khi giá tới key level</h2></div><span class="ui-note">Mỗi lớp trỏ tới chương tương ứng</span></div>
@@ -48,18 +46,10 @@
 </section>
 
 <section class="ui-sec">
-  <div class="ui-sec-h"><div><span class="ui-eyebrow">Khoá học</span><h2 class="ui-h2">Hai playbook, một lộ trình</h2></div></div>
+  <h2 class="ui-h2">Khoá học</h2>
   <div class="ui-grid ui-g2">
-    <div class="course" id="course-levels" style="--c:var(--c-levels)">
-      <div class="top"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v16"/><path d="M4 6h5M4 9.5h10M4 13h16M4 16.5h11M4 20h6"/></svg></span><div><h3>TPO Level</h3><p>TPO · Day &amp; Open types · Initial Balance · Level map · VWAP RTH · CVD · Plan mỗi ngày · Case study template ATAS.</p></div></div>
-      <div class="chs"></div><div class="meters"></div>
-      <div class="act"><a class="ui-btn primary" href="levels.html">Vào khoá</a><a class="ui-btn" href="quiz.html#luyen-tap">Luyện 93 câu</a></div>
-    </div>
-    <div class="course" id="course-tools" style="--c:var(--c-tools)">
-      <div class="top"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v18M17 3v18"/><rect x="4.5" y="7" width="5" height="9" rx="1"/><rect x="14.5" y="5" width="5" height="7" rx="1"/></svg></span><div><h3>Orderflow Tools Playbook</h3><p>DOM · Tape · Footprint · Delta &amp; CVD · 13 kịch bản footprint · kết hợp tại key level TPO · thuật ngữ.</p></div></div>
-      <div class="chs"></div><div class="meters"></div>
-      <div class="act"><a class="ui-btn primary" href="tools.html">Vào khoá</a><a class="ui-btn" href="quiz.html#luyen-tap">Luyện 87 câu</a></div>
-    </div>
+    <a class="crow" id="course-levels" href="levels.html" style="--c:var(--c-levels)"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v16"/><path d="M4 6h5M4 9.5h10M4 13h16M4 16.5h11M4 20h6"/></svg></span><span class="t"><b>TPO Level</b><small>7 chương · 86 câu trắc nghiệm</small></span><span class="m"><span class="lbl">Câu đúng <b class="v">0/86</b></span><span class="ui-bar"><i class="ok" style="background:var(--buy)"></i><i class="bad" style="background:var(--sell)"></i></span></span><span class="arr">→</span></a>
+    <a class="crow" id="course-tools" href="tools.html" style="--c:var(--c-tools)"><span class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v18M17 3v18"/><rect x="4.5" y="7" width="5" height="9" rx="1"/><rect x="14.5" y="5" width="5" height="7" rx="1"/></svg></span><span class="t"><b>Orderflow Tools</b><small>9 chương · 87 câu trắc nghiệm</small></span><span class="m"><span class="lbl">Câu đúng <b class="v">0/87</b></span><span class="ui-bar"><i class="ok" style="background:var(--buy)"></i><i class="bad" style="background:var(--sell)"></i></span></span><span class="arr">→</span></a>
   </div>
 </section>
 
@@ -72,11 +62,11 @@
 <section class="ui-sec">
   <div class="ui-sec-h"><div><span class="ui-eyebrow">Dùng hằng ngày</span><h2 class="ui-h2">Công cụ trong phiên</h2></div></div>
   <div class="tools-grid">
-    <a class="tool" href="levels.html#plan" style="--c:var(--c-levels)"><i class="dot"></i><span><span class="w">Trước 9:25 ET</span><b>Plan Builder + pre-market checklist</b><span class="d">Nhập số hôm qua và overnight, ra open location, ladder level và 2 kịch bản.</span></span></a>
+    <a class="tool" href="levels.html#plan" style="--c:var(--c-levels)"><i class="dot"></i><span><span class="w">Trước 9:25 ET</span><b>Plan Builder + bản đồ level</b><span class="d">Nhập số hôm qua, overnight và các vùng, ra open location, 2 kịch bản và hình bản đồ level.</span></span></a>
     <a class="tool" href="levels.html#levels" style="--c:var(--c-levels)"><i class="dot"></i><span><span class="w">Chọn zone</span><b>Thứ bậc level &amp; chấm điểm</b><span class="d">Tier 1–4, acceptance hay rejection, 80% rule, spike rules, công cụ tính IB.</span></span></a>
     <a class="tool" href="tools.html#ket-hop" style="--c:var(--c-tools)"><i class="dot"></i><span><span class="w">Tại level</span><b>Chấm hạng setup A++ / A+ / B</b><span class="d">Checklist VWAP → CVD → DOM → Tape → Footprint, tự ra hạng và hành động.</span></span></a>
     <a class="tool" href="tools.html#kich-ban" style="--c:var(--c-tools)"><i class="dot"></i><span><span class="w">Trigger</span><b>13 kịch bản footprint</b><span class="d">Bối cảnh, footprint 3 nến kiểu ATAS, entry · stop · target, điều kiện vô hiệu.</span></span></a>
-    <a class="tool" href="levels.html#template" style="--c:var(--c-levels)"><i class="dot"></i><span><span class="w">Case study</span><b>Đọc template NQZ6 29/10 → 04/11</b><span class="d">Value migration 5 phiên và bản đồ level minh hoạ.</span></span></a>
+    <a class="tool" href="levels.html#initial-balance" style="--c:var(--c-levels)"><i class="dot"></i><span><span class="w">10:30 ET</span><b>Initial Balance &amp; IB Journal</b><span class="d">Công cụ tính IB, 5 kịch bản sau 10:30, 4 setup IB, thống kê IB của riêng bạn.</span></span></a>
     <a class="tool" href="tools.html#thuat-ngu" style="--c:var(--brand)"><i class="dot"></i><span><span class="w">Tra cứu</span><b>Thuật ngữ orderflow &amp; TPO</b><span class="d">36 thuật ngữ orderflow, từ điển TPO ở chương 01 khoá Level.</span></span></a>
   </div>
 </section>
@@ -94,11 +84,11 @@
 </div>
 <footer class="ui-foot">Playbook học tập cho NQ intraday. Không phải lời khuyên đầu tư. Các con số thống kê truyền thống (80% rule, tỉ lệ day type, ngưỡng delta) cần được tự kiểm chứng bằng backtest trước khi dùng với tiền thật.</footer>
 </main>
-<script src="assets/js/fp.js?v=7"></script>
-<script src="assets/js/bank-levels.js?v=7"></script>
-<script src="assets/js/bank-tools.js?v=7"></script>
-<script src="assets/js/quiz.js?v=7"></script>
-<script src="assets/js/core.js?v=7"></script>
-<script src="assets/js/home.js?v=7"></script>
+<script src="assets/js/fp.js?v=8"></script>
+<script src="assets/js/bank-levels.js?v=8"></script>
+<script src="assets/js/bank-tools.js?v=8"></script>
+<script src="assets/js/quiz.js?v=8"></script>
+<script src="assets/js/core.js?v=8"></script>
+<script src="assets/js/home.js?v=8"></script>
 </body>
 </html>

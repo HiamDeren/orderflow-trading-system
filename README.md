@@ -11,7 +11,7 @@ Website học tập gộp hai playbook **Orderflow Tools** và **TPO Level** cho
 | `levels.html` | Khoá 1 · TPO Level: TPO, day/open types, level map, VWAP RTH, CVD, Plan Builder, case study |
 | `quiz.html` | Trung tâm trắc nghiệm: luyện tập, thi thử, ôn câu sai |
 
-**Ngân hàng câu hỏi: 180 câu, giữ nguyên văn** — 87 câu Orderflow Tools (`assets/js/bank-tools.js`, id `T001…T087`) và 93 câu TPO Level (`assets/js/bank-levels.js`, id `L001…L093`).
+**Ngân hàng câu hỏi: 173 câu, giữ nguyên văn** — 87 câu Orderflow Tools (`assets/js/bank-tools.js`, id `T001…T087`) và 86 câu TPO Level (`assets/js/bank-levels.js`, id `L001…L093`, bỏ 7 câu case study).
 
 - Mỗi chương có bài kiểm tra nhanh theo đúng module.
 - Thi thử: đề Tools 50 câu, đề Level 50 câu, đề tổng 100 câu (50 + 50), rút ngẫu nhiên giữ tỉ lệ theo chương. Qua bài khi đạt ≥ 80% ba lần liên tiếp.

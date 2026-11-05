@@ -1,7 +1,7 @@
 import re,json,os,sys
 import pathlib
 ROOT=str(pathlib.Path(__file__).resolve().parent.parent)
-FILES=['index.html','quiz.html','tools.html','levels.html']+['assets/js/'+f for f in ['core.js','quiz.js','home.js','fp.js','tools-page.js','levels-page.js','levels-data.js','bank-tools.js','bank-levels.js']]
+FILES=['index.html','quiz.html','tools.html','levels.html']+['assets/js/'+f for f in ['core.js','quiz.js','home.js','fp.js','tools-page.js','levels-page.js','plan-chart.js','levels-data.js','bank-tools.js','bank-levels.js']]
 VN=re.compile(r'[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]')
 DELIM=re.compile(r'[<>\'"`{}$\n]')
 def strip_comments(src,js):

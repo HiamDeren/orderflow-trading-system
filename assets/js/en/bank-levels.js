@@ -120,6 +120,7 @@ PB.quiz = [
   {m:"ib",q:"The dPOC sits in the upper half of the IB, price holds above IB mid, VWAP slopes up at 10:30. What does it suggest?",o:["IBH will certainly break","A bias towards an upside breakout, but acceptance + CVD confirmation are still needed","Short IBH","Stand aside all day"],a:1,e:"Context leaning one way, not a signal yet."},
   {m:"ib",q:"How should the IB mid mainly be used?",o:["The strongest entry zone","A rotation target and a place to move the stop","Level Tier 1","Not allowed"],a:1,e:"IBH/IBL are the main boundaries; the IB mid is the centre of gravity."}
 ];
-window.QBANK=(window.QBANK||[]).concat(PB.quiz.map((q,i)=>({id:'L'+String(i+1).padStart(3,'0'),course:'levels',mod:q.m,q:q.q,o:q.o,a:q.a,e:q.e,vis:null})));
+
+window.QBANK=(window.QBANK||[]).concat(PB.quiz.map((q,i)=>({id:'L'+String(i+1).padStart(3,'0'),course:'levels',mod:q.m,q:q.q,o:q.o,a:q.a,e:q.e,vis:null})).filter(q=>q.mod!=='case'));
 window.QMODS=window.QMODS||{};window.QMODS.levels={tpo:'TPO foundations',structure:'Day & Open types',case:'Case study',ib:'Initial Balance',levels:'Level map',vwap:'VWAP RTH',cvd:'CVD divergence'};
 })();
