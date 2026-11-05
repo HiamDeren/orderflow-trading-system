@@ -1,0 +1,2218 @@
+0	Hệ thống học Orderflow + TPO cho NQ intraday: 2 khoá, 166 câu trắc nghiệm, thi thử 50/100 câu.
+1	NQ intraday · PropFirm · 2–3 lệnh/ngày
+2	Hai playbook gộp thành một nơi học:
+3	để execute. Học theo chương, luyện 166 câu trắc nghiệm, thi thử 50 hoặc 100 câu.
+4	Bắt đầu lộ trình
+5	Thi thử
+6	Cách hai khoá ghép với nhau
+7	Hệ thống 4 lớp khi giá tới key level
+8	Mỗi lớp trỏ tới chương tương ứng
+9	TPO: trade ở đâu
+10	Balance hay imbalance, open type, value relationship. Chỉ vẽ level Tier 1–3 và chấm điểm trước phiên.
+11	VWAP RTH: cổng lọc
+12	Trạng thái VWAP và band ±σ quyết định fade hay break, và R:R tới TP1 có đủ ≥ 1.5 không.
+13	Cổng VWAP
+14	Lực đến level mạnh dần hay yếu dần, lệnh chờ giữ hay rút, lệnh lớn có đẩy được giá không.
+15	Trigger · Quản lý
+16	Footprint trên nến M1 đã đóng
+17	Absorption, delta flip hoặc stacked imbalance. Không có trigger thì không vào. Chấm hạng A++ / A+ / B.
+18	13 kịch bản
+19	Khoá học
+20	Hai playbook, một lộ trình
+21	Lộ trình 9 tuần đã tick:
+22	Lộ trình 9 tuần · TPO · Day &amp; Open types · Level map · VWAP RTH · CVD · Plan mỗi ngày · Case study template ATAS.
+23	Vào khoá
+24	Luyện 79 câu
+25	DOM · Tape · Footprint · Delta &amp; CVD · 13 kịch bản footprint · kết hợp tại key level TPO · thuật ngữ.
+26	Luyện 87 câu
+27	Trắc nghiệm
+28	Tiến độ ôn luyện
+29	Mở trung tâm trắc nghiệm →
+30	Dùng hằng ngày
+31	Công cụ trong phiên
+32	Trước 9:25 ET
+33	Nhập số hôm qua và overnight, ra open location, ladder level và 2 kịch bản.
+34	Chọn zone
+35	Thứ bậc level &amp; chấm điểm
+36	Tier 1–4, acceptance hay rejection, 80% rule, spike rules, công cụ tính IB.
+37	Tại level
+38	Chấm hạng setup A++ / A+ / B
+39	Checklist VWAP → CVD → DOM → Tape → Footprint, tự ra hạng và hành động.
+40	13 kịch bản footprint
+41	Bối cảnh, footprint 3 nến kiểu ATAS, entry · stop · target, điều kiện vô hiệu.
+42	Đọc template NQZ6 29/10 → 04/11
+43	Value migration 5 phiên và bản đồ level minh hoạ.
+44	Tra cứu
+45	Thuật ngữ orderflow &amp; TPO
+46	36 thuật ngữ orderflow, từ điển TPO ở chương 01 khoá Level.
+47	Đồng bộ giữa các thiết bị
+48	Sao lưu &amp; khôi phục tiến độ
+49	Tiến độ (chương đã xem, câu trả lời, lịch sử thi, checklist, số liệu Plan Builder) được lưu trong trình duyệt của từng thiết bị. Để học tiếp trên máy khác: bấm
+50	Copy mã
+51	hoặc
+52	Tải file
+53	ở thiết bị này, rồi dán mã hoặc chọn file ở thiết bị kia và bấm
+54	Khôi phục
+55	Copy mã tiến độ
+56	Tải file .json
+57	Dán mã tiến độ vào đây, hoặc để trống rồi bấm Khôi phục để chọn file .json
+58	Mã tiến độ
+59	Xoá toàn bộ tiến độ
+60	Playbook học tập cho NQ intraday. Không phải lời khuyên đầu tư. Các con số thống kê truyền thống (80% rule, tỉ lệ day type, ngưỡng delta) cần được tự kiểm chứng bằng backtest trước khi dùng với tiền thật.
+61	Trắc nghiệm · Orderflow System
+62	166 câu trắc nghiệm TPO Level và Orderflow Tools: luyện tập, thi thử 50/100 câu, ôn câu sai.
+63	Trung tâm trắc nghiệm
+64	Luyện tập 166 câu
+65	Toàn bộ câu hỏi của hai khoá, giữ nguyên nội dung và giải thích. Chọn đáp án để xem ngay đúng sai. Dùng phím 1–4 (hoặc A–D) để chọn, ← → để chuyển câu.
+66	câu TPO Level
+67	câu Orderflow Tools
+68	câu có hình footprint/DOM/tape
+69	Thi thử 50 / 100 câu
+70	Ôn câu sai
+71	Đề 50 câu mỗi khoá, đề tổng 100 câu
+72	Không hiện đáp án cho tới khi nộp bài. Đề đang làm được lưu lại, tắt trình duyệt vẫn làm tiếp được. Qua bài khi đạt ≥ 80% ba lần liên tiếp.
+73	Những câu bạn đang làm sai
+74	Gom từ cả luyện tập và thi thử. Trả lời đúng thì câu tự rời khỏi danh sách.
+75	Câu hỏi giữ nguyên văn từ hai playbook gốc · Ngưỡng qua bài 80% · Tiến độ lưu trên trình duyệt, sao lưu ở trang Tổng quan.
+76	DOM, Tape, Footprint, Delta & CVD, 13 kịch bản footprint cho NQ intraday trên ATAS.
+77	Khoá 2 · NQ · ATAS · Rithmic · intraday RTH
+78	Toàn bộ kiến thức orderflow trong hệ thống ở một chỗ: DOM, tape, footprint, delta và CVD, cách kết hợp tại key level TPO, 13 kịch bản footprint và thuật ngữ. Hình minh hoạ vẽ theo kiểu cluster ATAS, số liệu là dữ liệu mẫu.
+79	chương
+80	kịch bản footprint
+81	câu trắc nghiệm
+82	pha tại key level
+83	Bắt đầu học →
+84	Xem 13 kịch bản
+85	Thi thử 50 câu
+86	Tổng quan: mỗi công cụ trả lời một câu hỏi
+87	Orderflow không phải là nhìn càng nhiều càng tốt. Mỗi công cụ được dùng ở một thời điểm cụ thể khi giá tiến tới key level đã vẽ từ TPO.
+88	Ai đang chờ ở đâu? Lệnh limit treo tại từng mức giá, có giữ hay bị rút.
+89	Ai đang tấn công, với kích thước nào, nhanh hay chậm? Từng giao dịch khớp theo thời gian thực.
+90	Trong nến vừa đóng, bên nào thắng ở từng mức giá? Đây là trigger vào lệnh.
+91	Delta nến
+92	Tổng lực mua chủ động trừ bán chủ động trong một nến. So với hướng nến để biết đồng thuận hay hấp thụ.
+93	Delta cộng dồn trong phiên. Giá đến level bằng lực mạnh dần hay yếu dần.
+94	Ở đâu thì đáng giao dịch, và nên fade hay break. Không phải orderflow nhưng quyết định orderflow có ý nghĩa hay không.
+95	Trình tự 5 pha khi giá tới key level
+96	1. Trước khi tới
+97	15–20 tick trước level
+98	VWAP: cổng lọc
+99	Level nằm đâu so với VWAP RTH và band σ. Chọn giả thuyết fade hay break, ước R:R.
+100	2. Tiếp cận
+101	5–10 tick cuối
+102	CVD + tốc độ tape
+103	Giá đến level bằng lực mạnh dần hay yếu dần.
+104	3. Chạm level
+105	trong vùng TPO
+106	Lệnh chờ tại level giữ hay rút. Lệnh lớn đập vào có đẩy được giá không.
+107	nến M1 đã đóng
+108	Absorption, delta flip hoặc stacked imbalance. Không có trigger thì không vào.
+109	5. Quản lý
+110	sau khi vào
+111	Stop ngoài vùng tín hiệu, target VWAP hoặc level kế tiếp
+112	Thoát khi điều kiện vô hiệu xuất hiện.
+113	Nền tảng: lệnh market, lệnh limit và phiên đấu giá
+114	Mọi công cụ orderflow đều đo một trong hai thứ: lệnh đang chờ (passive) hoặc lệnh đã khớp do bên chủ động gây ra (aggressive).
+115	là việc đọc dòng lệnh thực tế đang khớp và đang chờ để biết bên nào đang kiểm soát giá tại một mức cụ thể, thay vì chỉ nhìn kết quả là cây nến.
+116	Lệnh limit = passive
+117	Treo sẵn ở một giá, chờ người khác khớp vào. Limit mua nằm ở bid, limit bán nằm ở ask. Hiện trên DOM. Có thể rút bất cứ lúc nào, nên có thể là spoof.
+118	Lệnh market = aggressor
+119	Chấp nhận giá của bên kia để khớp ngay. Market mua khớp vào ask, market bán khớp vào bid. Hiện trên tape và footprint sau khi khớp.
+120	Giá di chuyển như thế nào
+121	Giá chỉ lên một tick khi toàn bộ lệnh limit bán ở ask hiện tại bị market mua ăn hết, hoặc bị người đặt rút đi.
+122	Vì vậy lệnh market là bên
+123	tạo chuyển động
+124	, lệnh limit là bên
+125	cản hoặc cho qua
+126	Market mua nhiều mà giá không lên nghĩa là có limit bán lớn hấp thụ: đây là gốc của khái niệm absorption.
+127	Giá đi nhanh qua vùng ít lệnh chờ (LVN), chậm lại ở vùng nhiều lệnh và nhiều volume (HVN). Đây là phần nối giữa orderflow và TPO/volume profile.
+128	Hai kiểu hoạt động theo Auction Market Theory
+129	Bên chủ động đẩy giá ra khỏi vùng giá trị (value) và được chấp nhận. Orderflow: stacked imbalance, CVD xác nhận, tape nhanh. Phù hợp playbook
+130	Giá ra khỏi value bị đẩy ngược về. Orderflow: absorption, exhaustion, divergence, delta flip. Phù hợp playbook
+131	Kiểm tra nhanh · Nền tảng
+132	DOM: sổ lệnh
+133	ATAS: Smart DOM. Dùng ở pha 3 khi giá chạm level.
+134	hiển thị số hợp đồng limit đang treo ở từng mức giá quanh giá hiện tại: bên bid (lệnh mua chờ) và bên ask (lệnh bán chờ). DOM cho biết thanh khoản bị động, chưa phải là giao dịch đã xảy ra.
+135	Khái niệm
+136	Lệnh chờ dồn thêm tại một mức khi giá tiến lại gần. Có người muốn bảo vệ mức đó.
+137	Lệnh chờ rút đi ngay trước khi giá chạm. Đường trống cho giá đi qua.
+138	Wall (tường)
+139	Mức có size lớn bất thường so với các mức xung quanh. Chỉ có ý nghĩa khi có volume khớp vào mà vẫn đứng.
+140	Lệnh lớn đặt để tạo ấn tượng rồi rút trước khi bị khớp. Lý do không được tin DOM một mình.
+141	Lệnh chỉ hiện một phần. Volume khớp tại giá vượt xa size hiển thị, size liên tục được nạp lại.
+142	Lịch sử DOM theo thời gian (ATAS: DOM Levels). Thấy tường tồn tại bao lâu và có bị rút trước khi giá tới hay không.
+143	Cách đọc
+144	Chỉ nhìn DOM khi giá còn vài tick tới level đã chọn. Không dùng DOM để tìm setup.
+145	So size tại level với lúc giá còn xa: tăng là stacking, giảm mà không có volume khớp là pulling.
+146	Đối chiếu với tape: size giảm
+147	do khớp
+148	(tường bị ăn) khác hoàn toàn size giảm
+149	do rút
+150	Nhìn cả phía đối diện: fade long cần ask phía trên mỏng đi; break long cần bid phía dưới dồn theo giá.
+151	Ví dụ
+152	A. Stacking: level giữ
+153	VAL 25,410.50. Lúc T1 giá còn cách 6 tick, bid tại level 140. Lúc T2 giá chạm, bid tăng lên
+154	dù đã có volume khớp vào; ask phía trên giảm. Ủng hộ
+155	nếu footprint cho trigger.
+156	B. Pulling: level vỡ
+157	Cùng VAL. Lúc T1 bid tại level 300. Lúc T2, khi giá còn 1 tick, bid chỉ còn
+158	mà gần như không có volume khớp: lệnh đã bị rút. Không fade; chuẩn bị cho kịch bản
+159	break xuống
+160	C. Iceberg tại bid
+161	DOM luôn hiện 12 lot tại 25,410.50 nhưng tape cho thấy đã khớp 186 lot ở giá này và giá chưa thủng. Có người chơi lớn đang hấp thụ bằng lệnh ẩn. Iceberg ở cực trị thường giữ giá; iceberg bị phá thủng thường dẫn tới chuyển động mạnh theo hướng phá.
+162	Nên và không nên
+163	Nên
+164	Dùng DOM để tinh chỉnh entry tại level đã chọn từ trước.
+165	Luôn xác nhận bằng tape: có khớp thật không.
+166	Ghi nhận phía đối diện mỏng hay dày.
+167	Không nên
+168	Vào lệnh chỉ vì thấy một tường lớn.
+169	Nhìn DOM quanh tin 8:30, 10:00 ET hoặc cú spike lúc 9:30.
+170	Nhìn DOM liên tục cả phiên, gây mệt và overtrade.
+171	Kiểm tra nhanh · DOM
+172	Tape: băng giao dịch
+173	ATAS: Smart Tape (cài đặt 2 cột Price + Volume, màu theo bên khớp). Dùng ở pha 2 và 3.
+174	liệt kê từng giao dịch đã khớp: giá, khối lượng, bên chủ động (mua tại ask hay bán tại bid) và thời gian. Smart Tape gộp các lệnh bị chia nhỏ khớp cùng lúc thành một dòng để thấy kích thước thật.
+175	Một dòng trên băng. Màu xanh: mua chủ động khớp tại ask. Màu đỏ: bán chủ động khớp tại bid.
+176	Lọc size
+177	Chỉ hiện lệnh từ một ngưỡng trở lên. Đặt theo phân vị của phiên (ví dụ top 1%), chỉnh riêng RTH và ETH.
+178	Lệnh vượt ngưỡng size, vẽ bong bóng lên chart. Big trades ở cực trị mà giá không đi tiếp: phía đó bị kẹt.
+179	Số giao dịch mỗi giây. Bùng nổ khi phá range là ignition; bùng nổ ở cuối nhịp dài là climax.
+180	Absorption trên tape
+181	Lệnh lớn liên tục đập vào cùng một giá nhưng giá không đi tiếp.
+182	Initiative trên tape
+183	Chuỗi lệnh lớn một phía, giá nhảy qua nhiều mức liên tiếp.
+184	Trong 5–10 tick cuối trước level: tốc độ chậm dần ủng hộ fade, nhanh dần ủng hộ break.
+185	Khi chạm level: hỏi một câu duy nhất, lệnh lớn đập vào có làm giá đi tiếp không.
+186	Ghép với DOM: lệnh lớn khớp nhưng size hiển thị không giảm, nghĩa là có refill.
+187	Sau hấp thụ, chờ chuỗi lệnh lớn phía ngược lại xuất hiện, đó là dấu hiệu đổi phe.
+188	A. Absorption tại VAL
+189	Ba lệnh bán 48, 62, 55 lot liên tiếp tại 25,411.00 (tô vàng) mà giá không giảm. Sau đó lệnh mua 31 và 24 lot đẩy giá lên (tô xanh). Bên bán bị hấp thụ, ủng hộ fade long.
+190	B. Initiative phá VAH
+191	Chuỗi lệnh mua 40–70 lot trong chưa tới 1 giây, giá nhảy 4 tick qua 25,430.00. Khi retest, chỉ có lệnh bán 3–6 lot. Ủng hộ break long.
+192	Luôn bật lọc size, nếu không băng NQ chạy quá nhanh để đọc.
+193	So tốc độ với mức nền cùng khung giờ.
+194	Đọc tape cùng lúc với DOM tại level.
+195	Coi một lệnh lớn đơn lẻ là tín hiệu.
+196	Đọc tape giữa range khi không có level.
+197	Tin tốc độ tăng vọt lúc ra tin là tín hiệu.
+198	Kiểm tra nhanh · Tape
+199	ATAS: Cluster chart, Bid × Ask, Imbalance. Dùng ở pha 4, chỉ đọc trên nến M1 đã đóng.
+200	tách mỗi cây nến thành từng mức giá và cho biết tại mỗi mức có bao nhiêu volume khớp do bán chủ động (cột bid, bên trái) và mua chủ động (cột ask, bên phải). Nó cho thấy cây nến được tạo ra như thế nào.
+201	Giải phẫu một cây nến footprint
+202	Cây nến mẫu dưới đây là một nến M1 tăng. Mỗi số tròn trên hình ứng với một thành phần trong bảng bên cạnh; cột cuối là giá trị đọc được từ chính cây nến này.
+203	Đỉnh nến (High)
+204	Mức giá cao nhất có giao dịch. Đỉnh có cả bid và ask khác 0 là unfinished auction, giá hay quay lại thăm.
+205	Đáy nến (Low)
+206	Mức giá thấp nhất có giao dịch. Đáy có 0 ở phía bid là finished auction: không còn người bán chủ động bên dưới.
+207	Thân và râu
+208	Thanh dọc bên trái. Phần sáng là thân, từ giá mở (Open) tới giá đóng (Close); phần tối là râu. Thân xanh xám là nến tăng, xám là nến giảm.
+209	Open 25,411.00 → Close 25,412.25, đóng tại đỉnh
+210	Trục giá
+211	Mỗi hàng là một mức giá: 1 tick (0.25 điểm) trên NQ, hoặc một nhóm tick nếu bật gộp hàng.
+212	7 mức giá, 1 tick mỗi hàng
+213	Cột bid (trái)
+214	Volume do người bán chủ động khớp vào giá bid (lệnh market sell).
+215	Cột ask (phải)
+216	Volume do người mua chủ động khớp vào giá ask (lệnh market buy).
+217	Imbalance (số trắng đậm)
+218	Ask tại một mức gấp từ 3 lần bid ở mức thấp hơn 1 tick (hoặc ngược lại cho phía bán), mỗi ô tối thiểu 20 lot.
+219	POC của nến (khung cam)
+220	Mức có tổng volume lớn nhất trong nến. POC ở giữa thân: giá được chấp nhận; POC ở đuôi nến: giá bị từ chối ở đó.
+221	Thanh volume và delta mức giá
+222	Chiều dài là volume tại mức đó (bid + ask). Màu xanh khi delta mức dương, xám khi âm. Số trên thanh là delta mức: ask − bid.
+223	Tại POC: 118 − 41 = +77
+224	Tổng ask trừ tổng bid của cả nến: lực mua chủ động ròng.
+225	Delta chia volume nến. Cho biết một phía áp đảo đến mức nào, không phụ thuộc nến to hay nhỏ.
+226	237 / 585 = 40.5%, ATAS làm tròn 41%
+227	Volume nến
+228	Tổng mọi hợp đồng khớp trong nến: Σ bid + Σ ask.
+229	Value area của nến
+230	70% volume của nến quanh POC. ATAS có thể tô vùng này trong cluster. Ở nến mẫu: 25,411.25 – 25,412.00. Giá đóng ngoài value area của nến cho thấy bên đẩy giá mạnh tới cuối nến.
+231	Delta cao nhất và thấp nhất đạt được trong lúc nến đang chạy (Cluster Statistic). Không nhìn được trên nến đã đóng, nhưng cho biết lực bên nào đã bị đảo ngược trong nến.
+232	Trades và thời gian
+233	Số giao dịch và giờ của nến. Volume lớn với ít trades là lệnh lớn; volume lớn với rất nhiều trades là đám đông lệnh nhỏ.
+234	Delta và Delta%
+235	= Σ ask − Σ bid, đơn vị hợp đồng: lực mua chủ động ròng trong nến.
+236	= Delta ÷ Volume × 100, chạy từ −100% đến +100%: tỷ lệ áp đảo của một phía. ATAS gọi Delta% là
+237	Cách tính từng bước với nến mẫu
+238	Tính delta từng mức: ask − bid. Đây là số trên thanh ngang của ATAS.
+239	Cộng delta các mức, hoặc lấy Σ ask − Σ bid: 411 − 174 =
+240	Volume nến = Σ bid + Σ ask =
+241	. Bên mua chủ động chiếm khoảng 70% volume (411/585), bên bán khoảng 30%.
+242	Mẹo: Delta% = (tỷ lệ ask − tỷ lệ bid). 70% − 30% = 40%.
+243	Thang đọc Delta%
+244	Bán áp đảo một phía
+245	Bán rõ ràng
+246	Nghiêng bán
+247	Cân bằng
+248	Nghiêng mua
+249	Mua rõ ràng
+250	Mua áp đảo một phía
+251	Ngưỡng là quy ước của hệ thống, chỉnh lại sau khi backtest. Ngưỡng ±15% là mức dùng cho trigger delta flip.
+252	Vì sao cần Delta% chứ không chỉ Delta
+253	Nến A và B cùng delta +210 nhưng ý nghĩa khác hẳn. Nến A là nến mở cửa volume lớn, +210 chỉ là 5%: hai bên gần như cân bằng. Nến B là nến giờ trưa volume nhỏ, +210 là 34%: bên mua áp đảo. Delta tuyệt đối dùng để so với chính nó trong cùng khung giờ; Delta% dùng để so giữa các nến khác volume.
+254	Đọc đúng
+255	Luôn đọc Delta% cùng hướng nến: delta% ngược hướng thân nến tại level là dấu hiệu hấp thụ.
+256	Delta% lớn ở nến phá level, cùng hướng phá: initiative.
+257	Delta% từng mức (ví dụ POC: 77 / 159 = 48%) cho biết mức nào bị một phía chiếm.
+258	Dễ đọc sai
+259	Delta% rất lớn ở cuối một nhịp dài có thể là climax, không phải lực tiếp diễn.
+260	Delta% chỉ là kết quả cuối nến; nến đóng +5% có thể từng đạt +40% rồi bị đảo (xem max delta).
+261	So delta tuyệt đối giữa 9:30 và 12:00 là so sai.
+262	Imbalance chéo
+263	So sánh chéo ask với bid một tick thấp hơn
+264	Giá
+265	120 / 30 = 400% → imbalance mua tại 25,412.25
+266	Imbalance không so bid và ask trên cùng một hàng. Người mua chủ động tại giá P khớp với người bán ở ask P, còn người bán chủ động khớp ở bid P − 1 tick. Vì vậy:
+267	tại P: ask(P) ≥ 3 × bid(P − 1 tick).
+268	Imbalance bán
+269	tại P: bid(P) ≥ 3 × ask(P + 1 tick).
+270	Thêm ngưỡng volume tối thiểu (ví dụ 20 lot) để bỏ các ô 9 × 1 vô nghĩa.
+271	Trên NQ có thể gộp 2–4 tick mỗi hàng để dễ đọc.
+272	Các mẫu hình cơ bản
+273	Từ 3 mức imbalance liên tiếp cùng phía. Vùng initiative, thường thành hỗ trợ/kháng cự mới khi retest.
+274	1–2 mức cực trị có volume phía tấn công lớn bất thường, giá không đi tiếp và nến đóng ngược lại.
+275	Volume phía tấn công nhỏ dần về cực trị, cực trị có 0 ở phía tấn công. Không còn ai đuổi giá.
+276	Cực trị nến còn volume ở cả bid và ask. Giá hay quay lại sửa. Dùng làm target.
+277	Cực trị có 0 ở phía tấn công (ví dụ đỉnh có ask = 0). Đấu giá phía đó đã kết thúc.
+278	Imbalance hoặc big trades dồn ở cực trị rồi giá đóng ngược lại. Phe đó bị kẹt, cắt lỗ sẽ đẩy giá nhanh hơn.
+279	Giá đóng xuyên qua vùng stacked theo chiều ngược. Vùng stacked cũ lật thành kháng cự/hỗ trợ.
+280	Volume dồn ở phần trên (P) hoặc dưới (b), phần còn lại mỏng. Thường là short covering hoặc long liquidation.
+281	POC nến
+282	POC ở đầu đuôi nến: giá bị từ chối ở đó. POC ở thân: giá được chấp nhận.
+283	3 trigger được phép dùng để vào lệnh
+284	1–2 mức cực trị có volume phía tấn công từ 60 lot và gấp từ 2.5 lần trung bình các mức khác trong nến. Giá không đi tiếp, nến đóng ở nửa đối diện.
+285	Nến trước delta âm rõ (từ khoảng 15% volume nến), nến sau dương rõ và đóng vượt đỉnh thân nến trước. Ngược lại khi short. Chỉ tính khi xảy ra tại level.
+286	Từ 3 mức liên tiếp imbalance ≥ 300% cùng phía, mỗi mức tối thiểu 20 lot. Đánh theo hướng stacked khi retest, không đuổi giá.
+287	Không dùng
+288	Một ô imbalance lẻ, nến delta lớn nhưng không ở level, nến đang chạy chưa đóng.
+289	Kiểm tra nhanh · Footprint & kịch bản
+290	Delta và CVD
+291	ATAS: Delta, Cumulative Delta, Cluster Statistic. CVD dùng ở pha 2, delta nến là một phần của trigger ở pha 4.
+292	= tổng volume khớp ở ask − tổng volume khớp ở bid, tức mua chủ động trừ bán chủ động.
+293	là delta cộng dồn từ đầu phiên.
+294	Các con số trong Cluster Statistic
+295	Σ ask − Σ bid của nến.
+296	|Delta| / Volume. Từ khoảng 15% trở lên là delta rõ ràng; dưới 5% là cân bằng.
+297	Delta cao nhất và thấp nhất trong lúc nến chạy. Nến 5: max +410 nhưng đóng +35, bên mua đẩy rồi bị đảo ngay trong nến.
+298	Vượt xa trung bình ở cực trị: climax hoặc absorption.
+299	Delta so với hướng nến
+300	Delta dương
+301	Delta âm
+302	Nến tăng
+303	Đồng thuận tăng
+304	Mua chủ động đẩy giá lên. Ủng hộ tiếp diễn, xác nhận break long.
+305	Bán bị hấp thụ
+306	Bên bán đập nhiều hơn mà giá vẫn tăng. Tại hỗ trợ: dấu hiệu fade long.
+307	Nến giảm
+308	Mua bị hấp thụ
+309	Bên mua đập nhiều hơn mà giá vẫn giảm. Tại kháng cự: dấu hiệu fade short.
+310	Đồng thuận giảm
+311	Bán chủ động đẩy giá xuống. Xác nhận break short.
+312	Hai ô vàng chỉ có giá trị khi xảy ra tại key level. Giữa range, delta ngược hướng nến thường là nhiễu.
+313	Giá tạo đỉnh cao hơn trong khi CVD tạo đỉnh thấp hơn
+314	Giá tạo đỉnh cao hơn (HH) nhưng CVD tạo đỉnh thấp hơn (LH): người mua chủ động đang yếu đi, giá được kéo lên chủ yếu do limit sell rút.
+315	Fade: muốn thấy divergence khi giá vào level.
+316	Break: muốn CVD tạo đỉnh/đáy mới cùng giá. Có divergence thì không đánh break.
+317	Trong trend mạnh divergence kéo dài nhiều nhịp; chỉ xét tại swing hoặc level.
+318	Reset CVD nhất quán. Reset lúc 9:30 ET trùng anchor của VWAP RTH.
+319	Delta flip là khi delta nến đổi dấu rõ ràng ngay tại level và nến sau đóng vượt thân nến trước. Đây là phiên bản nhanh của CVD divergence trên một hai nến. Xem ví dụ
+320	Delta divergence trên nến
+321	trong 13 kịch bản.
+322	Kiểm tra nhanh · Delta & CVD
+323	Mỗi kịch bản gồm bối cảnh cần có, footprint 3 nến kiểu ATAS, cách đọc, kế hoạch và điều kiện vô hiệu.
+324	Phe bị kẹt
+325	Kết hợp tại key level TPO
+326	VWAP là cổng lọc, footprint là trigger bắt buộc, CVD, DOM và tape quyết định hạng setup.
+327	Fade tại level
+328	Level nằm phía ngoài VWAP, lý tưởng trùng band ±1σ/±2σ. Khoảng tới VWAP là TP1, phải ≥ 1.5 lần stop.
+329	Không tạo đỉnh/đáy mới cùng giá khi vào level.
+330	Lệnh chờ tại level giữ hoặc dồn thêm; phía đối diện mỏng đi.
+331	Lệnh lớn đập vào level nhưng giá không đi tiếp, có refill.
+332	Absorption, delta flip hoặc stacked ngược hướng trên nến xác nhận.
+333	Kế hoạch
+334	Vào khi nến trigger đóng hoặc retest. Stop 2–4 tick ngoài vùng absorption. TP1 VWAP/POC, TP2 level TPO kế tiếp.
+335	Vô hiệu
+336	2 nến M1 đóng xuyên level với delta theo chiều phá: level bị chấp nhận.
+337	Giá cùng phía hướng phá so với VWAP, VWAP dốc theo hướng đó. Level không nằm từ band ±2σ trở ra.
+338	Tạo đỉnh/đáy mới cùng giá khi phá, không divergence.
+339	Lệnh chờ tại level bị ăn dần hoặc bị rút; phía sau dồn theo giá.
+340	Chuỗi lệnh lớn xuyên level, tốc độ tăng vọt; khi retest lệnh ngược nhỏ và thưa.
+341	Stacked theo hướng phá xuyên level, retest sạch hoặc delta flip khi retest.
+342	Limit trong vùng stacked khi retest. Stop sau vùng stacked. Target unfinished, band ±1σ/±2σ, level kế tiếp.
+343	Nến đóng lại trong value với delta ngược: breakout thất bại, chuyển sang fade.
+344	Chấm hạng setup
+345	VWAP không ngược giả thuyết, R:R tới TP1 ≥ 1.5
+346	Cổng lọc bắt buộc
+347	CVD xác nhận
+348	Fade: divergence/đi ngang · Break: tạo mới cùng giá
+349	DOM xác nhận
+350	Fade: lệnh chờ giữ/dồn · Break: lệnh chờ bị ăn/rút
+351	Tape xác nhận
+352	Fade: lệnh lớn không đẩy được giá · Break: chuỗi lệnh lớn xuyên level
+353	Footprint có trigger trên nến M1 đã đóng
+354	Bắt buộc
+355	Có dấu hiệu đỏ
+356	Quanh tin, quá 3 nến chưa trigger, công cụ mâu thuẫn, level chạm lần 3, stop xa hơn TP1
+357	Chờ
+358	Tick theo thứ tự từ trên xuống.
+359	Footprint + VWAP + cả 3 xác nhận. Vào lệnh, size đầy đủ.
+360	Footprint + VWAP + 2/3 xác nhận. Vào lệnh.
+361	Chỉ 1/3 xác nhận. Với giới hạn 2–3 lệnh/ngày: bỏ qua.
+362	Bỏ
+363	Không qua VWAP, có dấu hiệu đỏ, hoặc footprint đơn lẻ.
+364	Kiểm tra nhanh · Kết hợp tại level
+365	Thuật ngữ
+366	Dữ liệu minh hoạ · Tên indicator theo ATAS · Màu ATAS dạng #AARRGGBB: histogram delta dương #FF3F7FD9, âm #FF4A4A4A, POC #FFE07B39, key level #6B782C2C
+367	TPO, Day & Open types, Level map, VWAP RTH, CVD divergence và quy trình lên plan cho NQ.
+368	Khoá 1 · NQ · RTH 9:30–16:00 ET
+369	Context bằng TPO · Confluence bằng VWAP RTH + CVD · Trigger bằng orderflow. Lộ trình 9 tuần từ đọc profile đến lên plan và execute trong 2 tiếng NY AM.
+370	giai đoạn lộ trình
+371	Mở Plan Builder
+372	00 · Lộ trình 9 tuần
+373	Từ đọc profile đến lên plan và execute trong 2 tiếng NY AM
+374	TPO trong hệ thống của bạn đóng vai trò
+375	: nó trả lời
+376	thị trường đang balance hay imbalance, và mình chỉ được phép hành động ở đâu
+377	. VWAP RTH và CVD là lớp confluence. Trigger vào lệnh vẫn là thứ bạn đã chốt (OSR, IB, footprint/delta). Playbook này không thêm model mới, nó cho các model hiện có một bản đồ level rõ ràng.
+378	Tiến độ tổng
+379	Tick lưu trên trình duyệt này. Mỗi giai đoạn có tiêu chí
+380	qua bài
+381	ở dòng cuối, chưa đạt thì chưa sang giai đoạn sau.
+382	Tài liệu gốc nên đọc
+383	(chương về TPO, day types, open types, value relationships). Đây là nguồn của gần như toàn bộ khái niệm trong tab 01–03.
+384	: phần auction theo khung lớn, cách đọc nhiều ngày liền.
+385	(Steidlmayer): định nghĩa gốc của TPO, IB, Rotation Factor.
+386	Recap Notion của bạn:
+387	. Tab 01 có phần giải đáp các câu hỏi mở bạn còn ghi lại.
+388	Cách bạn đang dùng ATAS (giữ nguyên)
+389	context khung lớn: weekly VA, composite.
+390	chart chính để vẽ zone (template trong ảnh).
+391	VWAP RTH ±1/2/3 SD + CVD + footprint để trigger.
+392	Một nguyên tắc từ chính nhận định của bạn: lý do chưa pass prop là đổi strategy liên tục. Lộ trình này cố tình chậm và đo được, để tạo conviction cho một bộ khung duy nhất.
+393	01 · Nền tảng
+394	TPO là gì và đọc một profile như thế nào
+395	ghi lại mỗi mức giá mà thị trường
+396	có mặt
+397	trong từng khoảng 30 phút. Xếp chồng các khoảng đó theo chiều ngang, ta được một phân phối: chỗ dày là nơi thị trường chấp nhận giá (value), chỗ mỏng là nơi thị trường từ chối hoặc đi qua rất nhanh. Candle cho biết giá đi thế nào, profile cho biết giá được
+398	chấp nhận
+399	ở đâu.
+400	Giải phẫu một profile RTH
+401	Profile mẫu sinh từ dữ liệu 13 period (A = 9:30 … M = 15:30 ET). POC, VA tính tự động theo đúng quy tắc 70%. Ô hồng = value area, ô cam = POC, thanh vàng nhạt bên trái = Initial Balance.
+402	Đọc profile mẫu bên trái
+403	trong A period, A đẩy lên cao rồi bị bán mạnh: 4 dòng chỉ có chữ A ở đỉnh =
+404	. Người bán phản ứng (responsive) đã từ chối giá cao. Đỉnh này
+405	hoàn tất
+406	= A + B. C phá IB low =
+407	range extension xuống
+408	. Initiative sellers xuất hiện.
+409	C đi nhanh để lại
+410	giữa profile: vùng imbalance, thường làm kháng cự khi giá quay lại, hoặc bị lấp nếu thị trường đổi ý.
+411	Phần dưới xây value dày (D → M):
+412	nằm thấp, profile hình chữ
+413	Đáy có 3 chữ khác nhau cùng chạm một giá, không có tail:
+414	. Auction phía dưới chưa xong, ngày sau dễ quay lại quét.
+415	Từ điển TPO (bấm để mở)
+416	Mỗi mục: định nghĩa · cách đọc · cách dùng cho NQ intraday
+417	Rotation Factor: tự tính trong 2 phút
+418	So sánh từng period với period ngay trước nó. High cao hơn:
+419	, thấp hơn:
+420	, bằng:
+421	. Làm tương tự với Low. Cộng hết lại.
+422	Điểm High
+423	Điểm Low
+424	Luỹ kế
+425	RF dương lớn = rotation lên chiếm ưu thế (buyers điều khiển). Gần 0 = hai chiều, balance. Dùng RF của A–C để xác nhận open type, không dùng làm tín hiệu vào lệnh.
+426	Giải đáp các
+427	câu hỏi mở
+428	trong recap Lecture 5 của bạn
+429	Hai cách đếm khác chiều nhau.
+430	Hai prints ở đỉnh
+431	trong video là
+432	hai chữ cái khác nhau cùng chạm mức cao nhất
+433	(đếm theo chiều ngang) → đó là poor high, nên không phải tail. Tail đếm theo
+434	chiều dọc
+435	: số dòng liên tiếp ở cực trị chỉ có một chữ. Theo Dalton, excess tối thiểu là 2 dòng single print. Với NQ, quy ước thực dụng: tail ≥ 2 dòng ở row size bạn đang dùng (ví dụ 5 điểm/dòng → tail ≥ 10 điểm).
+436	1 độ lệch chuẩn của phân phối chuẩn ≈ 68.27%, đó là gốc toán học. 70% là quy ước làm tròn của CBOT và là mặc định trên hầu hết nền tảng, kể cả ATAS. Chọn một con số và giữ cố định để các ngày so sánh được với nhau.
+437	RF tính thế nào?
+438	Bảng ngay phía trên.
+439	là gì?
+440	Trong playbook này, đó là level Tier 1–2 ở tab 03 (weekly VA, prior day VAH/VAL/POC, naked POC, poor high/low, single prints). Giá đóng xuyên qua một level như vậy trong IB thường làm IB rộng và một chiều.
+441	Quiz 01 · Nền tảng TPO
+442	02 · Cấu trúc ngày
+443	Day types, profile shapes, open types và quan hệ value giữa các ngày
+444	Bốn bộ phân loại này trả lời bốn câu hỏi khác nhau.
+445	: 30 phút đầu ai đang chủ động.
+446	: hôm nay có khả năng trend hay rotation.
+447	: hôm qua kết thúc ra sao.
+448	: value đang di chuyển hay đứng yên qua nhiều ngày.
+449	Day types (Dalton) · chọn để xem profile
+450	Open types · 30 phút đầu tiên
+451	Đường nét đứt = giá open 9:30. Phân loại open type xong trước 10:00 ET (21:30–22:00 giờ VN), sau đó mới quyết định có trade theo kịch bản A hay B trong plan.
+452	Open location so với hôm qua · bấm từng ô
+453	Đây là câu hỏi đầu tiên của plan mỗi ngày. Mức tự tin về imbalance tăng dần khi open càng xa value.
+454	Quan hệ value giữa hai ngày
+455	Hộp xám = VA hôm qua, hộp hồng = VA hôm nay. Đánh giá sau khi phiên đóng cửa, ghi vào phần Post-session review.
+456	Level nào đáng vẽ, level nào đáng trade, và khi nào level
+457	hỏng
+458	Mỗi ngày bạn chỉ có 2–3 lệnh, nên số level phải ít và có thứ bậc. Quy tắc: chỉ
+459	vẽ
+460	Tier 1–3 trên chart RTH. Tier 4 (scalping) là tuỳ chọn, chỉ bật khi đã có 20 phiên liên tiếp tuân thủ plan.
+461	Thứ bậc level
+462	Hiện Tier 4 · scalping add-in
+463	Nguồn trên ATAS
+464	Ý nghĩa
+465	Cách dùng
+466	Dấu hiệu
+467	Thời gian
+468	Giá ở ngoài level ≥ 2 period TPO (60 phút) hoặc xây TPO dày ở đó
+469	Chỉ 1 period chạm rồi quay lại, để lại tail
+470	Volume profile dày lên ngoài level (participation)
+471	Volume mỏng, single prints
+472	VWAP dốc theo hướng phá, giá giữ phía đó
+473	Giá chạm ±2 SD rồi quay về VWAP
+474	CVD tạo đỉnh/đáy mới cùng giá
+475	CVD divergence ngay tại level
+476	Kết luận
+477	level cũ thành support/resistance
+478	về POC / cạnh VA đối diện
+479	Trong 2 tiếng NY AM bạn khó chờ đủ 2 period. Phiên bản nhanh: 1 period (30 phút) đóng ngoài level + VWAP + CVD cùng xác nhận.
+480	Open (hoặc đi) ra ngoài VA hôm qua, quay lại vào trong và được chấp nhận 2 period TPO liên tiếp → xác suất cao đi hết VA sang cạnh còn lại.
+481	là tên gọi truyền thống, không phải thống kê đã kiểm chứng cho NQ hiện tại. Hãy tự đo trên Market Replay (bài tập ở Giai đoạn 3).
+482	Spike là cú đi mạnh trong 1–2 period cuối phiên (L, M). Nó chưa kịp được thị trường kiểm chứng, nên ngày hôm sau open ở đâu so với spike cho biết spike là thật hay giả.
+483	Ngày sau open
+484	Spike lên (bullish)
+485	Spike xuống (bearish)
+486	Ngoài spike theo hướng spike
+487	tiếp diễn lên
+488	tiếp diễn xuống
+489	Trong vùng spike
+490	Spike trở thành vùng balance mới, đánh rotation trong spike
+491	Ngoài spike ngược hướng
+492	spike bị reject
+493	→ xuống
+494	→ lên
+495	Ví dụ thật trong template của bạn: 29/10 có spike bán cuối phiên, 30/10 open gap xuống dưới spike → tiếp diễn (xem tab 07).
+496	Chấm điểm một level trước khi trade
+497	Yếu tố
+498	Điểm
+499	Tier 1 (weekly VA, composite, nPOC nhiều ngày)
+500	Tier 2 (VAH/VAL/POC hôm qua, poor H/L, single prints)
+501	Trùng ≥ 2 level trong vòng 10–15 điểm NQ
+502	Trùng VWAP RTH hoặc band ±2 SD
+503	Chưa được test trong phiên hiện tại (fresh)
+504	Đã bị xuyên qua và accept hôm nay
+505	zone A, được trade.
+506	chỉ trade khi CVD + trigger rõ.
+507	không trade, chỉ dùng làm target.
+508	Scalping add-in (tuỳ chọn) · công cụ tính IB
+509	Nhập IB lúc 10:30 ET để có extension, IB mid và đánh giá độ rộng so với trung bình 20 phiên.
+510	IB trung bình 20 phiên
+511	VWAP RTH: value động của chính phiên hôm nay
+512	TPO cho biết value
+513	đã
+514	được xây ở đâu (thường là của hôm qua). VWAP RTH cho biết giá vốn trung bình của mọi người đã giao dịch
+515	từ 9:30 hôm nay
+516	. Kết hợp hai thứ: TPO là bản đồ, VWAP là la bàn trong phiên.
+517	Định nghĩa
+518	VWAP(t) = Σ (Pᵢ × Vᵢ) / Σ Vᵢ      với i chạy từ 9:30 ET đến t
+519	: cùng mốc với IB và TPO RTH, nên ba công cụ nói cùng một ngôn ngữ thời gian. VWAP ETH (18:00 ET) chỉ là lớp phụ khi volume overnight bất thường, như bạn đã chốt.
+520	Giá trên VWAP
+521	: người mua trung bình hôm nay đang lãi → buyers kiểm soát intraday. Dưới VWAP thì ngược lại.
+522	15–20 phút đầu
+523	σ còn nhỏ và nhảy liên tục, band rất hẹp. Đừng fade band trước 10:00 ET.
+524	Bốn trạng thái VWAP
+525	Trạng thái
+526	Nhận diện
+527	Hành động
+528	VWAP phẳng, giá cắt qua lại nhiều lần, ở trong ±1 SD
+529	Bingbong ±1 SD, fade ±2/±3 SD về VWAP
+530	Trend lên
+531	VWAP dốc lên, giá giữ trên VWAP, chạy dọc +1/+2 SD
+532	Buy pullback về VWAP / +1 SD. Cấm short +2 SD
+533	Trend xuống
+534	Đối xứng
+535	Sell pullback về VWAP / −1 SD
+536	Chuyển pha
+537	Giá reclaim / mất VWAP sau IB, VWAP bắt đầu đổi độ dốc
+538	Trade retest VWAP theo hướng mới, cần CVD xác nhận
+539	VWAP × TPO: đọc cùng nhau
+540	Thời gian và volume đồng thuận cùng một giá → balance. Fade các cạnh VA đang hình thành và ±2 SD.
+541	VWAP dẫn, dPOC kéo theo
+542	dPOC di chuyển cùng chiều với VWAP sau 10:30 → value đang migrate, ngày có khả năng trend hoặc normal variation. Đánh go-with.
+543	VWAP trùng level TPO
+544	VWAP hoặc band ±2 SD nằm trong vòng 10–15 điểm của VAH/VAL/POC hôm qua → zone A theo bảng chấm điểm tab 03.
+545	VWAP phẳng, giá chạm −2 SD tại VAL hôm qua (zone A) rồi quay về VWAP, chạm +2 SD tại VAH rồi quay lại.
+546	Trend day: band là chỗ thêm lệnh, không phải chỗ đảo
+547	Giá chạy dọc +1/+2 SD, mỗi lần pullback về +1 SD hoặc VWAP là điểm mua. Người fade +2 SD bị cuốn.
+548	Màu ATAS gợi ý (ARGB)
+549	Đường
+550	Ghi chú
+551	Cyan đậm, dày 2px, tách hẳn khỏi POC cam
+552	Cùng màu, alpha 60%, nét đứt
+553	Tím nhạt, vùng reversal
+554	Đỏ, cực trị
+555	Trắng mờ, chỉ để tham chiếu
+556	Lỗi hay gặp
+557	Fade ±2 SD trong ngày Open Drive + IB extension. Đó là ngày trend, band chỉ là chỗ thêm lệnh.
+558	Nhầm VWAP ETH với VWAP RTH trên chart M1. Đặt tên và màu khác nhau rõ ràng.
+559	Dùng VWAP như một level độc lập, bỏ qua TPO. VWAP chỉ được cộng điểm khi trùng location.
+560	Coi chạm VWAP là tín hiệu. Chạm chỉ là location, vẫn cần CVD + trigger.
+561	CVD divergence: ai đang chủ động, và họ có còn đẩy được giá không
+562	Bạn tự nhận lỗi chính hiện tại là đọc footprint/delta chưa chuẩn. CVD là cách đơn giản hoá: thay vì đọc từng ô bid × ask, chỉ so
+563	hai swing liên tiếp
+564	của giá với hai swing tương ứng của CVD, và
+565	chỉ tại level TPO
+566	Delta(bar) = Volume khớp ở Ask (market buy) − Volume khớp ở Bid (market sell)
+567	CVD(t)     = Σ Delta từ mốc reset đến t
+568	Reset      = 9:30 ET (cùng mốc VWAP RTH và TPO RTH)
+569	: lệnh market, tạo ra delta.
+570	: lệnh limit trên DOM, hấp thụ delta.
+571	Giá di chuyển khi aggression lớn hơn lượng passive liquidity. Divergence xảy ra khi hai thứ này lệch nhau.
+572	hình dạng swing trong cùng phiên
+573	, không so giá trị tuyệt đối giữa các ngày.
+574	Bộ lọc bắt buộc
+575	Location trước
+576	: chỉ xét divergence tại zone điểm ≥ 4 (tab 03). Divergence giữa không trung = nhiễu.
+577	: ngày trend (Open Drive, IB extension, VWAP dốc) thì divergence ngược trend fail liên tục. Chỉ chấp nhận khi trùng Tier 1 + band ±2 SD.
+578	: divergence không phải entry. Chờ phá micro-structure M1, reclaim level, hoặc delta flip.
+579	: ngoài cực trị đã tạo divergence. Giá vượt qua là ý tưởng sai.
+580	Ma trận 4 loại divergence
+581	Panel trên: giá. Panel dưới: CVD. Đường tím = level TPO. Hai loại
+582	là aggressor yếu đi; hai loại
+583	là aggressor vẫn mạnh nhưng bị passive chặn lại. Absorption thường mạnh hơn vì có người lớn đứng ở level.
+584	Checklist đọc CVD tại level (5 bước)
+585	Ghép vào stack xác nhận của bạn
+586	Điều kiện
+587	Zone TPO ≥ 6 điểm + VWAP/band trùng + CVD divergence + trigger (delta flip / DOM)
+588	Zone TPO ≥ 6 + một trong hai (VWAP hoặc CVD) + trigger
+589	Full hoặc 75%
+590	Zone TPO + trigger, không có confluence
+591	Sim / bỏ qua
+592	Không có location TPO
+593	Không trade
+594	Khớp với quy ước triple-layer = A++, double = A+ trong page
+595	của bạn.
+596	06 · Quy trình mỗi ngày
+597	Lên plan: từ profile hôm qua đến 2 kịch bản có invalidation
+598	Mục tiêu của plan không phải dự đoán đúng hướng. Mục tiêu là trước 9:25 ET bạn biết:
+599	mình trade ở đâu, theo điều kiện gì, và điều gì làm mình đứng ngoài
+600	. Từ 01/11/2026 Mỹ đã hết DST, nên 9:30 ET =
+601	21:30 giờ VN
+602	Timeline (ET / giờ VN, mùa đông EST)
+603	Số mặc định = minh hoạ đọc từ ảnh template ngày 04/11 (xấp xỉ). Thay bằng số thật trên ATAS.
+604	Hôm qua (RTH)
+605	Ngày plan
+606	Không
+607	Có
+608	Trung tính
+609	Giá lúc 9:15 ET
+610	Không có tin đỏ
+611	Level khác (mỗi dòng: tên : giá)
+612	Danh sách level khác
+613	RTH gap đáy (30/10 High) : 28861
+614	RTH gap đỉnh (29/10 Low) : 29107
+615	Level tím : 28176
+616	Tạo plan
+617	Khoảng cách
+618	Pre-market checklist (trước 9:25 ET)
+619	Xoá tick cho ngày mới
+620	In-session: cây quyết định
+621	Post-session review (sau 16:00 ET, sáng hôm sau giờ VN)
+622	Chấm điểm process, không chấm kết quả
+623	Với mỗi phiên ghi 3 con số:
+624	kịch bản nào xảy ra (A / B / không cái nào),
+625	số lệnh nằm trong plan / tổng số lệnh,
+626	có dừng đúng 11:30 ET không. Sau 20 phiên, tỉ lệ (2) phải ≥ 90% trước khi bật Tier 4 scalping.
+627	Xoá tick
+628	07 · Case study từ ảnh của bạn
+629	Các số dưới đây đọc từ toạ độ trên ảnh chụp nên sai số khoảng ±10–15 điểm. Phiên 04/11 còn đang chạy lúc chụp (giá 28,657.25), nên VA/POC 04/11 là
+630	. Dùng tab này để luyện cách đọc, còn số để trade thì lấy trực tiếp trên ATAS.
+631	Value migration 5 phiên
+632	Thanh mảnh = range RTH, hộp hồng = VA, vạch cam = POC, gạch trái/phải = open/close. Vùng xám nét đứt = RTH gap chưa lấp, vùng sọc = single prints 29/10.
+633	Template của bạn đang tốt ở đâu, nên thêm gì
+634	Đã có
+635	TPO + volume profile chồng nhau: thấy được presence vs participation.
+636	VA tô màu và POC kéo dài sang phải: dễ thấy level nào còn
+637	IB bar bên trái mỗi ngày, marker open/close.
+638	Tách 3 tab Weekly / ETH / RTH.
+639	Nên thêm
+640	Bật đánh dấu
+641	và
+642	(hoặc vẽ tay) để không bỏ sót magnet.
+643	Chỉ kéo dài POC/VA của 3–5 ngày gần nhất và các level còn naked. Nhiều dải ngang mờ trong ảnh làm khó phân biệt Tier.
+644	Hiện
+645	trên chart M1 execution.
+646	Một chart composite 5–10 ngày khi các VA chồng nhau (như 30/10–04/11).
+647	Playbook học tập cho NQ intraday. Không phải lời khuyên đầu tư. Các con số thống kê truyền thống (80% rule, tỉ lệ day type) cần được bạn tự kiểm chứng bằng backtest trước khi dùng với tiền thật.
+648	Tổng quan
+649	Bảng điều khiển
+650	Lộ trình 9 tuần
+651	Nền tảng TPO
+652	Lên plan mỗi ngày
+653	Đọc template
+654	Nền tảng
+655	Kết hợp tại level
+656	Luyện tập · Thi thử
+657	Luyện tập
+658	Điều hướng
+659	Ôn luyện
+660	Mở menu
+661	Ngôn ngữ
+662	Giờ New York · phiên RTH NQ
+663	Điều hướng nhanh
+664	Chuyển chương
+665	← Chương trước
+666	Chương tiếp →
+667	Hoàn thành khoá →
+668	// giờ NY → Date thật
+669	hôm nay
+670	ngày mai
+671	ngày
+672	giờ
+673	phút
+674	Cửa sổ trade · còn
+675	RTH đang mở · đóng
+676	· còn
+677	Giờ Việt Nam. RTH NQ 9:30–16:00 ET =
+678	giờ VN
+679	Trắc nghiệm:
+680	đúng /
+681	đã làm ·
+682	câu
+683	Câu sai:
+684	Sao lưu tiến độ
+685	Câu
+686	Chính xác.
+687	Bỏ trống.
+688	Chưa đúng.
+689	Đáp án đúng:
+690	câu cần ôn
+691	đúng ·
+692	đã làm
+693	Chỉ câu sai (
+694	Bấm lần nữa để xoá
+695	Làm lại
+696	Không còn câu sai nào cần ôn. Làm thêm ở phần Luyện tập hoặc Thi thử.
+697	Không có câu nào khớp bộ lọc.
+698	← Trước
+699	· phím 1–4 · ← →
+700	Tiếp →
+701	Đề TPO Level
+702	50 câu rút ngẫu nhiên từ 79 câu của khoá Level, giữ tỉ lệ theo chương.
+703	Đề Orderflow Tools
+704	50 câu rút ngẫu nhiên từ 87 câu của khoá Tools, giữ tỉ lệ theo chương.
+705	Đề tổng hợp
+706	Tổng
+707	100 câu = 50 Level + 50 Tools, xáo trộn. Bài kiểm tra cuối của cả hệ thống.
+708	ngưỡng 80%
+709	Đề câu sai
+710	Câu sai
+711	Gần nhất
+712	Tốt nhất
+713	Số lần
+714	Đã qua bài
+715	Đạt ≥80% liên tiếp:
+716	Bắt đầu đề
+717	Tối đa 50 câu lấy từ danh sách câu bạn đang làm sai (
+718	câu). Không chấm qua bài, chỉ để ôn.
+719	Làm đề câu sai
+720	Lịch sử thi
+721	Qua bài khi đạt ≥ 80% ba lần liên tiếp cho cùng một đề
+722	Thời điểm
+723	Đề
+724	Chưa có lần thi nào.
+725	Đang thi · không hiện đáp án đến khi nộp
+726	đã chọn
+727	Bấm lần nữa để huỷ
+728	Huỷ đề
+729	Còn
+730	câu trống · bấm lần nữa
+731	Nộp bài
+732	Kết quả
+733	Làm đề mới
+734	Danh sách đề
+735	Đạt
+736	Chưa đạt
+737	câu đúng
+738	· chuỗi đạt liên tiếp
+739	— đã qua bài 🎯
+740	Xem lại
+741	Câu sai/trống
+742	Tất cả
+743	Ôn các câu sai →
+744	Không sai câu nào. Xuất sắc!
+745	Kiểm tra nhanh
+746	Trắc nghiệm chương ·
+747	Ngân hàng câu hỏi
+748	Luyện tập · có đáp án ngay
+749	Chỉ câu chưa làm
+750	Mọi chương
+751	Trả lời đúng thì câu tự rời danh sách
+752	Minh hoạ TPO profile với value area, POC, VWAP và một nến footprint
+753	Đang trong cửa sổ trade
+754	· kết thúc
+755	(còn
+756	RTH đang mở
+757	· đóng lúc
+758	RTH mở lúc
+759	còn
+760	Giờ VN
+761	Cửa sổ trade
+762	giờ VN ·
+763	Tiếp tục học ·
+764	Tiếp tục:
+765	Bắt đầu từ đây
+766	Lộ trình 9 tuần · TPO Level Playbook
+767	Chương đã xem
+768	Câu đúng
+769	câu trong ngân hàng
+770	câu đã làm
+771	độ chính xác
+772	câu sai cần ôn
+773	Chưa thi ·
+774	chuỗi đạt
+775	Đã tải file tiến độ
+776	Đã copy mã tiến độ
+777	Mã đã hiện trong ô, hãy copy thủ công
+778	Đã khôi phục, đang tải lại…
+779	Mã không hợp lệ
+780	Bấm lần nữa để xoá toàn bộ
+781	Đã xoá
+782	Absorption ở đáy
+783	Cần có:
+784	giá quét low cũ, VAL hoặc band −2σ VWAP sau một nhịp giảm.
+785	Nến 2:
+786	bid 210 và 240 ở hai mức thấp nhất, delta âm mạnh nhưng nến đóng tăng.
+787	Nến 3:
+788	stacked imbalance mua xác nhận.
+789	Volume bán chủ động dồn cực lớn ở đáy nhưng giá không xuống thêm: có limit buy lớn hấp thụ.
+790	Delta của nến hấp thụ âm nhưng thân nến tăng, đây là điểm mấu chốt.
+791	Nến sau xuất hiện stacked imbalance mua: phe mua chuyển sang chủ động.
+792	Retest vùng stacked mua của nến 3, hoặc limit ngay trên vùng absorption.
+793	2 tick dưới đáy vùng absorption.
+794	POC phiên, VWAP hoặc HVN gần nhất phía trên.
+795	Nến đóng dưới vùng absorption, hoặc bid lớn tiếp tục khớp ở đáy mới thấp hơn.
+796	Iceberg bid trên DOM, CVD tạo đáy cao hơn trong khi giá tạo đáy thấp hơn.
+797	Absorption ở đỉnh
+798	giá quét high cũ, VAH hoặc band +2σ VWAP sau một nhịp tăng.
+799	ask 210 và 240 ở hai mức cao nhất, delta dương mạnh nhưng nến đóng giảm.
+800	stacked imbalance bán xác nhận.
+801	Người mua đập lệnh market dồn dập ở đỉnh nhưng giá không lên thêm: limit sell lớn đang hấp thụ.
+802	Delta dương mà thân nến giảm.
+803	Stacked imbalance bán ở nến sau là xác nhận.
+804	Retest vùng stacked bán của nến 3.
+805	2 tick trên đỉnh vùng absorption.
+806	POC, VWAP hoặc HVN gần nhất phía dưới.
+807	Nến đóng trên vùng absorption, hoặc ask lớn tiếp tục khớp ở đỉnh mới.
+808	Tường ask đứng vững trên heatmap, big trades mua cụm ở đỉnh.
+809	giá nén dưới IB high, high phiên trước hoặc VAH rồi phá lên.
+810	4 mức imbalance mua liên tiếp khi phá range.
+811	giá lùi về vùng stacked, volume bán nhỏ dần, delta vẫn dương.
+812	Stacked imbalance mua cho thấy phe mua chủ động ăn liền nhiều mức ask, đây là initiative.
+813	Đỉnh nến 2 còn volume cả hai phía (unfinished), giá thường quay lại vượt qua.
+814	Khi retest, bid khớp nhỏ dần về đáy vùng: người bán không còn lực.
+815	Limit trong nửa trên của vùng stacked, hoặc vào khi nến retest đóng lại trên vùng.
+816	2 tick dưới mức thấp nhất của vùng stacked.
+817	Đỉnh unfinished của nến breakout, rồi mục tiêu đo độ dài range.
+818	Giá đóng dưới đáy vùng stacked: chuyển sang kịch bản imbalance failure.
+819	CVD tạo đỉnh mới cùng giá, VWAP dốc lên, speed of tape tăng lúc phá.
+820	Stacked imbalance bán, retest
+821	giá nén trên IB low, low phiên trước hoặc VAL rồi phá xuống.
+822	4 mức imbalance bán liên tiếp khi phá range.
+823	giá hồi về vùng stacked, ask khớp nhỏ dần.
+824	Phe bán chủ động ăn liền nhiều mức bid.
+825	Đáy nến 2 unfinished, giá thường quay lại xuống thấp hơn.
+826	Khi hồi, ask nhỏ dần: người mua yếu.
+827	Limit trong nửa dưới vùng stacked bán.
+828	2 tick trên mức cao nhất của vùng stacked.
+829	Đáy unfinished, rồi mục tiêu đo độ dài range.
+830	Giá đóng trên đỉnh vùng stacked bán.
+831	CVD tạo đáy mới, giá dưới VWAP, tường bid phía dưới bị rút trên heatmap.
+832	Exhaustion ở đỉnh
+833	nhịp tăng dài chạm band +2σ, VAH hoặc vùng kháng cự HTF.
+834	ask giảm dần 16 → 12 → 9 → 5 → 0 về phía đỉnh, đỉnh có ask = 0 (finished auction).
+835	stacked imbalance bán.
+836	Volume mua chủ động mỏng dần khi giá lên cao: không còn ai đuổi giá.
+837	Đỉnh có ask bằng 0: phiên đấu giá phía trên đã kết thúc.
+838	Khác absorption: ở đây volume nhỏ, không phải volume lớn bị chặn.
+839	Retest vùng stacked bán của nến xác nhận.
+840	2 tick trên đỉnh exhaustion.
+841	VWAP hoặc POC; nhịp đầu thường về lại giữa range.
+842	Giá quay lại vượt đỉnh với ask volume tăng mạnh.
+843	Speed of tape giảm dần khi lên đỉnh, CVD đi ngang hoặc giảm.
+844	Exhaustion ở đáy
+845	nhịp giảm dài chạm band −2σ, VAL hoặc hỗ trợ HTF.
+846	bid giảm dần về phía đáy, đáy có bid = 0 (finished auction).
+847	Bán chủ động cạn dần khi giá xuống thấp.
+848	Đáy có bid bằng 0: không còn người bán ở dưới.
+849	Cần nến xác nhận có initiative mua.
+850	Retest vùng stacked mua của nến xác nhận.
+851	2 tick dưới đáy exhaustion.
+852	VWAP hoặc POC.
+853	Giá quay lại phá đáy với bid volume tăng mạnh.
+854	Speed of tape giảm khi xuống đáy, CVD không tạo đáy mới.
+855	Unfinished auction làm target
+856	một đỉnh hoặc đáy nến quan trọng (high phiên, swing) còn volume cả hai phía.
+857	Nến 1:
+858	đỉnh còn 12 × 9, chưa kết thúc.
+859	giá quay lại vượt qua và tạo đỉnh mới có ask = 0.
+860	Đỉnh có cả bid và ask khác 0 nghĩa là đấu giá chưa xong, thị trường hay quay lại
+861	sửa
+862	Khi giá quay lại và tạo đỉnh mới với ask = 0, mức đó đã được sửa.
+863	Đây là công cụ chọn target, không phải tín hiệu vào lệnh.
+864	Không vào lệnh chỉ vì unfinished.
+865	Không áp dụng.
+866	Dùng mức unfinished làm TP cho lệnh long đang giữ, hoặc chờ sửa xong rồi mới xét short.
+867	Không phải mọi unfinished đều được quay lại trong cùng phiên; ưu tiên các mức ở swing quan trọng.
+868	Mức unfinished trùng high phiên trước hoặc poor high trên TPO thì xác suất quay lại cao hơn.
+869	Người mua bị kẹt ở breakout giả
+870	giá phá high range hoặc high phiên trước, kéo nhiều người mua đuổi.
+871	imbalance mua dồn ở 3 mức cao nhất, delta +258 nhưng nến đóng thấp, râu trên dài.
+872	đóng dưới mức breakout với stacked bán.
+873	Người mua đuổi ở đỉnh (vùng viền xanh dương) giờ đang lỗ.
+874	Khi giá đóng lại trong range, họ phải cắt lỗ bằng lệnh bán, đẩy giá xuống nhanh hơn.
+875	Nến 3 hồi nhẹ với ask rất nhỏ: không ai muốn mua lại.
+876	Short khi nến đóng dưới mức breakout, hoặc retest nhẹ vào vùng stacked bán.
+877	2 tick trên đỉnh nến bẫy.
+878	Cạnh đối diện của range, POC range trước đó.
+879	Giá quay lại trên vùng bị kẹt và giữ được với delta dương.
+880	Big trades mua cụm ở đỉnh, tường bid bên dưới bị rút trên heatmap.
+881	Người bán bị kẹt ở breakdown giả
+882	giá phá low range hoặc low phiên trước, kéo người bán đuổi.
+883	imbalance bán dồn ở 3 mức thấp nhất nhưng nến đóng cao, râu dưới dài.
+884	đóng trên mức breakdown với stacked mua.
+885	Người bán đuổi ở đáy đang lỗ.
+886	Họ cắt lỗ bằng lệnh mua, đẩy giá lên nhanh (short covering).
+887	Nến hồi xuống có bid rất nhỏ.
+888	Long khi nến đóng lại trên mức breakdown, hoặc retest vùng stacked mua.
+889	2 tick dưới đáy nến bẫy.
+890	Cạnh trên của range, POC range.
+891	Giá quay lại dưới vùng bị kẹt và giữ được với delta âm.
+892	Big trades bán cụm ở đáy, đây là dạng sweep and reclaim quen thuộc.
+893	giá tạo đỉnh mới tại kháng cự, sau ít nhất một nhịp tăng rõ.
+894	giá tạo đỉnh cao hơn nhưng delta −92.
+895	Giá lên mà delta âm: phe bán chủ động nhiều hơn nhưng giá vẫn được kéo lên bởi limit buy rút dần.
+896	Lực mua thật đã yếu; đỉnh mới không có người mua chủ động đỡ.
+897	Cần nến sau có initiative bán mới vào lệnh.
+898	2 tick trên đỉnh nến divergence.
+899	VWAP, POC hoặc đáy nhịp tăng gần nhất.
+900	Nến tiếp theo đóng trên đỉnh divergence với delta dương.
+901	CVD trên toàn phiên cũng tạo đỉnh thấp hơn; cluster statistic cho thấy max delta lớn nhưng delta đóng nến âm.
+902	Imbalance failure (lật vùng stacked)
+903	vùng stacked mua xuất hiện, nhưng giá không đi tiếp được sau đó.
+904	stacked mua 3 mức.
+905	giá xuyên qua toàn bộ vùng stacked và đóng dưới, kèm stacked bán.
+906	Vùng stacked là nơi phe mua đã cam kết; khi giá đóng dưới vùng này, họ bị kẹt.
+907	Vùng stacked mua cũ trở thành kháng cự.
+908	Đây là kịch bản có tỷ lệ lợi nhuận/rủi ro tốt vì stop gần.
+909	Short khi nến đóng dưới đáy vùng stacked mua, hoặc retest từ dưới lên.
+910	2 tick trên đỉnh vùng stacked mua cũ.
+911	Đáy của nhịp tăng ban đầu, HVN phía dưới.
+912	Giá reclaim lại vùng stacked và đóng trên.
+913	Delta flip từ dương sang âm mạnh, speed of tape tăng khi xuyên vùng.
+914	nến tăng mạnh sau một nhịp giảm, volume dồn ở phần trên.
+915	phần dưới nến gần như trống (volume 2–14), volume dồn ở 3 mức trên cùng, delta chỉ +14.
+916	giá trôi xuống lại.
+917	Giá lên nhanh qua phần dưới mà không có volume: chủ yếu là người short cũ mua đóng lệnh.
+918	Volume chỉ xuất hiện khi lên cao, delta gần bằng 0: không có người mua mới thật sự.
+919	Phần dưới mỏng là LVN trong nến, giá thường quay lại lấp.
+920	Không đuổi long. Chờ giá quay về phần mỏng rồi đánh giá lại.
+921	Nếu short theo nến 3: 2 tick trên đỉnh P.
+922	Đáy của phần mỏng (gốc nến P).
+923	Volume mới xuất hiện ở phần dưới và giá giữ trên POC của nến P: thị trường đã chấp nhận giá cao hơn.
+924	TPO/volume profile phiên có hình P, CVD không tăng tương ứng với giá.
+925	nến giảm mạnh sau một nhịp tăng, volume dồn ở phần dưới.
+926	phần trên nến gần như trống, volume dồn ở 3 mức dưới cùng, delta gần 0.
+927	giá hồi lên lại.
+928	Giá rơi nhanh qua phần trên không có volume: người long cũ thoát hàng.
+929	Không có người bán mới thật sự, delta gần 0.
+930	Phần trên mỏng thường được lấp lại.
+931	Không đuổi short. Chờ giá hồi về phần mỏng.
+932	Nếu long theo nến 3: 2 tick dưới đáy b.
+933	Đỉnh của phần mỏng.
+934	Volume mới xuất hiện ở phần trên và giá giữ dưới POC của nến b.
+935	Profile phiên có hình b, CVD không giảm tương ứng.
+936	Footprint kiểu cluster ATAS
+937	Thời gian (ET)
+938	Bên
+939	Bán
+940	Nến mẫu
+941	Delta mức
+942	Volume mức
+943	Mở cửa, volume lớn
+944	Giờ trưa, volume nhỏ
+945	Nến phá VAL
+946	Nến
+947	Đọc
+948	: cân bằng
+949	: mua áp đảo
+950	: bán áp đảo
+951	Bid hiển thị
+952	Khớp đợt này
+953	Tổng khớp
+954	Lần nạp lại
+955	Cảnh báo / target
+956	Vô hiệu:
+957	Xác nhận thêm:
+958	Có dấu hiệu đỏ.
+959	Có trigger nhưng chưa qua cổng VWAP.
+960	/3 xác nhận, chưa qua cổng VWAP.
+961	Qua cổng VWAP,
+962	/3 xác nhận. Chờ trigger footprint.
+963	Vào lệnh, size đầy đủ.
+964	Vào lệnh.
+965	Bỏ qua, giữ lượt lệnh.
+966	Footprint đơn lẻ, không có xác nhận.
+967	Volume chủ động lớn bị lệnh limit chặn lại, giá không đi tiếp.
+968	Bên dùng lệnh market, chấp nhận giá của bên kia.
+969	Giá bán thấp nhất đang chờ. Trên footprint: volume mua chủ động khớp tại ask.
+970	Giá mua cao nhất đang chờ. Trên footprint: volume bán chủ động khớp tại bid.
+971	Lệnh khớp vượt ngưỡng size, vẽ bong bóng trên chart.
+972	Volume dồn ở phần dưới nến/profile, thường là long liquidation.
+973	Volume và tốc độ bùng nổ ở cuối một nhịp dài.
+974	Bảng số dưới chart ATAS: volume, delta, delta %, max/min delta theo nến.
+975	Cumulative Volume Delta: delta cộng dồn trong phiên.
+976	Σ ask − Σ bid: mua chủ động trừ bán chủ động.
+977	Delta đổi dấu rõ tại level và nến sau đóng vượt thân nến trước.
+978	Giá tạo cực trị mới nhưng delta/CVD không xác nhận.
+979	Depth of Market: sổ lệnh limit đang chờ.
+980	Volume phía tấn công cạn dần về cực trị.
+981	Giao dịch ngược hướng giá vừa đến, kỳ vọng level giữ (responsive).
+982	Cực trị nến có 0 ở phía tấn công.
+983	Biểu đồ bid × ask theo từng mức giá trong nến (ATAS: cluster).
+984	Lịch sử DOM theo thời gian (ATAS: DOM Levels).
+985	Vùng volume cao (giá chậm lại) / volume thấp (giá đi nhanh qua).
+986	Lệnh limit ẩn, khớp nhiều hơn phần hiển thị và được nạp lại.
+987	Ask(P) ≥ 300% bid(P − 1) hoặc bid(P) ≥ 300% ask(P + 1).
+988	Bên chủ động đẩy giá ra khỏi value và được chấp nhận.
+989	Mức giá đã chọn từ trước (TPO: VAH, VAL, POC, poor high/low, single print, IB).
+990	Volume dồn ở phần trên, phần dưới mỏng, thường là short covering.
+991	Point of Control: mức có volume (hoặc TPO) lớn nhất.
+992	Lệnh chờ bị rút trước khi giá chạm.
+993	Giá ra khỏi value bị đẩy ngược lại.
+994	Giá quay lại vùng vừa phá để kiểm tra trước khi đi tiếp.
+995	Time & Sales của ATAS có gộp lệnh bị chia nhỏ.
+996	Số giao dịch mỗi đơn vị thời gian.
+997	Lệnh lớn đặt để tạo ấn tượng rồi rút.
+998	Từ 3 mức imbalance liên tiếp cùng phía.
+999	Lệnh chờ dồn thêm khi giá tiến gần.
+1000	Phe vào lệnh ở cực trị rồi giá đóng ngược, buộc phải cắt lỗ.
+1001	Cực trị nến còn volume ở cả bid và ask.
+1002	Giá trung bình theo volume; RTH anchor 9:30 ET, band ±1σ/±2σ/±3σ.
+1003	Biểu đồ minh hoạ
+1004	Profile mẫu có selling tail, single prints và poor low
+1005	RF của profile mẫu
+1006	(giá tính theo dòng)
+1007	Tự tin:
+1008	Hành động:
+1009	Năm vùng open location
+1010	Theo dõi gì
+1011	Nối với model của bạn
+1012	Hôm qua
+1013	Hôm nay
+1014	VA hôm qua
+1015	Open ngoài VA
+1016	Chạm VAL
+1017	Minh hoạ 80% rule
+1018	Nhập IB High lớn hơn IB Low.
+1019	chưa có trung bình
+1020	HẸP → ưu tiên range extension, đánh breakout có xác nhận
+1021	RỘNG → ưu tiên rotation trong IB, fade cạnh IB
+1022	TRUNG BÌNH → chờ RE một phía + VWAP dốc
+1023	điểm  (
+1024	so với trung bình)
+1025	Đánh giá      :
+1026	Extension lên   1.5x:
+1027	Extension xuống 1.5x:
+1028	(1.5x / 2x tính theo tổng range = 1.5 / 2 lần IB width, đo từ cạnh IB đối diện)
+1029	Fade +2 SD = bị cuốn
+1030	Tại
+1031	Nhận diện:
+1032	Ý nghĩa:
+1033	Việc cần làm
+1034	Thiếu số:
+1035	. Cần tối thiểu PD High/Low, VAH/POC/VAL và giá lúc 9:15.
+1036	Thứ tự chưa hợp lệ: cần PD High ≥ VAH ≥ POC ≥ VAL ≥ PD Low.
+1037	không có level vẽ sẵn → dùng IB extension làm target
+1038	// ladder with clusters (≤ 15 điểm)
+1039	▶ Giá lúc 9:15
+1040	Open location dự kiến:
+1041	(VAH) khi có CVD exhaustion/absorption + trigger, target POC
+1042	(VAL) tương tự, target POC.
+1043	Breakout: 1 period đóng ngoài VA + VWAP dốc theo hướng phá. Trên VAH → go-with, target
+1044	. Dưới VAL → target
+1045	A sai khi giá accept ngoài cạnh đang fade. B sai khi breakout quay lại trong VA trong cùng period.
+1046	Giữ trên VAH
+1047	→ long retest VAH (kiểu OTD), target PD High
+1048	rồi
+1049	Quay vào VA và accept (2 period, hoặc 1 period + VWAP lật xuống) → 80% rule: short, target POC
+1050	rồi VAL
+1051	A sai khi accept dưới VAH. B sai khi giá reclaim lại VAH sau khi vào VA.
+1052	Open Drive, hoặc Open Test Drive xuống PD High
+1053	rồi giữ → go-with long, target
+1054	. Không fade trong 30 phút đầu.
+1055	Quay lại dưới PD High và giữ 1 period → trapped longs / ORR: short, target VAH
+1056	rồi POC
+1057	A sai khi giá đóng period dưới PD High. B sai khi giá reclaim PD High.
+1058	Giữ dưới VAL
+1059	→ short retest VAL (kiểu OTD), target PD Low
+1060	Quay vào VA và accept (2 period, hoặc 1 period + VWAP lật lên) → 80% rule: long, target POC
+1061	rồi VAH
+1062	A sai khi accept trên VAL. B sai khi giá mất lại VAL sau khi vào VA.
+1063	Open Drive, hoặc Open Test Drive lên PD Low
+1064	rồi bị reject → go-with short, target
+1065	Quay lại trên PD Low và giữ 1 period → trapped shorts / ORR: long, target VAL
+1066	A sai khi giá đóng period trên PD Low. B sai khi giá mất lại PD Low.
+1067	Overnight net long + open cao: dễ có inventory correction xuống 30–60 phút đầu. Ưu tiên chờ OTD/OSR thay vì long ngay open.
+1068	Overnight net short + open thấp: dễ có inventory correction lên đầu phiên. Ưu tiên chờ OTD/OSR thay vì short ngay open.
+1069	Overnight net long nhưng open thấp: longs ETH đang kẹt, áp lực bán có thể tăng khi mất ON Low.
+1070	Overnight net short nhưng open cao: shorts ETH đang kẹt, ON High là nhiên liệu nếu bị phá.
+1071	là magnet: kỳ vọng bị quét. Không short ngay dưới nó với stop sát.
+1072	là magnet: kỳ vọng bị quét. Không long ngay trên nó với stop sát.
+1073	Shape P hôm qua = short covering. Cần thấy new buying (giữ trên VA) mới tin tiếp diễn.
+1074	Shape b hôm qua = long liquidation. Cần thấy new selling (giữ dưới VA) mới tin tiếp diễn.
+1075	Shape D hôm qua = balance. Mặc định kỳ vọng balance tiếp.
+1076	Shape B hôm qua = double distribution. Single prints giữa hai vùng là level quan trọng.
+1077	Hôm qua trend. Ngày sau trend thường có balance hoặc tiếp diễn chậm hơn; không đoán đảo chiều.
+1078	Hôm qua Neutral: xem close ở giữa (center → balance) hay cực trị (extreme → ưu tiên hướng close).
+1079	Hôm qua Non-Trend: năng lượng tích luỹ, chú ý breakout khỏi range hôm qua.
+1080	Close hôm qua ở
+1081	gần high, mạnh
+1082	gần low, yếu
+1083	giữa range, balance
+1084	• Hôm qua:
+1085	trung tính
+1086	• Giá 9:15 ET:
+1087	• Level gần nhất: trên
+1088	· dưới
+1089	• Cụm level (≤
+1090	điểm):
+1091	KỊCH BẢN A (chính)
+1092	KỊCH BẢN B (thay thế)
+1093	GHI CHÚ CONTEXT
+1094	QUY TẮC CỐ ĐỊNH
+1095	• Open type phải khớp kịch bản trước khi vào lệnh (phân loại xong lúc 10:00 ET).
+1096	• Chỉ trade zone điểm ≥ 6, grade A+ trở lên (VWAP RTH và/hoặc CVD xác nhận).
+1097	• Tối đa 2–3 lệnh. Dừng 11:30 ET (23:30 VN) hoặc khi chạm daily loss limit.
+1098	• No-trade: giữa POC và cạnh VA khi chưa có open type rõ.
+1099	Đã copy plan.
+1100	Trình duyệt chặn copy. Bôi đen khung plan để copy tay.
+1101	Value migration 29/10 đến 04/11
+1102	RTH gap chưa lấp
+1103	Level tím 28,176
+1104	Cụm POC 02/11 + 04/11
+1105	Đọc profile:
+1106	Bài học:
+1107	Bản đồ level cho 05/11 (minh hoạ, cập nhật sau khi 04/11 đóng phiên)
+1108	Nguồn
+1109	Vai trò
+1110	Rotation 28,505–28,795. Short cụm 28,795–28,890 khi CVD exhaustion, long 28,505–28,445 khi absorption. Target cụm POC 28,650–28,680.
+1111	Accept trên 28,890
+1112	Breakout tiếp diễn từ balance 03/11. Go-with, target lấp gap đến 29,105. Single prints 29,105–29,350 là kháng cự lần test đầu.
+1113	Accept dưới 28,445
+1114	Breakout 04/11 thất bại, quay lại balance 03/11. Target POC 03/11 28,330, sau đó level tím 28,176.
+1115	Thử ngay: mở tab 06, Plan Builder đã điền sẵn các số này. Đổi
+1116	Giá lúc 9:15
+1117	để xem open location và kịch bản thay đổi thế nào.
+1118	Giai đoạn 1 · Nền móng
+1119	Tuần 1–2
+1120	Đọc Dalton – Mind Over Markets: phần TPO, Initial Balance, Value Area
+1121	Thuộc toàn bộ từ điển ở tab 01 (đọc to được định nghĩa + cách dùng của từng mục)
+1122	Trên ATAS Daily Profile RTH: tự đánh dấu POC, VAH, VAL, IB, open/close cho 20 phiên NQ gần nhất
+1123	Trong 20 phiên đó, khoanh mọi single prints, tail (excess) và poor high/low
+1124	Tính Rotation Factor bằng tay cho 5 phiên, so với cảm nhận ban đầu của bạn
+1125	Qua bài: Quiz 01 ≥ 80% và 20 phiên đã đánh dấu đủ
+1126	Giai đoạn 2 · Cấu trúc ngày
+1127	Tuần 3–4
+1128	Phân loại day type + shape + open type cho 30 phiên (lưu vào database Notion hoặc sheet)
+1129	Ghi value relationship ngày-với-ngày cho 30 phiên đó
+1130	Đo IB width trung bình 20 phiên NQ và % ngày có range extension (dùng làm baseline cho Plan Builder)
+1131	Đếm: bao nhiêu % ngày IB bị phá cả hai phía (neutral) trên NQ của bạn
+1132	Luyện spike rules: tìm 10 ngày có spike cuối phiên, ghi ngày sau open ở đâu và kết quả
+1133	Qua bài: Quiz 02 ≥ 80%, phân loại lại 10 phiên ngẫu nhiên đúng ≥ 8
+1134	Giai đoạn 3 · Level & Plan
+1135	Tuần 5–6
+1136	Mỗi tối dùng Plan Builder (tab 06) lên plan cho 10 phiên liên tiếp, trade trên sim
+1137	Mỗi plan có đúng 2 kịch bản (A/B), mỗi kịch bản có zone, trigger, target, invalidation
+1138	Backtest 80% rule trên ATAS Market Replay: 20 lần, ghi tỉ lệ đi hết VA
+1139	Backtest IB extension 1.5x/2x khi IB hẹp: 20 lần
+1140	Chấm điểm level (bảng tab 03) cho mọi zone trước khi vào lệnh sim
+1141	Qua bài: 10 plan liên tiếp viết trước 9:25 ET, ≥ 90% lệnh nằm trong plan
+1142	Giai đoạn 4 · Add-in VWAP RTH + CVD
+1143	Tuần 7–8
+1144	Mỗi phiên ghi trạng thái VWAP (balance / trend / chuyển pha) lúc 10:30 ET
+1145	Ghi quan hệ VWAP vs dPOC lúc 10:30 và 11:30 ET
+1146	Đặt CVD reset 9:30 ET trên chart M1 execution, cùng mốc với VWAP RTH
+1147	Thu thập 20 CVD divergence tại zone TPO, phân loại exhaustion / absorption, ghi kết quả
+1148	Grade mọi setup A++ / A+ / B / C, chỉ trade A+ trở lên trên sim
+1149	Qua bài: Quiz 04 + 05 ≥ 80%, winrate của setup A+ trên sim được đo trên ≥ 30 lệnh
+1150	Giai đoạn 5 · Thực chiến prop
+1151	Tuần 9+
+1152	Live: tối đa 2–3 lệnh/ngày, chỉ setup A+ trở lên, dừng 11:30 ET (23:30 VN)
+1153	Weekly review: tỉ lệ kịch bản A/B đúng, lỗi lặp lại, lệnh ngoài plan
+1154	Tuỳ chọn: bật Tier 4 scalping chỉ khi 20 phiên liên tiếp ≥ 90% lệnh trong plan
+1155	Bài kiểm tra tổng 50 câu (tab 08) ≥ 40/50 ba lần liên tiếp
+1156	Mỗi ô (hoặc chữ cái) = giá đã được giao dịch trong một khoảng 30 phút. RTH NQ có 13 period: A 9:30, B 10:00, C 10:30, D 11:00, E 11:30, F 12:00, G 12:30, H 13:00, I 13:30, J 14:00, K 14:30, L 15:00, M 15:30 ET.
+1157	Càng nhiều ô xếp ngang ở một giá, thị trường càng dành nhiều thời gian ở đó.
+1158	Cửa sổ trade của bạn (9:30–11:30 ET) chỉ gồm A–D. Mọi quyết định trong phiên dựa trên A–D so với profile hôm qua.
+1159	Presence = thời gian có mặt ở giá (TPO). Participation = volume thực sự khớp ở giá (volume profile).
+1160	TPO dày + volume mỏng = có mặt nhưng ít người tham gia: value yếu. TPO mỏng + volume dày = giao dịch lớn đi qua nhanh: level mạnh.
+1161	Đây là lý do template của bạn đặt TPO và volume profile cạnh nhau. Ưu tiên level mà cả hai cùng xác nhận.
+1162	TPOC = giá có nhiều TPO nhất (thời gian). VPOC = giá có volume lớn nhất. Thường gần nhau nhưng không bắt buộc.
+1163	POC là giá
+1164	công bằng nhất
+1165	của phiên. POC nằm cao = buyers xây value cao (P); POC thấp = b.
+1166	POC hôm qua là target tự nhiên của mọi rotation trong VA. POC chưa bị chạm lại = naked POC, magnet.
+1167	Vùng chứa ~70% TPO (hoặc volume) quanh POC. Cạnh trên VAH, cạnh dưới VAL.
+1168	Trong VA = fair value, hai bên đồng thuận. Ngoài VA = giá
+1169	không công bằng
+1170	, thị trường hoặc từ chối nhanh, hoặc chấp nhận và xây value mới.
+1171	Cạnh VA là level Tier 2 quan trọng nhất trong ngày: fade nếu bị reject, go-with nếu được accept (tab 03).
+1172	Range của A + B, tức 9:30–10:30 ET. IB width = IB High − IB Low.
+1173	IB hẹp so với trung bình = hai bên chưa đồng thuận, dễ có range extension mạnh. IB rộng = phần lớn range ngày đã có, thiên về rotation.
+1174	IB là anchor của model IB bạn đang dùng. So IB width với trung bình 20 phiên (công cụ ở tab 03).
+1175	Giá đi ra ngoài IB sau 10:30 ET.
+1176	RE một phía = initiative activity theo phía đó. RE hai phía = Neutral day.
+1177	RE kèm VWAP dốc và CVD cùng chiều → đánh go-with, target IB 1.5x/2x.
+1178	Các dòng giá chỉ có duy nhất một chữ cái, nằm bên trong profile (không phải ở cực trị).
+1179	Giá đi nhanh một chiều, không có trao đổi hai chiều = vùng imbalance.
+1180	Lần test đầu thường là support/resistance. Nếu bị lấp hết và giá được accept, imbalance đã được sửa, level hết tác dụng.
+1181	≥ 2 dòng single print liên tiếp ở cực trị của phiên. Buying tail ở đáy, selling tail ở đỉnh.
+1182	Responsive participant từ chối giá rất nhanh: auction ở phía đó đã hoàn tất.
+1183	Đỉnh/đáy có tail là level mạnh, không kỳ vọng quay lại quét. Stop có thể đặt ngoài tail.
+1184	Cực trị có ≥ 2 chữ cái khác nhau cùng chạm đúng một giá, không có tail. Còn gọi là unfinished auction.
+1185	Thị trường dừng ở đó vì hết người tham gia trong phiên, không phải vì bị từ chối mạnh.
+1186	Magnet: thường bị quay lại quét trong các phiên sau. Dùng làm target, không đặt stop ngay sau nó.
+1187	Mũi tên trên template của bạn: giá mở 9:30 và giá đóng 16:00.
+1188	Close gần cực trị theo hướng ngày = mạnh, dễ tiếp diễn. Close về giữa = balance.
+1189	Close location là đầu vào của spike rules và của kỳ vọng open ngày sau.
+1190	Halfback = điểm giữa range hiện tại của ngày. IB mid = điểm giữa IB.
+1191	Giá trên halfback = buyers đang thắng phiên; dưới = sellers.
+1192	Level scalping Tier 4, cũng là chỗ dời stop về hoà vốn.
+1193	Tổng điểm so sánh high/low của từng period với period trước (+1 cao hơn, −1 thấp hơn, 0 bằng).
+1194	RF dương lớn = rotation lên chiếm ưu thế; gần 0 = hai chiều.
+1195	Xác nhận nhanh open type sau A–C. Không dùng làm tín hiệu vào lệnh.
+1196	POC của một phiên cũ mà giá chưa quay lại chạm.
+1197	Fair value cũ chưa được kiểm tra lại.
+1198	Target có xác suất cao. Nhiều nPOC xếp gần nhau = zone Tier 1.
+1199	Cú đi mạnh một chiều trong 1–2 period cuối phiên (L, M).
+1200	Chưa được thị trường kiểm chứng. Ngày sau open ở đâu so với spike cho biết spike thật hay giả.
+1201	Xem bảng spike rules ở tab 03.
+1202	Phần lớn giao dịch ETH nằm trên (net long) hay dưới (net short) close RTH hôm qua.
+1203	Inventory lệch nhiều một phía hay bị
+1204	xả
+1205	ngược trong 30–60 phút đầu RTH.
+1206	Overnight inventory net long + open ở ON high → cẩn thận long ngay open; kết hợp với model OSR (sweep ON range → reclaim).
+1207	Gộp nhiều ngày có VA chồng nhau thành một profile lớn.
+1208	VA nhiều ngày chồng nhau = fair value bền. Cạnh composite mạnh hơn cạnh VA một ngày.
+1209	Ví dụ trong template: 30/10, 02/11, 04/11 có VA chồng nhau quanh 28,360–28,880, rất hợp để composite.
+1210	Value của tuần, bias khung lớn
+1211	Giá trong weekly VA → balance, ưu tiên rotation. Open ngoài weekly VA → ưu tiên go-with
+1212	Composite VA (nhiều ngày)
+1213	Gộp profile
+1214	Fair value bền nhiều ngày
+1215	Cạnh composite là zone fade mạnh nhất; phá và accept → trend nhiều ngày
+1216	Naked POC nhiều ngày
+1217	POC kéo dài (extend)
+1218	Fair value cũ chưa test
+1219	Target ưu tiên; lần chạm đầu hay phản ứng
+1220	Daily Profile RTH hôm qua
+1221	Cạnh fair value hôm qua
+1222	Fade nếu reject; go-with nếu accept; 80% rule khi quay lại vào VA
+1223	Giá công bằng nhất hôm qua
+1224	Target của rotation trong VA, pivot bias
+1225	Liquidity, stop của phe hôm qua
+1226	Sweep & reclaim (cùng logic OSR); poor thì là magnet
+1227	Đánh dấu tay
+1228	Magnet / target, không đặt stop ngay sau
+1229	Vùng imbalance
+1230	Support/resistance lần test đầu; lấp hết = hết tác dụng
+1231	Biên inventory overnight
+1232	Model OSR của bạn: sweep biên ON → reclaim → retest
+1233	Mốc phân loại open type
+1234	Giữ trên/dưới open sau 30 phút = ai thắng A period
+1235	Biên range extension
+1236	IB hẹp → breakout go-with; IB rộng → fade cạnh IB
+1237	Value động của phiên
+1238	30 phút đầu
+1239	Tính từ IB
+1240	Chốt lời từng phần; 2x hiếm, chỉ ngày trend
+1241	Profile hôm nay
+1242	Value đang dịch chuyển
+1243	dPOC migrate theo hướng trade → pullback về dPOC là điểm thêm
+1244	Mid range ngày
+1245	Ai thắng phiên đến lúc này
+1246	Dời stop hoà vốn, filter hướng scalp
+1247	Từng chữ cái
+1248	Cấu trúc nhỏ
+1249	Trailing stop: trend lên, stop dưới low period trước
+1250	Single prints trong ngày
+1251	Imbalance mới
+1252	Retest đầu tiên là entry scalp
+1253	Scalp rotation khi VWAP phẳng
+1254	IB rất rộng (A, B đã tạo gần hết range). Không có hoặc rất ít range extension.
+1255	Large timeframe participants vào sớm và đặt biên cho cả ngày. Phần còn lại là rotation.
+1256	Fade cạnh IB khi có CVD exhaustion. Target IB mid / POC. Không đuổi breakout.
+1257	IB trung bình, range extension một phía, thường khoảng 1.2–2x IB.
+1258	Initiative buyers (hoặc sellers) xuất hiện sau IB và dời value. Loại ngày thường gặp trên index futures.
+1259	Sau RE, buy pullback về IB high / dPOC / VWAP. Target IB 1.5x – 2x.
+1260	IB hẹp, profile mỏng và dài, mỗi period tạo high/low mới, close ở cực trị.
+1261	Một phe kiểm soát hoàn toàn, phe kia không có cơ hội tạo value.
+1262	Không fade. Vào ở low của period trước / VWAP / +1 SD. Trailing stop theo period.
+1263	Hai vùng value tách nhau bởi một dải single prints. Thường bắt đầu bằng IB hẹp.
+1264	Balance sáng, sau đó có thông tin mới đẩy giá sang vùng balance thứ hai.
+1265	Single prints ở giữa là support (hoặc resistance) lần test đầu. Ngày sau nếu lấp hết single prints = tín hiệu yếu.
+1266	Range extension cả hai phía IB. Neutral center: close giữa range. Neutral extreme: close ở một cực trị.
+1267	Center = hai phe cân bằng, chưa ai thắng. Extreme = phe thắng xuất hiện cuối phiên, thường tiếp diễn ngày sau.
+1268	Center: ngày sau kỳ vọng balance. Extreme: ngày sau ưu tiên hướng close.
+1269	IB hẹp, cả ngày gần như không ra khỏi IB. Range rất nhỏ.
+1270	Thiếu thông tin, thường trước tin lớn hoặc ngày lễ. Năng lượng đang được tích.
+1271	Không trade trong range. Ngày sau chú ý breakout khỏi vùng balance này.
+1272	Thân mỏng phía dưới, value phình ra ở trên.
+1273	Thường là short covering: phe short cũ đóng lệnh, không hẳn là new buyers.
+1274	Ngày sau cần thấy new buying (giữ trên VA) mới tin tiếp diễn. Nếu giá quay xuống phần thân mỏng → dễ đi nhanh.
+1275	Thân mỏng phía trên, value phình ra ở dưới.
+1276	Thường là long liquidation: phe long cũ thoát hàng.
+1277	Ngày sau cần thấy new selling (giữ dưới VA) mới tin tiếp diễn.
+1278	Cao nhất
+1279	Giá đi mạnh một chiều ngay từ 9:30 và không quay lại test open.
+1280	Go-with. Chỉ vào pullback nhỏ đầu tiên vào level gần (ON high, PDH). Tuyệt đối không fade.
+1281	Giá test một level phía ngược (PDH/PDL, ON high/low) để kiểm tra không còn business, rồi đảo và drive qua open.
+1282	Chờ test xong + reclaim open. Rất khớp với model OSR của bạn (sweep → reclaim → retest).
+1283	Trung bình
+1284	Giá đi một hướng, gặp responsive activity ở level, bị từ chối và quay ngược xuyên qua open.
+1285	Trade theo hướng sau khi xuyên open. Target cạnh VA đối diện. Stop ngoài cực trị bị từ chối.
+1286	Thấp
+1287	Giá xoay quanh open hai chiều, không phe nào chủ động. In range: kỳ vọng balance. Out of range: phải chọn hướng sớm.
+1288	Không trade A period. Chờ IB hình thành, đánh cạnh IB hoặc breakout có CVD xác nhận.
+1289	Trên range hôm qua
+1290	Imbalance mạnh
+1291	Open trên PD High. Mức tự tin cao nhất là có imbalance lên. Thị trường phải chứng minh giá mới được chấp nhận.
+1292	Open Drive / Open Test Drive xuống PDH rồi giữ được → go-with. Nếu quay lại vào range hôm qua và giữ 1 period → trapped longs, ORR xuống, target VAH rồi POC.
+1293	OSR: sweep ON low hoặc PDH → reclaim → long.
+1294	Trên VA, trong range
+1295	Thiên lên, vừa phải
+1296	Open giữa VAH và PD High. Thị trường đang thử giá cao hơn value nhưng chưa vượt range.
+1297	Giữ trên VAH (accept) → test PD High. Quay vào VA và accept 2 period → 80% rule về VAL.
+1298	Kịch bản A: long retest VAH. Kịch bản B: short khi accept lại trong VA.
+1299	Trong VA hôm qua
+1300	Open trong value hôm qua. Mặc định là hai bên vẫn đồng thuận, rotation trong VA.
+1301	Fade VAH / VAL với CVD exhaustion hoặc absorption, target POC. Chỉ đổi sang breakout khi accept ngoài VA.
+1302	Playbook VWAP ±1 SD bingbong + fade cạnh VA.
+1303	Dưới VA, trong range
+1304	Thiên xuống, vừa phải
+1305	Open giữa VAL và PD Low. Đối xứng với
+1306	Giữ dưới VAL → test PD Low. Quay vào VA + accept 2 period → 80% rule về VAH.
+1307	Kịch bản A: short retest VAL. Kịch bản B: long khi accept lại trong VA.
+1308	Dưới range hôm qua
+1309	Open dưới PD Low. Imbalance xuống, ví dụ 30/10 trong template của bạn.
+1310	Open Drive xuống → go-with, sell pullback. Quay lại vào range và giữ → trapped shorts, ORR lên.
+1311	OSR: sweep ON high hoặc PDL → reject → short.
+1312	VA hôm nay nằm hoàn toàn trên VA hôm qua.
+1313	Bullish rõ. Ngày sau ưu tiên long ở VAH/POC mới.
+1314	Chồng lên nhau nhưng dịch lên.
+1315	Thiên bullish vừa phải, cần thêm xác nhận.
+1316	Gần như trùng.
+1317	Balance. Fade cạnh, chuẩn bị composite.
+1318	VA hôm nay nằm trong VA hôm qua.
+1319	Nén lại. Chuẩn bị breakout, đừng đoán hướng trước.
+1320	VA hôm nay bao trùm VA hôm qua.
+1321	Mở rộng, hai phe cùng hoạt động. Xem close location để chọn hướng.
+1322	Chồng lên nhau nhưng dịch xuống.
+1323	Thiên bearish vừa phải.
+1324	VA hôm nay nằm hoàn toàn dưới VA hôm qua.
+1325	Bearish rõ. Ngày sau ưu tiên short ở VAL/POC mới.
+1326	Tại VAH / PDH / +2 SD
+1327	Giá tạo higher high, CVD tạo lower high.
+1328	Mỗi nhịp lên cần ít người mua chủ động hơn. Aggressive buyers cạn.
+1329	Short sau khi phá low của nhịp cuối; stop trên high mới; target POC / VWAP.
+1330	CVD tạo higher high mạnh, giá không vượt được high cũ.
+1331	Người mua vẫn bấm market rất mạnh nhưng passive sellers đứng ở level hấp thụ hết.
+1332	Thường mạnh hơn exhaustion. Short khi delta flip âm; stop trên level; target VA đối diện.
+1333	Tại VAL / PDL / −2 SD
+1334	Giá tạo lower low, CVD tạo higher low.
+1335	Aggressive sellers cạn dần.
+1336	Long sau khi phá high nhịp cuối; stop dưới low mới; target POC / VWAP.
+1337	CVD tạo lower low mạnh, giá giữ higher low / equal low.
+1338	Passive buyers hấp thụ toàn bộ lệnh bán market.
+1339	Long khi delta flip dương; stop dưới level; target VA đối diện.
+1340	Giá đang ở zone TPO có điểm ≥ 4 (tab 03)?
+1341	Regime hôm nay: balance hay trend? (open type, IB, độ dốc VWAP)
+1342	So 2 swing gần nhất của giá tại zone với 2 swing CVD tương ứng (reset 9:30 ET)
+1343	Đó là exhaustion hay absorption? Smart Tape thấy lệnh lớn đứng ở level → cộng thêm tự tin
+1344	Có trigger chưa: phá cấu trúc M1, reclaim level hoặc delta flip. Stop ngoài cực trị, target POC / VWAP
+1345	Đóng phiên RTH. Chụp profile, làm post-session review khi bạn dậy.
+1346	Ban ngày VN
+1347	Đọc profile hôm qua: day type, shape, close, value relationship. Cập nhật level Tier 1–2.
+1348	Globex mở, phiên ETH bắt đầu.
+1349	Chốt open location dự kiến, kịch bản A/B, invalidation. Plan Builder.
+1350	A period: phân loại open type. Cửa sổ OSR.
+1351	B period: IB hình thành. Cẩn thận tin 10:00 ET.
+1352	Sau IB: range extension hay rotation. Model IB. Dừng 11:30 ET.
+1353	Tắt platform. Ghi journal ngắn.
+1354	Ghi day type, shape, close location của hôm qua
+1355	Value relationship hôm qua so với hôm kia
+1356	Weekly VA: giá đang ở trong hay ngoài?
+1357	Cập nhật Tier 1–2: VAH/VAL/POC, PDH/PDL, nPOC, poor H/L, single prints, gap
+1358	Lịch tin 8:30 / 10:00 ET
+1359	Open location dự kiến (1 trong 5 vùng)
+1360	Kịch bản A và B, mỗi kịch bản có zone, trigger, target, invalidation
+1361	Đánh dấu no-trade zone (giữa VA, xa mọi level)
+1362	Nhắc rule: tối đa 2–3 lệnh, dừng 11:30 ET, daily loss limit của prop
+1363	Chụp Daily Profile RTH sau 16:00 ET
+1364	Ghi day type, shape, open type, IB width, có RE không và phía nào
+1365	Kịch bản nào đã xảy ra? Plan sai ở chỗ nào?
+1366	Từng lệnh: zone mấy điểm, grade gì, có đúng trigger không
+1367	Đánh dấu level mới cho mai: VA/POC, poor H/L, single prints, spike
+1368	Ghi một bài học và một điều giữ nguyên
+1369	OD → go-with, chỉ vào pullback đầu. OTD → chờ test xong + reclaim. ORR → kịch bản ngược. OA → không trade A period.
+1370	Giá có đến zone trong plan không?
+1371	Không → không làm gì. Lệnh ngoài plan là lỗi, kể cả khi thắng.
+1372	Zone có điểm ≥ 6?
+1373	Không → chỉ dùng làm target. 4–5 → cần CVD + trigger rất rõ.
+1374	VWAP có cho phép hướng này?
+1375	Trend ngược hướng (VWAP dốc, giá chạy dọc band) → bỏ ý tưởng fade.
+1376	CVD xác nhận?
+1377	Divergence / absorption khi fade; CVD tạo cực trị mới cùng giá khi breakout.
+1378	Delta flip / DOM / phá cấu trúc M1. Stop ngoài cực trị, target level kế tiếp.
+1379	70% trung bình → ưu tiên range extension. IB
+1380	130% → ưu tiên rotation trong IB.
+1381	Dừng
+1382	Đủ 2–3 lệnh, chạm loss limit, hoặc 11:30 ET (23:30 VN).
+1383	Value xây ở trên cùng (VA ~29,415–29,625), sau đó cuối phiên giá trượt dài xuống ~29,105 với cột TPO chỉ một ô: single prints / spike bán cuối phiên. Close sát low.
+1384	Close yếu + spike xuống. Theo spike rules: ngày sau open dưới spike (29,105–29,350) = tiếp diễn; open trong spike = balance; open trên spike = spike bị reject.
+1385	Spike xuống
+1386	Open ~28,795, thấp hơn low 29/10 khoảng 310 điểm: open ngoài range, dưới cả spike. Value thấp hơn hẳn (lower value). Để lại RTH gap 28,860–29,105 chưa lấp.
+1387	Ví dụ chuẩn của
+1388	open dưới range
+1389	+ spike rules xác nhận tiếp diễn. Gap trên đầu là magnet / kháng cự Tier 2 cho các ngày sau.
+1390	Range rất rộng (~790 điểm), phá cả high lẫn low của 30/10 (outside day). VA rộng ra phía trên (overlapping higher), nhưng close sát low.
+1391	Khả năng cao là Neutral Extreme (kiểm tra lại IB trên ATAS): phá cả hai phía, close ở cực trị dưới → ngày sau thiên xuống. Hãy nhớ kỳ vọng này để so với ngày 03/11.
+1392	Outside day · close yếu
+1393	Inside day hẹp (~230 điểm) nằm ở phần dưới range 02/11. VA rất hẹp 28,280–28,395. Giữ trên low 02/11 (28,100) và level tím 28,176.
+1394	Kỳ vọng bearish từ close 02/11 KHÔNG được tiếp diễn: sellers không đẩy được giá thấp hơn. Balance hẹp sau ngày rộng = năng lượng tích luỹ, chuẩn bị breakout.
+1395	Open ~28,430 sát high 03/11, drive lên thoát khỏi balance 03/11. Quét qua high 02/11 (28,890) lên ~28,975. Developing POC ~28,680 trùng POC 02/11 (~28,650).
+1396	Higher value so với 03/11: breakout khỏi balance đã được accept. Giá quay về fair value của 02/11. Sau khi đóng phiên, kiểm tra high 28,975 có tail (reject) hay là poor high.
+1397	PD High 04/11 + 02/11 High + RTH gap đáy
+1398	Kháng cự cụm / zone breakout. Accept trên → mục tiêu lấp gap đến 29,105
+1399	Cạnh trên value. Fade nếu CVD exhaustion
+1400	Pivot. Hai POC trùng nhau = fair value nhiều ngày
+1401	Cạnh dưới value
+1402	High 03/11 = biên balance bị phá
+1403	Retest breakout. Mất mức này = breakout 04/11 thất bại
+1404	Target nếu breakout thất bại
+1405	Level tím của bạn
+1406	Tier 1 khung lớn, dưới low 03/11
+1407	Kháng cự lần test đầu phía trên gap
+1408	Kết hợp
+1409	Trên footprint, số ở cột ask là gì?
+1410	Lệnh limit bán đang chờ ở giá đó
+1411	Volume do người mua chủ động khớp vào giá ask
+1412	Volume do người bán chủ động khớp vào giá ask
+1413	Số lệnh mua bị hủy
+1414	Ask trên footprint là volume đã khớp khi lệnh market mua đánh vào phía ask. Lệnh limit chờ chỉ xuất hiện trên DOM.
+1415	Aggressor là ai?
+1416	Bên đặt lệnh limit lớn nhất
+1417	Bên dùng lệnh market, chấp nhận giá của bên kia
+1418	Bên đang có lãi
+1419	Aggressor chủ động khớp ngay bằng lệnh market. Bên đặt limit là bên bị động (passive).
+1420	Giá NQ lên thêm một tick khi nào?
+1421	Khi có nhiều lệnh limit mua hơn lệnh limit bán
+1422	Khi toàn bộ lệnh bán ở ask hiện tại bị ăn hết hoặc bị rút
+1423	Khi delta dương
+1424	Khi CVD tăng
+1425	Giá chỉ chuyển sang mức ask kế tiếp khi mức ask hiện tại không còn lệnh: bị khớp hết hoặc bị rút. Vì vậy market mua nhiều mà giá đứng yên là dấu hiệu hấp thụ.
+1426	Giá ra khỏi value, bị đẩy ngược lại vào trong với absorption và divergence. Đây là hoạt động gì?
+1427	Responsive là phản ứng đẩy giá về value. Playbook phù hợp là Fade.
+1428	Stacking trên DOM là gì?
+1429	Lệnh chờ bị rút khi giá tới gần
+1430	Lệnh chờ dồn thêm tại một mức khi giá tiến lại gần
+1431	Nhiều lệnh market khớp cùng lúc
+1432	3 imbalance liên tiếp
+1433	Stacking cho thấy có người muốn bảo vệ mức giá đó. Nhầm với stacked imbalance (footprint) là lỗi thường gặp.
+1434	Ask wall 400 lot phía trên. Giá tiến tới, size giảm dần 400 → 120, tape cho thấy lệnh mua khớp liên tục tại giá đó. Đọc thế nào?
+1435	Spoof, sắp bị rút
+1436	Tường đang bị ăn thật, khả năng phá cao
+1437	Tường giữ, nên short
+1438	Không có thông tin
+1439	Size giảm do khớp (có volume trên tape) nghĩa là người mua đang ăn dần thanh khoản. Khác với pulling, nơi size giảm mà không có volume khớp.
+1440	Bid 300 lot tại VAL biến mất khi giá còn 1 tick, gần như không có volume khớp. Bạn nên làm gì?
+1441	Fade long vì VAL là hỗ trợ
+1442	Không fade; level có thể vỡ, chờ xem kịch bản break
+1443	Long ngay khi chạm
+1444	Tăng size
+1445	Đây là pulling. Lệnh bảo vệ đã rút, nên giả thuyết fade yếu đi.
+1446	Vì sao không dùng DOM để tìm setup?
+1447	DOM không có trên ATAS
+1448	DOM thay đổi rất nhanh và có spoof; chỉ dùng tinh chỉnh tại level đã chọn
+1449	DOM chỉ dùng cho cổ phiếu
+1450	DOM chậm hơn footprint
+1451	DOM là công cụ thực thi tại level, không phải công cụ chọn level.
+1452	Dấu hiệu nào cho thấy có iceberg?
+1453	Size hiển thị rất lớn
+1454	Volume khớp tại một giá vượt xa size hiển thị và size được nạp lại
+1455	Delta âm lớn
+1456	Giá đi nhanh qua mức
+1457	Iceberg chỉ hiện một phần. Nhìn tape và DOM cùng lúc mới thấy refill.
+1458	Fade long tại VAL: hình ảnh DOM nào ủng hộ nhất?
+1459	Ask phía trên dày lên, bid tại level giảm
+1460	Bid tại level giữ/dồn thêm, ask phía trên mỏng đi
+1461	Cả hai phía đều rút
+1462	Bid và ask cùng tăng mạnh
+1463	Fade long cần người mua bị động bảo vệ level và phía bán phía trên yếu đi.
+1464	Smart Tape gộp lệnh để làm gì?
+1465	Giảm số dòng cho đẹp
+1466	Gộp các lệnh bị chia nhỏ cùng thời điểm để thấy kích thước thật
+1467	Ẩn lệnh nhỏ
+1468	Tính delta
+1469	Lệnh lớn thường bị chia nhỏ khi khớp. Gộp lại mới thấy đó là một người chơi lớn.
+1470	Tại VAL: lệnh bán 48, 62, 55 lot liên tiếp tại cùng giá mà giá không giảm, sau đó lệnh mua lớn xuất hiện. Đọc?
+1471	Initiative bán, short
+1472	Bán bị hấp thụ, ủng hộ fade long
+1473	Lệnh lớn đập vào mà giá không đi tiếp là absorption trên tape. Chuỗi lệnh mua sau đó là dấu hiệu đổi phe.
+1474	Tốc độ tape bùng nổ ở cực trị sau một nhịp tăng dài thường là gì?
+1475	Climax, có thể sắp cạn
+1476	Short covering chắc chắn
+1477	Bùng nổ khi phá range là ignition; bùng nổ ở cuối nhịp dài là climax. Cần so với mức nền cùng khung giờ.
+1478	Nên đặt ngưỡng lọc size cho tape NQ thế nào?
+1479	Cố định 1 lot
+1480	Theo phân vị size của phiên, chỉnh riêng RTH và ETH
+1481	Không lọc
+1482	Bằng volume trung bình nến
+1483	ETH thanh khoản thấp hơn RTH nhiều; dùng cùng một ngưỡng sẽ hoặc quá nhiễu, hoặc bỏ sót.
+1484	Break long qua VAH. Khi retest, tape nào ủng hộ?
+1485	Chuỗi lệnh bán 50 lot liên tục
+1486	Lệnh bán nhỏ 3–6 lot, thưa
+1487	Không có giao dịch nào
+1488	Lệnh mua 1 lot
+1489	Retest sạch là phía ngược lại yếu và thưa. Lệnh bán lớn khi retest là dấu hiệu breakout có thể thất bại.
+1490	Imbalance mua tại giá P được tính bằng?
+1491	Ask(P) so với bid(P)
+1492	Ask(P) so với bid(P − 1 tick)
+1493	Ask(P) so với ask(P − 1 tick)
+1494	Delta(P) so với volume
+1495	So chéo vì người mua chủ động ở P khớp với ask P, còn người bán chủ động ở cùng thời điểm khớp ở bid thấp hơn một tick.
+1496	Stacked imbalance cần tối thiểu bao nhiêu mức liên tiếp?
+1497	Từ 3 mức liên tiếp cùng phía. 1–2 mức là nhiễu.
+1498	Nến này đang cho tín hiệu gì tại VAL?
+1499	Stacked imbalance bán
+1500	Nến 2: bid 210 và 240 ở hai mức thấp nhất, delta âm mạnh nhưng nến đóng tăng. Nến 3 có stacked imbalance mua xác nhận.
+1501	Vùng stacked ở nến 2 nên được dùng thế nào?
+1502	Short vì nến 3 giảm
+1503	Long khi giá retest vùng stacked mua
+1504	Bỏ qua
+1505	Long đuổi ngay nến 2
+1506	Stacked mua khi phá range là initiative. Vào khi retest, stop dưới vùng stacked; không đuổi giá.
+1507	Đỉnh nến 2 có ask giảm dần về 0. Đây là?
+1508	Exhaustion: người mua cạn
+1509	Exhaustion là volume nhỏ dần, khác absorption là volume lớn bị chặn. Đỉnh có ask = 0 là finished auction.
+1510	Nến 1 có imbalance mua dồn ở 3 mức cao nhất nhưng đóng thấp, nến 2 đóng dưới mức breakout. Đọc?
+1511	Breakout mạnh, long
+1512	Người mua bị kẹt, ưu tiên short
+1513	Người mua đuổi ở đỉnh đang lỗ; khi họ cắt lỗ bằng lệnh bán, giá xuống nhanh hơn.
+1514	Unfinished auction được dùng chủ yếu để?
+1515	Vào lệnh ngay
+1516	Chọn target vì giá hay quay lại sửa
+1517	Đặt stop
+1518	Đo delta
+1519	Unfinished auction không phải trigger. Nó là mục tiêu tự nhiên cho lệnh đang giữ.
+1520	Absorption khác exhaustion ở điểm nào?
+1521	Không khác
+1522	Absorption: volume lớn bị chặn; exhaustion: volume cạn dần
+1523	Absorption chỉ có ở đỉnh
+1524	Exhaustion cần delta dương
+1525	Cả hai đều là tín hiệu đảo chiều, nhưng cơ chế ngược nhau: một bên còn lực nhưng bị chặn, một bên hết lực.
+1526	Giá đóng xuyên qua toàn bộ vùng stacked mua theo chiều xuống. Đây là?
+1527	Stacked mua mạnh hơn
+1528	Imbalance failure: vùng stacked cũ thành kháng cự
+1529	Phe mua đã cam kết ở vùng stacked giờ bị kẹt. Kịch bản có R:R tốt vì stop gần.
+1530	Nến tăng mạnh nhưng phần dưới gần như trống volume, volume dồn ở phần trên, delta gần 0. Nên?
+1531	Đuổi long
+1532	Không đuổi long; nhiều khả năng là short covering (P-shape)
+1533	Tăng size long
+1534	Không có người mua mới thật sự. Phần mỏng phía dưới thường được lấp lại.
+1535	Delta của một nến bằng?
+1536	Volume × giá
+1537	Ask cao nhất − bid cao nhất
+1538	Delta = mua chủ động (ask) trừ bán chủ động (bid).
+1539	Tại VAL, nến M1 đóng tăng nhưng delta −250. Đọc?
+1540	Bán chủ động bị hấp thụ, ủng hộ fade long nếu có xác nhận
+1541	Nhiễu, bỏ qua dù ở level
+1542	Delta ngược hướng nến tại key level là dấu hiệu hấp thụ. Giữa range thì mới là nhiễu.
+1543	Giá tạo đỉnh cao hơn, CVD tạo đỉnh thấp hơn. Ý nghĩa?
+1544	Lực mua chủ động đang mạnh lên
+1545	Lực mua chủ động yếu đi: divergence
+1546	CVD bị lỗi
+1547	Nên đánh break long
+1548	Divergence ủng hộ fade và là lý do để không đánh break.
+1549	Cluster statistic: max delta +410 nhưng delta đóng nến +35. Đọc?
+1550	Mua áp đảo đến cuối nến
+1551	Bên mua đẩy rồi bị đảo ngay trong nến
+1552	Không có ý nghĩa
+1553	Khoảng cách giữa max delta và delta đóng là phần lực mua bị bên bán lấy lại.
+1554	Điều kiện delta flip để long?
+1555	Nến sau delta dương bất kỳ
+1556	Nến trước delta âm rõ, nến sau dương rõ và đóng vượt đỉnh thân nến trước, tại level
+1557	CVD tăng
+1558	Hai nến cùng delta dương
+1559	Phải đủ cả ba: đổi dấu rõ, đóng vượt thân nến trước, và xảy ra tại level.
+1560	Delta/Volume bao nhiêu thì coi là delta rõ ràng?
+1561	Trên 1%
+1562	Từ khoảng 15%
+1563	Đúng 50%
+1564	Không quan trọng
+1565	Dưới khoảng 5% là cân bằng. Ngưỡng 15% là quy ước của hệ thống, có thể chỉnh sau khi backtest.
+1566	Thứ tự đúng khi giá tiến tới key level?
+1567	VWAP → CVD/tape → DOM/tape → footprint → quản lý
+1568	VWAP xong trước khi giá tới, footprint chỉ dùng ở nến đã đóng.
+1569	Có trigger footprint, qua cổng VWAP, CVD và DOM xác nhận, tape không. Hạng?
+1570	2/3 xác nhận là A+.
+1571	Có absorption đẹp nhưng level sát VWAP, R:R tới TP1 chỉ 1.1. Làm gì?
+1572	Vào vì trigger đẹp
+1573	Bỏ: không qua cổng VWAP
+1574	Vào size gấp đôi
+1575	Đổi target xa hơn tùy ý
+1576	Cổng VWAP là bắt buộc. Trigger đẹp không bù được R:R kém.
+1577	Giá ở level đã 4 nến M1 mà chưa có trigger. Đọc?
+1578	Sắp có trigger, chờ tiếp
+1579	Level đang được chấp nhận; đứng ngoài
+1580	Vào lệnh fade
+1581	Đánh break ngay
+1582	Quá 3 nến không có trigger là dấu hiệu đỏ. Có thể chuẩn bị cho kịch bản break nếu đủ điều kiện.
+1583	Playbook break long nhưng CVD divergence lúc phá. Làm gì?
+1584	Vẫn vào
+1585	Không đánh break
+1586	Vào fade short ngay
+1587	Break cần CVD xác nhận. Divergence là dấu hiệu breakout yếu, có thể thành bẫy.
+1588	Fade long sau absorption ở đáy. Stop đặt ở đâu?
+1589	Cố định 10 tick
+1590	2–4 tick dưới đáy vùng absorption, ngoài level
+1591	Tại VWAP
+1592	Không đặt stop
+1593	Stop đặt ở nơi kịch bản sai. Nếu stop quá xa so với TP1 thì bỏ lệnh.
+1594	Lệnh market bán khớp ở đâu?
+1595	Tại giá ask
+1596	Tại giá bid
+1597	Tại giá mở cửa nến
+1598	Người bán chủ động chấp nhận giá mua tốt nhất đang chờ, tức giá bid. Vì vậy volume bán chủ động nằm ở cột bid của footprint.
+1599	DOM hiển thị loại lệnh nào?
+1600	Lệnh đã khớp
+1601	Lệnh limit đang chờ, chưa khớp
+1602	Chỉ lệnh lớn
+1603	Lệnh stop của người khác
+1604	DOM là thanh khoản bị động. Lệnh đã khớp xuất hiện trên tape và footprint.
+1605	Footprint và tape giống nhau ở điểm nào?
+1606	Đều hiển thị lệnh chờ
+1607	Đều hiển thị giao dịch đã khớp, có phân biệt bên chủ động
+1608	Đều chỉ dùng cho khung D1
+1609	Đều không có ở ATAS
+1610	Tape cho từng giao dịch theo thời gian, footprint gom chúng theo mức giá trong mỗi nến.
+1611	Vì sao giá thường đi nhanh qua LVN?
+1612	Vì có nhiều lệnh chờ cản
+1613	Vì ở đó ít volume và ít thanh khoản cản giá
+1614	Vì VWAP nằm ở đó
+1615	Vì delta luôn dương ở LVN
+1616	LVN là vùng thị trường từng từ chối nhanh. Ít người giao dịch ở đó nên giá đi qua dễ dàng.
+1617	Initiative buying trên footprint thường biểu hiện thế nào?
+1618	Stacked imbalance mua và giá được chấp nhận phía trên level
+1619	Volume giảm dần về đỉnh
+1620	Initiative là bên mua chủ động ăn liền nhiều mức ask và giá giữ được ở vùng mới.
+1621	TPO đọc context, orderflow để execute
+1622	nghĩa là gì?
+1623	Chỉ dùng TPO để vào lệnh
+1624	TPO chọn level trước, orderflow quyết định có vào tại level đó hay không
+1625	Orderflow chọn level, TPO chọn entry
+1626	Hai công cụ thay thế nhau
+1627	Level được vẽ từ TPO trước phiên. Orderflow chỉ được đọc khi giá tới những level này.
+1628	Một tường bid 500 lot xuất hiện cách giá 30 tick, không trùng level nào. Bạn làm gì?
+1629	Đặt lệnh mua ngay tại tường
+1630	Bỏ qua, đó không phải level đã chọn
+1631	Short vì tường sẽ bị phá
+1632	Dời level theo tường
+1633	DOM chỉ dùng tại level đã chọn. Tường ở xa có thể biến mất bất cứ lúc nào.
+1634	Fade short tại VAH. Ask tại level giữ khoảng 250 lot dù tape cho thấy đã có 400 lot mua khớp vào. Đọc?
+1635	Có refill hoặc iceberg phía ask, ủng hộ fade short
+1636	Tường sắp vỡ
+1637	Không liên quan
+1638	Khớp nhiều hơn phần hiển thị mà size vẫn đứng là dấu hiệu lệnh bán ẩn đang hấp thụ người mua.
+1639	Playbook break long qua VAH 25,430.00. Hình DOM này ủng hộ hay không?
+1640	Không ủng hộ: ask tại VAH quá dày
+1641	Ủng hộ: ask tại VAH giảm từ 280 xuống 40 do bị khớp, bid phía dưới dồn theo
+1642	Ủng hộ fade short
+1643	Size tại level giảm mạnh (đối chiếu tape thấy là do khớp), phía bid dày lên: thanh khoản cản đang bị ăn, đúng điều kiện DOM của playbook break.
+1644	Trên heatmap, một tường đứng suốt 40 phút và giá đã bật ra 2 lần. Dùng thế nào?
+1645	Coi là mức thật: đặt target trước tường, hoặc stop phía sau nếu đang được tường bảo vệ
+1646	Vào lệnh phá tường ngay
+1647	Dời VWAP
+1648	Tường tồn tại lâu và đã được kiểm chứng có giá trị cao hơn tường vừa xuất hiện.
+1649	Trên heatmap, tường lớn biến mất ngay trước khi giá chạm. Đọc?
+1650	Mức hỗ trợ mạnh
+1651	Không dựa vào tường đó; khả năng giá đi xuyên hoặc đây là bẫy
+1652	Phải fade tại đó
+1653	Volume khớp lớn
+1654	Thanh khoản rút trước khi bị kiểm tra không bảo vệ được giá.
+1655	Vì sao tránh đọc DOM trong 2 phút quanh tin 8:30 ET?
+1656	ATAS tắt DOM khi có tin
+1657	Thanh khoản bị rút, sổ lệnh méo và nhảy liên tục
+1658	Delta luôn bằng 0
+1659	Giá không di chuyển
+1660	Quanh tin, nhà tạo lập rút lệnh. DOM lúc đó không phản ánh ý định thật.
+1661	Fade long tại VAL. Phía đối diện trên DOM cần thế nào?
+1662	Ask phía trên dày lên
+1663	Ask phía trên mỏng đi hoặc bị rút
+1664	Bid phía dưới bị rút
+1665	Fade long cần đường phía trên dễ đi: ít lệnh bán chờ cản.
+1666	Stacking (DOM) khác stacked imbalance (footprint) thế nào?
+1667	Là một
+1668	Stacking là lệnh chờ dồn thêm; stacked imbalance là các mức khớp mất cân bằng liên tiếp
+1669	Stacking chỉ có ở tape
+1670	Stacked imbalance là lệnh chờ
+1671	Một bên là thanh khoản bị động, một bên là giao dịch đã khớp. Tên gần giống nên hay bị nhầm.
+1672	Smart Tape của bạn chỉ có 2 cột Price và Volume. Làm sao biết bên chủ động?
+1673	Không thể biết
+1674	Theo màu dòng: mua tại ask và bán tại bid có màu khác nhau
+1675	Theo thứ tự dòng
+1676	Theo cột thời gian
+1677	Màu là thông tin thứ ba của mỗi dòng. Nên giữ hai màu tương phản rõ, ví dụ xanh và đỏ.
+1678	Giá đang ở VAL 25,410.50. Băng này ủng hộ playbook nào?
+1679	Fade long tại VAL
+1680	Break short: chuỗi lệnh bán lớn xuyên VAL, retest chỉ có lệnh mua nhỏ
+1681	Giá nhảy liên tiếp nhiều mức theo chuỗi lệnh bán lớn trong chưa tới nửa giây là initiative. Retest có lực mua yếu.
+1682	Big trades mua cụm ở đỉnh nến, nến đóng gần đáy. Đọc?
+1683	Breakout mạnh
+1684	Người mua lớn bị kẹt ở đỉnh
+1685	Lệnh lớn ở cực trị mà giá không đi tiếp nghĩa là phe đó đang lỗ và sẽ phải thoát.
+1686	Big trades cùng hướng breakout và giá giữ được phía trên level. Đọc?
+1687	Bẫy
+1688	Lực thật, ủng hộ break
+1689	Lệnh lớn đi cùng hướng và được thị trường chấp nhận là initiative.
+1690	Tốc độ tape chậm dần khi giá tiến sát VAL. Ủng hộ gì?
+1691	Fade long: lực bán chủ động đang yếu
+1692	Đứng ngoài bắt buộc
+1693	Giá đến level bằng lực yếu dần là điều kiện tốt cho fade. Vẫn cần trigger footprint.
+1694	Lệnh bán lớn đập vào VAL và giá xuyên qua ngay vài tick. Đọc?
+1695	Không có hấp thụ, level yếu
+1696	Iceberg giữ giá
+1697	Absorption chỉ có khi lệnh lớn đập vào mà giá đứng. Xuyên qua ngay nghĩa là không có ai bảo vệ.
+1698	Ngưỡng lọc size trong phiên ETH so với RTH nên thế nào?
+1699	Cao hơn
+1700	Thấp hơn vì thanh khoản ETH mỏng hơn
+1701	Bằng nhau
+1702	Không cần lọc trong ETH
+1703	Cùng một lệnh 20 lot có ý nghĩa khác nhau ở ETH và RTH.
+1704	Một lệnh 200 lot đơn lẻ xuất hiện giữa range, không gần level nào. Làm gì?
+1705	Vào theo hướng lệnh đó
+1706	Bỏ qua: không ở level, không có chuỗi
+1707	Đảo chiều ngay
+1708	Dời level tới đó
+1709	Một print đơn lẻ không phải tín hiệu. Tape chỉ được đọc tại level.
+1710	Nến 2 phá xuống qua level. Hành động phù hợp?
+1711	Long vì đã tới hỗ trợ
+1712	Short khi giá retest vùng stacked bán
+1713	Đứng ngoài vì delta âm
+1714	Long khi nến 3 đóng
+1715	4 mức imbalance bán liên tiếp xuyên level là initiative. Vào short khi retest, stop trên đỉnh vùng stacked.
+1716	Nến 2 chạm level phía dưới. Tín hiệu là gì?
+1717	Exhaustion ở đáy: bid nhỏ dần, đáy có bid = 0
+1718	Stacked bán
+1719	Delta flip âm
+1720	Volume bán chủ động cạn dần khi xuống thấp, đáy là finished auction. Nến 3 có stacked mua xác nhận.
+1721	Đỉnh nến 1 (12 × 9) có ý nghĩa gì?
+1722	Unfinished auction: giá có xu hướng quay lại sửa
+1723	Đỉnh còn volume ở cả hai phía. Nến 3 quay lại vượt qua và tạo đỉnh mới có ask = 0, tức đã sửa xong.
+1724	Nến 2 tạo đỉnh mới tại kháng cự. Đọc thế nào?
+1725	Đồng thuận tăng, long
+1726	Delta divergence: giá lên nhưng delta âm, ưu tiên short sau xác nhận
+1727	Đỉnh mới không có người mua chủ động đỡ. Nến 3 có stacked bán là xác nhận.
+1728	Chuyện gì xảy ra với vùng stacked mua của nến 1?
+1729	Được giữ, long
+1730	Bị xuyên qua và đóng dưới: imbalance failure, vùng cũ thành kháng cự
+1731	Thành unfinished auction
+1732	Phe mua ở vùng stacked bị kẹt. Short khi retest từ dưới lên, stop trên đỉnh vùng stacked cũ.
+1733	Nến 2 tăng mạnh. Có nên đuổi long?
+1734	Có, delta dương
+1735	Không: phần dưới mỏng, volume dồn ở trên, delta gần 0, nhiều khả năng là short covering
+1736	Có, có stacked mua
+1737	Có, POC ở trên
+1738	P-shape cho thấy không có người mua mới. Phần mỏng phía dưới thường được lấp lại.
+1739	Nến 1 quét xuống dưới level rồi đóng lại phía trên. Hành động?
+1740	Short theo hướng phá
+1741	Long: người bán đuổi ở đáy bị kẹt, nến 2 đóng trên mức breakdown với stacked mua
+1742	Đứng ngoài
+1743	Short khi nến 3 hồi
+1744	Đây là dạng sweep and reclaim. Stop dưới đáy nến bẫy.
+1745	POC của nến tăng dài nằm ở râu dưới. Đọc?
+1746	Bên bán kiểm soát
+1747	Volume lớn ở đáy rồi giá bị đẩy lên: bên mua bảo vệ đáy
+1748	Nến sẽ đảo xuống chắc chắn
+1749	POC ở đuôi nến nghĩa là giá bị từ chối ở đó sau khi giao dịch nhiều.
+1750	Vì sao nên gộp 2–4 tick mỗi hàng khi đọc footprint NQ?
+1751	ATAS bắt buộc
+1752	Để dễ đọc và giảm nhiễu imbalance do NQ có nhiều tick
+1753	Để delta lớn hơn
+1754	Để giá đẹp hơn
+1755	Mỗi hàng 0.25 trên NQ làm footprint quá dài và đầy imbalance lẻ.
+1756	Một ô 9 × 1 có được tính là imbalance không?
+1757	Có, vì 900%
+1758	Không, vì dưới ngưỡng volume tối thiểu
+1759	Có nếu ở level
+1760	Chỉ tính khi delta âm
+1761	Ngưỡng volume tối thiểu (ví dụ 20 lot) loại các tỷ lệ lớn nhưng vô nghĩa.
+1762	Finished auction ở đỉnh nến trông thế nào?
+1763	Đỉnh có bid = 0
+1764	Đỉnh có ask = 0
+1765	Đỉnh có volume lớn nhất
+1766	Đỉnh có stacked mua
+1767	Không còn người mua chủ động ở mức cao nhất: đấu giá phía trên đã kết thúc.
+1768	Footprint dùng làm trigger nên đọc trên nến nào?
+1769	Nến đang chạy
+1770	Nến M1 đã đóng
+1771	Nến H1
+1772	Bất kỳ
+1773	Nến đang chạy có thể đổi hoàn toàn trong vài giây cuối.
+1774	Delta của nến này là bao nhiêu?
+1775	Nến M1
+1776	Nến này đóng tại VAL. Đọc kết hợp hướng nến và delta?
+1777	Nến tại VAL
+1778	Bán chủ động bị hấp thụ: nến tăng nhưng delta âm
+1779	Σ ask = 115, Σ bid = 230, delta = −115. Bid lớn hơn ask ở mọi mức nhưng thân nến tăng. Tại VAL đây là dấu hiệu hấp thụ, ủng hộ fade long nếu có xác nhận.
+1780	Tại VAH, nến đóng giảm nhưng delta +180. Đọc?
+1781	Mua chủ động bị hấp thụ, ủng hộ fade short nếu có xác nhận
+1782	Bên mua đập lệnh nhiều nhưng giá vẫn giảm: có limit sell lớn chặn tại VAH.
+1783	Giá phá xuống VAL và CVD tạo đáy mới cùng giá. Ủng hộ?
+1784	Break short: CVD xác nhận
+1785	Break cần CVD đi cùng giá. Không có divergence là điều kiện bắt buộc.
+1786	Giá giảm vào VAL nhưng CVD đi ngang. Ý nghĩa?
+1787	Bán chủ động mạnh lên
+1788	Bán chủ động không tăng thêm lực, ủng hộ fade long
+1789	Phải break short
+1790	CVD lỗi
+1791	Giá giảm mà không có thêm lực bán chủ động thường là do bid rút hoặc người bán đang cạn.
+1792	Nến có Delta/Volume 2%. Đọc?
+1793	Mua áp đảo
+1794	Cân bằng, không có thông tin hướng
+1795	Bán áp đảo
+1796	Dưới khoảng 5% là cân bằng. Không dùng nến đó làm bằng chứng delta.
+1797	Vì sao reset CVD lúc 9:30 ET hợp với hệ thống?
+1798	Vì ATAS mặc định
+1799	Vì trùng anchor VWAP RTH và Initial Balance, so sánh nhất quán
+1800	Vì ETH không có volume
+1801	Vì delta ETH luôn âm
+1802	Cùng một mốc giúp CVD, VWAP và IB nói về cùng một phiên đấu giá.
+1803	Fade short tại VAH. TP1 thường đặt ở đâu?
+1804	Level TPO phía trên
+1805	VWAP hoặc POC TPO
+1806	Đỉnh phiên
+1807	Không đặt
+1808	Fade kỳ vọng giá quay về giá trị. VWAP và POC là nơi giá trị nằm.
+1809	Đang fade short tại VAH. 2 nến M1 đóng trên VAH với delta dương. Làm gì?
+1810	Giữ lệnh
+1811	Thoát: level bị chấp nhận; cân nhắc playbook break long
+1812	Thêm lệnh short
+1813	Dời stop xa hơn
+1814	Đây là điều kiện vô hiệu của fade.
+1815	Break long: nến đóng lại trong value với delta âm. Làm gì?
+1816	Giữ lệnh chờ hồi
+1817	Thoát; người mua bị kẹt, cân nhắc fade short
+1818	Thêm lệnh long
+1819	Không làm gì
+1820	Breakout thất bại thường chạy nhanh về phía ngược lại.
+1821	Có trigger footprint, qua cổng VWAP, nhưng không có xác nhận nào từ CVD, DOM, tape. Hạng?
+1822	Footprint đơn lẻ không đủ. Hệ thống yêu cầu ít nhất 2/3 xác nhận để vào.
+1823	Footprint + VWAP + chỉ có tape xác nhận. Với giới hạn 2–3 lệnh/ngày nên?
+1824	Vào full size
+1825	Bỏ qua (hạng B), giữ lượt cho setup tốt hơn
+1826	Vào gấp đôi
+1827	Đổi sang break
+1828	Hạng B có thể có lãi, nhưng với số lệnh giới hạn thì chỉ nên dùng lượt cho A+ trở lên.
+1829	Giá chạm VAL lần thứ 3 trong phiên. Đọc?
+1830	Level mạnh hơn
+1831	Dấu hiệu đỏ: level đã bị kiểm tra nhiều, dễ vỡ
+1832	Không ảnh hưởng
+1833	Chỉ được long
+1834	Mỗi lần chạm, lệnh bảo vệ bị tiêu hao.
+1835	Vừa thua 2 lệnh liên tiếp, một setup A+ xuất hiện. Theo checklist?
+1836	Vào để gỡ
+1837	Bỏ: đây là dấu hiệu đỏ về kỷ luật
+1838	Vào gấp đôi size
+1839	Vào nhưng không đặt stop
+1840	Quy tắc này bảo vệ trailing drawdown của tài khoản prop.
+1841	Break long nhưng level nằm ở band +2σ VWAP. Đọc?
+1842	Đạt cổng VWAP
+1843	Không qua cổng: breakout ở band ngoài cùng dễ thành quá đà
+1844	Phải fade long
+1845	Playbook break yêu cầu level không nằm từ band ±2σ trở ra.
+1846	Trên NQ RTH, chữ cái C tương ứng khung giờ ET nào?
+1847	A = 9:30, B = 10:00, C = 10:30. Cửa sổ 9:30–11:30 của bạn gồm A–D.
+1848	Initial Balance trên NQ RTH là gì?
+1849	Range của A period
+1850	Range của A + B (9:30–10:30 ET)
+1851	Range phiên ETH
+1852	IB = A + B, tức giờ đầu tiên của RTH.
+1853	TPO POC khác Volume POC ở điểm nào?
+1854	Không khác gì
+1855	TPO POC là giá có nhiều thời gian nhất, VPOC là giá có volume lớn nhất
+1856	TPO POC luôn cao hơn VPOC
+1857	VPOC chỉ có trên ETH
+1858	Một bên đo presence (thời gian), một bên đo participation (volume). Thường gần nhau nhưng không bắt buộc.
+1859	Ở đỉnh phiên có 3 chữ cái khác nhau cùng chạm đúng mức cao nhất, không có dòng single print nào phía trên. Đây là gì?
+1860	Nhiều chữ cùng chạm một cực trị mà không có tail = poor high. Thị trường dễ quay lại quét.
+1861	Selling tail ở đỉnh profile cho biết điều gì?
+1862	Buyers đang mạnh
+1863	Responsive sellers từ chối giá cao rất nhanh, auction phía trên đã hoàn tất
+1864	Giá chắc chắn sẽ quay lại đỉnh
+1865	Volume ở đỉnh rất lớn
+1866	Tail = excess. Đỉnh có tail là level mạnh, không kỳ vọng bị quét lại sớm.
+1867	Value Area thường được định nghĩa là:
+1868	Khoảng 70% TPO (hoặc volume) quanh POC
+1869	Range của IB
+1870	Toàn bộ range trừ tail
+1871	70% là quy ước CBOT, gốc từ 1 độ lệch chuẩn ≈ 68.27%.
+1872	Phiên có Rotation Factor = +9. Ý nghĩa đúng nhất?
+1873	Thị trường balance hoàn toàn
+1874	Rotation lên chiếm ưu thế, buyers điều khiển
+1875	Sắp đảo chiều xuống
+1876	Volume lớn hơn bình thường
+1877	RF dương lớn = các period liên tục tạo high/low cao hơn period trước.
+1878	Single prints giữa profile hình thành khi nào?
+1879	Thị trường đi ngang lâu
+1880	Giá đi nhanh một chiều trong một period, không có giao dịch hai chiều
+1881	Có tin tức sau 16:00
+1882	IB quá rộng
+1883	Vùng imbalance. Lần test đầu thường là support/resistance.
+1884	Một vùng có TPO dày nhưng volume profile rất mỏng. Theo khái niệm presence vs participation:
+1885	Value rất mạnh
+1886	Có mặt về thời gian nhưng ít người thực sự giao dịch, value yếu
+1887	Đây là single prints
+1888	Đây là POC
+1889	Presence không có participation. Ưu tiên level mà cả TPO và volume cùng xác nhận.
+1890	IB hôm nay chỉ bằng 55% IB trung bình 20 phiên. Kỳ vọng hợp lý nhất?
+1891	Ngày Normal, rotation trong IB
+1892	Khả năng range extension cao (trend / normal variation)
+1893	Không trade cả ngày
+1894	Chắc chắn là Neutral day
+1895	IB hẹp = hai bên chưa đồng thuận, năng lượng dồn cho range extension.
+1896	Neutral day được nhận diện bằng:
+1897	Không có range extension
+1898	Range extension cả hai phía của IB
+1899	Profile mỏng và dài
+1900	Hai vùng value tách bởi single prints
+1901	RE hai phía. Close giữa = neutral center, close ở cực trị = neutral extreme.
+1902	Open Drive có đặc điểm nào?
+1903	Giá xoay quanh open
+1904	Giá đi mạnh một chiều ngay từ open và không quay lại test open
+1905	Giá test một level rồi đảo
+1906	Giá đi một hướng rồi đảo xuyên open
+1907	Open type có mức tự tin cao nhất. Go-with, không fade.
+1908	Giá mở, chạy lên test ON high, bị từ chối, rồi rơi xuyên qua open. Đây là:
+1909	ORR: đi một hướng, gặp responsive activity, đảo xuyên open. Target cạnh VA đối diện.
+1910	VA hôm nay nằm hoàn toàn bên trong VA hôm qua. Quan hệ này nói gì?
+1911	Bullish mạnh
+1912	Bearish mạnh
+1913	Nén lại (inside value), chuẩn bị breakout
+1914	Thị trường đóng cửa
+1915	Inside value = compression. Không đoán hướng trước, chờ breakout được accept.
+1916	P-shape thường phản ánh điều gì?
+1917	Short covering, không hẳn là new buying
+1918	New sellers xuất hiện
+1919	Ngày Non-Trend
+1920	Phần thân mỏng ở dưới là phe short đóng lệnh. Ngày sau cần thấy new buying mới tin tiếp diễn.
+1921	Trong Double Distribution day, dải single prints ở giữa có vai trò gì?
+1922	Support/resistance ở lần test đầu
+1923	Luôn bị lấp ngay trong ngày
+1924	Là POC của ngày
+1925	Ranh giới giữa hai vùng balance. Bị lấp hết = tín hiệu phe đẩy giá đã yếu.
+1926	Open ngoài range hôm qua nhưng sau 30 phút giá quay lại vào range và giữ được. Cách hiểu đúng?
+1927	Tiếp tục go-with hướng open
+1928	Trapped traders, khả năng đảo chiều mạnh (ORR)
+1929	Bỏ qua, không quan trọng
+1930	Chờ ngày mai
+1931	Out-of-range open thất bại thường cho cú đảo mạnh vì phe theo gap bị kẹt.
+1932	Ngày Trend lên: cách xử lý đúng?
+1933	Fade mỗi đỉnh mới
+1934	Không fade, mua pullback về low của period trước / VWAP
+1935	Đứng ngoài cả ngày
+1936	Short ở +2 SD
+1937	Ngày trend phe kia không có cơ hội. Trailing stop theo period.
+1938	Điều kiện kích hoạt 80% rule là gì?
+1939	Giá chạm VAH
+1940	Giá ở ngoài VA hôm qua, quay lại vào trong và được chấp nhận 2 period TPO liên tiếp
+1941	IB phá cả hai phía
+1942	Giá open trong VA
+1943	Khi kích hoạt, kỳ vọng giá đi hết VA sang cạnh còn lại. Tự kiểm chứng tỉ lệ trên NQ.
+1944	Dấu hiệu acceptance ngoài một level là gì?
+1945	Chỉ chạm 1 tick
+1946	Giá ở ngoài level ≥ 2 period và xây TPO/volume ở đó
+1947	Có tail ở đó
+1948	Thời gian + volume ngoài level = được chấp nhận. Level cũ chuyển vai trò.
+1949	Hôm qua có spike bán cuối phiên. Hôm nay open nằm bên trong vùng spike. Theo spike rules:
+1950	Tiếp diễn xuống
+1951	Spike thành vùng balance, đánh rotation trong spike
+1952	Spike bị reject, tăng mạnh
+1953	Open trong spike → spike trở thành vùng giá được thị trường xem xét lại.
+1954	Naked POC dùng tốt nhất như thế nào?
+1955	Target / magnet, và zone phản ứng ở lần chạm đầu
+1956	Luôn đảo chiều tại đó
+1957	Level nào thuộc Tier 1 trong playbook?
+1958	Weekly VA / composite / naked POC nhiều ngày
+1959	Tier 1 = khung lớn, nhiều ngày đồng thuận.
+1960	Overnight inventory net long mạnh, open sát ON high. Cẩn trọng điều gì?
+1961	Long ngay open vì trend mạnh
+1962	Inventory correction: giá dễ bị xả xuống ở 30–60 phút đầu
+1963	Không có gì
+1964	Chắc chắn Open Drive lên
+1965	Inventory lệch một phía hay được cân bằng lại đầu RTH. Kết hợp với OSR.
+1966	Sau khi Mỹ hết DST (từ 01/11/2026), 9:30 ET là mấy giờ ở Việt Nam?
+1967	EST = UTC−5, VN = UTC+7, chênh 12 giờ.
+1968	IB High 28,700, IB Low 28,600. Mức IB extension 2x phía trên là:
+1969	IB width 100. 2x IB tính từ IB Low = 28,600 + 200 = 28,800 (tức IB High + 1 width). 1.5x = 28,750.
+1970	Developing POC liên tục dịch lên trong phiên. Với scalping, điều này gợi ý:
+1971	Short mỗi lần dPOC đổi
+1972	Value đang migrate lên, pullback về dPOC là điểm long
+1973	Thị trường balance
+1974	dPOC migration là xác nhận value đang dịch theo hướng đó.
+1975	Halfback là gì?
+1976	Điểm giữa IB
+1977	Điểm giữa range hiện tại của ngày
+1978	POC hôm qua
+1979	Trên halfback = buyers đang thắng phiên đến lúc đó.
+1980	Trong hệ thống của bạn, VWAP RTH được anchor lúc nào?
+1981	Cùng mốc với IB và TPO RTH. VWAP ETH anchor 18:00 là lớp phụ.
+1982	Công thức VWAP:
+1983	Trung bình cộng giá đóng cửa
+1984	Σ(Giá × Volume) / Σ Volume
+1985	Giá × Volume
+1986	Giá trung bình có trọng số volume từ mốc anchor.
+1987	VWAP phẳng, giá cắt qua lại nhiều lần và nằm trong ±1 SD. Trạng thái và hành động?
+1988	Trend, đuổi theo
+1989	Balance, bingbong ±1 SD và fade ±2 SD
+1990	Chuyển pha, đứng ngoài
+1991	Không xác định
+1992	Khớp với khái niệm bingbong ±1 SD bạn đang dùng.
+1993	Ngày Open Drive lên, VWAP dốc, giá chạy dọc +1/+2 SD. Hành động đúng?
+1994	Buy pullback về VWAP / +1 SD, không fade
+1995	Short ở +3 SD chắc chắn thắng
+1996	Trên ngày trend, band là chỗ thêm lệnh theo hướng, không phải chỗ đảo.
+1997	VWAP và dPOC cùng dịch lên sau 10:30 ET nghĩa là:
+1998	Value đang migrate lên, ngày có khả năng trend / normal variation
+1999	Sắp đảo chiều
+2000	Thời gian và volume cùng xác nhận value mới.
+2001	Tại sao không nên fade band VWAP RTH trước 10:00 ET?
+2002	Vì ATAS không hiển thị
+2003	Vì σ còn nhỏ và thay đổi liên tục, band quá hẹp và không ổn định
+2004	Vì volume quá lớn
+2005	Vì luật prop cấm
+2006	Ít dữ liệu → độ lệch chuẩn chưa có ý nghĩa.
+2007	Giá đang nằm trên VWAP RTH. Điều này nói gì về người tham gia hôm nay?
+2008	Người bán trung bình đang lãi
+2009	Người mua trung bình hôm nay đang lãi, buyers kiểm soát intraday
+2010	Thị trường chắc chắn tăng tiếp
+2011	VWAP là giá vốn trung bình của phiên.
+2012	Zone nào có grade cao nhất cho lệnh long trong ngày balance?
+2013	Giữa VA hôm qua
+2014	PD VAL trùng −2 SD VWAP RTH + CVD absorption bullish
+2015	Trên PD High
+2016	Tại VWAP khi giá đang trend xuống
+2017	Ba lớp: location TPO + VWAP band + CVD. Đó là A++.
+2018	Delta của một bar được tính thế nào?
+2019	Tổng volume
+2020	Delta đo aggression. CVD là tổng luỹ kế delta từ mốc reset.
+2021	Tại sao nên reset CVD lúc 9:30 ET?
+2022	Để cùng mốc với VWAP RTH và TPO RTH, so sánh swing trong cùng một phiên
+2023	Để CVD luôn dương
+2024	Không cần reset
+2025	Ba công cụ cùng mốc thời gian thì mới so sánh được.
+2026	Tại PD VAH: giá tạo higher high, CVD tạo lower high. Đây là:
+2027	Xác nhận breakout
+2028	Không phải divergence
+2029	Nhịp lên mới cần ít người mua chủ động hơn → buyers cạn.
+2030	Tại PD VAL: CVD tạo lower low rất mạnh nhưng giá giữ higher low. Đây là:
+2031	Absorption bullish: passive buyers hấp thụ lệnh bán
+2032	Breakout xuống
+2033	Nhiễu
+2034	Sellers vẫn bấm market mạnh nhưng không đẩy được giá → có người lớn đứng mua ở level.
+2035	Ngày Open Drive + IB extension + VWAP dốc lên. Thấy bearish divergence ở giữa range. Nên làm gì?
+2036	Bỏ qua: divergence ngược trend thường fail, và không có location
+2037	Short gấp đôi size
+2038	Đảo hết lệnh long
+2039	Hai bộ lọc đều fail: regime là trend và không ở zone TPO.
+2040	Divergence xuất hiện tại zone điểm 7. Bước tiếp theo?
+2041	Vào lệnh ngay khi thấy divergence
+2042	Chờ trigger: phá cấu trúc M1, reclaim hoặc delta flip
+2043	Đợi đến 11:30
+2044	Hỏi người khác
+2045	Divergence là điều kiện, không phải entry.
+2046	Lệnh short dựa trên bearish divergence tại VAH bị invalidate khi:
+2047	Giá chạm VWAP
+2048	Giá vượt qua high đã tạo divergence
+2049	CVD giảm
+2050	Hết 30 phút
+2051	Stop đặt ngoài cực trị tạo divergence.
+2052	So sánh CVD giữa các ngày như thế nào?
+2053	So giá trị tuyệt đối hôm nay với hôm qua
+2054	Không so tuyệt đối giữa các ngày, chỉ so hình dạng swing trong cùng phiên
+2055	CVD dương luôn bullish
+2056	CVD âm luôn bearish
+2057	Giá trị tuyệt đối phụ thuộc mốc reset và volume từng ngày.
+2058	Trong template của bạn, 30/10 open ~28,795, dưới low 29/10 (~29,105). Theo bảng open location, đây là:
+2059	Open dưới range hôm qua: imbalance mạnh
+2060	Open trên VA trong range
+2061	Out-of-range open, và cũng là open dưới spike bán cuối phiên 29/10 → tiếp diễn.
+2062	03/11 có range nằm gọn trong range 02/11 và VA rất hẹp. Kỳ vọng hợp lý cho 04/11?
+2063	Chắc chắn giảm
+2064	Balance hẹp sau ngày rộng, chuẩn bị breakout, chờ breakout được accept
+2065	Không trade được
+2066	Lặp lại y hệt 03/11
+2067	04/11 đã breakout lên khỏi balance này.
+2068	POC developing 04/11 (~28,680) gần POC 02/11 (~28,650). Ý nghĩa cho plan 05/11?
+2069	Cụm fair value nhiều ngày, là pivot quan trọng
+2070	Phải short ở đó
+2071	Là single prints
+2072	Hai POC trùng nhau = zone điểm cao theo bảng chấm level.
+2073	02/11 phá cả high và low của 30/10, close sát low. Nếu IB cũng bị phá cả hai phía, day type là:
+2074	RE hai phía + close ở cực trị. Ngày sau thiên theo hướng close, nhưng 03/11 đã không tiếp diễn.
+2075	RTH gap 28,860–29,105 (giữa low 29/10 và high 30/10) đóng vai trò gì trong plan các ngày sau?
+2076	Không quan trọng vì đã qua
+2077	Magnet / kháng cự Tier 2: lần test đầu hay phản ứng, accept vào trong thì kỳ vọng lấp gap
+2078	Support mạnh nhất
+2079	Là POC
+2080	Gap RTH là vùng imbalance chưa được giao dịch trong phiên chính.
+2081	VA 04/11 nằm hoàn toàn trên VA 03/11. Quan hệ value này là:
+2082	Higher value = bullish rõ, breakout khỏi balance 03/11 đã được accept.
+2083	Trên template ATAS của bạn, phần volume profile màu hồng (crimson) thể hiện gì?
+2084	Value area của volume profile
+2085	Phiên ETH
+2086	Phần hồng là 70% volume quanh POC, phần xám là ngoài value.
+2087	Tail ở đáy profile được gọi là gì?
+2088	Buyers phản ứng từ chối giá thấp rất nhanh → buying tail (excess ở đáy).
+2089	Row size của bạn là 5 điểm/dòng. Theo quy ước thực dụng trong playbook, tail tối thiểu dài bao nhiêu?
+2090	5 điểm (1 dòng)
+2091	10 điểm (2 dòng)
+2092	25 điểm
+2093	Không có quy ước
+2094	Excess tối thiểu = 2 dòng single print ở cực trị.
+2095	Tại sao nên giữ cố định một con số cho Value Area (70% hoặc 68%)?
+2096	Vì ATAS bắt buộc
+2097	Để VA giữa các ngày so sánh được với nhau
+2098	Vì 70% luôn chính xác hơn
+2099	Để VA rộng hơn
+2100	Đổi tham số giữa chừng làm hỏng mọi so sánh value relationship.
+2101	Khi nào nên dùng composite profile?
+2102	Mỗi ngày đều gộp
+2103	Khi nhiều ngày liên tiếp có VA chồng lên nhau
+2104	Chỉ ngày trend
+2105	Chỉ phiên ETH
+2106	VA chồng nhau = fair value bền; cạnh composite mạnh hơn cạnh VA một ngày.
+2107	Marker close nằm sát high của ngày, sau một ngày up. Điều này gợi ý:
+2108	Close mạnh, dễ tiếp diễn hướng lên ngày sau
+2109	Chắc chắn đảo chiều
+2110	Close location là đầu vào cho kỳ vọng open và spike rules.
+2111	Trong A–D (9:30–11:30 ET), RF của A–C dùng để làm gì?
+2112	Tín hiệu vào lệnh
+2113	Xác nhận open type / ai đang chủ động
+2114	Đặt stop loss
+2115	Tính VWAP
+2116	RF là công cụ xác nhận context, không phải trigger.
+2117	Ngày Normal (Dalton) có đặc điểm gì?
+2118	IB rất hẹp, trend cả ngày
+2119	IB rất rộng, gần như không có range extension
+2120	RE cả hai phía
+2121	Hai vùng value
+2122	Large timeframe vào sớm, đặt biên cả ngày trong IB.
+2123	Open Auction trong range hôm qua. Hành động đúng?
+2124	Vào lệnh ngay A period
+2125	Không trade A period, chờ IB rồi đánh cạnh IB hoặc breakout có xác nhận
+2126	Short mọi nhịp lên
+2127	Long mọi nhịp xuống
+2128	OA = không ai chủ động, tự tin thấp nhất.
+2129	Hôm qua Neutral Extreme, close ở high. Ngày sau ưu tiên:
+2130	Hướng xuống
+2131	Hướng lên (theo hướng close)
+2132	Đánh ngược mọi breakout
+2133	Phe thắng xuất hiện cuối phiên, thường tiếp diễn.
+2134	VA hôm nay bao trùm toàn bộ VA hôm qua. Đây là:
+2135	Outside value: mở rộng, hai phe cùng hoạt động
+2136	Xem close location để chọn hướng.
+2137	b-shape thường phản ánh điều gì?
+2138	Thân mỏng ở trên là phe long cũ thoát hàng.
+2139	Open Test Drive khớp nhất với model nào bạn đang dùng?
+2140	OSR: sweep biên ON range → reclaim → retest
+2141	Không model nào
+2142	Test một level ngược hướng để kiểm tra business rồi drive qua open.
+2143	Open nằm trong VA hôm qua. Kỳ vọng mặc định là gì?
+2144	Trend mạnh
+2145	Rotation trong VA, fade cạnh VAH/VAL về POC
+2146	Hai bên vẫn đồng thuận cho đến khi có acceptance ngoài VA.
+2147	Level đã bị xuyên qua và được accept trong phiên hôm nay được chấm bao nhiêu điểm?
+2148	Level đã mất vai trò, không fade lại ở đó.
+2149	Zone được chấm 5 điểm. Cách xử lý?
+2150	Chỉ trade khi CVD + trigger rất rõ
+2151	Không bao giờ trade
+2152	Dùng làm stop
+2153	≥ 6 là zone A; 4–5 cần thêm xác nhận; ≤ 3 chỉ là target.
+2154	Single prints bị lấp hết và giá xây value ở đó. Ý nghĩa?
+2155	Imbalance đã được sửa, level hết tác dụng
+2156	Cần vẽ thêm
+2157	Single prints chỉ có tác dụng khi còn là vùng imbalance.
+2158	IB width 80 điểm, trung bình 20 phiên 200 điểm. Đánh giá?
+2159	Rộng → rotation
+2160	Hẹp (40%) → ưu tiên range extension
+2161	Không đủ dữ liệu
+2162	Dưới 70% trung bình được xem là IB hẹp.
+2163	Ngày trend lên, cách trailing stop theo TPO?
+2164	Dưới VWAP −3 SD
+2165	Dưới low của period trước
+2166	Trên high của period hiện tại
+2167	Không dời stop
+2168	Mỗi period trend tạo low cao hơn, stop đi theo.
+2169	Plan mỗi ngày phải được chốt trước thời điểm nào?
+2170	Sau khi vào lệnh đầu
+2171	Bias và kịch bản xây xong trước 9:25 ET, như hệ thống bạn đã quy định.
+2172	Mỗi kịch bản trong plan cần đủ 4 thành phần nào?
+2173	Entry, size, tin tức, cảm xúc
+2174	Giá, giờ, VWAP, RSI
+2175	Chỉ cần hướng
+2176	Thiếu invalidation thì plan chỉ là dự đoán.
+2177	Một lệnh thắng nhưng nằm ngoài plan. Trong post-session review, nó được đánh giá thế nào?
+2178	Tốt vì có lãi
+2179	Lỗi process, dù có lãi
+2180	Không cần ghi
+2181	Tăng size lần sau
+2182	Chấm process, không chấm kết quả.
+2183	Điều kiện dừng trade trong ngày theo playbook là:
+2184	Khi thắng 1 lệnh
+2185	Đủ 2–3 lệnh, chạm daily loss limit, hoặc 11:30 ET
+2186	Khi hết tin tức
+2187	Không có
+2188	Khớp giới hạn prop và cửa sổ 2 tiếng NY AM của bạn.
+2189	Khi nào dùng chiến thuật bingbong ±1 SD?
+2190	Ngày trend mạnh
+2191	Khi VWAP phẳng, thị trường balance
+2192	Khi có tin
+2193	Rotation quanh VWAP chỉ hợp lệ khi không có trend.
+2194	VWAP ETH (anchor 18:00 ET) có vai trò gì trong hệ thống của bạn?
+2195	Trigger chính
+2196	Lớp confluence phụ, xem khi volume overnight bất thường
+2197	Thay thế VWAP RTH
+2198	VWAP RTH là trigger chính vì cùng mốc với IB.
+2199	Giá chạm VWAP RTH. Đây đã là tín hiệu vào lệnh chưa?
+2200	Có, vào ngay
+2201	Chưa: chỉ là location, vẫn cần CVD + trigger
+2202	Có nếu là phiên Á
+2203	Chỉ khi trên VWAP
+2204	VWAP được cộng điểm khi trùng location TPO, không phải tín hiệu độc lập.
+2205	Khác biệt cốt lõi giữa absorption và exhaustion?
+2206	Absorption: aggressor vẫn mạnh nhưng bị passive chặn; exhaustion: aggressor yếu dần
+2207	Absorption chỉ có ở đáy
+2208	Exhaustion mạnh hơn absorption
+2209	Absorption thường mạnh hơn vì có người lớn đứng ở level.
+2210	Công cụ nào trên ATAS giúp xác nhận có lệnh lớn đứng hấp thụ ở level?
+2211	Bạn đã setup Smart Tape 2 cột Price + Volume đúng cho việc này.
+2212	Setup grade A++ cần những gì?
+2213	Chỉ CVD divergence
+2214	Zone TPO ≥ 6 + VWAP/band trùng + CVD divergence + trigger
+2215	Chỉ VWAP
+2216	Open type bất kỳ
+2217	Ba lớp confluence + trigger = A++.

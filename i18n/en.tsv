@@ -1,0 +1,2218 @@
+0	Orderflow + TPO study system for NQ intraday: 2 courses, 166 quiz questions, 50/100-question mock exams.
+1	NQ intraday · PropFirm · 2–3 trades/day
+2	Two playbooks merged into one place to learn:
+3	to execute. Learn chapter by chapter, practise 166 quiz questions, take 50- or 100-question mock exams.
+4	Start the roadmap
+5	Mock exam
+6	How the two courses fit together
+7	The 4-layer system when price reaches a key level
+8	Each layer links to the matching chapter
+9	TPO: where to trade
+10	Balance or imbalance, open type, value relationship. Draw only Tier 1–3 levels and score them before the session.
+11	VWAP RTH: the filter gate
+12	VWAP state and the ±σ bands decide fade or break, and whether R:R to TP1 reaches ≥ 1.5.
+13	VWAP gate
+14	Is force into the level building or fading, are resting orders holding or pulling, can large orders move price?
+15	Trigger · Management
+16	Footprint on a closed M1 candle
+17	Absorption, delta flip or stacked imbalance. No trigger, no entry. Grade A++ / A+ / B.
+18	13 scenarios
+19	Courses
+20	Two playbooks, one roadmap
+21	9-week roadmap ticked:
+22	9-week roadmap · TPO · Day &amp; Open types · Level map · VWAP RTH · CVD · Daily plan · ATAS template case study.
+23	Open course
+24	Practise 79 questions
+25	DOM · Tape · Footprint · Delta &amp; CVD · 13 footprint scenarios · combining at TPO key levels · glossary.
+26	Practise 87 questions
+27	Quiz
+28	Study progress
+29	Open the quiz centre →
+30	Daily use
+31	In-session tools
+32	Before 9:25 ET
+33	Enter yesterday’s and overnight numbers to get open location, a level ladder and 2 scenarios.
+34	Pick the zone
+35	Level hierarchy &amp; scoring
+36	Tier 1–4, acceptance vs rejection, 80% rule, spike rules, IB calculator.
+37	At the level
+38	Grade the setup A++ / A+ / B
+39	Checklist VWAP → CVD → DOM → Tape → Footprint, gives the grade and the action.
+40	13 footprint scenarios
+41	Context, 3-candle ATAS-style footprint, entry · stop · target, invalidation.
+42	Reading the NQZ6 template 29/10 → 04/11
+43	5-session value migration and an illustrative level map.
+44	Reference
+45	Orderflow &amp; TPO glossary
+46	36 orderflow terms, the TPO dictionary is in chapter 01 of the Level course.
+47	Sync across devices
+48	Back up &amp; restore progress
+49	Progress (chapters viewed, answers, exam history, checklists, Plan Builder numbers) is stored in each device’s browser. To continue on another device: press
+50	Copy code
+51	or
+52	Download file
+53	on this device, then paste the code or pick the file on the other device and press
+54	Restore
+55	Copy progress code
+56	Download .json file
+57	Paste your progress code here, or leave empty and press Restore to pick a .json file
+58	Progress code
+59	Erase all progress
+60	Study playbook for NQ intraday. Not investment advice. Traditional statistics (80% rule, day-type frequencies, delta thresholds) must be verified with your own backtests before trading real money.
+61	Quiz · Orderflow System
+62	166 TPO Level and Orderflow Tools quiz questions: practice, 50/100-question mock exams, review mistakes.
+63	Quiz centre
+64	Practise 166 questions
+65	Every question from both courses, with the original content and explanations. Pick an answer to see right or wrong instantly. Use keys 1–4 (or A–D) to answer, ← → to move between questions.
+66	TPO Level questions
+67	Orderflow Tools questions
+68	questions with footprint/DOM/tape visuals
+69	Mock exam 50 / 100 questions
+70	Review mistakes
+71	50 questions per course, 100 for the full exam
+72	Answers stay hidden until you submit. An exam in progress is saved, so you can close the browser and continue. You pass with ≥ 80% three times in a row.
+73	Questions you are getting wrong
+74	Collected from both practice and mock exams. Answer correctly and the question leaves the list.
+75	Questions kept verbatim from the two original playbooks · Pass mark 80% · Progress saved in the browser, back up from the Overview page.
+76	DOM, Tape, Footprint, Delta & CVD, 13 footprint scenarios for NQ intraday on ATAS.
+77	Course 2 · NQ · ATAS · Rithmic · intraday RTH
+78	All the orderflow knowledge of the system in one place: DOM, tape, footprint, delta and CVD, how to combine them at TPO key levels, 13 footprint scenarios and a glossary. Illustrations are drawn in ATAS cluster style, numbers are sample data.
+79	chapters
+80	footprint scenarios
+81	quiz questions
+82	phases at a key level
+83	Start learning →
+84	See the 13 scenarios
+85	50-question mock exam
+86	Overview: each tool answers one question
+87	Orderflow is not about watching as much as possible. Each tool is used at a specific moment as price approaches a key level drawn from TPO.
+88	Who is waiting where? Limit orders resting at each price, holding or being pulled.
+89	Who is attacking, with what size, fast or slow? Every trade printed in real time.
+90	In the candle that just closed, which side won at each price? This is the entry trigger.
+91	Candle delta
+92	Aggressive buying minus aggressive selling within one candle. Compare with the candle direction to see agreement or absorption.
+93	Delta accumulated through the session. Is price reaching the level with building or fading force?
+94	Where it is worth trading, and whether to fade or break. Not orderflow, but it decides whether orderflow means anything.
+95	The 5-phase sequence when price reaches a key level
+96	1. Before arrival
+97	15–20 ticks before the level
+98	VWAP: filter gate
+99	Where is the level relative to VWAP RTH and the σ bands? Pick the fade or break hypothesis, estimate R:R.
+100	2. Approach
+101	last 5–10 ticks
+102	CVD + tape speed
+103	Is price reaching the level with building or fading force?
+104	3. Touching the level
+105	inside the TPO zone
+106	Are resting orders at the level holding or pulling? Do large orders hitting it move price?
+107	closed M1 candle
+108	Absorption, delta flip or stacked imbalance. No trigger, no entry.
+109	5. Management
+110	after entry
+111	Stop beyond the signal zone, target VWAP or the next level
+112	Exit when an invalidation condition appears.
+113	Foundations: market orders, limit orders and the auction
+114	Every orderflow tool measures one of two things: resting orders (passive) or orders filled by the aggressive side (aggressive).
+115	is reading the actual flow of orders being filled and resting to see which side controls price at a specific level, instead of only looking at the result, the candle.
+116	Limit order = passive
+117	Rests at a price, waiting for someone else to fill it. Buy limits sit on the bid, sell limits on the ask. Shown on the DOM. Can be pulled at any time, so it can be a spoof.
+118	Market order = aggressor
+119	Accepts the other side’s price to fill immediately. Market buys fill on the ask, market sells fill on the bid. Shown on the tape and footprint after the fill.
+120	How price moves
+121	Price only ticks up when all sell limits at the current ask are eaten by market buys, or pulled by whoever placed them.
+122	So market orders are the side that
+123	creates movement
+124	, limit orders are the side that
+125	blocks it or lets it through
+126	Heavy market buying without price rising means a large sell limit is absorbing: this is the root of the absorption concept.
+127	Price moves fast through areas with few resting orders (LVN) and slows down in areas with many orders and much volume (HVN). This is the link between orderflow and TPO/volume profile.
+128	Two kinds of activity in Auction Market Theory
+129	The aggressive side pushes price out of the value area and it gets accepted. Orderflow: stacked imbalance, CVD confirms, fast tape. Fits the playbook
+130	Price leaves value and gets pushed back. Orderflow: absorption, exhaustion, divergence, delta flip. Fits the playbook
+131	Quick check · Foundations
+132	DOM: the order book
+133	ATAS: Smart DOM. Used in phase 3 when price touches the level.
+134	shows the number of limit contracts resting at each price around the current price: the bid side (resting buys) and the ask side (resting sells). The DOM shows passive liquidity, not trades that have happened.
+135	Concepts
+136	Resting orders added at a price as price approaches. Someone wants to defend that level.
+137	Resting orders pulled just before price touches. An open road for price to pass.
+138	Wall
+139	A price with unusually large size compared with its neighbours. Only meaningful when volume trades into it and it still stands.
+140	A large order placed to create an impression, then pulled before it is filled. The reason not to trust the DOM alone.
+141	An order that shows only part of its size. Volume traded at the price far exceeds the displayed size, and the size keeps refilling.
+142	DOM history over time (ATAS: DOM Levels). Shows how long a wall has existed and whether it was pulled before price arrived.
+143	How to read
+144	Only watch the DOM when price is a few ticks from the chosen level. Do not use the DOM to find setups.
+145	Compare size at the level with when price was far away: an increase is stacking, a decrease without traded volume is pulling.
+146	Cross-check with the tape: size decreasing
+147	because of fills
+148	(the wall being eaten) is completely different from size decreasing
+149	because of pulling
+150	Watch the opposite side too: a long fade needs the ask above to thin out; a long break needs the bid below to follow price up.
+151	Examples
+152	A. Stacking: the level holds
+153	VAL 25,410.50. At T1 price is 6 ticks away, bid at the level is 140. At T2 price touches, the bid rises to
+154	even though volume has traded into it; the ask above shrinks. Supports a
+155	if the footprint gives a trigger.
+156	B. Pulling: the level breaks
+157	Same VAL. At T1 the bid at the level is 300. At T2, with price 1 tick away, the bid is only
+158	with almost no traded volume: the orders were pulled. Do not fade; prepare for the scenario
+159	break down
+160	C. Iceberg on the bid
+161	The DOM always shows 12 lots at 25,410.50 but the tape shows 186 lots traded at this price and price has not broken. A large player is absorbing with a hidden order. An iceberg at an extreme usually holds price; an iceberg that gets broken usually leads to a strong move in the break direction.
+162	Do and don’t
+163	Do
+164	Use the DOM to fine-tune entry at a level chosen in advance.
+165	Always confirm with the tape: are there real fills?
+166	Note whether the opposite side is thin or thick.
+167	Don’t
+168	Enter just because you see a big wall.
+169	Watching the DOM around the 8:30, 10:00 ET news or the 9:30 spike.
+1150	Phase 5 · Live prop trading
+1151	Week 9+
+1152	Live: max 2–3 trades/day, A+ setups or better only, stop at 11:30 ET (23:30 Vietnam)
+1153	Weekly review: rate of correct A/B scenarios, repeated mistakes, trades outside the plan
+1154	Optional: switch on Tier 4 scalping only after 20 consecutive sessions with ≥ 90% of trades in plan
+1155	50-question final test (tab 08) ≥ 40/50 three times in a row
+1156	Each cell (or letter) = a price traded during a 30-minute period. NQ RTH has 13 periods: A 9:30, B 10:00, C 10:30, D 11:00, E 11:30, F 12:00, G 12:30, H 13:00, I 13:30, J 14:00, K 14:30, L 15:00, M 15:30 ET.
+1157	The more cells stacked horizontally at a price, the more time the market spent there.
+1158	Your trade window (9:30–11:30 ET) only covers A–D. Every in-session decision is based on A–D versus yesterday’s profile.
+1159	Presence = time spent at a price (TPO). Participation = volume actually traded at a price (volume profile).
+1160	Thick TPO + thin volume = present but few participants: weak value. Thin TPO + thick volume = big business passing quickly: a strong level.
+1161	This is why your template puts TPO and volume profile side by side. Prefer levels that both confirm.
+1162	TPOC = the price with the most TPOs (time). VPOC = the price with the most volume. Usually close to each other but not necessarily.
+1163	The POC is the
+1164	fairest
+1165	price of the session. A high POC = buyers built value high (P); a low POC = b.
+1166	Yesterday’s POC is the natural target of every rotation inside the VA. A POC not yet revisited = naked POC, a magnet.
+1167	The area holding ~70% of TPOs (or volume) around the POC. Upper edge VAH, lower edge VAL.
+1168	Inside the VA = fair value, both sides agree. Outside the VA = an
+1169	unfair
+1170	price, the market either rejects it quickly or accepts it and builds new value.
+1171	The VA edges are the most important Tier 2 levels of the day: fade on rejection, go with acceptance (tab 03).
+1172	The range of A + B, i.e. 9:30–10:30 ET. IB width = IB High − IB Low.
+1173	An IB narrow versus average = the two sides have not agreed yet, a strong range extension is likely. A wide IB = most of the day’s range is in, leaning to rotation.
+1174	The IB is the anchor of the IB model you use. Compare IB width with the 20-session average (tool in tab 03).
+1175	Price moves outside the IB after 10:30 ET.
+1176	One-sided RE = initiative activity on that side. Two-sided RE = Neutral day.
+1177	RE with a sloping VWAP and CVD in the same direction → go with it, target IB 1.5x/2x.
+1178	Price rows with only a single letter, inside the profile (not at an extreme).
+1179	Price moved fast in one direction with no two-way trade = an imbalance area.
+1180	The first test is usually support/resistance. If fully filled and price is accepted, the imbalance has been repaired and the level is spent.
+1181	≥ 2 consecutive single-print rows at a session extreme. Buying tail at the low, selling tail at the high.
+1182	Responsive participants rejected price very fast: the auction on that side is complete.
+1183	A high/low with a tail is a strong level, do not expect it to be swept soon. A stop can sit beyond the tail.
+1184	An extreme where ≥ 2 different letters touch exactly the same price, with no tail. Also called an unfinished auction.
+1185	The market stopped there because it ran out of participants in the session, not because of strong rejection.
+1186	Magnet: usually swept in later sessions. Use it as a target, do not place a stop right behind it.
+1187	The arrows on your template: the 9:30 open price and the 16:00 close price.
+1188	A close near the extreme in the day’s direction = strong, likely to continue. A close back in the middle = balance.
+1189	Close location feeds the spike rules and the expectation for the next day’s open.
+1190	Halfback = the midpoint of the day’s current range. IB mid = the midpoint of the IB.
+1191	Price above halfback = buyers are winning the session; below = sellers.
+1192	A Tier 4 scalping level, also where to move the stop to breakeven.
+1193	The total score comparing each period’s high/low with the previous period (+1 higher, −1 lower, 0 equal).
+1194	Large positive RF = upward rotation dominates; near 0 = two-sided.
+1195	Quick confirmation of the open type after A–C. Not an entry signal.
+1196	The POC of an older session that price has not come back to touch.
+1197	Old fair value not yet retested.
+1198	A high-probability target. Several nPOCs close together = a Tier 1 zone.
+1199	A strong one-directional move in the last 1–2 periods of the session (L, M).
+1200	Not yet validated by the market. Where the next day opens relative to the spike tells you whether it was real or fake.
+1201	See the spike rules table in tab 03.
+1202	Whether most ETH trading sits above (net long) or below (net short) yesterday’s RTH close.
+1203	Heavily one-sided inventory often gets
+1204	unwound
+1205	in the opposite direction in the first 30–60 minutes of RTH.
+1206	Overnight inventory net long + open at the ON high → be careful buying the open; combine with the OSR model (sweep ON range → reclaim).
+1207	Merging several days with overlapping VAs into one large profile.
+1208	Overlapping multi-day VAs = durable fair value. Composite edges are stronger than a single-day VA edge.
+1209	Example in the template: 30/10, 02/11, 04/11 have overlapping VAs around 28,360–28,880, ideal for a composite.
+1210	The week’s value, higher-timeframe bias
+1211	Price inside the weekly VA → balance, favour rotation. Open outside the weekly VA → favour going with it
+1212	Composite VA (multi-day)
+1213	Merged profile
+1214	Durable multi-day fair value
+1215	Composite edges are the strongest fade zones; break and acceptance → multi-day trend
+1216	Multi-day naked POC
+1217	Extended POC
+1218	Old untested fair value
+1219	Priority target; the first touch often reacts
+1220	Yesterday’s Daily Profile RTH
+1221	Edge of yesterday’s fair value
+1222	Fade on rejection; go with acceptance; 80% rule when coming back into the VA
+1223	Yesterday’s fairest price
+1224	Target of rotations inside the VA, bias pivot
+1225	Liquidity, yesterday’s stops
+1226	Sweep & reclaim (same logic as OSR); if poor, it is a magnet
+1227	Marked by hand
+1228	Magnet / target, no stop right behind it
+1229	Imbalance area
+1230	Support/resistance on the first test; fully filled = spent
+1231	Overnight inventory boundary
+1232	Your OSR model: sweep the ON edge → reclaim → retest
+1233	Open-type classification anchor
+1234	Holding above/below the open after 30 minutes = who won the A period
+1235	Range extension boundary
+1236	Narrow IB → go with the breakout; wide IB → fade the IB edges
+1237	The session’s dynamic value
+1238	First 30 minutes
+1239	Computed from the IB
+1240	Take partial profits; 2x is rare, trend days only
+1241	Today’s profile
+1242	Value in motion
+1243	dPOC migrates in the trade direction → pullbacks to the dPOC are add points
+1244	Day’s mid-range
+1245	Who is winning the session so far
+1246	Move stop to breakeven, filter scalp direction
+1247	Each letter
+1248	Micro structure
+1249	Trailing stop: in an uptrend, stop below the previous period’s low
+1250	Intraday single prints
+1251	New imbalance
+1252	The first retest is a scalp entry
+1253	Scalp rotations when VWAP is flat
+1254	Very wide IB (A and B have made almost the whole range). Little or no range extension.
+1255	Large timeframe participants came in early and set the boundaries for the whole day. The rest is rotation.
+1256	Fade the IB edges on CVD exhaustion. Target IB mid / POC. Do not chase breakouts.
+1257	Average IB, one-sided range extension, usually about 1.2–2x the IB.
+1258	Initiative buyers (or sellers) appear after the IB and move value. The most common day type on index futures.
+1259	After RE, buy pullbacks to the IB high / dPOC / VWAP. Target IB 1.5x – 2x.
+1260	Narrow IB, a thin elongated profile, every period makes a new high/low, the close is at the extreme.
+1261	One side is in complete control, the other has no chance to build value.
+1262	Do not fade. Enter at the previous period’s low / VWAP / +1 SD. Trail the stop by period.
+1263	Two value areas separated by a band of single prints. Usually starts with a narrow IB.
+1264	Morning balance, then new information pushes price into a second balance area.
+1265	The single prints in the middle are support (or resistance) on the first test. If they are fully filled the next day = a weak signal.
+1266	Range extension on both sides of the IB. Neutral center: close in the middle of the range. Neutral extreme: close at one extreme.
+1267	Center = both sides balanced, no winner yet. Extreme = the winner appears late in the session, usually continuing the next day.
+1268	Center: expect balance the next day. Extreme: favour the close direction the next day.
+1269	Narrow IB, the whole day barely leaves the IB. A very small range.
+1270	Lack of information, often before big news or a holiday. Energy is building.
+1271	Do not trade inside the range. The next day watch for a breakout from this balance area.
+1272	Thin stem below, value bulging at the top.
+1273	Usually short covering: old shorts closing, not necessarily new buyers.
+1274	The next day you need to see new buying (holding above the VA) before trusting continuation. If price falls back into the thin stem → it can move fast.
+1275	Thin stem above, value bulging at the bottom.
+1276	Usually long liquidation: old longs exiting.
+1277	The next day you need to see new selling (holding below the VA) before trusting continuation.
+1278	Highest
+1279	Price moves strongly in one direction right from 9:30 and never comes back to test the open.
+1280	Go with it. Only enter the first small pullback into a nearby level (ON high, PDH). Never fade.
+1281	Price tests a level on the opposite side (PDH/PDL, ON high/low) to check there is no more business, then reverses and drives through the open.
+1282	Wait for the test to finish + an open reclaim. A close match for your OSR model (sweep → reclaim → retest).
+1283	Medium
+1284	Price moves one way, meets responsive activity at a level, gets rejected and reverses back through the open.
+1285	Trade in the direction after the open is crossed. Target the opposite VA edge. Stop beyond the rejected extreme.
+1286	Low
+1287	Price rotates around the open both ways, neither side in control. In range: expect balance. Out of range: a direction must be chosen early.
+1288	Do not trade the A period. Wait for the IB to form, trade the IB edges or a breakout confirmed by CVD.
+1289	Above yesterday’s range
+1290	Strong imbalance
+1291	Open above PD High. The highest confidence that there is upside imbalance. The market must prove the new prices are accepted.
+1292	Open Drive / Open Test Drive down to PDH and holds → go with it. If it comes back into yesterday’s range and holds 1 period → trapped longs, ORR down, target VAH then POC.
+1293	OSR: sweep the ON low or PDH → reclaim → long.
+1294	Above VA, inside range
+1295	Leaning up, moderate
+1296	Open between VAH and PD High. The market is testing prices above value but has not left the range.
+1297	Holds above VAH (accept) → tests PD High. Comes back into the VA and is accepted 2 periods → 80% rule to VAL.
+1298	Scenario A: long the VAH retest. Scenario B: short when accepted back inside the VA.
+1299	Inside yesterday’s VA
+1300	Open inside yesterday’s value. Default: both sides still agree, rotation inside the VA.
+1301	Fade VAH / VAL on CVD exhaustion or absorption, target POC. Only switch to breakout on acceptance outside the VA.
+1302	The VWAP ±1 SD ping-pong playbook + fading the VA edges.
+1303	Below VA, inside range
+1304	Leaning down, moderate
+1305	Open between VAL and PD Low. Mirror image of
+1306	Holds below VAL → tests PD Low. Comes back into the VA + accepted 2 periods → 80% rule to VAH.
+1307	Scenario A: short the VAL retest. Scenario B: long when accepted back inside the VA.
+1308	Below yesterday’s range
+1309	Open below PD Low. Downside imbalance, e.g. 30/10 in your template.
+1310	Open Drive down → go with it, sell pullbacks. Comes back into the range and holds → trapped shorts, ORR up.
+1311	OSR: sweep the ON high or PDL → reject → short.
+1312	Today’s VA is entirely above yesterday’s VA.
+1313	Clearly bullish. The next day favour longs at the new VAH/POC.
+1314	Overlapping but shifted up.
+1315	Moderately bullish, needs more confirmation.
+1316	Almost identical.
+1317	Balance. Fade the edges, prepare a composite.
+1318	Today’s VA sits inside yesterday’s VA.
+1319	Compression. Prepare for a breakout, do not guess the direction in advance.
+1320	Today’s VA engulfs yesterday’s VA.
+1321	Expansion, both sides active. Use the close location to pick a direction.
+1322	Overlapping but shifted down.
+1323	Moderately bearish.
+1324	Today’s VA is entirely below yesterday’s VA.
+1325	Clearly bearish. The next day favour shorts at the new VAL/POC.
+1326	At VAH / PDH / +2 SD
+1327	Price makes a higher high, CVD makes a lower high.
+1328	Each leg up needs fewer aggressive buyers. Aggressive buyers are drying up.
+1329	Short after the last leg’s low breaks; stop above the new high; target POC / VWAP.
+1330	CVD makes a strong higher high, price cannot exceed the old high.
+1331	Buyers still hit the market hard but passive sellers at the level absorb everything.
+1332	Usually stronger than exhaustion. Short on a negative delta flip; stop above the level; target the opposite VA.
+1333	At VAL / PDL / −2 SD
+1334	Price makes a lower low, CVD makes a higher low.
+1335	Aggressive sellers are drying up.
+1336	Long after the last leg’s high breaks; stop below the new low; target POC / VWAP.
+1337	CVD makes a strong lower low, price holds a higher low / equal low.
+1338	Passive buyers absorb all the market selling.
+1339	Long on a positive delta flip; stop below the level; target the opposite VA.
+1340	Is price at a TPO zone scoring ≥ 4 (tab 03)?
+1341	Today’s regime: balance or trend? (open type, IB, VWAP slope)
+1342	Compare the last 2 price swings at the zone with the 2 matching CVD swings (reset 9:30 ET)
+1343	Is it exhaustion or absorption? Smart Tape showing large orders standing at the level → extra confidence
+1344	Is there a trigger yet: M1 structure break, level reclaim or delta flip. Stop beyond the extreme, target POC / VWAP
+1345	RTH close. Capture the profile, do the post-session review when you wake up.
+1346	Vietnam daytime
+1347	Read yesterday’s profile: day type, shape, close, value relationship. Update Tier 1–2 levels.
+1348	Globex opens, the ETH session starts.
+1349	Lock in the expected open location, scenarios A/B, invalidation. Plan Builder.
+1350	A period: classify the open type. OSR window.
+1351	B period: the IB forms. Careful with the 10:00 ET news.
+1352	After the IB: range extension or rotation. IB model. Stop at 11:30 ET.
+1353	Shut down the platform. Write a short journal entry.
+1354	Record yesterday’s day type, shape, close location
+1355	Yesterday’s value relationship versus the day before
+1356	Weekly VA: is price inside or outside?
+1357	Update Tier 1–2: VAH/VAL/POC, PDH/PDL, nPOC, poor H/L, single prints, gap
+1358	News calendar 8:30 / 10:00 ET
+1359	Expected open location (1 of the 5 zones)
+1360	Scenarios A and B, each with zone, trigger, target, invalidation
+1361	Mark the no-trade zone (mid-VA, far from any level)
+1362	Rule reminder: max 2–3 trades, stop at 11:30 ET, the prop daily loss limit
+1363	Capture the Daily Profile RTH after 16:00 ET
+1364	Record day type, shape, open type, IB width, whether there was RE and on which side
+1365	Which scenario happened? Where was the plan wrong?
+1366	Each trade: zone score, grade, was it the right trigger
+1367	Mark new levels for tomorrow: VA/POC, poor H/L, single prints, spike
+1368	Write down one lesson and one thing to keep
+1369	OD → go with it, only enter the first pullback. OTD → wait for the test + reclaim. ORR → the opposite scenario. OA → do not trade the A period.
+1370	Did price reach a zone in the plan?
+1371	No → do nothing. A trade outside the plan is a mistake, even if it wins.
+1372	Does the zone score ≥ 6?
+1373	No → use it only as a target. 4–5 → needs very clear CVD + trigger.
+1374	Does VWAP allow this direction?
+1375	Trend against you (sloping VWAP, price riding the band) → drop the fade idea.
+1376	Does CVD confirm?
+1377	Divergence / absorption for a fade; CVD making new extremes with price for a breakout.
+1378	Delta flip / DOM / M1 structure break. Stop beyond the extreme, target the next level.
+1379	70% of average → favour range extension. IB
+1380	130% → favour rotation inside the IB.
+1381	Stop
+1382	2–3 trades done, loss limit hit, or 11:30 ET (23:30 Vietnam).
+1383	Value built at the very top (VA ~29,415–29,625), then late in the session price slid all the way down to ~29,105 with single-cell TPO columns: single prints / a late selling spike. Close near the low.
+1384	Weak close + down spike. Per the spike rules: next day opening below the spike (29,105–29,350) = continuation; opening inside the spike = balance; opening above the spike = spike rejected.
+1385	Down spike
+1386	Open ~28,795, about 310 points below the 29/10 low: open outside the range, below even the spike. Much lower value. Left an unfilled RTH gap 28,860–29,105.
+1387	A textbook example of
+1388	opening below the range
+1389	+ spike rules confirming continuation. The gap overhead is a magnet / Tier 2 resistance for the following days.
+1390	Very wide range (~790 points), breaking both the high and the low of 30/10 (outside day). The VA widened upward (overlapping higher), but the close was near the low.
+1391	Most likely a Neutral Extreme (check the IB on ATAS): both sides broken, close at the lower extreme → the next day leans down. Remember this expectation to compare with 03/11.
+1392	Outside day · weak close
+1393	A narrow inside day (~230 points) in the lower part of the 02/11 range. Very narrow VA 28,280–28,395. Held above the 02/11 low (28,100) and the purple level 28,176.
+1394	The bearish expectation from the 02/11 close was NOT followed through: sellers could not push price lower. A narrow balance after a wide day = energy building, prepare for a breakout.
+1395	Open ~28,430 near the 03/11 high, drove up out of the 03/11 balance. Swept through the 02/11 high (28,890) up to ~28,975. Developing POC ~28,680 matches the 02/11 POC (~28,650).
+1396	Higher value versus 03/11: the breakout from balance was accepted. Price returned to the 02/11 fair value. After the close, check whether the 28,975 high has a tail (rejection) or is a poor high.
+1397	04/11 PD High + 02/11 High + RTH gap bottom
+1398	Cluster resistance / breakout zone. Accepted above → target the gap fill to 29,105
+1399	Upper value edge. Fade on CVD exhaustion
+1400	Pivot. Two POCs coinciding = multi-day fair value
+1401	Lower value edge
+1402	03/11 High = the broken balance boundary
+1403	Breakout retest. Losing this level = the 04/11 breakout failed
+1404	Target if the breakout fails
+1405	Your purple level
+1406	Higher-timeframe Tier 1, below the 03/11 low
+1407	Resistance on the first test above the gap
+1408	Combining
+1409	On the footprint, what is the number in the ask column?
+1410	Sell limit orders resting at that price
+1411	Volume filled by aggressive buyers into the ask
+1412	Volume filled by aggressive sellers into the ask
+1413	Number of cancelled buy orders
+1414	The ask on the footprint is volume filled when market buy orders hit the ask side. Resting limit orders only appear on the DOM.
+1415	Who is the aggressor?
+1416	The side placing the largest limit order
+1417	The side using market orders, accepting the other side’s price
+1418	The side currently in profit
+1419	The aggressor fills immediately with market orders. The side placing limits is passive.
+1420	When does NQ tick up by one tick?
+1421	When there are more buy limits than sell limits
+1422	When all sell orders at the current ask are eaten or pulled
+1423	When delta is positive
+1424	When CVD rises
+1425	Price only moves to the next ask level when the current ask has no orders left: fully filled or pulled. So heavy market buying with price standing still is a sign of absorption.
+1426	Price leaves value and is pushed back inside with absorption and divergence. What kind of activity is this?
+1427	Responsive is the reaction pushing price back to value. The matching playbook is Fade.
+1428	What is stacking on the DOM?
+1429	Resting orders pulled as price approaches
+1430	Resting orders added at a price as price approaches
+1431	Many market orders filling at once
+1432	3 consecutive imbalances
+1433	Stacking shows someone wants to defend that price. Confusing it with stacked imbalance (footprint) is a common mistake.
+1434	A 400-lot ask wall above. As price approaches, the size drops 400 → 120 and the tape shows buy orders filling continuously at that price. How do you read it?
+1435	Spoof, about to be pulled
+1436	The wall is really being eaten, a break is likely
+1437	The wall holds, short it
+1438	No information
+1439	Size dropping because of fills (volume on the tape) means buyers are eating the liquidity. Unlike pulling, where size drops without traded volume.
+1440	A 300-lot bid at VAL disappears when price is 1 tick away, with almost no traded volume. What should you do?
+1441	Fade long because VAL is support
+1442	Do not fade; the level may break, watch for the break scenario
+1443	Go long as soon as it touches
+1444	Increase size
+1445	This is pulling. The defending orders were withdrawn, so the fade hypothesis weakens.
+1446	Why not use the DOM to find setups?
+1447	ATAS has no DOM
+1448	The DOM changes very fast and has spoofs; only use it to fine-tune at a chosen level
+1449	The DOM is only for stocks
+1450	The DOM is slower than the footprint
+1451	The DOM is an execution tool at the level, not a tool for choosing levels.
+1452	Which sign shows an iceberg?
+1453	Very large displayed size
+1454	Volume traded at a price far exceeds the displayed size and the size keeps refilling
+1455	Large negative delta
+1456	Price moves fast through the level
+1457	An iceberg only shows part of itself. You only see the refill by watching tape and DOM together.
+1458	Long fade at VAL: which DOM picture supports it best?
+1459	Ask above thickens, bid at the level shrinks
+1460	Bid at the level holds/stacks, ask above thins out
+1461	Both sides pull
+1462	Bid and ask both rise sharply
+1463	A long fade needs passive buyers defending the level and the sell side above weakening.
+1464	What does Smart Tape merge orders for?
+1465	Fewer lines, looks nicer
+1466	To merge orders split into pieces at the same moment so you see the real size
+1467	To hide small orders
+1468	To compute delta
+1469	Large orders are usually split when filled. Only merged do you see it is one large player.
+1470	At VAL: sell orders of 48, 62, 55 lots in a row at the same price without price dropping, then large buy orders appear. Reading?
+1471	Sell initiative, short
+1472	Selling absorbed, supports a long fade
+1473	Large orders hitting without follow-through is absorption on the tape. The string of buys afterwards signals a side change.
+1474	A tape-speed burst at an extreme after a long up leg is usually what?
+1475	Climax, may be about to run out
+1476	Certainly short covering
+1477	A burst when breaking a range is ignition; a burst at the end of a long leg is climax. Compare with the baseline for the same time of day.
+1478	How should you set the size filter for the NQ tape?
+1479	Fixed at 1 lot
+1480	By session size percentile, tuned separately for RTH and ETH
+1481	No filter
+1482	Equal to the average candle volume
+1483	ETH liquidity is much lower than RTH; using one threshold is either too noisy or misses things.
+1484	Long break above VAH. On the retest, which tape supports it?
+1485	A continuous string of 50-lot sells
+1486	Small 3–6 lot sells, sparse
+1487	No trades at all
+1488	1-lot buy orders
+1489	A clean retest means the opposite side is weak and sparse. Large sells on the retest are a sign the breakout may fail.
+1490	How is a buy imbalance at price P computed?
+1491	Ask(P) versus bid(P)
+1492	Ask(P) versus bid(P − 1 tick)
+1493	Ask(P) versus ask(P − 1 tick)
+1494	Delta(P) versus volume
+1495	Diagonally, because an aggressive buyer at P fills against ask P, while an aggressive seller at the same moment fills at the bid one tick lower.
+1496	How many consecutive levels does a stacked imbalance need at minimum?
+1497	3 or more consecutive levels on the same side. 1–2 levels is noise.
+1498	What signal is this candle giving at VAL?
+1499	Sell stacked imbalance
+1500	Candle 2: bid 210 and 240 at the two lowest levels, strongly negative delta but the candle closes up. Candle 3 has a confirming buy stacked imbalance.
+1501	How should the stacked zone in candle 2 be used?
+1502	Short because candle 3 is bearish
+1503	Long when price retests the buy stacked zone
+1504	Skip it
+1505	Chase long right on candle 2
+1506	A buy stacked imbalance on a range break is initiative. Enter on the retest, stop below the stacked zone; do not chase.
+1507	Candle 2’s high has the ask shrinking to 0. This is?
+1508	Exhaustion: buyers ran out
+1509	Exhaustion is shrinking volume, unlike absorption which is large volume being blocked. A high with ask = 0 is a finished auction.
+1510	Candle 1 has buy imbalance piled at its 3 highest levels but closes low, candle 2 closes below the breakout level. Reading?
+1511	Strong breakout, long
+1512	Buyers trapped, favour short
+1513	Buyers who chased the high are losing; when they stop out with sell orders, price falls faster.
+1514	What is an unfinished auction mainly used for?
+1515	Enter immediately
+1516	Choosing a target, since price often comes back to repair it
+1517	Placing the stop
+1518	Measuring delta
+1519	An unfinished auction is not a trigger. It is a natural target for a position you hold.
+1520	How does absorption differ from exhaustion?
+1521	No difference
+1522	Absorption: large volume blocked; exhaustion: volume drying up
+1523	Absorption only happens at highs
+1524	Exhaustion needs positive delta
+1525	Both are reversal signals, but the mechanisms are opposite: one side still has force but is blocked, the other has run out.
+1526	Price closes through the whole buy stacked zone downward. This is?
+1527	Stronger buy stacking
+1528	Imbalance failure: the old stacked zone becomes resistance
+1529	The buyers who committed at the stacked zone are now trapped. Good R:R because the stop is close.
+1530	A strong bullish candle but its lower part is almost empty of volume, volume piles at the top, delta near 0. You should?
+1531	Chase long
+1532	Do not chase long; most likely short covering (P-shape)
+1533	Increase long size
+1534	There are no real new buyers. The thin lower part usually gets filled back.
+1535	A candle’s delta equals?
+1536	Volume × price
+1537	Highest ask − highest bid
+1538	Delta = aggressive buying (ask) minus aggressive selling (bid).
+1539	At VAL, an M1 candle closes up but delta is −250. Reading?
+1540	Aggressive selling absorbed, supports a long fade if confirmed
+1541	Noise, ignore it even at a level
+1542	Delta against the candle direction at a key level is a sign of absorption. Only mid-range is it noise.
+1543	Price makes a higher high, CVD makes a lower high. Meaning?
+1544	Aggressive buying is strengthening
+1545	Aggressive buying is weakening: divergence
+1546	CVD is broken
+1547	You should trade a long break
+1548	Divergence supports a fade and is a reason not to trade the break.
+1549	Cluster statistic: max delta +410 but the candle closes with delta +35. Reading?
+1550	Buyers dominated to the end of the candle
+1551	Buyers pushed and were reversed within the candle
+1552	Meaningless
+1553	The gap between max delta and closing delta is the buying force the sellers took back.
+1554	The delta flip condition for a long?
+1555	Any next candle with positive delta
+1556	Previous candle clearly negative delta, next candle clearly positive and closing above the previous body high, at a level
+1557	CVD rises
+1558	Two candles both with positive delta
+1559	All three are required: a clear sign change, a close beyond the previous body, and it happens at a level.
+1560	What Delta/Volume counts as a clear delta?
+1561	Above 1%
+1562	From about 15%
+1563	Exactly 50%
+1564	It does not matter
+1565	Below about 5% is balanced. The 15% threshold is a system convention, adjustable after backtesting.
+1566	The correct order as price approaches a key level?
+1567	VWAP → CVD/tape → DOM/tape → footprint → management
+1568	VWAP is done before price arrives, footprint is only used on closed candles.
+1569	Footprint trigger present, VWAP gate passed, CVD and DOM confirm, tape does not. Grade?
+1570	2/3 confirmations is A+.
+1571	A nice absorption but the level is right next to VWAP, R:R to TP1 only 1.1. What do you do?
+1572	Enter because the trigger is nice
+1573	Skip: fails the VWAP gate
+1574	Enter with double size
+1575	Move the target further at will
+1576	The VWAP gate is mandatory. A nice trigger does not make up for a poor R:R.
+1577	Price has been at the level for 4 M1 candles without a trigger. Reading?
+1578	A trigger is coming, keep waiting
+1579	The level is being accepted; stay out
+1580	Enter the fade
+1581	Trade the break immediately
+1582	More than 3 candles without a trigger is a red flag. You may prepare for the break scenario if its conditions are met.
+1583	Long break playbook but CVD diverges on the break. What do you do?
+1584	Enter anyway
+1585	Do not trade the break
+1586	Fade short immediately
+1587	A break needs CVD confirmation. Divergence signals a weak breakout that may become a trap.
+1588	Long fade after absorption at the low. Where does the stop go?
+1589	Fixed 10 ticks
+1590	2–4 ticks below the low of the absorption zone, beyond the level
+1591	At VWAP
+1592	No stop
+1593	The stop goes where the scenario is wrong. If the stop is too far relative to TP1, skip the trade.
+1594	Where does a market sell order fill?
+1595	At the ask
+1596	At the bid
+1597	At the candle open price
+1598	An aggressive seller accepts the best resting buy price, i.e. the bid. So aggressive selling volume sits in the bid column of the footprint.
+1599	What kind of orders does the DOM show?
+1600	Filled orders
+1601	Resting limit orders, not yet filled
+1602	Only large orders
+1603	Other people’s stop orders
+1604	The DOM is passive liquidity. Filled orders appear on the tape and the footprint.
+1605	What do footprint and tape have in common?
+1606	Both show resting orders
+1607	Both show filled trades, distinguishing the aggressor side
+1608	Both are only for the D1 timeframe
+1609	Neither exists in ATAS
+1610	The tape shows each trade over time, the footprint groups them by price level within each candle.
+1611	Why does price usually move fast through an LVN?
+1612	Because many resting orders block it
+1613	Because there is little volume and little liquidity there to block price
+1614	Because VWAP sits there
+1615	Because delta is always positive at an LVN
+1616	An LVN is an area the market rejected quickly before. Few people trade there, so price passes easily.
+1617	How does initiative buying usually show on the footprint?
+1618	Buy stacked imbalance and price accepted above the level
+1619	Volume shrinking towards the high
+1620	Initiative is aggressive buyers lifting several ask levels in a row and price holding in the new area.
+1621	TPO reads context, orderflow executes
+1622	what does it mean?
+1623	Use only TPO to enter
+1624	TPO chooses the level first, orderflow decides whether to enter at that level
+1625	Orderflow chooses the level, TPO chooses the entry
+1626	The two tools replace each other
+1627	Levels are drawn from TPO before the session. Orderflow is only read when price reaches those levels.
+1628	A 500-lot bid wall appears 30 ticks from price, not matching any level. What do you do?
+1629	Place a buy order right at the wall
+1630	Ignore it, it is not a chosen level
+1631	Short because the wall will break
+1632	Move your level to the wall
+1633	The DOM is only used at chosen levels. A distant wall can disappear at any moment.
+1634	Short fade at VAH. The ask at the level holds around 250 lots even though the tape shows 400 lots of buys filled into it. Reading?
+1635	Refill or an iceberg on the ask, supports a short fade
+1636	The wall is about to break
+1637	Unrelated
+1638	More filled than displayed while the size still stands is a sign of a hidden sell order absorbing buyers.
+1639	Long break playbook above VAH 25,430.00. Does this DOM picture support it or not?
+1640	Does not support: the ask at VAH is too thick
+1641	Supports: the ask at VAH dropped from 280 to 40 through fills, the bid below follows up
+1642	Supports a short fade
+1643	Size at the level drops sharply (the tape shows it is from fills) while the bid side thickens: the blocking liquidity is being eaten, exactly the DOM condition of the break playbook.
+1644	On the heatmap, a wall has stood for 40 minutes and price has bounced off it twice. How do you use it?
+1645	Treat it as a real level: place targets in front of the wall, or the stop behind it if it is protecting you
+1646	Enter a wall break immediately
+1647	Move VWAP
+1648	A long-lived, proven wall is worth more than a wall that just appeared.
+1649	On the heatmap, a big wall disappears just before price touches it. Reading?
+1650	A strong support level
+1651	Do not rely on that wall; price may go through or it is a trap
+1652	You must fade there
+1653	Large traded volume
+1654	Liquidity pulled before being tested cannot protect price.
+1655	Why avoid reading the DOM in the 2 minutes around the 8:30 ET news?
+1656	ATAS turns off the DOM during news
+1657	Liquidity is pulled, the book is distorted and jumps constantly
+1658	Delta is always 0
+1659	Price does not move
+1660	Around news, market makers pull their orders. The DOM then does not reflect real intent.
+1661	Long fade at VAL. What should the opposite side of the DOM look like?
+1662	Ask above thickening
+1663	Ask above thinning or being pulled
+1664	Bid below being pulled
+1665	A long fade needs an easy road above: few resting sells in the way.
+1666	How does stacking (DOM) differ from stacked imbalance (footprint)?
+1667	They are the same
+1668	Stacking is resting orders being added; stacked imbalance is consecutive levels of imbalanced fills
+1669	Stacking only exists on the tape
+1670	Stacked imbalance is resting orders
+1671	One is passive liquidity, the other is filled trades. The names are similar so they are often confused.
+1672	Your Smart Tape has only 2 columns, Price and Volume. How do you know the aggressor side?
+1673	You cannot know
+1674	By line colour: buys at the ask and sells at the bid have different colours
+1675	By line order
+1676	By the time column
+1677	Colour is the third piece of information on each line. Keep two clearly contrasting colours, e.g. green and red.
+1678	Price is at VAL 25,410.50. Which playbook does this tape support?
+1679	Long fade at VAL
+1680	Short break: a string of large sells through VAL, the retest shows only small buys
+1681	Price jumping through several levels on a string of large sells in under half a second is initiative. The retest shows weak buying.
+1682	Big buy trades clustered at the candle high, the candle closes near its low. Reading?
+1683	Strong breakout
+1684	Large buyers trapped at the high
+1685	Large orders at an extreme without follow-through means that side is losing and will have to exit.
+1686	Big trades in the breakout direction and price holds above the level. Reading?
+1687	Trap
+1688	Real force, supports the break
+1689	Large orders in the same direction, accepted by the market, are initiative.
+1690	Tape speed slows as price nears VAL. What does it support?
+1691	Long fade: aggressive selling is weakening
+1692	Mandatory stand-aside
+1693	Price reaching a level with fading force is a good condition for a fade. You still need a footprint trigger.
+1694	Large sells hit VAL and price goes straight through by a few ticks. Reading?
+1695	No absorption, the level is weak
+1696	An iceberg holds price
+1697	Absorption only exists when large orders hit and price stands. Going straight through means nobody is defending.
+1698	How should the size filter in ETH compare with RTH?
+1699	Higher
+1700	Lower, because ETH liquidity is thinner
+1701	The same
+1702	No filter needed in ETH
+1703	The same 20-lot order means different things in ETH and RTH.
+1704	A single 200-lot order appears mid-range, not near any level. What do you do?
+1705	Enter in that order’s direction
+1706	Ignore it: not at a level, no string
+1707	Reverse immediately
+1708	Move your level there
+1709	A single print is not a signal. The tape is only read at levels.
+1710	Candle 2 breaks down through the level. The appropriate action?
+1711	Long because support has been reached
+1712	Short when price retests the sell stacked zone
+1713	Stand aside because delta is negative
+1714	Long when candle 3 closes
+1715	4 consecutive sell imbalance levels through the level is initiative. Short on the retest, stop above the top of the stacked zone.
+1716	Candle 2 touches the level below. What is the signal?
+1717	Exhaustion at the low: bids shrinking, the low has bid = 0
+1718	Sell stacked
+1719	Negative delta flip
+1720	Aggressive selling volume dries up going lower, the low is a finished auction. Candle 3 has a confirming buy stacked imbalance.
+1721	What does candle 1’s high (12 × 9) mean?
+1722	Unfinished auction: price tends to come back to repair it
+1723	The high still has volume on both sides. Candle 3 comes back above it and makes a new high with ask = 0, i.e. it has been repaired.
+1724	Candle 2 makes a new high at resistance. How do you read it?
+1725	Bullish agreement, long
+1726	Delta divergence: price rises but delta is negative, favour short after confirmation
+1727	The new high has no aggressive buyers supporting it. Candle 3’s sell stacked imbalance is the confirmation.
+1728	What happens to candle 1’s buy stacked zone?
+1729	It holds, long
+1730	It is cut through and closed below: imbalance failure, the old zone becomes resistance
+1731	It becomes an unfinished auction
+1732	The buyers at the stacked zone are trapped. Short on a retest from below, stop above the top of the old stacked zone.
+1733	Candle 2 rallies strongly. Should you chase long?
+1734	Yes, delta is positive
+1735	No: the lower part is thin, volume sits at the top, delta near 0, most likely short covering
+1736	Yes, there is buy stacking
+1737	Yes, the POC is at the top
+1738	The P-shape shows there are no new buyers. The thin lower part usually gets filled back.
+1739	Candle 1 sweeps below the level and closes back above. Action?
+1740	Short in the break direction
+1741	Long: sellers who chased the low are trapped, candle 2 closes above the breakdown level with buy stacking
+1742	Stand aside
+1743	Short when candle 3 pulls back
+1744	This is a sweep and reclaim. Stop below the low of the trap candle.
+1745	The POC of a long bullish candle sits in the lower wick. Reading?
+1746	Sellers are in control
+1747	Large volume at the low then price was pushed up: buyers defended the low
+1748	The candle will certainly reverse down
+1749	A POC at the tail of a candle means price was rejected there after heavy trading.
+1750	Why merge 2–4 ticks per row when reading an NQ footprint?
+1751	ATAS requires it
+1752	For easier reading and less imbalance noise, since NQ has many ticks
+1753	To make delta bigger
+1754	To make prices look nicer
+1755	0.25 per row on NQ makes the footprint too long and full of stray imbalances.
+1756	Does a 9 × 1 cell count as an imbalance?
+1757	Yes, because 900%
+1758	No, because it is below the minimum volume threshold
+1759	Yes if at a level
+1760	Only when delta is negative
+1761	The minimum volume threshold (e.g. 20 lots) removes ratios that are large but meaningless.
+1762	What does a finished auction at a candle high look like?
+1763	The high has bid = 0
+1764	The high has ask = 0
+1765	The high has the most volume
+1766	The high has buy stacking
+1767	No aggressive buyers left at the highest price: the auction above is over.
+1768	On which candle should a footprint trigger be read?
+1769	The running candle
+1770	A closed M1 candle
+1771	An H1 candle
+1772	Any
+1773	A running candle can change completely in its last few seconds.
+1774	What is this candle’s delta?
+1775	M1 candle
+1776	This candle closes at VAL. Reading candle direction and delta together?
+1777	Candle at VAL
+1778	Aggressive selling absorbed: a bullish candle with negative delta
+1779	Σ ask = 115, Σ bid = 230, delta = −115. The bid is larger than the ask at every level but the body is bullish. At VAL this is a sign of absorption, supporting a long fade if confirmed.
+1780	At VAH, a candle closes down but delta is +180. Reading?
+1781	Aggressive buying absorbed, supports a short fade if confirmed
+1782	Buyers hit hard but price still falls: a large sell limit is blocking at VAH.
+1783	Price breaks below VAL and CVD makes a new low with price. Supports?
+1784	Short break: CVD confirms
+1785	A break needs CVD moving with price. No divergence is a mandatory condition.
+1786	Price falls into VAL but CVD is flat. Meaning?
+1787	Aggressive selling is getting stronger
+1788	Aggressive selling is not adding force, supports a long fade
+1789	You must trade a short break
+1790	CVD error
+1791	Price falling without additional aggressive selling is usually bids being pulled or sellers drying up.
+1792	A candle with Delta/Volume of 2%. Reading?
+1793	Buyers dominate
+1794	Balanced, no directional information
+1795	Sellers dominate
+1796	Below about 5% is balanced. Do not use that candle as delta evidence.
+1797	Why does resetting CVD at 9:30 ET suit the system?
+1798	Because it is the ATAS default
+1799	Because it matches the VWAP RTH and Initial Balance anchor, for consistent comparison
+1800	Because ETH has no volume
+1801	Because ETH delta is always negative
+1802	A shared anchor makes CVD, VWAP and IB describe the same auction session.
+1803	Short fade at VAH. Where does TP1 usually go?
+1804	The TPO level above
+1805	VWAP or the TPO POC
+1806	The session high
+1807	No TP
+1808	A fade expects price to return to value. VWAP and POC are where value is.
+1809	You are in a short fade at VAH. 2 M1 candles close above VAH with positive delta. What do you do?
+1810	Hold the position
+1811	Exit: the level is accepted; consider the long break playbook
+1812	Add to the short
+1813	Move the stop further away
+1814	This is the invalidation condition of the fade.
+1815	Long break: a candle closes back inside value with negative delta. What do you do?
+1816	Hold and wait for a bounce
+1817	Exit; buyers are trapped, consider a short fade
+1818	Add to the long
+1819	Do nothing
+170	Watching the DOM continuously all session, which causes fatigue and overtrading.
+171	Quick check · DOM
+172	Tape: time & sales
+173	ATAS: Smart Tape (2 columns Price + Volume, coloured by aggressor side). Used in phases 2 and 3.
+174	lists every filled trade: price, size, aggressor side (buy at the ask or sell at the bid) and time. Smart Tape merges orders split into pieces at the same moment into one line so you see the real size.
+175	One line on the tape. Green: aggressive buy filled at the ask. Red: aggressive sell filled at the bid.
+176	Size filter
+177	Show only orders above a threshold. Set it by session percentile (e.g. top 1%), tuned separately for RTH and ETH.
+178	Orders above the size threshold, drawn as bubbles on the chart. Big trades at an extreme with no follow-through: that side is trapped.
+179	Trades per second. A burst when breaking a range is ignition; a burst at the end of a long leg is climax.
+180	Absorption on the tape
+181	Large orders keep hitting the same price but price does not follow through.
+182	Initiative on the tape
+183	A string of large one-sided orders, price jumps through several levels in a row.
+184	In the last 5–10 ticks before the level: slowing speed supports a fade, accelerating speed supports a break.
+185	On touching the level ask one question only: do large orders hitting it make price follow through?
+186	Combine with the DOM: large orders fill but displayed size does not shrink, meaning there is a refill.
+187	After absorption, wait for a string of large orders from the opposite side: that is the sign of a side change.
+188	A. Absorption at VAL
+189	Three sell orders of 48, 62, 55 lots in a row at 25,411.00 (yellow) without price dropping. Then buy orders of 31 and 24 lots lift price (green). The sellers were absorbed, supporting a long fade.
+190	B. Initiative breaking VAH
+191	A string of 40–70 lot buys in under 1 second, price jumps 4 ticks through 25,430.00. On the retest only 3–6 lot sells appear. Supports a long break.
+192	Always turn on the size filter, otherwise the NQ tape runs too fast to read.
+193	Compare speed with the baseline for the same time of day.
+194	Read the tape together with the DOM at the level.
+195	Treating a single large order as a signal.
+196	Reading the tape mid-range when there is no level.
+197	Trusting a speed spike during news as a signal.
+198	Quick check · Tape
+199	ATAS: Cluster chart, Bid × Ask, Imbalance. Used in phase 4, read only on closed M1 candles.
+200	splits each candle into price levels and shows, at each level, how much volume was filled by aggressive sellers (bid column, left) and aggressive buyers (ask column, right). It shows how the candle was built.
+201	Anatomy of a footprint candle
+202	The sample candle below is a bullish M1 candle. Each numbered circle matches a component in the table next to it; the last column is the value read from this very candle.
+203	Candle high
+204	The highest traded price. A high with both bid and ask non-zero is an unfinished auction, price often comes back to visit.
+205	Candle low
+206	The lowest traded price. A low with 0 on the bid side is a finished auction: no aggressive sellers left below.
+207	Body and wick
+208	The vertical bar on the left. The bright part is the body, from Open to Close; the dark part is the wick. A blue-grey body is a bullish candle, grey is bearish.
+209	Open 25,411.00 → Close 25,412.25, closes at the high
+210	Price axis
+211	Each row is one price: 1 tick (0.25 points) on NQ, or a group of ticks if row merging is on.
+212	7 price levels, 1 tick per row
+213	Bid column (left)
+214	Volume filled by aggressive sellers into the bid (market sell orders).
+215	Ask column (right)
+216	Volume filled by aggressive buyers into the ask (market buy orders).
+217	Imbalance (bold white numbers)
+218	Ask at a level at least 3 times the bid one tick lower (or the reverse for the sell side), each cell at least 20 lots.
+219	Candle POC (orange box)
+220	The level with the most total volume in the candle. POC in the middle of the body: price accepted; POC at the tail: price rejected there.
+221	Volume bar and level delta
+222	Length is the volume at that level (bid + ask). Blue when the level delta is positive, grey when negative. The number on the bar is the level delta: ask − bid.
+223	At POC: 118 − 41 = +77
+224	Total ask minus total bid for the whole candle: net aggressive buying.
+225	Delta divided by candle volume. Shows how dominant one side is, regardless of candle size.
+226	237 / 585 = 40.5%, ATAS rounds to 41%
+227	Candle volume
+228	All contracts traded in the candle: Σ bid + Σ ask.
+229	Candle value area
+230	70% of the candle’s volume around the POC. ATAS can shade this zone in the cluster. On the sample candle: 25,411.25 – 25,412.00. A close outside the candle’s value area shows the pushing side was strong until the end of the candle.
+231	The highest and lowest delta reached while the candle was running (Cluster Statistic). Not visible on a closed candle, but shows which side’s force was reversed inside the candle.
+232	Trades and time
+233	Number of trades and the candle time. Large volume with few trades means large orders; large volume with many trades is a crowd of small orders.
+234	Delta and Delta%
+235	= Σ ask − Σ bid, in contracts: net aggressive buying in the candle.
+236	= Delta ÷ Volume × 100, ranging from −100% to +100%: how dominant one side is. ATAS calls Delta%
+237	Step-by-step calculation with the sample candle
+238	Compute each level’s delta: ask − bid. This is the number on the ATAS horizontal bar.
+239	Add up the level deltas, or take Σ ask − Σ bid: 411 − 174 =
+240	Candle volume = Σ bid + Σ ask =
+241	. Aggressive buyers take about 70% of volume (411/585), sellers about 30%.
+242	Tip: Delta% = (ask share − bid share). 70% − 30% = 40%.
+243	Delta% reading scale
+244	One-sided selling
+245	Clear selling
+246	Leaning sell
+247	Balanced
+248	Leaning buy
+249	Clear buying
+250	One-sided buying
+251	Thresholds are system conventions, adjust them after backtesting. The ±15% threshold is the one used for the delta flip trigger.
+252	Why you need Delta%, not just Delta
+253	Candles A and B both have delta +210 but mean very different things. Candle A is a high-volume opening candle, +210 is only 5%: both sides almost balanced. Candle B is a low-volume lunchtime candle, +210 is 34%: buyers dominate. Absolute delta is for comparing with itself at the same time of day; Delta% is for comparing candles with different volume.
+254	Read correctly
+255	Always read Delta% with the candle direction: delta% against the body direction at a level is a sign of absorption.
+256	Large Delta% on the candle breaking a level, in the break direction: initiative.
+257	Per-level Delta% (e.g. POC: 77 / 159 = 48%) shows which level one side took over.
+258	Easy to misread
+259	Very large Delta% at the end of a long leg can be a climax, not continuation force.
+260	Delta% is only the end-of-candle result; a candle closing at +5% may have reached +40% and been reversed (see max delta).
+261	Comparing absolute delta between 9:30 and 12:00 is a wrong comparison.
+262	Diagonal imbalance
+263	Diagonal comparison of the ask with the bid one tick lower
+264	Price
+265	120 / 30 = 400% → buy imbalance at 25,412.25
+266	Imbalance does not compare bid and ask on the same row. An aggressive buyer at price P fills against sellers at ask P, while an aggressive seller fills at bid P − 1 tick. Therefore:
+267	at P: ask(P) ≥ 3 × bid(P − 1 tick).
+268	Sell imbalance
+269	at P: bid(P) ≥ 3 × ask(P + 1 tick).
+270	Add a minimum volume threshold (e.g. 20 lots) to drop meaningless 9 × 1 cells.
+271	On NQ you can merge 2–4 ticks per row for easier reading.
+272	Basic patterns
+273	3 or more consecutive imbalance levels on the same side. An initiative zone, often becomes new support/resistance on the retest.
+274	1–2 extreme levels with unusually large volume from the attacking side, price does not follow through and the candle closes the other way.
+275	Attacking-side volume shrinks towards the extreme, the extreme has 0 on the attacking side. Nobody is chasing price any more.
+276	The candle extreme still has volume on both bid and ask. Price often comes back to repair it. Use it as a target.
+277	The extreme has 0 on the attacking side (e.g. a high with ask = 0). The auction on that side is over.
+278	Imbalance or big trades pile up at the extreme, then price closes the other way. That side is trapped, their stop-outs will push price faster.
+279	Price closes through the stacked zone in the opposite direction. The old stacked zone flips into resistance/support.
+280	Volume concentrated in the upper part (P) or lower part (b), the rest thin. Usually short covering or long liquidation.
+281	Candle POC
+282	POC at the end of a tail: price rejected there. POC in the body: price accepted.
+283	The 3 triggers allowed for entry
+284	1–2 extreme levels with attacking-side volume of at least 60 lots and at least 2.5 times the average of the other levels in the candle. Price does not follow through, the candle closes in the opposite half.
+285	The previous candle has clearly negative delta (around 15% of candle volume or more), the next is clearly positive and closes above the previous candle’s body high. The reverse for shorts. Only counts when it happens at a level.
+286	3 or more consecutive levels with imbalance ≥ 300% on the same side, each at least 20 lots. Trade in the stacked direction on the retest, do not chase price.
+287	Not allowed
+288	A single imbalance cell, a big-delta candle not at a level, a candle still running and not closed.
+289	Quick check · Footprint & scenarios
+290	Delta and CVD
+291	ATAS: Delta, Cumulative Delta, Cluster Statistic. CVD is used in phase 2, candle delta is part of the trigger in phase 4.
+292	= total volume filled at the ask − total volume filled at the bid, i.e. aggressive buying minus aggressive selling.
+293	is delta accumulated from the start of the session.
+294	The numbers in Cluster Statistic
+295	Σ ask − Σ bid of the candle.
+296	|Delta| / Volume. Around 15% or more is a clear delta; below 5% is balanced.
+297	Highest and lowest delta while the candle is running. Candle 5: max +410 but closes +35, buyers pushed and were reversed within the candle.
+298	Far above average at an extreme: climax or absorption.
+299	Delta versus candle direction
+300	Positive delta
+301	Negative delta
+302	Bullish candle
+303	Bullish agreement
+304	Aggressive buying pushes price up. Supports continuation, confirms a long break.
+305	Selling absorbed
+306	Sellers hit harder but price still rises. At support: a long fade signal.
+307	Bearish candle
+308	Buying absorbed
+309	Buyers hit harder but price still falls. At resistance: a short fade signal.
+310	Bearish agreement
+311	Aggressive selling pushes price down. Confirms a short break.
+312	The two yellow cells only matter when they happen at a key level. Mid-range, delta against the candle direction is usually noise.
+313	Price makes a higher high while CVD makes a lower high
+314	Price makes a higher high (HH) but CVD makes a lower high (LH): aggressive buyers are weakening, price is lifted mainly by sell limits being pulled.
+315	Fade: you want to see divergence as price enters the level.
+316	Break: you want CVD to make a new high/low with price. If there is divergence, do not trade the break.
+317	In a strong trend divergence can last many legs; only consider it at a swing or a level.
+318	Reset CVD consistently. Resetting at 9:30 ET matches the VWAP RTH anchor.
+319	A delta flip is when candle delta clearly changes sign right at the level and the next candle closes beyond the previous body. It is the fast version of CVD divergence over one or two candles. See the example
+320	Delta divergence on a candle
+321	in the 13 scenarios.
+322	Quick check · Delta & CVD
+323	Each scenario covers the required context, a 3-candle ATAS-style footprint, how to read it, the plan and the invalidation.
+324	Trapped side
+325	Combining at a TPO key level
+326	VWAP is the filter gate, footprint is the mandatory trigger, CVD, DOM and tape decide the setup grade.
+327	Fade at the level
+328	The level lies outside VWAP, ideally matching the ±1σ/±2σ band. The distance to VWAP is TP1 and must be ≥ 1.5 times the stop.
+329	No new high/low with price as it enters the level.
+330	Resting orders at the level hold or are added to; the opposite side thins out.
+331	Large orders hit the level but price does not follow through, with refills.
+332	Absorption, delta flip or stacked imbalance in the opposite direction on the confirmation candle.
+333	Plan
+334	Enter when the trigger candle closes or on the retest. Stop 2–4 ticks beyond the absorption zone. TP1 VWAP/POC, TP2 the next TPO level.
+335	Invalidation
+336	2 M1 candles close through the level with delta in the break direction: the level is accepted.
+337	Price is on the break side of VWAP, VWAP sloping that way. The level is not at or beyond the ±2σ band.
+338	New high/low with price on the break, no divergence.
+339	Resting orders at the level get eaten or pulled; orders behind follow price.
+340	A string of large orders through the level, speed spikes; on the retest opposing orders are small and sparse.
+341	Stacked in the break direction through the level, a clean retest or a delta flip on the retest.
+342	Limit inside the stacked zone on the retest. Stop behind the stacked zone. Targets: unfinished auction, ±1σ/±2σ band, next level.
+343	A candle closes back inside value with opposite delta: failed breakout, switch to fade.
+344	Grade the setup
+345	VWAP not against the hypothesis, R:R to TP1 ≥ 1.5
+346	Mandatory filter gate
+347	CVD confirms
+348	Fade: divergence/flat · Break: new extreme with price
+349	DOM confirms
+350	Fade: resting orders hold/stack · Break: resting orders eaten/pulled
+351	Tape confirms
+352	Fade: large orders fail to move price · Break: string of large orders through the level
+353	Footprint trigger on a closed M1 candle
+354	Mandatory
+355	Red flag present
+356	Around news, more than 3 candles without a trigger, tools disagree, third touch of the level, stop farther than TP1
+357	Waiting
+358	Tick from top to bottom.
+359	Footprint + VWAP + all 3 confirmations. Enter, full size.
+360	Footprint + VWAP + 2/3 confirmations. Enter.
+361	Only 1/3 confirmations. With a 2–3 trades/day limit: skip.
+362	Skip
+363	Fails VWAP, red flag present, or footprint alone.
+364	Quick check · Combining at the level
+365	Glossary
+366	Illustrative data · Indicator names as in ATAS · ATAS colours in #AARRGGBB: positive delta histogram #FF3F7FD9, negative #FF4A4A4A, POC #FFE07B39, key level #6B782C2C
+367	TPO, Day & Open types, Level map, VWAP RTH, CVD divergence and the planning routine for NQ.
+368	Course 1 · NQ · RTH 9:30–16:00 ET
+369	Context from TPO · Confluence from VWAP RTH + CVD · Trigger from orderflow. A 9-week roadmap from reading a profile to planning and executing in the 2-hour NY AM window.
+370	roadmap phases
+371	Open Plan Builder
+372	00 · 9-week roadmap
+373	From reading a profile to planning and executing in the 2-hour NY AM window
+374	In your system TPO plays the role of
+375	: it answers
+376	is the market balanced or imbalanced, and where am I allowed to act
+377	. VWAP RTH and CVD are the confluence layer. The entry trigger remains what you have already settled on (OSR, IB, footprint/delta). This playbook adds no new model, it gives your existing models a clear level map.
+378	Overall progress
+379	Ticks are saved in this browser. Each phase has a
+380	pass
+381	criterion on its last line; do not move on until you meet it.
+382	Source material to read
+383	(chapters on TPO, day types, open types, value relationships). The source of almost every concept in tabs 01–03.
+384	: the auction on higher timeframes, reading several days in a row.
+385	(Steidlmayer): the original definitions of TPO, IB, Rotation Factor.
+386	Your Notion recaps:
+387	. Tab 01 answers the open questions you still have noted down.
+388	How you use ATAS (unchanged)
+389	higher-timeframe context: weekly VA, composite.
+390	main chart for drawing zones (the template in the screenshot).
+391	VWAP RTH ±1/2/3 SD + CVD + footprint for the trigger.
+392	A principle from your own assessment: the reason you have not passed prop yet is changing strategy constantly. This roadmap is deliberately slow and measurable, to build conviction in a single framework.
+393	01 · Foundations
+394	What TPO is and how to read a profile
+395	records every price at which the market was
+396	present
+397	in each 30-minute period. Stack those periods horizontally and you get a distribution: thick areas are where the market accepts price (value), thin areas are where it rejects or passes through very quickly. A candle tells you how price moved, the profile tells you where price was
+398	accepted
+1820	A failed breakout usually runs fast the other way.
+1821	Footprint trigger present, VWAP gate passed, but no confirmation from CVD, DOM or tape. Grade?
+1822	A footprint alone is not enough. The system requires at least 2/3 confirmations to enter.
+1823	Footprint + VWAP + only the tape confirms. With a 2–3 trades/day limit you should?
+1824	Enter full size
+1825	Skip (grade B), save the slot for a better setup
+1826	Enter double
+1827	Switch to the break
+1828	Grade B can be profitable, but with a limited number of trades you should only spend slots on A+ or better.
+1829	Price touches VAL for the 3rd time in the session. Reading?
+1830	The level is stronger
+1831	Red flag: the level has been tested many times and breaks easily
+1832	No effect
+1833	Only longs allowed
+1834	Each touch consumes the defending orders.
+1835	You just lost 2 trades in a row and an A+ setup appears. Per the checklist?
+1836	Enter to win it back
+1837	Skip: this is a discipline red flag
+1838	Enter with double size
+1839	Enter without a stop
+1840	This rule protects the prop account’s trailing drawdown.
+1841	Long break but the level sits at the +2σ VWAP band. Reading?
+1842	Passes the VWAP gate
+1843	Fails the gate: a breakout at the outermost band easily overextends
+1844	You must fade long
+1845	The break playbook requires the level not to be at or beyond the ±2σ band.
+1846	On NQ RTH, which ET time window does the letter C correspond to?
+1847	A = 9:30, B = 10:00, C = 10:30. Your 9:30–11:30 window covers A–D.
+1848	What is the Initial Balance on NQ RTH?
+1849	The range of the A period
+1850	The range of A + B (9:30–10:30 ET)
+1851	The ETH session range
+1852	IB = A + B, i.e. the first hour of RTH.
+1853	How does the TPO POC differ from the Volume POC?
+1854	No difference
+1855	The TPO POC is the price with the most time, the VPOC is the price with the most volume
+1856	The TPO POC is always above the VPOC
+1857	The VPOC only exists in ETH
+1858	One measures presence (time), the other participation (volume). Usually close but not necessarily.
+1859	At the session high, 3 different letters touch exactly the highest price, with no single-print rows above. What is this?
+1860	Several letters touching one extreme without a tail = poor high. The market can easily come back to sweep it.
+1861	What does a selling tail at the top of the profile tell you?
+1862	Buyers are strong
+1863	Responsive sellers rejected the higher prices very fast, the auction above is complete
+1864	Price will certainly come back to the high
+1865	Volume at the high is very large
+1866	Tail = excess. A high with a tail is a strong level, do not expect it to be swept soon.
+1867	The Value Area is usually defined as:
+1868	About 70% of TPOs (or volume) around the POC
+1869	The IB range
+1870	The whole range minus the tails
+1871	70% is the CBOT convention, rooted in 1 standard deviation ≈ 68.27%.
+1872	A session has Rotation Factor = +9. The most accurate meaning?
+1873	The market is fully balanced
+1874	Upward rotation dominates, buyers in control
+1875	About to reverse down
+1876	Volume is higher than normal
+1877	Large positive RF = periods keep making higher highs/lows than the previous period.
+1878	When do single prints form in the middle of a profile?
+1879	The market moves sideways for a long time
+1880	Price moves fast in one direction within a period, with no two-way trade
+1881	There is news after 16:00
+1882	The IB is too wide
+1883	An imbalance area. The first test is usually support/resistance.
+1884	An area with thick TPO but a very thin volume profile. By the presence vs participation concept:
+1885	Very strong value
+1886	Present in time but few people actually traded, weak value
+1887	These are single prints
+1888	This is the POC
+1889	Presence without participation. Prefer levels confirmed by both TPO and volume.
+1890	Today’s IB is only 55% of the 20-session average IB. The most reasonable expectation?
+1891	A Normal day, rotation inside the IB
+1892	High chance of range extension (trend / normal variation)
+1893	Do not trade all day
+1894	Certainly a Neutral day
+1895	A narrow IB = the two sides have not agreed yet, energy is building for range extension.
+1896	A Neutral day is recognised by:
+1897	No range extension
+1898	Range extension on both sides of the IB
+1899	A thin, elongated profile
+1900	Two value areas separated by single prints
+1901	Two-sided RE. Close in the middle = neutral center, close at an extreme = neutral extreme.
+1902	What characterises an Open Drive?
+1903	Price rotates around the open
+1904	Price moves strongly in one direction right from the open and never comes back to test it
+1905	Price tests a level then reverses
+1906	Price goes one way then reverses through the open
+1907	The open type with the highest confidence. Go with it, do not fade.
+1908	Price opens, runs up to test the ON high, gets rejected, then falls through the open. This is:
+1909	ORR: goes one way, meets responsive activity, reverses through the open. Target the opposite VA edge.
+1910	Today’s VA sits entirely inside yesterday’s VA. What does this relationship say?
+1911	Strongly bullish
+1912	Strongly bearish
+1913	Compression (inside value), prepare for a breakout
+1914	The market is closed
+1915	Inside value = compression. Do not guess the direction in advance, wait for an accepted breakout.
+1916	What does a P-shape usually reflect?
+1917	Short covering, not necessarily new buying
+1918	New sellers appear
+1919	A Non-Trend day
+1920	The thin stem below is shorts closing. The next day you need to see new buying before trusting continuation.
+1921	On a Double Distribution day, what role does the band of single prints in the middle play?
+1922	Support/resistance on the first test
+1923	Always filled within the same day
+1924	It is the day’s POC
+1925	The boundary between two balance areas. Fully filled = a sign the pushing side has weakened.
+1926	Open outside yesterday’s range but after 30 minutes price comes back into the range and holds. The correct interpretation?
+1927	Keep going with the open direction
+1928	Trapped traders, likely a strong reversal (ORR)
+1929	Ignore it, not important
+1930	Wait for tomorrow
+1931	A failed out-of-range open often gives a strong reversal because those following the gap are trapped.
+1932	An up Trend day: the correct handling?
+1933	Fade every new high
+1934	Do not fade, buy pullbacks to the previous period’s low / VWAP
+1935	Stand aside all day
+1936	Short at +2 SD
+1937	On a trend day the other side has no chance. Trail the stop by period.
+1938	What triggers the 80% rule?
+1939	Price touches VAH
+1940	Price is outside yesterday’s VA, comes back inside and is accepted for 2 consecutive TPO periods
+1941	The IB breaks on both sides
+1942	Price opens inside the VA
+1943	Once triggered, expect price to travel through the VA to the other edge. Verify the rate on NQ yourself.
+1944	What is the sign of acceptance beyond a level?
+1945	A single 1-tick touch
+1946	Price stays beyond the level ≥ 2 periods and builds TPO/volume there
+1947	There is a tail there
+1948	Time + volume beyond the level = accepted. The old level changes role.
+1949	Yesterday had a late selling spike. Today opens inside the spike zone. By the spike rules:
+1950	Continuation down
+1951	The spike becomes a balance area, trade rotations inside the spike
+1952	The spike is rejected, a strong rally
+1953	Open inside the spike → the spike becomes a price area the market is reconsidering.
+1954	How is a naked POC best used?
+1955	Target / magnet, and a reaction zone on the first touch
+1956	It always reverses there
+1957	Which level belongs to Tier 1 in the playbook?
+1958	Weekly VA / composite / multi-day naked POC
+1959	Tier 1 = higher timeframe, multi-day agreement.
+1960	Overnight inventory strongly net long, the open is near the ON high. What should you be careful of?
+1961	Buying the open because the trend is strong
+1962	Inventory correction: price can easily be dumped in the first 30–60 minutes
+1963	Nothing
+1964	Certainly an Open Drive up
+1965	One-sided inventory tends to be rebalanced at the start of RTH. Combine with OSR.
+1966	After the US leaves DST (from 01/11/2026), what time is 9:30 ET in Vietnam?
+1967	EST = UTC−5, Vietnam = UTC+7, a 12-hour difference.
+1968	IB High 28,700, IB Low 28,600. The 2x IB extension level above is:
+1969	IB width 100. 2x IB from the IB Low = 28,600 + 200 = 28,800 (i.e. IB High + 1 width). 1.5x = 28,750.
+1970	The developing POC keeps moving up during the session. For scalping this suggests:
+1971	Short every time the dPOC shifts
+1972	Value is migrating up, pullbacks to the dPOC are long entries
+1973	The market is balanced
+1974	dPOC migration confirms value is shifting in that direction.
+1975	What is the halfback?
+1976	The midpoint of the IB
+1977	The midpoint of the day’s current range
+1978	Yesterday’s POC
+1979	Above the halfback = buyers are winning the session so far.
+1980	In your system, when is VWAP RTH anchored?
+1981	The same anchor as the IB and TPO RTH. VWAP ETH anchored at 18:00 is a secondary layer.
+1982	The VWAP formula:
+1983	The arithmetic mean of closing prices
+1984	Σ(Price × Volume) / Σ Volume
+1985	Price × Volume
+1986	The volume-weighted average price from the anchor point.
+1987	Flat VWAP, price crosses back and forth many times and stays within ±1 SD. State and action?
+1988	Trend, chase it
+1989	Balance, ping-pong ±1 SD and fade ±2 SD
+1990	Phase change, stand aside
+1991	Undetermined
+1992	Matches the ±1 SD ping-pong concept you use.
+1993	An Open Drive up day, VWAP sloping, price riding +1/+2 SD. The correct action?
+1994	Buy pullbacks to VWAP / +1 SD, do not fade
+1995	Shorting at +3 SD is a sure win
+1996	On a trend day the bands are where you add in the direction, not where you reverse.
+1997	VWAP and dPOC both moving up after 10:30 ET means:
+1998	Value is migrating up, the day is likely a trend / normal variation day
+1999	About to reverse
+2000	Time and volume both confirm new value.
+2001	Why not fade the VWAP RTH bands before 10:00 ET?
+2002	Because ATAS does not display them
+2003	Because σ is still small and changing constantly, the bands are too narrow and unstable
+2004	Because volume is too large
+2005	Because prop rules forbid it
+2006	Little data → the standard deviation is not meaningful yet.
+2007	Price is above VWAP RTH. What does this say about today’s participants?
+2008	The average seller is in profit
+2009	Today’s average buyer is in profit, buyers control intraday
+2010	The market will certainly keep rising
+2011	VWAP is the session’s average cost.
+2012	Which zone has the highest grade for a long on a balance day?
+2013	The middle of yesterday’s VA
+2014	PD VAL matching −2 SD VWAP RTH + bullish CVD absorption
+2015	Above PD High
+2016	At VWAP while price trends down
+2017	Three layers: TPO location + VWAP band + CVD. That is A++.
+2018	How is a bar’s delta computed?
+2019	Total volume
+2020	Delta measures aggression. CVD is the cumulative sum of delta from the reset point.
+2021	Why reset CVD at 9:30 ET?
+2022	To share the anchor with VWAP RTH and TPO RTH, comparing swings within the same session
+2023	So CVD is always positive
+2024	No reset needed
+2025	The three tools must share a time anchor to be comparable.
+2026	At PD VAH: price makes a higher high, CVD makes a lower high. This is:
+2027	Breakout confirmation
+2028	Not a divergence
+2029	Each new leg up needs fewer aggressive buyers → buyers are drying up.
+2030	At PD VAL: CVD makes a very strong lower low but price holds a higher low. This is:
+2031	Bullish absorption: passive buyers absorbing the selling
+2032	Downside breakout
+2033	Noise
+2034	Sellers still hit the market hard but cannot push price → a large player is standing on the bid at the level.
+2035	An Open Drive + IB extension + rising VWAP day. You see a bearish divergence mid-range. What should you do?
+2036	Ignore it: counter-trend divergence usually fails, and there is no location
+2037	Short with double size
+2038	Reverse all your longs
+2039	Both filters fail: the regime is trend and it is not at a TPO zone.
+2040	A divergence appears at a zone scoring 7. Next step?
+2041	Enter as soon as you see the divergence
+2042	Wait for the trigger: M1 structure break, reclaim or delta flip
+2043	Wait until 11:30
+2044	Ask someone else
+2045	Divergence is a condition, not an entry.
+2046	A short based on bearish divergence at VAH is invalidated when:
+2047	Price touches VWAP
+2048	Price goes past the high that formed the divergence
+2049	CVD falls
+2050	30 minutes have passed
+2051	The stop goes beyond the extreme that formed the divergence.
+2052	How do you compare CVD across days?
+2053	Compare today’s absolute value with yesterday’s
+2054	Do not compare absolute values across days, only the swing shape within the same session
+2055	Positive CVD is always bullish
+2056	Negative CVD is always bearish
+2057	Absolute values depend on the reset point and each day’s volume.
+2058	In your template, 30/10 opened at ~28,795, below the 29/10 low (~29,105). By the open location table, this is:
+2059	Open below yesterday’s range: strong imbalance
+2060	Open above the VA inside the range
+2061	An out-of-range open, and also an open below the 29/10 late selling spike → continuation.
+2062	03/11 has a range fully inside the 02/11 range and a very narrow VA. A reasonable expectation for 04/11?
+2063	Certainly down
+2064	A narrow balance after a wide day, prepare for a breakout, wait for it to be accepted
+2065	Untradeable
+2066	An exact repeat of 03/11
+2067	04/11 did break out upward from this balance.
+2068	The 04/11 developing POC (~28,680) is close to the 02/11 POC (~28,650). What does it mean for the 05/11 plan?
+2069	A multi-day fair value cluster, an important pivot
+2070	You must short there
+2071	They are single prints
+2072	Two coinciding POCs = a high-scoring zone per the level scoring table.
+2073	02/11 broke both the high and the low of 30/10, closing near the low. If the IB was also broken on both sides, the day type is:
+2074	Two-sided RE + a close at an extreme. The next day leans in the close direction, but 03/11 did not follow through.
+2075	What role does the RTH gap 28,860–29,105 (between the 29/10 low and the 30/10 high) play in the plans of the following days?
+2076	Not important since it is in the past
+2077	Magnet / Tier 2 resistance: the first test often reacts, acceptance inside means expect a gap fill
+2078	The strongest support
+2079	It is the POC
+2080	An RTH gap is an imbalance area not traded during the main session.
+2081	The 04/11 VA sits entirely above the 03/11 VA. This value relationship is:
+2082	Higher value = clearly bullish, the breakout from the 03/11 balance was accepted.
+2083	On your ATAS template, what does the pink (crimson) part of the volume profile show?
+2084	The volume profile’s value area
+2085	The ETH session
+2086	The pink part is 70% of volume around the POC, the grey part is outside value.
+2087	What is a tail at the bottom of the profile called?
+2088	Buyers responding by rejecting low prices very fast → a buying tail (excess at the low).
+2089	Your row size is 5 points/row. By the practical convention in the playbook, how long must a tail be at minimum?
+2090	5 points (1 row)
+2091	10 points (2 rows)
+2092	25 points
+2093	There is no convention
+2094	Minimum excess = 2 single-print rows at the extreme.
+2095	Why keep a fixed number for the Value Area (70% or 68%)?
+2096	Because ATAS requires it
+2097	So VAs from different days are comparable
+2098	Because 70% is always more accurate
+2099	To make the VA wider
+2100	Changing the parameter midway breaks every value relationship comparison.
+2101	When should you use a composite profile?
+2102	Merge every day
+2103	When several consecutive days have overlapping VAs
+2104	Only on trend days
+2105	Only the ETH session
+2106	Overlapping VAs = durable fair value; composite edges are stronger than a single-day VA edge.
+2107	The close marker sits near the day’s high, after an up day. This suggests:
+2108	A strong close, likely to continue up the next day
+2109	A certain reversal
+2110	Close location feeds the open expectation and the spike rules.
+2111	Within A–D (9:30–11:30 ET), what is the RF of A–C used for?
+2112	An entry signal
+2113	Confirming the open type / who is in control
+2114	Placing the stop loss
+2115	Computing VWAP
+2116	RF is a context confirmation tool, not a trigger.
+2117	What characterises a Normal day (Dalton)?
+2118	A very narrow IB, trending all day
+2119	A very wide IB, almost no range extension
+2120	RE on both sides
+2121	Two value areas
+2122	The large timeframe came in early and set the day’s boundaries within the IB.
+2123	An Open Auction inside yesterday’s range. The correct action?
+2124	Enter during the A period
+2125	Do not trade the A period, wait for the IB then trade the IB edges or a confirmed breakout
+2126	Short every rally
+2127	Buy every dip
+2128	OA = nobody in control, the lowest confidence.
+2129	Yesterday was a Neutral Extreme, closing at the high. The next day favours:
+2130	Downside
+2131	Upside (in the close direction)
+2132	Fading every breakout
+2133	The winning side appeared late in the session, it usually continues.
+2134	Today’s VA engulfs the whole of yesterday’s VA. This is:
+2135	Outside value: expansion, both sides active
+2136	Use the close location to pick a direction.
+2137	What does a b-shape usually reflect?
+2138	The thin stem on top is old longs exiting.
+2139	Which of your models does Open Test Drive match best?
+2140	OSR: sweep the ON range edge → reclaim → retest
+2141	None
+2142	Test a level in the opposite direction to check for business, then drive through the open.
+2143	The open is inside yesterday’s VA. What is the default expectation?
+2144	A strong trend
+2145	Rotation inside the VA, fade the VAH/VAL edges back to POC
+2146	Both sides still agree until there is acceptance outside the VA.
+2147	How many points does a level that was pierced and accepted in today’s session score?
+2148	The level has lost its role, do not fade there again.
+2149	A zone scores 5 points. How do you handle it?
+2150	Only trade with very clear CVD + trigger
+2151	Never trade it
+2152	Use it as the stop
+2153	≥ 6 is zone A; 4–5 needs more confirmation; ≤ 3 is only a target.
+2154	Single prints are fully filled and price builds value there. Meaning?
+2155	The imbalance has been repaired, the level is spent
+2156	You need to draw more
+2157	Single prints only matter while they are still an imbalance area.
+2158	IB width 80 points, 20-session average 200 points. Assessment?
+2159	Wide → rotation
+2160	Narrow (40%) → favour range extension
+2161	Not enough data
+2162	Below 70% of the average counts as a narrow IB.
+2163	An up trend day, how do you trail the stop with TPO?
+2164	Below VWAP −3 SD
+2165	Below the previous period’s low
+2166	Above the current period’s high
+2167	Never move the stop
+2168	Each trend period makes a higher low, the stop follows.
+2169	By what time must the daily plan be locked in?
+2170	After the first trade
+2171	Bias and scenarios are built before 9:25 ET, as your system specifies.
+2172	Which 4 components must each scenario in the plan have?
+2173	Entry, size, news, emotions
+2174	Price, time, VWAP, RSI
+2175	Only the direction
+2176	Without invalidation a plan is just a prediction.
+2177	A winning trade that was outside the plan. How is it graded in the post-session review?
+2178	Good because it made money
+2179	A process error, even though it made money
+2180	No need to record it
+2181	Increase size next time
+2182	Score the process, not the result.
+2183	The stop-trading condition for the day in the playbook is:
+2184	After one winning trade
+2185	2–3 trades done, the daily loss limit hit, or 11:30 ET
+2186	When the news is over
+2187	There is none
+2188	Matches the prop limits and your 2-hour NY AM window.
+2189	When do you use the ±1 SD ping-pong tactic?
+2190	On a strong trend day
+2191	When VWAP is flat and the market is balanced
+2192	When there is news
+2193	Rotation around VWAP is only valid when there is no trend.
+2194	What role does VWAP ETH (anchored 18:00 ET) play in your system?
+2195	The main trigger
+2196	A secondary confluence layer, checked when overnight volume is unusual
+2197	Replaces VWAP RTH
+2198	VWAP RTH is the main one because it shares the IB anchor.
+2199	Price touches VWAP RTH. Is that an entry signal yet?
+2200	Yes, enter now
+2201	Not yet: it is only a location, you still need CVD + a trigger
+2202	Yes if it is the Asian session
+2203	Only when above VWAP
+2204	VWAP adds points when it coincides with a TPO location, it is not an independent signal.
+2205	The core difference between absorption and exhaustion?
+2206	Absorption: the aggressor is still strong but blocked by passive orders; exhaustion: the aggressor fades
+2207	Absorption only happens at lows
+2208	Exhaustion is stronger than absorption
+2209	Absorption is usually stronger because a large player is standing at the level.
+2210	Which ATAS tool helps confirm a large order standing and absorbing at the level?
+2211	You have already set up Smart Tape with 2 columns, Price + Volume, for exactly this.
+2212	What does an A++ setup need?
+2213	Only CVD divergence
+2214	TPO zone ≥ 6 + VWAP/band match + CVD divergence + trigger
+2215	Only VWAP
+2216	Any open type
+2217	Three confluence layers + trigger = A++.
+399	.
+400	Anatomy of an RTH profile
+401	Sample profile generated from 13 periods of data (A = 9:30 … M = 15:30 ET). POC and VA are computed automatically with the 70% rule. Pink cells = value area, orange cells = POC, the light tan bar on the left = Initial Balance.
+402	Reading the sample profile on the left
+403	in the A period, A pushes higher then gets sold hard: 4 rows with only the letter A at the top =
+404	. Responsive sellers rejected the higher prices. This high is
+405	complete
+406	= A + B. C breaks the IB low =
+407	downside range extension
+408	. Initiative sellers appear.
+409	C moves fast and leaves
+410	in the middle of the profile: an imbalance area, often resistance when price comes back, or it gets filled if the market changes its mind.
+411	The lower part builds thick value (D → M):
+412	sits low, the profile has the shape of the letter
+413	The low has 3 different letters touching the same price, no tail:
+414	. The auction below is not finished, the next day can easily come back to sweep it.
+415	TPO dictionary (click to open)
+416	Each entry: definition · how to read · how to use for NQ intraday
+417	Rotation Factor: compute it yourself in 2 minutes
+418	Compare each period with the one just before it. Higher high:
+419	, lower:
+420	, equal:
+421	. Do the same for the Low. Add everything up.
+422	High score
+423	Low score
+424	Cumulative
+425	Large positive RF = upward rotation dominates (buyers in control). Near 0 = two-sided, balance. Use the RF of A–C to confirm the open type, not as an entry signal.
+426	Answers to the
+427	open questions
+428	in your Lecture 5 recap
+429	The two counts run in different directions.
+430	Two prints at the top
+431	in the video means
+432	two different letters touching the highest price
+433	(counted horizontally) → that is a poor high, so not a tail. A tail is counted
+434	vertically
+435	: the number of consecutive rows at the extreme with a single letter. According to Dalton, the minimum excess is 2 single-print rows. For NQ, a practical convention: tail ≥ 2 rows at the row size you use (e.g. 5 points/row → tail ≥ 10 points).
+436	1 standard deviation of a normal distribution ≈ 68.27%, that is the mathematical root. 70% is the CBOT rounding convention and the default on most platforms, including ATAS. Pick one number and keep it fixed so days are comparable.
+437	How is RF calculated?
+438	The table just above.
+439	what is it?
+440	In this playbook it means the Tier 1–2 levels in tab 03 (weekly VA, prior day VAH/VAL/POC, naked POC, poor high/low, single prints). Price closing through such a level during the IB usually makes the IB wide and one-directional.
+441	Quiz 01 · TPO foundations
+442	02 · Day structure
+443	Day types, profile shapes, open types and value relationships between days
+444	These four classifications answer four different questions.
+445	: who is in control in the first 30 minutes.
+446	: is today likely to trend or rotate.
+447	: how did yesterday finish.
+448	: is value moving or standing still over several days.
+449	Day types (Dalton) · pick one to see the profile
+450	Open types · the first 30 minutes
+451	Dashed line = the 9:30 open price. Classify the open type before 10:00 ET (21:30–22:00 Vietnam time), only then decide whether to trade scenario A or B of the plan.
+452	Open location versus yesterday · click each zone
+453	This is the first question of every daily plan. Confidence in imbalance grows the further the open is from value.
+454	Value relationship between two days
+455	Grey box = yesterday’s VA, pink box = today’s VA. Evaluate after the close, record it in the Post-session review.
+456	Which levels are worth drawing, which are worth trading, and when a level is
+457	broken
+458	You only have 2–3 trades a day, so levels must be few and ranked. Rule: only
+459	draw
+460	Tier 1–3 on the RTH chart. Tier 4 (scalping) is optional, only switched on after 20 consecutive sessions following the plan.
+461	Level hierarchy
+462	Show Tier 4 · scalping add-in
+463	Source in ATAS
+464	Meaning
+465	How to use
+466	Sign
+467	Time
+468	Price stays outside the level ≥ 2 TPO periods (60 minutes) or builds thick TPO there
+469	Only 1 period touches and comes back, leaving a tail
+470	Volume profile thickens outside the level (participation)
+471	Thin volume, single prints
+472	VWAP slopes in the break direction, price holds that side
+473	Price touches ±2 SD and returns to VWAP
+474	CVD makes a new high/low with price
+475	CVD divergence right at the level
+476	Conclusion
+477	the old level becomes support/resistance
+478	back to the POC / opposite VA edge
+479	In the 2-hour NY AM window it is hard to wait a full 2 periods. Fast version: 1 period (30 minutes) closes beyond the level + VWAP + CVD confirm together.
+480	Open (or move) outside yesterday’s VA, come back inside and get accepted for 2 consecutive TPO periods → high probability of travelling through the VA to the other edge.
+481	is the traditional name, not a verified statistic for today’s NQ. Measure it yourself on Market Replay (exercise in Phase 3).
+482	A spike is a strong move in the last 1–2 periods of the session (L, M). The market has not had time to validate it, so where the next day opens relative to the spike tells you whether the spike was real or fake.
+483	Next day opens
+484	Spike up (bullish)
+485	Spike down (bearish)
+486	Beyond the spike in its direction
+487	continuation up
+488	continuation down
+489	Inside the spike
+490	The spike becomes a new balance area, trade rotations inside the spike
+491	Beyond the spike against its direction
+492	spike rejected
+493	→ down
+494	→ up
+495	A real example in your template: 29/10 had a late selling spike, 30/10 opened with a gap below the spike → continuation (see tab 07).
+496	Scoring a level before trading it
+497	Factor
+498	Points
+499	Tier 1 (weekly VA, composite, multi-day nPOC)
+500	Tier 2 (yesterday’s VAH/VAL/POC, poor H/L, single prints)
+501	≥ 2 levels within 10–15 NQ points of each other
+502	Matches VWAP RTH or the ±2 SD band
+503	Not yet tested in the current session (fresh)
+504	Already pierced and accepted today
+505	zone A, tradeable.
+506	only trade with clear CVD + trigger.
+507	do not trade, use only as a target.
+508	Scalping add-in (optional) · IB calculator
+509	Enter the IB at 10:30 ET to get extensions, IB mid and a width assessment versus the 20-session average.
+510	20-session average IB
+511	VWAP RTH: the dynamic value of today’s session
+512	TPO tells you where value
+513	has been
+514	built (usually yesterday’s). VWAP RTH tells you the average cost of everyone who has traded
+515	since 9:30 today
+516	. Combine the two: TPO is the map, VWAP is the in-session compass.
+517	Definition
+518	VWAP(t) = Σ (Pᵢ × Vᵢ) / Σ Vᵢ      with i running from 9:30 ET to t
+519	: the same anchor as the IB and TPO RTH, so the three tools speak the same time language. VWAP ETH (18:00 ET) is only a secondary layer when overnight volume is unusual, as you decided.
+520	Price above VWAP
+521	: today’s average buyer is in profit → buyers control intraday. Below VWAP the opposite.
+522	First 15–20 minutes
+523	σ is still small and jumps constantly, the bands are very narrow. Do not fade the bands before 10:00 ET.
+524	The four VWAP states
+525	State
+526	Recognition
+527	Action
+528	Flat VWAP, price crosses back and forth many times, stays within ±1 SD
+529	Ping-pong ±1 SD, fade ±2/±3 SD back to VWAP
+530	Uptrend
+531	VWAP slopes up, price holds above VWAP, rides along +1/+2 SD
+532	Buy pullbacks to VWAP / +1 SD. Never short +2 SD
+533	Downtrend
+534	Mirror image
+535	Sell pullbacks to VWAP / −1 SD
+536	Phase change
+537	Price reclaims / loses VWAP after the IB, VWAP starts changing slope
+538	Trade the VWAP retest in the new direction, needs CVD confirmation
+539	VWAP × TPO: read them together
+540	Time and volume agree on the same price → balance. Fade the developing VA edges and ±2 SD.
+541	VWAP leads, dPOC follows
+542	dPOC moves in the same direction as VWAP after 10:30 → value is migrating, the day is likely a trend or normal variation day. Go with it.
+543	VWAP matches a TPO level
+544	VWAP or the ±2 SD band within 10–15 points of yesterday’s VAH/VAL/POC → zone A per the scoring table in tab 03.
+545	Flat VWAP, price touches −2 SD at yesterday’s VAL (zone A) and returns to VWAP, touches +2 SD at VAH and comes back.
+546	Trend day: the bands are where you add, not where you reverse
+547	Price rides along +1/+2 SD, every pullback to +1 SD or VWAP is a buy. Those fading +2 SD get run over.
+548	Suggested ATAS colours (ARGB)
+549	Line
+550	Note
+551	Strong cyan, 2px, clearly separated from the orange POC
+552	Same colour, 60% alpha, dashed
+553	Light purple, reversal zone
+554	Red, extreme
+555	Faint white, reference only
+556	Common mistakes
+557	Fading ±2 SD on an Open Drive + IB extension day. That is a trend day, the bands are only places to add.
+558	Confusing VWAP ETH with VWAP RTH on the M1 chart. Give them clearly different names and colours.
+559	Using VWAP as an independent level, ignoring TPO. VWAP only adds points when it coincides with a location.
+560	Treating a VWAP touch as a signal. A touch is only a location, you still need CVD + a trigger.
+561	CVD divergence: who is aggressive, and can they still move price?
+562	You said your main weakness right now is reading footprint/delta inaccurately. CVD is the simplification: instead of reading every bid × ask cell, just compare
+563	two consecutive swings
+564	of price with the two matching CVD swings, and
+565	only at a TPO level
+566	Delta(bar) = Volume filled at the Ask (market buy) − Volume filled at the Bid (market sell)
+567	CVD(t)     = Σ Delta from the reset point to t
+568	Reset      = 9:30 ET (same anchor as VWAP RTH and TPO RTH)
+569	: market orders, they create delta.
+570	: limit orders on the DOM, they absorb delta.
+571	Price moves when aggression exceeds the passive liquidity. Divergence happens when the two are out of line.
+572	the swing shape within the same session
+573	, not absolute values across days.
+574	Mandatory filters
+575	Location first
+576	: only consider divergence at a zone scoring ≥ 4 (tab 03). Divergence in mid-air = noise.
+577	: on trend days (Open Drive, IB extension, sloping VWAP) counter-trend divergence fails repeatedly. Only accept it when it coincides with Tier 1 + the ±2 SD band.
+578	: divergence is not an entry. Wait for an M1 micro-structure break, a level reclaim, or a delta flip.
+579	: beyond the extreme that created the divergence. Price going past it means the idea is wrong.
+580	The 4-type divergence matrix
+581	Top panel: price. Bottom panel: CVD. Purple line = TPO level. The two
+582	types are the aggressor weakening; the two
+583	types are the aggressor still strong but blocked by passive orders. Absorption is usually stronger because a large player is standing at the level.
+584	Checklist for reading CVD at a level (5 steps)
+585	Plug it into your confirmation stack
+586	Condition
+587	TPO zone ≥ 6 points + VWAP/band match + CVD divergence + trigger (delta flip / DOM)
+588	TPO zone ≥ 6 + one of the two (VWAP or CVD) + trigger
+589	Full or 75%
+590	TPO zone + trigger, no confluence
+591	Sim / skip
+592	No TPO location
+593	No trade
+594	Matches the convention triple-layer = A++, double = A+ in your page
+595	.
+596	06 · Daily routine
+597	Planning: from yesterday’s profile to 2 scenarios with invalidation
+598	The goal of the plan is not predicting direction correctly. The goal is that before 9:25 ET you know:
+599	where you trade, under which conditions, and what keeps you out
+600	. From 01/11/2026 the US has left DST, so 9:30 ET =
+601	21:30 Vietnam time
+602	Timeline (ET / Vietnam time, winter EST)
+603	Default numbers = illustration read from the 04/11 template screenshot (approximate). Replace them with real numbers from ATAS.
+604	Yesterday (RTH)
+605	Plan date
+606	No
+607	Yes
+608	Neutral
+609	Price at 9:15 ET
+610	No red-folder news
+611	Other levels (one per line: name : price)
+612	List of other levels
+613	RTH gap bottom (30/10 High) : 28861
+614	RTH gap top (29/10 Low) : 29107
+615	Purple level : 28176
+616	Build plan
+617	Distance
+618	Pre-market checklist (before 9:25 ET)
+619	Clear ticks for a new day
+620	In-session: decision tree
+621	Post-session review (after 16:00 ET, next morning Vietnam time)
+622	Score the process, not the result
+623	For each session record 3 numbers:
+624	which scenario happened (A / B / neither),
+625	trades inside the plan / total trades,
+626	did you stop on time at 11:30 ET. After 20 sessions, ratio (2) must be ≥ 90% before switching on Tier 4 scalping.
+627	Clear ticks
+628	07 · Case study from your screenshot
+629	The numbers below are read from screenshot coordinates, so the error is about ±10–15 points. The 04/11 session was still running when captured (price 28,657.25), so the 04/11 VA/POC is
+630	. Use this tab to practise reading; take tradeable numbers directly from ATAS.
+631	5-session value migration
+632	Thin bar = RTH range, pink box = VA, orange tick = POC, left/right ticks = open/close. Dashed grey zone = unfilled RTH gap, hatched zone = 29/10 single prints.
+633	Where your template is already good, and what to add
+634	Already there
+635	TPO + volume profile overlaid: you can see presence vs participation.
+636	Coloured VA and POC extended to the right: easy to see which levels are still
+637	IB bar on the left of each day, open/close markers.
+638	3 separate tabs Weekly / ETH / RTH.
+639	Should add
+640	Turn on marking for
+641	and
+642	(or draw them by hand) so you never miss a magnet.
+643	Only extend the POC/VA of the last 3–5 days and the levels still naked. The many faint horizontal bands in the screenshot make Tiers hard to tell apart.
+644	Show
+645	on the M1 execution chart.
+646	A 5–10 day composite chart when VAs overlap (like 30/10–04/11).
+647	Study playbook for NQ intraday. Not investment advice. Traditional statistics (80% rule, day-type frequencies) must be verified with your own backtests before trading real money.
+648	Overview
+649	Dashboard
+650	9-week roadmap
+651	TPO foundations
+652	Daily planning
+653	Reading the template
+654	Foundations
+655	Combining at the level
+656	Practice · Mock exams
+657	Practice
+658	Navigation
+659	Review
+660	Open menu
+661	Language
+662	New York time · NQ RTH session
+663	Quick navigation
+664	Chapter navigation
+665	← Previous chapter
+666	Next chapter →
+667	Course complete →
+668	// NY time → real Date
+669	today
+670	tomorrow
+671	d
+672	h
+673	min
+674	Trade window · ends in
+675	RTH open · closes
+676	· in
+677	Vietnam time. NQ RTH 9:30–16:00 ET =
+678	Vietnam time
+679	Quiz:
+680	correct /
+681	answered ·
+682	questions
+683	Wrong:
+684	Back up progress
+685	Q
+686	Correct.
+687	Left blank.
+688	Not quite.
+689	Correct answer:
+690	to review
+691	correct ·
+692	answered
+693	Wrong only (
+694	Press again to erase
+695	Reset
+696	No wrong answers left to review. Do more in Practice or Mock exam.
+697	No questions match the filter.
+698	← Previous
+699	· keys 1–4 · ← →
+700	Next →
+701	TPO Level exam
+702	50 questions drawn at random from the 79 of the Level course, keeping the chapter proportions.
+703	Orderflow Tools exam
+704	50 questions drawn at random from the 87 of the Tools course, keeping the chapter proportions.
+705	Full exam
+706	Full
+707	100 questions = 50 Level + 50 Tools, shuffled. The final test of the whole system.
+708	pass mark 80%
+709	Mistakes exam
+710	Mistakes
+711	Last
+712	Best
+713	Attempts
+714	Passed
+715	≥80% streak:
+716	Start ·
+717	Up to 50 questions taken from the list you are getting wrong (
+718	questions). Not graded for passing, review only.
+719	Take the mistakes exam
+720	Exam history
+721	You pass when you reach ≥ 80% three times in a row on the same exam
+722	When
+723	Exam
+724	No attempts yet.
+725	Exam in progress · answers hidden until you submit
+726	answered
+727	Press again to cancel
+728	Cancel exam
+729	Still
+730	blank · press again
+731	Submit
+732	Result
+733	New exam
+734	Exam list
+735	Pass
+736	Not passed
+737	correct
+738	· pass streak
+739	— passed 🎯
+740	Review
+741	Wrong/blank
+742	All
+743	Review the mistakes →
+744	No mistakes. Excellent!
+745	Quick check
+746	Chapter quiz ·
+747	Question bank
+748	Practice · instant answers
+749	Unanswered only
+750	All chapters
+751	Answer correctly and the question leaves the list
+752	Illustration of a TPO profile with value area, POC, VWAP and a footprint candle
+753	In the trade window
+754	· ends
+755	(in
+756	RTH is open
+757	· closes at
+758	RTH opens at
+759	in
+760	Vietnam
+761	Trade window
+762	Vietnam time ·
+763	Continue ·
+764	Continue:
+765	Start here
+766	9-week roadmap · TPO Level Playbook
+767	Chapters viewed
+768	Correct answers
+769	questions in the bank
+770	answered
+771	accuracy
+772	mistakes to review
+773	Not taken ·
+774	pass streak
+775	Progress file downloaded
+776	Progress code copied
+777	The code is shown in the box, copy it manually
+778	Restored, reloading…
+779	Invalid code
+780	Press again to erase everything
+781	Erased
+782	Absorption at the low
+783	Required:
+784	price sweeps an old low, VAL or the −2σ VWAP band after a down leg.
+785	Candle 2:
+786	bid 210 and 240 at the two lowest levels, strongly negative delta but the candle closes up.
+787	Candle 3:
+788	buy stacked imbalance confirms.
+789	Aggressive selling volume piles up hugely at the low but price does not go lower: a large buy limit is absorbing.
+790	The absorption candle’s delta is negative but the body is bullish, this is the key point.
+791	The next candle shows a buy stacked imbalance: buyers turn aggressive.
+792	Retest of candle 3’s buy stacked zone, or a limit just above the absorption zone.
+793	2 ticks below the low of the absorption zone.
+794	Session POC, VWAP or the nearest HVN above.
+795	A candle closes below the absorption zone, or large bids keep filling at a new lower low.
+796	Iceberg bid on the DOM, CVD makes a higher low while price makes a lower low.
+797	Absorption at the high
+798	price sweeps an old high, VAH or the +2σ VWAP band after an up leg.
+799	ask 210 and 240 at the two highest levels, strongly positive delta but the candle closes down.
+800	sell stacked imbalance confirms.
+801	Buyers hammer market orders at the high but price does not go higher: a large sell limit is absorbing.
+802	Positive delta but a bearish body.
+803	A sell stacked imbalance on the next candle is the confirmation.
+804	Retest of candle 3’s sell stacked zone.
+805	2 ticks above the high of the absorption zone.
+806	POC, VWAP or the nearest HVN below.
+807	A candle closes above the absorption zone, or large asks keep filling at a new high.
+808	Ask wall holding firm on the heatmap, big buy trades clustered at the high.
+809	price compresses under the IB high, the prior session high or VAH, then breaks up.
+810	4 consecutive buy imbalance levels on the range break.
+811	price pulls back to the stacked zone, sell volume shrinks, delta stays positive.
+812	A buy stacked imbalance shows aggressive buyers lifting several ask levels in a row, this is initiative.
+813	Candle 2’s high still has volume on both sides (unfinished), price usually comes back above it.
+814	On the retest, filled bids shrink towards the bottom of the zone: sellers have no strength left.
+815	Limit in the upper half of the stacked zone, or enter when the retest candle closes back above the zone.
+816	2 ticks below the lowest level of the stacked zone.
+817	The unfinished high of the breakout candle, then a measured move of the range height.
+818	Price closes below the bottom of the stacked zone: switch to the imbalance failure scenario.
+819	CVD makes a new high with price, VWAP slopes up, speed of tape rises on the break.
+820	Sell stacked imbalance, retest
+821	price compresses above the IB low, the prior session low or VAL, then breaks down.
+822	4 consecutive sell imbalance levels on the range break.
+823	price bounces back to the stacked zone, filled asks shrink.
+824	Aggressive sellers hit several bid levels in a row.
+825	Candle 2’s low is unfinished, price usually comes back lower.
+826	On the bounce asks shrink: buyers are weak.
+827	Limit in the lower half of the sell stacked zone.
+828	2 ticks above the highest level of the stacked zone.
+829	The unfinished low, then a measured move of the range height.
+830	Price closes above the top of the sell stacked zone.
+831	CVD makes a new low, price below VWAP, the bid wall below gets pulled on the heatmap.
+832	Exhaustion at the high
+833	a long up leg touches the +2σ band, VAH or an HTF resistance zone.
+834	ask shrinks 16 → 12 → 9 → 5 → 0 towards the high, the high has ask = 0 (finished auction).
+835	sell stacked imbalance.
+836	Aggressive buying volume thins out as price rises: nobody is chasing price any more.
+837	The high has ask = 0: the auction above is over.
+838	Unlike absorption: here volume is small, not large volume being blocked.
+839	Retest of the confirmation candle’s sell stacked zone.
+840	2 ticks above the exhaustion high.
+841	VWAP or POC; the first leg usually returns to mid-range.
+842	Price comes back above the high with sharply rising ask volume.
+843	Speed of tape slows going into the high, CVD flat or falling.
+844	Exhaustion at the low
+845	a long down leg touches the −2σ band, VAL or HTF support.
+846	bid shrinks towards the low, the low has bid = 0 (finished auction).
+847	Aggressive selling dries up as price goes lower.
+848	The low has bid = 0: no sellers left below.
+849	Needs a confirmation candle with buy initiative.
+850	Retest of the confirmation candle’s buy stacked zone.
+851	2 ticks below the exhaustion low.
+852	VWAP or POC.
+853	Price comes back to break the low with sharply rising bid volume.
+854	Speed of tape slows into the low, CVD makes no new low.
+855	Unfinished auction as a target
+856	an important candle high or low (session high, swing) with volume still on both sides.
+857	Candle 1:
+858	the high still shows 12 × 9, not finished.
+859	price comes back above it and makes a new high with ask = 0.
+860	A high with both bid and ask non-zero means the auction is not finished, the market often comes back to
+861	repair it
+862	When price comes back and makes a new high with ask = 0, the level has been repaired.
+863	This is a tool for choosing targets, not an entry signal.
+864	Do not enter just because of an unfinished auction.
+865	Not applicable.
+866	Use the unfinished level as TP for a long you are holding, or wait until it is repaired before considering a short.
+867	Not every unfinished auction gets revisited in the same session; prefer levels at important swings.
+868	An unfinished level that matches the prior session high or a TPO poor high has a higher probability of being revisited.
+869	Buyers trapped in a false breakout
+870	price breaks the range high or the prior session high, pulling in many buyers chasing.
+871	buy imbalance piled at the 3 highest levels, delta +258 but the candle closes low with a long upper wick.
+872	closes below the breakout level with sell stacked imbalance.
+873	Buyers who chased at the high (blue-outlined zone) are now losing.
+874	When price closes back inside the range, they must stop out with sell orders, pushing price down faster.
+875	Candle 3 bounces slightly with very small asks: nobody wants to buy again.
+876	Short when a candle closes below the breakout level, or on a light retest into the sell stacked zone.
+877	2 ticks above the high of the trap candle.
+878	The opposite edge of the range, the earlier range POC.
+879	Price comes back above the trapped zone and holds with positive delta.
+880	Big buy trades clustered at the high, the bid wall below gets pulled on the heatmap.
+881	Sellers trapped in a false breakdown
+882	price breaks the range low or the prior session low, pulling in sellers chasing.
+883	sell imbalance piled at the 3 lowest levels but the candle closes high with a long lower wick.
+884	closes above the breakdown level with buy stacked imbalance.
+885	Sellers who chased at the low are losing.
+886	They stop out with buy orders, pushing price up fast (short covering).
+887	The pullback candle has very small bids.
+888	Long when a candle closes back above the breakdown level, or on a retest of the buy stacked zone.
+889	2 ticks below the low of the trap candle.
+890	The upper edge of the range, the range POC.
+891	Price comes back below the trapped zone and holds with negative delta.
+892	Big sell trades clustered at the low, this is the familiar sweep and reclaim pattern.
+893	price makes a new high at resistance, after at least one clear up leg.
+894	price makes a higher high but delta is −92.
+895	Price rises while delta is negative: aggressive sellers are larger but price is still lifted by buy limits being pulled.
+896	Real buying force has weakened; the new high has no aggressive buyers supporting it.
+897	Needs a following candle with new sell initiative before entering.
+898	2 ticks above the high of the divergence candle.
+899	VWAP, POC or the low of the most recent up leg.
+900	The next candle closes above the divergence high with positive delta.
+901	Session CVD also makes a lower high; cluster statistic shows a large max delta but a negative closing delta.
+902	Imbalance failure (stacked zone flips)
+903	a buy stacked zone appears, but price cannot follow through afterwards.
+904	buy stacked on 3 levels.
+905	price cuts through the whole stacked zone and closes below it, with sell stacked imbalance.
+906	The stacked zone is where buyers committed; when price closes below it, they are trapped.
+907	The old buy stacked zone becomes resistance.
+908	This scenario has a good reward/risk ratio because the stop is close.
+909	Short when a candle closes below the bottom of the buy stacked zone, or on a retest from below.
+910	2 ticks above the top of the old buy stacked zone.
+911	The low of the initial up leg, the HVN below.
+912	Price reclaims the stacked zone and closes above it.
+913	A strong delta flip from positive to negative, speed of tape rises as the zone breaks.
+914	a strong bullish candle after a down leg, volume concentrated in the upper part.
+915	the lower part of the candle is almost empty (volume 2–14), volume piles up at the top 3 levels, delta only +14.
+916	price drifts back down.
+917	Price rises fast through the lower part without volume: mostly old shorts buying to close.
+918	Volume only appears higher up, delta near 0: no real new buyers.
+919	The thin lower part is an LVN inside the candle, price usually comes back to fill it.
+920	Do not chase longs. Wait for price to return to the thin part, then reassess.
+921	If shorting on candle 3: 2 ticks above the top of the P.
+922	The bottom of the thin part (the base of the P candle).
+923	New volume appears in the lower part and price holds above the P candle’s POC: the market has accepted higher prices.
+924	The session TPO/volume profile is P-shaped, CVD does not rise in line with price.
+925	a strong bearish candle after an up leg, volume concentrated in the lower part.
+926	the upper part of the candle is almost empty, volume piles up at the bottom 3 levels, delta near 0.
+927	price bounces back up.
+928	Price falls fast through the upper part without volume: old longs exiting.
+929	No real new sellers, delta near 0.
+930	The thin upper part usually gets filled back.
+931	Do not chase shorts. Wait for price to bounce back into the thin part.
+932	If buying on candle 3: 2 ticks below the bottom of the b.
+933	The top of the thin part.
+934	New volume appears in the upper part and price holds below the b candle’s POC.
+935	The session profile is b-shaped, CVD does not fall in line.
+936	ATAS cluster-style footprint
+937	Time (ET)
+938	Side
+939	Sell
+940	Sample candle
+941	Level delta
+942	Level volume
+943	Open, high volume
+944	Lunchtime, low volume
+945	Candle breaking VAL
+946	Candle
+947	Reading
+948	: balanced
+949	: buyers dominate
+950	: sellers dominate
+951	Displayed bid
+952	Filled this round
+953	Total filled
+954	Refills
+955	Warning / target
+956	Invalidation:
+957	Extra confirmation:
+958	Red flag present.
+959	Trigger present but VWAP gate not passed.
+960	/3 confirmations, VWAP gate not passed.
+961	VWAP gate passed,
+962	/3 confirmations. Waiting for the footprint trigger.
+963	Enter, full size.
+964	Enter.
+965	Skip, save the trade slot.
+966	Footprint alone, no confirmation.
+967	Large aggressive volume blocked by limit orders, price does not follow through.
+968	The side using market orders, accepting the other side’s price.
+969	The lowest resting sell price. On the footprint: aggressive buy volume filled at the ask.
+970	The highest resting buy price. On the footprint: aggressive sell volume filled at the bid.
+971	Fills above the size threshold, drawn as bubbles on the chart.
+972	Volume concentrated in the lower part of the candle/profile, usually long liquidation.
+973	Volume and speed bursting at the end of a long leg.
+974	The table under the ATAS chart: volume, delta, delta %, max/min delta per candle.
+975	Cumulative Volume Delta: delta accumulated through the session.
+976	Σ ask − Σ bid: aggressive buying minus aggressive selling.
+977	Delta clearly changes sign at a level and the next candle closes beyond the previous body.
+978	Price makes a new extreme but delta/CVD does not confirm.
+979	Depth of Market: the book of resting limit orders.
+980	Attacking-side volume dries up towards the extreme.
+981	Trading against the direction price just came from, expecting the level to hold (responsive).
+982	A candle extreme with 0 on the attacking side.
+983	A bid × ask chart for each price level inside the candle (ATAS: cluster).
+984	DOM history over time (ATAS: DOM Levels).
+985	High-volume area (price slows down) / low-volume area (price passes quickly).
+986	A hidden limit order that fills more than its displayed size and gets refilled.
+987	Ask(P) ≥ 300% bid(P − 1) or bid(P) ≥ 300% ask(P + 1).
+988	The aggressive side pushes price out of value and it gets accepted.
+989	A price chosen in advance (TPO: VAH, VAL, POC, poor high/low, single print, IB).
+990	Volume concentrated in the upper part, lower part thin, usually short covering.
+991	Point of Control: the price with the most volume (or TPO).
+992	Resting orders pulled before price touches.
+993	Price leaves value and gets pushed back.
+994	Price comes back to the zone it just broke to test it before continuing.
+995	ATAS Time & Sales that merges orders split into pieces.
+996	Number of trades per unit of time.
+997	A large order placed to create an impression, then pulled.
+998	3 or more consecutive imbalance levels on the same side.
+999	Resting orders added as price approaches.
+1000	The side that entered at an extreme before price closed the other way, forced to stop out.
+1001	A candle extreme with volume still on both bid and ask.
+1002	Volume-weighted average price; RTH anchored at 9:30 ET, bands ±1σ/±2σ/±3σ.
+1003	Illustrative chart
+1004	Sample profile with a selling tail, single prints and a poor low
+1005	RF of the sample profile
+1006	(prices counted by row)
+1007	Confidence:
+1008	Action:
+1009	Five open-location zones
+1010	What to watch
+1011	Link to your models
+1012	Yesterday
+1013	Today
+1014	Yesterday’s VA
+1015	Open outside VA
+1016	Touch VAL
+1017	80% rule illustration
+1018	Enter an IB High greater than the IB Low.
+1019	no average yet
+1020	NARROW → favour range extension, trade confirmed breakouts
+1021	WIDE → favour rotation inside the IB, fade the IB edges
+1022	AVERAGE → wait for one-sided RE + sloping VWAP
+1023	pts  (
+1024	of average)
+1025	Assessment    :
+1026	Extension up    1.5x:
+1027	Extension down  1.5x:
+1028	(1.5x / 2x measured on total range = 1.5 / 2 times the IB width, from the opposite IB edge)
+1029	Fading +2 SD = run over
+1030	At
+1031	Recognition:
+1032	Meaning:
+1033	What to do
+1034	Missing numbers:
+1035	. At minimum you need PD High/Low, VAH/POC/VAL and the price at 9:15.
+1036	Invalid order: requires PD High ≥ VAH ≥ POC ≥ VAL ≥ PD Low.
+1037	no pre-drawn level → use the IB extension as the target
+1038	// ladder with clusters (≤ 15 points)
+1039	▶ Price at 9:15
+1040	Expected open location:
+1041	(VAH) on CVD exhaustion/absorption + trigger, target POC
+1042	(VAL) likewise, target POC.
+1043	Breakout: 1 period closes outside the VA + VWAP sloping in the break direction. Above VAH → go with it, target
+1044	. Below VAL → target
+1045	A is wrong when price is accepted beyond the edge being faded. B is wrong when the breakout returns inside the VA within the same period.
+1046	Holds above VAH
+1047	→ long the VAH retest (OTD style), target PD High
+1048	then
+1049	Comes back into the VA and is accepted (2 periods, or 1 period + VWAP turning down) → 80% rule: short, target POC
+1050	then VAL
+1051	A is wrong when accepted below VAH. B is wrong when price reclaims VAH after entering the VA.
+1052	Open Drive, or Open Test Drive down to PD High
+1053	then holds → go with it long, target
+1054	. No fading in the first 30 minutes.
+1055	Comes back below PD High and holds 1 period → trapped longs / ORR: short, target VAH
+1056	then POC
+1057	A is wrong when a period closes below PD High. B is wrong when price reclaims PD High.
+1058	Holds below VAL
+1059	→ short the VAL retest (OTD style), target PD Low
+1060	Comes back into the VA and is accepted (2 periods, or 1 period + VWAP turning up) → 80% rule: long, target POC
+1061	then VAH
+1062	A is wrong when accepted above VAL. B is wrong when price loses VAL again after entering the VA.
+1063	Open Drive, or Open Test Drive up to PD Low
+1064	then gets rejected → go with it short, target
+1065	Comes back above PD Low and holds 1 period → trapped shorts / ORR: long, target VAL
+1066	A is wrong when a period closes above PD Low. B is wrong when price loses PD Low again.
+1067	Overnight net long + high open: an inventory correction down in the first 30–60 minutes is likely. Prefer waiting for OTD/OSR instead of buying the open.
+1068	Overnight net short + low open: an inventory correction up early in the session is likely. Prefer waiting for OTD/OSR instead of selling the open.
+1069	Overnight net long but a low open: ETH longs are trapped, selling pressure can grow if the ON Low is lost.
+1070	Overnight net short but a high open: ETH shorts are trapped, the ON High is fuel if it breaks.
+1071	is a magnet: expect it to be swept. Do not short right below it with a tight stop.
+1072	is a magnet: expect it to be swept. Do not buy right above it with a tight stop.
+1073	Yesterday’s P shape = short covering. You need to see new buying (holding above the VA) before trusting continuation.
+1074	Yesterday’s b shape = long liquidation. You need to see new selling (holding below the VA) before trusting continuation.
+1075	Yesterday’s D shape = balance. Default expectation: more balance.
+1076	Yesterday’s B shape = double distribution. The single prints between the two areas are an important level.
+1077	Yesterday was a trend day. The day after a trend usually balances or continues more slowly; do not guess a reversal.
+1078	Yesterday Neutral: check whether the close was in the middle (center → balance) or at an extreme (extreme → favour the close direction).
+1079	Yesterday Non-Trend: energy is building, watch for a breakout from yesterday’s range.
+1080	Yesterday’s close at
+1081	near the high, strong
+1082	near the low, weak
+1083	mid-range, balance
+1084	• Yesterday:
+1085	neutral
+1086	• Price 9:15 ET:
+1087	• Nearest levels: above
+1088	· below
+1089	• Level clusters (≤
+1090	pts):
+1091	SCENARIO A (primary)
+1092	SCENARIO B (alternative)
+1093	CONTEXT NOTES
+1094	FIXED RULES
+1095	• The open type must match the scenario before entering (classified by 10:00 ET).
+1096	• Only trade zones scoring ≥ 6, grade A+ or better (VWAP RTH and/or CVD confirming).
+1097	• Max 2–3 trades. Stop at 11:30 ET (23:30 Vietnam) or at the daily loss limit.
+1098	• No-trade: between the POC and a VA edge while the open type is unclear.
+1099	Plan copied.
+1100	The browser blocked copying. Select the plan box and copy by hand.
+1101	Value migration 29/10 to 04/11
+1102	Unfilled RTH gap
+1103	Purple level 28,176
+1104	POC cluster 02/11 + 04/11
+1105	Profile read:
+1106	Lesson:
+1107	Level map for 05/11 (illustrative, update after 04/11 closes)
+1108	Source
+1109	Role
+1110	Rotation 28,505–28,795. Short the 28,795–28,890 cluster on CVD exhaustion, long 28,505–28,445 on absorption. Target the POC cluster 28,650–28,680.
+1111	Accepted above 28,890
+1112	Continuation breakout from the 03/11 balance. Go with it, target the gap fill to 29,105. Single prints 29,105–29,350 are resistance on the first test.
+1113	Accepted below 28,445
+1114	The 04/11 breakout fails, back to the 03/11 balance. Target 03/11 POC 28,330, then the purple level 28,176.
+1115	Try it now: open tab 06, the Plan Builder is pre-filled with these numbers. Change
+1116	Price at 9:15
+1117	to see how the open location and scenarios change.
+1118	Phase 1 · Foundations
+1119	Weeks 1–2
+1120	Read Dalton – Mind Over Markets: the TPO, Initial Balance, Value Area sections
+1121	Learn the whole dictionary in tab 01 (be able to say each entry’s definition + usage out loud)
+1122	On ATAS Daily Profile RTH: mark POC, VAH, VAL, IB, open/close yourself for the last 20 NQ sessions
+1123	In those 20 sessions, circle every single print, tail (excess) and poor high/low
+1124	Compute the Rotation Factor by hand for 5 sessions, compare with your first impression
+1125	Pass: Quiz 01 ≥ 80% and 20 sessions fully marked
+1126	Phase 2 · Day structure
+1127	Weeks 3–4
+1128	Classify day type + shape + open type for 30 sessions (store in a Notion database or a sheet)
+1129	Record the day-to-day value relationship for those 30 sessions
+1130	Measure the average NQ IB width over 20 sessions and the % of days with range extension (baseline for the Plan Builder)
+1131	Count: what % of days the IB is broken on both sides (neutral) on your NQ
+1132	Practise spike rules: find 10 days with a late spike, record where the next day opened and the outcome
+1133	Pass: Quiz 02 ≥ 80%, reclassify 10 random sessions with ≥ 8 correct
+1134	Phase 3 · Levels & Plan
+1135	Weeks 5–6
+1136	Every evening use the Plan Builder (tab 06) to plan 10 consecutive sessions, trade them on sim
+1137	Each plan has exactly 2 scenarios (A/B), each with zone, trigger, target, invalidation
+1138	Backtest the 80% rule on ATAS Market Replay: 20 times, record how often the VA is traversed
+1139	Backtest IB extension 1.5x/2x when the IB is narrow: 20 times
+1140	Score levels (table in tab 03) for every zone before a sim entry
+1141	Pass: 10 consecutive plans written before 9:25 ET, ≥ 90% of trades inside the plan
+1142	Phase 4 · VWAP RTH + CVD add-in
+1143	Weeks 7–8
+1144	Every session record the VWAP state (balance / trend / phase change) at 10:30 ET
+1145	Record the VWAP vs dPOC relationship at 10:30 and 11:30 ET
+1146	Set the CVD reset at 9:30 ET on the M1 execution chart, same anchor as VWAP RTH
+1147	Collect 20 CVD divergences at TPO zones, classify exhaustion / absorption, record the outcome
+1148	Grade every setup A++ / A+ / B / C, only trade A+ or better on sim
+1149	Pass: Quiz 04 + 05 ≥ 80%, A+ setup win rate on sim measured over ≥ 30 trades

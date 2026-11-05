@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080B10">
+<title>TPO Level Playbook · Orderflow System</title>
+<meta name="description" content="TPO, Day & Open types, Level map, VWAP RTH, CVD divergence and the planning routine for NQ.">
+<link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/css/app.css?v=4">
+<link rel="stylesheet" href="assets/css/levels.css?v=4">
+</head>
+<body data-page="levels">
+<main class="ui-main">
+<div class="ui-content pg-levels">
+
+
+
+<section class="tab" id="ch-lo-trinh" data-chapter="lo-trinh">
+  <div class="ui-hero" style="--c:var(--c-levels)">
+    <span class="ui-eyebrow">Course 1 · NQ · RTH 9:30–16:00 ET</span>
+    <h1 class="ui-h1">TPO Level Playbook</h1>
+    <p class="ui-lede">Context from TPO · Confluence from VWAP RTH + CVD · Trigger from orderflow. A 9-week roadmap from reading a profile to planning and executing in the 2-hour NY AM window.</p>
+    <div class="facts"><span><b>8</b> chapters</span><span><b>5</b> roadmap phases</span><span><b>79</b> quiz questions</span><span>Plan Builder</span></div>
+    <div class="cta"><a class="ui-btn primary" href="#nen-tang">Start learning →</a><a class="ui-btn" href="#plan">Open Plan Builder</a><a class="ui-btn ghost" href="quiz.en.html#thi-thu">50-question mock exam</a></div>
+  </div>
+
+  <div class="head">
+    <span class="eyebrow">00 · 9-week roadmap</span>
+    <h2>From reading a profile to planning and executing in the 2-hour NY AM window</h2>
+    <p class="lead">In your system TPO plays the role of <b>context + location</b>: it answers "is the market balanced or imbalanced, and where am I allowed to act". VWAP RTH and CVD are the confluence layer. The entry trigger remains what you have already settled on (OSR, IB, footprint/delta). This playbook adds no new model, it gives your existing models a clear level map.</p>
+  </div>
+
+  <div class="panel stack">
+    <div class="qhead"><h3>Overall progress</h3><span class="score" id="rm-score">0/0</span></div>
+    <div class="progress"><i id="rm-bar"></i></div>
+    <p class="small muted">Ticks are saved in this browser. Each phase has a "pass" criterion on its last line; do not move on until you meet it.</p>
+  </div>
+
+  <div class="stack" id="roadmap"></div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Source material to read</h3>
+      <ul class="clean">
+        <li><b>James Dalton — Mind Over Markets</b> (chapters on TPO, day types, open types, value relationships). The source of almost every concept in tabs 01–03.</li>
+        <li><b>James Dalton — Markets in Profile</b>: the auction on higher timeframes, reading several days in a row.</li>
+        <li><b>CBOT Market Profile Handbook</b> (Steidlmayer): the original definitions of TPO, IB, Rotation Factor.</li>
+        <li>Your Notion recaps: <i>Lecture 5 – TPO Part 2</i>, <i>TPO: Components</i>, <i>TPO/VPO (Chika)</i>. Tab 01 answers the open questions you still have noted down.</li>
+      </ul>
+    </div>
+    <div class="panel stack">
+      <h3>How you use ATAS (unchanged)</h3>
+      <ul class="clean">
+        <li><span class="chip">Weekly Profile</span> higher-timeframe context: weekly VA, composite.</li>
+        <li><span class="chip">Daily Profile ETH</span> overnight inventory, ON high/low, ON POC.</li>
+        <li><span class="chip va">Daily Profile RTH</span> main chart for drawing zones (the template in the screenshot).</li>
+        <li><span class="chip vw">ETH M1 Execution</span> VWAP RTH ±1/2/3 SD + CVD + footprint for the trigger.</li>
+      </ul>
+      <p class="small muted">A principle from your own assessment: the reason you have not passed prop yet is changing strategy constantly. This roadmap is deliberately slow and measurable, to build conviction in a single framework.</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="tab" id="ch-nen-tang" data-chapter="nen-tang">
+  <div class="head">
+    <span class="eyebrow">01 · Foundations</span>
+    <h2>What TPO is and how to read a profile</h2>
+    <p class="lead"><b>TPO (Time Price Opportunity)</b> records every price at which the market was "present" in each 30-minute period. Stack those periods horizontally and you get a distribution: thick areas are where the market accepts price (value), thin areas are where it rejects or passes through very quickly. A candle tells you how price moved, the profile tells you where price was <i>accepted</i> .</p>
+  </div>
+
+  <div class="grid g2">
+    <figure class="panel">
+      <h3>Anatomy of an RTH profile</h3>
+      <div class="svgwrap" id="anatomy"></div>
+      <figcaption>Sample profile generated from 13 periods of data (A = 9:30 … M = 15:30 ET). POC and VA are computed automatically with the 70% rule. Pink cells = value area, orange cells = POC, the light tan bar on the left = Initial Balance.</figcaption>
+    </figure>
+    <div class="panel stack">
+      <h3>Reading the sample profile on the left</h3>
+      <ol class="clean">
+        <li><b>Open</b> in the A period, A pushes higher then gets sold hard: 4 rows with only the letter A at the top = <span class="chip va">selling tail</span>. Responsive sellers rejected the higher prices. This high is "complete".</li>
+        <li><b>IB</b> = A + B. C breaks the IB low = <span class="chip ib">downside range extension</span>. Initiative sellers appear.</li>
+        <li>C moves fast and leaves <span class="chip">single prints</span> in the middle of the profile: an imbalance area, often resistance when price comes back, or it gets filled if the market changes its mind.</li>
+        <li>The lower part builds thick value (D → M): <span class="chip poc">POC</span> sits low, the profile has the shape of the letter <b>b</b> → long liquidation.</li>
+        <li>The low has 3 different letters touching the same price, no tail: <span class="chip warn">poor low</span>. The auction below is not finished, the next day can easily come back to sweep it.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <div class="qhead"><h3>TPO dictionary (click to open)</h3><span class="small muted">Each entry: definition · how to read · how to use for NQ intraday</span></div>
+    <div class="grid g2" id="glossary"></div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Rotation Factor: compute it yourself in 2 minutes</h3>
+    <p>Compare each period with the one just before it. Higher high: <b>+1</b>, lower: <b>−1</b>, equal: <b>0</b>. Do the same for the Low. Add everything up.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Period</th><th class="num">High</th><th class="num">Low</th><th class="num">High score</th><th class="num">Low score</th><th class="num">Cumulative</th></tr></thead>
+      <tbody id="rf-table"></tbody>
+    </table></div>
+    <p class="small muted">Large positive RF = upward rotation dominates (buyers in control). Near 0 = two-sided, balance. Use the RF of A–C to confirm the open type, not as an entry signal.</p>
+  </div>
+
+  <div class="callout purple">
+    <h4>Answers to the "open questions" in your Lecture 5 recap</h4>
+    <ul class="clean small">
+      <li><b>Tail: 1 print or 2 prints?</b> The two counts run in different directions. "Two prints at the top" in the video means <i>two different letters touching the highest price</i> (counted horizontally) → that is a poor high, so not a tail. A tail is counted <i>vertically</i>: the number of consecutive rows at the extreme with a single letter. According to Dalton, the minimum excess is 2 single-print rows. For NQ, a practical convention: tail ≥ 2 rows at the row size you use (e.g. 5 points/row → tail ≥ 10 points).</li>
+      <li><b>68.4% or 70%?</b> 1 standard deviation of a normal distribution ≈ 68.27%, that is the mathematical root. 70% is the CBOT rounding convention and the default on most platforms, including ATAS. Pick one number and keep it fixed so days are comparable.</li>
+      <li><b>How is RF calculated?</b> The table just above.</li>
+      <li><b>"Key contextual level" what is it?</b> In this playbook it means the Tier 1–2 levels in tab 03 (weekly VA, prior day VAH/VAL/POC, naked POC, poor high/low, single prints). Price closing through such a level during the IB usually makes the IB wide and one-directional.</li>
+    </ul>
+  </div>
+
+  <div class="qz-slot" data-qz="levels:tpo" data-title="Quiz 01 · TPO foundations"></div>
+</section>
+
+
+<section class="tab" id="ch-cau-truc" data-chapter="cau-truc">
+  <div class="head">
+    <span class="eyebrow">02 · Day structure</span>
+    <h2>Day types, profile shapes, open types and value relationships between days</h2>
+    <p class="lead">These four classifications answer four different questions. <b>Open type</b>: who is in control in the first 30 minutes. <b>IB + range extension</b>: is today likely to trend or rotate. <b>Day type / shape</b>: how did yesterday finish. <b>Value relationship</b>: is value moving or standing still over several days.</p>
+  </div>
+
+  <div class="panel stack">
+    <h3>Day types (Dalton) · pick one to see the profile</h3>
+    <div class="seg" id="dt-buttons"></div>
+    <div class="grid g2">
+      <div class="svgwrap" id="dt-svg"></div>
+      <div class="stack" id="dt-info"></div>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Open types · the first 30 minutes</h3>
+    <p class="small muted">Dashed line = the 9:30 open price. Classify the open type before 10:00 ET (21:30–22:00 Vietnam time), only then decide whether to trade scenario A or B of the plan.</p>
+    <div class="grid g2" id="opentypes"></div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Open location versus yesterday · click each zone</h3>
+    <p class="small muted">This is the first question of every daily plan. Confidence in imbalance grows the further the open is from value.</p>
+    <div class="grid g2">
+      <div class="svgwrap" id="openloc-svg"></div>
+      <div class="stack" id="openloc-info"></div>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Value relationship between two days</h3>
+    <p class="small muted">Grey box = yesterday’s VA, pink box = today’s VA. Evaluate after the close, record it in the Post-session review.</p>
+    <div class="grid g3" id="valrel"></div>
+  </div>
+
+  <div class="qz-slot" data-qz="levels:structure" data-title="Quiz 02 · Day & Open types"></div>
+</section>
+
+<!-- ============ 03 LEVELS ============ -->
+<section class="tab" id="ch-levels" data-chapter="levels">
+  <div class="head">
+    <span class="eyebrow">03 · Level map</span>
+    <h2>Which levels are worth drawing, which are worth trading, and when a level is "broken"</h2>
+    <p class="lead">You only have 2–3 trades a day, so levels must be few and ranked. Rule: only <b>draw</b> Tier 1–3 on the RTH chart. Tier 4 (scalping) is optional, only switched on after 20 consecutive sessions following the plan.</p>
+  </div>
+
+  <div class="panel stack">
+    <div class="qhead"><h3>Level hierarchy</h3>
+      <label class="row small" for="tog-scalp"><input type="checkbox" id="tog-scalp"> Show Tier 4 · scalping add-in</label></div>
+    <div class="tablewrap"><table id="tier-table">
+      <thead><tr><th>Tier</th><th>Level</th><th>Source in ATAS</th><th>Meaning</th><th>How to use</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Acceptance or rejection?</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Sign</th><th>Acceptance</th><th>Rejection</th></tr></thead>
+        <tbody>
+          <tr><td>Time</td><td>Price stays outside the level ≥ 2 TPO periods (60 minutes) or builds thick TPO there</td><td>Only 1 period touches and comes back, leaving a tail</td></tr>
+          <tr><td>Volume</td><td>Volume profile thickens outside the level (participation)</td><td>Thin volume, single prints</td></tr>
+          <tr><td>VWAP RTH</td><td>VWAP slopes in the break direction, price holds that side</td><td>Price touches ±2 SD and returns to VWAP</td></tr>
+          <tr><td>CVD</td><td>CVD makes a new high/low with price</td><td>CVD divergence right at the level</td></tr>
+          <tr><td>Conclusion</td><td><span class="chip good">go-with</span> the old level becomes support/resistance</td><td><span class="chip bad">fade</span> back to the POC / opposite VA edge</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">In the 2-hour NY AM window it is hard to wait a full 2 periods. Fast version: 1 period (30 minutes) closes beyond the level + VWAP + CVD confirm together.</p>
+    </div>
+    <figure class="panel stack">
+      <h3>80% rule (Steidlmayer / Dalton)</h3>
+      <div class="svgwrap" id="rule80"></div>
+      <figcaption>Open (or move) outside yesterday’s VA, come back inside and get accepted for 2 consecutive TPO periods → high probability of travelling through the VA to the other edge. "80%" is the traditional name, not a verified statistic for today’s NQ. Measure it yourself on Market Replay (exercise in Phase 3).</figcaption>
+    </figure>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Spike rules · late-day breakout</h3>
+      <p class="small">A spike is a strong move in the last 1–2 periods of the session (L, M). The market has not had time to validate it, so where the next day opens relative to the spike tells you whether the spike was real or fake.</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Next day opens</th><th>Spike up (bullish)</th><th>Spike down (bearish)</th></tr></thead>
+        <tbody>
+          <tr><td>Beyond the spike in its direction</td><td><span class="chip good">continuation up</span></td><td><span class="chip good">continuation down</span></td></tr>
+          <tr><td>Inside the spike</td><td colspan="2">The spike becomes a new balance area, trade rotations inside the spike</td></tr>
+          <tr><td>Beyond the spike against its direction</td><td><span class="chip bad">spike rejected</span> → down</td><td><span class="chip bad">spike rejected</span> → up</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">A real example in your template: 29/10 had a late selling spike, 30/10 opened with a gap below the spike → continuation (see tab 07).</p>
+    </div>
+    <div class="panel stack">
+      <h3>Scoring a level before trading it</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Factor</th><th class="num">Points</th></tr></thead>
+        <tbody>
+          <tr><td>Tier 1 (weekly VA, composite, multi-day nPOC)</td><td class="num mono">+3</td></tr>
+          <tr><td>Tier 2 (yesterday’s VAH/VAL/POC, poor H/L, single prints)</td><td class="num mono">+2</td></tr>
+          <tr><td>≥ 2 levels within 10–15 NQ points of each other</td><td class="num mono">+2</td></tr>
+          <tr><td>Matches VWAP RTH or the ±2 SD band</td><td class="num mono">+2</td></tr>
+          <tr><td>Not yet tested in the current session (fresh)</td><td class="num mono">+1</td></tr>
+          <tr><td>Already pierced and accepted today</td><td class="num mono">−3</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small"><span class="chip good">≥ 6</span> zone A, tradeable. <span class="chip warn">4–5</span> only trade with clear CVD + trigger. <span class="chip bad">≤ 3</span> do not trade, use only as a target.</p>
+    </div>
+  </div>
+
+  <div class="panel stack" id="scalp-panel">
+    <h3>Scalping add-in (optional) · IB calculator</h3>
+    <p class="small muted">Enter the IB at 10:30 ET to get extensions, IB mid and a width assessment versus the 20-session average.</p>
+    <div class="form">
+      <div class="field"><label for="ib-h">IB High</label><input type="number" id="ib-h" value="28795" step="0.25"></div>
+      <div class="field"><label for="ib-l">IB Low</label><input type="number" id="ib-l" value="28640" step="0.25"></div>
+      <div class="field"><label for="ib-avg">20-session average IB</label><input type="number" id="ib-avg" value="190" step="1"></div>
+    </div>
+    <div class="out" id="ib-out"></div>
+  </div>
+
+  <div class="qz-slot" data-qz="levels:levels" data-title="Quiz 03 · Level, acceptance & scalping"></div>
+</section>
+
+<!-- ============ 04 VWAP ============ -->
+<section class="tab" id="ch-vwap" data-chapter="vwap">
+  <div class="head">
+    <span class="eyebrow">04 · Add-in confluence #1</span>
+    <h2>VWAP RTH: the dynamic value of today’s session</h2>
+    <p class="lead">TPO tells you where value <i>has been</i> built (usually yesterday’s). VWAP RTH tells you the average cost of everyone who has traded <i>since 9:30 today</i>. Combine the two: TPO is the map, VWAP is the in-session compass.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Definition</h3>
+      <div class="out" style="max-height:none">VWAP(t) = Σ (Pᵢ × Vᵢ) / Σ Vᵢ      with i running from 9:30 ET to t
+σ(t)    = √[ Σ Vᵢ × (Pᵢ − VWAP)² / Σ Vᵢ ]
+Band    = VWAP ± k·σ,   k = 1, 2, 3</div>
+      <ul class="clean small">
+        <li><b>Anchor 9:30 ET</b>: the same anchor as the IB and TPO RTH, so the three tools speak the same time language. VWAP ETH (18:00 ET) is only a secondary layer when overnight volume is unusual, as you decided.</li>
+        <li><b>Price above VWAP</b>: today’s average buyer is in profit → buyers control intraday. Below VWAP the opposite.</li>
+        <li><b>First 15–20 minutes</b> σ is still small and jumps constantly, the bands are very narrow. Do not fade the bands before 10:00 ET.</li>
+      </ul>
+    </div>
+    <div class="panel stack">
+      <h3>The four VWAP states</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>State</th><th>Recognition</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip">Balance</span></td><td>Flat VWAP, price crosses back and forth many times, stays within ±1 SD</td><td>Ping-pong ±1 SD, fade ±2/±3 SD back to VWAP</td></tr>
+          <tr><td><span class="chip good">Uptrend</span></td><td>VWAP slopes up, price holds above VWAP, rides along +1/+2 SD</td><td>Buy pullbacks to VWAP / +1 SD. Never short +2 SD</td></tr>
+          <tr><td><span class="chip bad">Downtrend</span></td><td>Mirror image</td><td>Sell pullbacks to VWAP / −1 SD</td></tr>
+          <tr><td><span class="chip warn">Phase change</span></td><td>Price reclaims / loses VWAP after the IB, VWAP starts changing slope</td><td>Trade the VWAP retest in the new direction, needs CVD confirmation</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>VWAP × TPO: read them together</h3>
+    <div class="grid g3">
+      <div class="card"><h4><span class="chip vw">VWAP ≈ dPOC</span></h4><p class="small">Time and volume agree on the same price → balance. Fade the developing VA edges and ±2 SD.</p></div>
+      <div class="card"><h4><span class="chip vw">VWAP leads, dPOC follows</span></h4><p class="small">dPOC moves in the same direction as VWAP after 10:30 → value is migrating, the day is likely a trend or normal variation day. Go with it.</p></div>
+      <div class="card"><h4><span class="chip vw">VWAP matches a TPO level</span></h4><p class="small">VWAP or the ±2 SD band within 10–15 points of yesterday’s VAH/VAL/POC → zone A per the scoring table in tab 03.</p></div>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <figure class="panel"><h3>Balance day: fade band</h3><div class="svgwrap" id="vw-bal"></div><figcaption>Flat VWAP, price touches −2 SD at yesterday’s VAL (zone A) and returns to VWAP, touches +2 SD at VAH and comes back.</figcaption></figure>
+    <figure class="panel"><h3>Trend day: the bands are where you add, not where you reverse</h3><div class="svgwrap" id="vw-trend"></div><figcaption>Price rides along +1/+2 SD, every pullback to +1 SD or VWAP is a buy. Those fading +2 SD get run over.</figcaption></figure>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Suggested ATAS colours (ARGB)</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Line</th><th>ARGB</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>VWAP RTH</td><td class="mono">#FF26C6DA</td><td>Strong cyan, 2px, clearly separated from the orange POC</td></tr>
+          <tr><td>±1 SD</td><td class="mono">#9926C6DA</td><td>Same colour, 60% alpha, dashed</td></tr>
+          <tr><td>±2 SD</td><td class="mono">#CCB388FF</td><td>Light purple, reversal zone</td></tr>
+          <tr><td>±3 SD</td><td class="mono">#CCEF5350</td><td>Red, extreme</td></tr>
+          <tr><td>VWAP ETH</td><td class="mono">#80FFFFFF</td><td>Faint white, reference only</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="panel stack">
+      <h3>Common mistakes</h3>
+      <ul class="clean small">
+        <li>Fading ±2 SD on an Open Drive + IB extension day. That is a trend day, the bands are only places to add.</li>
+        <li>Confusing VWAP ETH with VWAP RTH on the M1 chart. Give them clearly different names and colours.</li>
+        <li>Using VWAP as an independent level, ignoring TPO. VWAP only adds points when it coincides with a location.</li>
+        <li>Treating a VWAP touch as a signal. A touch is only a location, you still need CVD + a trigger.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qz-slot" data-qz="levels:vwap" data-title="Quiz 04 · VWAP RTH"></div>
+</section>
+
+<!-- ============ 05 CVD ============ -->
+<section class="tab" id="ch-cvd" data-chapter="cvd">
+  <div class="head">
+    <span class="eyebrow">05 · Add-in confluence #2</span>
+    <h2>CVD divergence: who is aggressive, and can they still move price?</h2>
+    <p class="lead">You said your main weakness right now is reading footprint/delta inaccurately. CVD is the simplification: instead of reading every bid × ask cell, just compare <b>two consecutive swings</b> of price with the two matching CVD swings, and <b>only at a TPO level</b>.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Definition</h3>
+      <div class="out" style="max-height:none">Delta(bar) = Volume filled at the Ask (market buy) − Volume filled at the Bid (market sell)
+CVD(t)     = Σ Delta from the reset point to t
+Reset      = 9:30 ET (same anchor as VWAP RTH and TPO RTH)</div>
+      <ul class="clean small">
+        <li><b>Aggressive (initiator)</b>: market orders, they create delta. <b>Passive</b>: limit orders on the DOM, they absorb delta.</li>
+        <li>Price moves when aggression exceeds the passive liquidity. Divergence happens when the two are out of line.</li>
+        <li>Compare CVD by <i>the swing shape within the same session</i>, not absolute values across days.</li>
+      </ul>
+    </div>
+    <div class="panel stack">
+      <h3>Mandatory filters</h3>
+      <ol class="clean small">
+        <li><b>Location first</b>: only consider divergence at a zone scoring ≥ 4 (tab 03). Divergence in mid-air = noise.</li>
+        <li><b>Regime</b>: on trend days (Open Drive, IB extension, sloping VWAP) counter-trend divergence fails repeatedly. Only accept it when it coincides with Tier 1 + the ±2 SD band.</li>
+        <li><b>Trigger</b>: divergence is not an entry. Wait for an M1 micro-structure break, a level reclaim, or a delta flip.</li>
+        <li><b>Invalidation</b>: beyond the extreme that created the divergence. Price going past it means the idea is wrong.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>The 4-type divergence matrix</h3>
+    <p class="small muted">Top panel: price. Bottom panel: CVD. Purple line = TPO level. The two "exhaustion" types are the aggressor weakening; the two "absorption" types are the aggressor still strong but blocked by passive orders. Absorption is usually stronger because a large player is standing at the level.</p>
+    <div class="grid g2" id="cvd-matrix"></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Checklist for reading CVD at a level (5 steps)</h3>
+      <div id="cvd-check"></div>
+    </div>
+    <div class="panel stack">
+      <h3>Plug it into your confirmation stack</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Grade</th><th>Condition</th><th>Size</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip good">A++</span></td><td>TPO zone ≥ 6 points + VWAP/band match + CVD divergence + trigger (delta flip / DOM)</td><td>Full</td></tr>
+          <tr><td><span class="chip good">A+</span></td><td>TPO zone ≥ 6 + one of the two (VWAP or CVD) + trigger</td><td>Full or 75%</td></tr>
+          <tr><td><span class="chip warn">B</span></td><td>TPO zone + trigger, no confluence</td><td>Sim / skip</td></tr>
+          <tr><td><span class="chip bad">C</span></td><td>No TPO location</td><td>No trade</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">Matches the convention triple-layer = A++, double = A+ in your page "12 — Entry Model" .</p>
+    </div>
+  </div>
+
+  <div class="qz-slot" data-qz="levels:cvd" data-title="Quiz 05 · CVD divergence"></div>
+</section>
+
+<!-- ============ 06 PLAN ============ -->
+<section class="tab" id="ch-plan" data-chapter="plan">
+  <div class="head">
+    <span class="eyebrow">06 · Daily routine</span>
+    <h2>Planning: from yesterday’s profile to 2 scenarios with invalidation</h2>
+    <p class="lead">The goal of the plan is not predicting direction correctly. The goal is that before 9:25 ET you know: <b>where you trade, under which conditions, and what keeps you out</b>. From 01/11/2026 the US has left DST, so 9:30 ET = <b>21:30 Vietnam time</b>.</p>
+  </div>
+
+  <div class="panel stack">
+    <h3>Timeline (ET / Vietnam time, winter EST)</h3>
+    <div id="timeline" class="stack"></div>
+  </div>
+
+  <div class="panel stack">
+    <div class="qhead"><h3>Plan Builder</h3><span class="small muted">Default numbers = illustration read from the 04/11 template screenshot (approximate). Replace them with real numbers from ATAS.</span></div>
+    <div class="grid g2">
+      <div class="stack">
+        <fieldset><legend>Yesterday (RTH)</legend>
+          <div class="form">
+            <div class="field"><label for="p-date">Plan date</label><input type="text" id="p-date" value="05/11/2026"></div>
+            <div class="field"><label for="p-pdh">PD High</label><input type="number" step="0.25" id="p-pdh" value="28975"></div>
+            <div class="field"><label for="p-pdl">PD Low</label><input type="number" step="0.25" id="p-pdl" value="28405"></div>
+            <div class="field"><label for="p-vah">PD VAH</label><input type="number" step="0.25" id="p-vah" value="28795"></div>
+            <div class="field"><label for="p-poc">PD POC</label><input type="number" step="0.25" id="p-poc" value="28680"></div>
+            <div class="field"><label for="p-val">PD VAL</label><input type="number" step="0.25" id="p-val" value="28505"></div>
+            <div class="field"><label for="p-close">PD Close</label><input type="number" step="0.25" id="p-close" value="28657"></div>
+            <div class="field"><label for="p-dtype">Day type</label><select id="p-dtype"><option>Normal</option><option selected>Normal Variation</option><option>Trend</option><option>Double Distribution</option><option>Neutral</option><option>Non-Trend</option></select></div>
+            <div class="field"><label for="p-shape">Shape</label><select id="p-shape"><option>D</option><option selected>P</option><option>b</option><option>B</option><option>Thin / elongated</option></select></div>
+            <div class="field"><label for="p-ph">Poor high?</label><select id="p-ph"><option value="0" selected>No</option><option value="1">Yes</option></select></div>
+            <div class="field"><label for="p-pl">Poor low?</label><select id="p-pl"><option value="0" selected>No</option><option value="1">Yes</option></select></div>
+          </div>
+        </fieldset>
+        <fieldset><legend>Overnight (ETH) & premarket</legend>
+          <div class="form">
+            <div class="field"><label for="p-onh">ON High</label><input type="number" step="0.25" id="p-onh" value="28760"></div>
+            <div class="field"><label for="p-onl">ON Low</label><input type="number" step="0.25" id="p-onl" value="28590"></div>
+            <div class="field"><label for="p-inv">ON inventory</label><select id="p-inv"><option value="long">Net long</option><option value="short">Net short</option><option value="neutral" selected>Neutral</option></select></div>
+            <div class="field"><label for="p-px">Price at 9:15 ET</label><input type="number" step="0.25" id="p-px" value="28700"></div>
+            <div class="field"><label for="p-news">News 8:30/10:00 ET</label><input type="text" id="p-news" value="No red-folder news"></div>
+          </div>
+        </fieldset>
+        <fieldset><legend>Other levels (one per line: name : price)</legend>
+          <textarea id="p-levels" aria-label="List of other levels">03/11 balance high : 28447
+03/11 POC : 28330
+02/11 POC : 28650
+02/11 High : 28892
+RTH gap bottom (30/10 High) : 28861
+RTH gap top (29/10 Low) : 29107
+29/10 POC : 29483
+Purple level : 28176</textarea>
+        </fieldset>
+        <div class="row"><button class="primary" id="p-build">Build plan</button><button id="p-copy">Copy plan</button><span class="small muted" id="p-msg" role="status"></span></div>
+      </div>
+      <div class="stack">
+        <div id="p-loc"></div>
+        <div class="tablewrap"><table class="ladder"><thead><tr><th>Level</th><th class="num">Price</th><th class="num">Distance</th></tr></thead><tbody id="p-ladder"></tbody></table></div>
+        <div class="out" id="p-out"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Pre-market checklist (before 9:25 ET)</h3>
+      <div id="pre-check"></div>
+      <div class="row"><button id="pre-reset">Clear ticks for a new day</button></div>
+    </div>
+    <div class="panel stack">
+      <h3>In-session: decision tree</h3>
+      <div class="ex-list" id="decision"></div>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Post-session review (after 16:00 ET, next morning Vietnam time)</h3>
+    <div class="grid g2">
+      <div id="post-check"></div>
+      <div class="callout">
+        <h4>Score the process, not the result</h4>
+        <p class="small">For each session record 3 numbers: <b>(1)</b> which scenario happened (A / B / neither), <b>(2)</b> trades inside the plan / total trades, <b>(3)</b> did you stop on time at 11:30 ET. After 20 sessions, ratio (2) must be ≥ 90% before switching on Tier 4 scalping.</p>
+      </div>
+    </div>
+    <div class="row"><button id="post-reset">Clear ticks</button></div>
+  </div>
+</section>
+
+<!-- ============ 07 TEMPLATE ============ -->
+<section class="tab" id="ch-template" data-chapter="template">
+  <div class="head">
+    <span class="eyebrow">07 · Case study from your screenshot</span>
+    <h2>NQZ6 · Daily Profile RTH · 29/10 → 04/11/2026</h2>
+    <p class="lead">The numbers below are read from screenshot coordinates, so the error is about ±10–15 points. The 04/11 session was still running when captured (price 28,657.25), so the 04/11 VA/POC is <i>developing</i>. Use this tab to practise reading; take tradeable numbers directly from ATAS.</p>
+  </div>
+
+  <figure class="panel stack">
+    <h3>5-session value migration</h3>
+    <div class="svgwrap" id="migration"></div>
+    <figcaption>Thin bar = RTH range, pink box = VA, orange tick = POC, left/right ticks = open/close. Dashed grey zone = unfilled RTH gap, hatched zone = 29/10 single prints.</figcaption>
+  </figure>
+
+  <div class="stack" id="days"></div>
+
+  <div class="panel stack">
+    <h3>Where your template is already good, and what to add</h3>
+    <div class="grid g2">
+      <div class="card"><h4><span class="chip good">Already there</span></h4><ul class="clean small">
+        <li>TPO + volume profile overlaid: you can see presence vs participation.</li>
+        <li>Coloured VA and POC extended to the right: easy to see which levels are still "naked".</li>
+        <li>IB bar on the left of each day, open/close markers.</li>
+        <li>3 separate tabs Weekly / ETH / RTH.</li>
+      </ul></div>
+      <div class="card"><h4><span class="chip warn">Should add</span></h4><ul class="clean small">
+        <li>Turn on marking for <b>single prints</b> and <b>poor high/low</b> (or draw them by hand) so you never miss a magnet.</li>
+        <li>Only extend the POC/VA of the last 3–5 days and the levels still naked. The many faint horizontal bands in the screenshot make Tiers hard to tell apart.</li>
+        <li>Show <b>IB extension 1.5x/2x</b> on the M1 execution chart.</li>
+        <li>A 5–10 day composite chart when VAs overlap (like 30/10–04/11).</li>
+      </ul></div>
+    </div>
+  </div>
+  <div class="qz-slot" data-qz="levels:case" data-title="Quiz 07 · Case study template"></div>
+</section>
+
+
+</div>
+<footer class="ui-foot">Study playbook for NQ intraday. Not investment advice. Traditional statistics (80% rule, day-type frequencies) must be verified with your own backtests before trading real money.</footer>
+</main>
+<script src="assets/js/en/levels-data.js?v=4"></script>
+<script src="assets/js/en/fp.js?v=4"></script>
+<script src="assets/js/en/bank-levels.js?v=4"></script>
+<script src="assets/js/en/bank-tools.js?v=4"></script>
+<script src="assets/js/en/quiz.js?v=4"></script>
+<script src="assets/js/en/core.js?v=4"></script>
+<script src="assets/js/en/levels-page.js?v=4"></script>
+</body>
+</html>

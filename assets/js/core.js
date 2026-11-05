@@ -40,6 +40,12 @@ const LOGO=`<svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><
 const page=document.body.dataset.page||'home';
 const cur=NAV.find(n=>n.k===page)||NAV[0];
 document.body.style.setProperty('--c',cur.c);
+/* ---------- ngôn ngữ: trang VI = x.html, trang EN = x.en.html ---------- */
+const LANG=document.documentElement.lang==='en'?'en':'vi';
+const FILE={home:'index',tools:'tools',levels:'levels',quiz:'quiz'}[page]||'index';
+const langHref=to=>FILE+(to==='en'?'.en':'')+'.html'+location.hash;
+(function(){const pref=store.get('ofs.lang',null);if(pref&&pref!==LANG&&!/[?&]stay/.test(location.search))location.replace(langHref(pref));})();
+
 
 /* ---------- build shell ---------- */
 function buildShell(){
@@ -65,9 +71,10 @@ function buildShell(){
   const top=document.createElement('header');top.className='ui-top';
   top.innerHTML=`<div class="ui-top-in"><button class="ui-burger" type="button" aria-label="Mở menu" aria-controls="ui-side" aria-expanded="false">${svg('menu',20)}</button>
     <div class="ui-crumb"><span class="dot"></span>${cur.chapters?`<span class="crumb-course">${cur.label}</span><span class="sep" id="ui-sep" hidden>/</span><b id="ui-chtitle"></b>`:`<b id="ui-chtitle">${cur.label}</b>`}</div>
-    <div class="ui-top-right"><span class="ui-clock" id="ui-clock" title="Giờ New York · phiên RTH NQ"><span class="led"></span><span id="ui-clock-t"></span></span></div></div>
+    <div class="ui-top-right"><div class="ui-lang" role="group" aria-label="Ngôn ngữ"><a href="${langHref('vi')}" data-lang="vi" class="${LANG==='vi'?'on':''}" hreflang="vi">VI</a><a href="${langHref('en')}" data-lang="en" class="${LANG==='en'?'on':''}" hreflang="en">EN</a></div><span class="ui-clock" id="ui-clock" title="Giờ New York · phiên RTH NQ"><span class="led"></span><span id="ui-clock-t"></span></span></div></div>
     <div class="ui-progress"><i id="ui-prog"></i></div>`;
   main.insertBefore(top,main.firstChild);
+  $$('.ui-lang a',top).forEach(a=>a.addEventListener('click',e=>{e.preventDefault();store.set('ofs.lang',a.dataset.lang);location.href=langHref(a.dataset.lang);}));
   $('.ui-burger',top).addEventListener('click',()=>document.body.classList.contains('nav-open')?closeNav():openNav());
 
   const bn=document.createElement('nav');bn.className='ui-bottom';bn.setAttribute('aria-label','Điều hướng nhanh');
@@ -137,16 +144,20 @@ function markSeen(){
 /* ---------- Phiên RTH: tính theo New York, hiển thị theo giờ Việt Nam (tự xử lý DST) ---------- */
 const TZ_NY='America/New_York', TZ_VN='Asia/Ho_Chi_Minh';
 function zparts(d,tz){
-  const f=new Intl.DateTimeFormat('en-US',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
+  const f=new Intl.DateTimeFormat('en-US',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
   const p=Object.fromEntries(f.formatToParts(d).map(x=>[x.type,x.value]));
-  return{y:+p.year,mo:+p.month,d:+p.day,h:+p.hour%24,mi:+p.minute};
+  return{y:+p.year,mo:+p.month,d:+p.day,h:+p.hour%24,mi:+p.minute,s:+(p.second||0)};
 }
 function nyDate(y,mo,d,h,mi){ // giờ NY → Date thật
   const want=Date.UTC(y,mo-1,d,h,mi);let t=want;
   for(let k=0;k<3;k++){const p=zparts(new Date(t),TZ_NY);t-=Date.UTC(p.y,p.mo-1,p.d,p.h,p.mi)-want;}
   return new Date(t);
 }
-const hhmm=(d,tz)=>{const p=zparts(d,tz);return`${String(p.h).padStart(2,'0')}:${String(p.mi).padStart(2,'0')}`;};
+const p2=n=>String(n).padStart(2,'0');
+const hhmm=(d,tz)=>{const p=zparts(d,tz);return`${p2(p.h)}:${p2(p.mi)}`;};
+const hhmmss=(d,tz)=>{const p=zparts(d,tz);return`${p2(p.h)}:${p2(p.mi)}:${p2(p.s)}`;};
+/* đếm ngược realtime dạng hh:mm:ss (thêm số ngày nếu > 24h) */
+function clock(ms){const t=Math.max(0,Math.floor(ms/1000)),d=Math.floor(t/86400),h=Math.floor(t%86400/3600),m=Math.floor(t%3600/60),s=t%60;return(d?d+' ngày ':'')+`${p2(h)}:${p2(m)}:${p2(s)}`;}
 const dayVN=d=>d.toLocaleDateString('vi-VN',{timeZone:TZ_VN,weekday:'long',day:'2-digit',month:'2-digit'});
 const dkey=(d,tz)=>{const p=zparts(d,tz);return p.y*10000+p.mo*100+p.d;};
 function relDay(d,now=new Date()){const a=dkey(d,TZ_VN),b=dkey(now,TZ_VN),t=dkey(new Date(now.getTime()+864e5),TZ_VN);
@@ -164,7 +175,7 @@ function session(now=new Date()){
     if(now<close){
       const state=now>=open?'open':(open-now<=5.5*36e5?'pre':'closed');
       return{now,open,wEnd,close,state,inWindow:now>=open&&now<wEnd,
-        vnNow:hhmm(now,TZ_VN),nyNow:hhmm(now,TZ_NY),openVN:hhmm(open,TZ_VN),wEndVN:hhmm(wEnd,TZ_VN),closeVN:hhmm(close,TZ_VN),
+        vnNow:hhmmss(now,TZ_VN),nyNow:hhmmss(now,TZ_NY),openVN:hhmm(open,TZ_VN),wEndVN:hhmm(wEnd,TZ_VN),closeVN:hhmm(close,TZ_VN),
         openDay:relDay(open,now),nyDay:now.toLocaleDateString('vi-VN',{timeZone:TZ_NY,weekday:'long',day:'2-digit',month:'2-digit'})};
     }
   }
@@ -172,9 +183,9 @@ function session(now=new Date()){
 function tick(){
   const s=session(),c=$('#ui-clock'),t=$('#ui-clock-t');if(!c||!t||!s)return;
   let msg;
-  if(s.inWindow)msg=`Cửa sổ trade · còn ${dur(s.wEnd-s.now,1)}`;
+  if(s.inWindow)msg=`<span class="txt-mid">Cửa sổ trade · </span>còn ${clock(s.wEnd-s.now)}`;
   else if(s.state==='open')msg=`RTH đang mở · đóng ${s.closeVN}`;
-  else msg=`RTH ${s.openVN} · còn ${dur(s.open-s.now,1)}`;
+  else msg=`<span class="txt-mid">RTH ${s.openVN} · </span>còn ${clock(s.open-s.now)}`;
   c.className='ui-clock '+s.state;c.title=`Giờ Việt Nam. RTH NQ 9:30–16:00 ET = ${s.openVN}–${s.closeVN} giờ VN`;
   t.innerHTML=`<span class="txt-long">VN ${s.vnNow} · </span>${msg}`;
 }
@@ -189,9 +200,9 @@ function mini(){
     <div style="display:flex;justify-content:space-between;gap:8px"><a href="quiz.html#cau-sai">Câu sai: ${s.wrong}</a><a href="index.html#backup">Sao lưu tiến độ</a></div>`;
 }
 
-window.OFS={store,NAV,session,dur,toast,svg,seen,mini};
+window.OFS={store,NAV,session,dur,clock,toast,svg,seen,mini,LANG};
 
-buildShell(); markSeen(); tick(); setInterval(tick,15000);
+buildShell(); markSeen(); tick(); (function loop(){tick();setTimeout(loop,1000-Date.now()%1000+5);})();
 document.addEventListener('DOMContentLoaded',()=>{chapterRouter();mini();});
 document.addEventListener('qz:change',mini);
 })();

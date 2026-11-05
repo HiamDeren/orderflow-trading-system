@@ -39,11 +39,11 @@ function art(){
 
 /* ---------- session (giờ Việt Nam) ---------- */
 function sess(){
-  const el=$('#sess');if(!el)return;const s=session();if(!s)return;const {dur}=window.OFS;
+  const el=$('#sess');if(!el)return;const s=session();if(!s)return;const {clock}=window.OFS;
   let head;
-  if(s.inWindow)head=`<b>Đang trong cửa sổ trade</b> · kết thúc ${s.wEndVN} (còn ${dur(s.wEnd-s.now)})`;
-  else if(s.state==='open')head=`<b>RTH đang mở</b> · đóng lúc ${s.closeVN} (còn ${dur(s.close-s.now)})`;
-  else head=`<b>RTH mở lúc ${s.openVN} ${s.openDay}</b> · <span style="white-space:nowrap">còn ${dur(s.open-s.now)}</span>`;
+  if(s.inWindow)head=`<b>Đang trong cửa sổ trade</b> · kết thúc ${s.wEndVN} (còn ${clock(s.wEnd-s.now)})`;
+  else if(s.state==='open')head=`<b>RTH đang mở</b> · đóng lúc ${s.closeVN} (còn ${clock(s.close-s.now)})`;
+  else head=`<b>RTH mở lúc ${s.openVN} ${s.openDay}</b> · <span style="white-space:nowrap">còn ${clock(s.open-s.now)}</span>`;
   el.className='sess '+s.state;
   el.innerHTML=`<div><i class="led"></i>${head}</div>
     <div>Giờ VN <b>${s.vnNow}</b> · New York <b>${s.nyNow}</b> (${s.nyDay})</div>
@@ -108,6 +108,6 @@ function backup(){
     localStorage.clear();toast('Đã xoá');setTimeout(()=>location.reload(),600);});
 }
 
-document.addEventListener('DOMContentLoaded',()=>{art();sess();cont();courses();quiz();backup();setInterval(sess,15000);});
+document.addEventListener('DOMContentLoaded',()=>{art();sess();cont();courses();quiz();backup();(function loop(){sess();setTimeout(loop,1000-Date.now()%1000+5);})();});
 document.addEventListener('qz:change',()=>{quiz();courses();});
 })();

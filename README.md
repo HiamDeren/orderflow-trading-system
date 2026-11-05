@@ -19,13 +19,19 @@ Website học tập gộp hai playbook **Orderflow Tools** và **TPO Level Playb
 
 Tiến độ lưu `localStorage` theo từng trình duyệt. Dùng mục **Sao lưu & khôi phục** ở trang Tổng quan để chuyển tiến độ giữa các thiết bị.
 
+## Song ngữ VI / EN
+
+Nút **VI | EN** trên thanh trên cùng. Bản tiếng Việt là `x.html`, bản tiếng Anh là `x.en.html` (JS ở `assets/js/en/`). Lựa chọn ngôn ngữ được nhớ; tiến độ dùng chung cho cả hai bản.
+
+Bản EN được sinh tự động từ bản VI: sửa nội dung tiếng Việt rồi chạy `python3 i18n/build_en.py`. Script báo các câu tiếng Việt mới chưa có bản dịch — thêm chúng vào `i18n/en_extra.tsv` (`câu VI<TAB>câu EN`) rồi chạy lại.
+
 ## Cấu trúc
 
 ```
 assets/css/app.css        design system + shell + quiz engine
 assets/css/tools.css      style component khoá Tools (scope .pg-tools)
 assets/css/levels.css     style component khoá Level (scope .pg-levels)
-assets/js/core.js         sidebar, topbar, bottom nav, router chương, đồng hồ phiên NY
+assets/js/core.js         sidebar, topbar, bottom nav, router chương, đồng hồ phiên realtime, nút VI/EN
 assets/js/quiz.js         quiz engine (luyện tập / thi thử / ôn câu sai)
 assets/js/fp.js           renderer footprint kiểu cluster ATAS, DOM/Tape helpers, 13 kịch bản
 assets/js/tools-page.js   hình minh hoạ khoá Tools

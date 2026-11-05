@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080B10">
+<title>Orderflow Tools · Orderflow System</title>
+<meta name="description" content="DOM, Tape, Footprint, Delta & CVD, 13 footprint scenarios for NQ intraday on ATAS.">
+<link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/css/app.css?v=4">
+<link rel="stylesheet" href="assets/css/tools.css?v=4">
+</head>
+<body data-page="tools">
+<main class="ui-main">
+<div class="ui-content pg-tools">
+
+<section class="ch" id="ch-tong-quan" data-chapter="tong-quan">
+  <div class="ui-hero" style="--c:var(--c-tools)">
+    <span class="ui-eyebrow">Course 2 · NQ · ATAS · Rithmic · intraday RTH</span>
+    <h1 class="ui-h1">Orderflow Tools Playbook</h1>
+    <p class="ui-lede">All the orderflow knowledge of the system in one place: DOM, tape, footprint, delta and CVD, how to combine them at TPO key levels, 13 footprint scenarios and a glossary. Illustrations are drawn in ATAS cluster style, numbers are sample data.</p>
+    <div class="facts"><span><b>9</b> chapters</span><span><b>13</b> footprint scenarios</span><span><b>87</b> quiz questions</span><span><b>5</b> phases at a key level</span></div>
+    <div class="cta"><a class="ui-btn primary" href="#nen-tang">Start learning →</a><a class="ui-btn" href="#kich-ban">See the 13 scenarios</a><a class="ui-btn ghost" href="quiz.en.html#thi-thu">50-question mock exam</a></div>
+  </div>
+
+  <div class="chh"><span class="no">00</span><h2>Overview: each tool answers one question</h2>
+  <p>Orderflow is not about watching as much as possible. Each tool is used at a specific moment as price approaches a key level drawn from TPO.</p></div>
+  <div class="grid g3">
+    <div class="card"><span class="en">Depth of Market</span><h5>DOM</h5><p>Who is waiting where? Limit orders resting at each price, holding or being pulled.</p></div>
+    <div class="card"><span class="en">Time &amp; Sales / Smart Tape</span><h5>Tape</h5><p>Who is attacking, with what size, fast or slow? Every trade printed in real time.</p></div>
+    <div class="card"><span class="en">Cluster chart</span><h5>Footprint</h5><p>In the candle that just closed, which side won at each price? This is the entry trigger.</p></div>
+    <div class="card"><span class="en">Delta</span><h5>Candle delta</h5><p>Aggressive buying minus aggressive selling within one candle. Compare with the candle direction to see agreement or absorption.</p></div>
+    <div class="card"><span class="en">Cumulative Delta</span><h5>CVD</h5><p>Delta accumulated through the session. Is price reaching the level with building or fading force?</p></div>
+    <div class="card"><span class="en">Context</span><h5>TPO + VWAP</h5><p>Where it is worth trading, and whether to fade or break. Not orderflow, but it decides whether orderflow means anything.</p></div>
+  </div>
+  <h3>The 5-phase sequence when price reaches a key level</h3>
+  <div class="flow">
+    <div class="row"><div class="ph"><b>1. Before arrival</b><span>15–20 ticks before the level</span></div><div class="tl ctx"><b>VWAP: filter gate</b><span>Where is the level relative to VWAP RTH and the σ bands? Pick the fade or break hypothesis, estimate R:R.</span></div></div>
+    <div class="row"><div class="ph"><b>2. Approach</b><span>last 5–10 ticks</span></div><div class="tl of"><b>CVD + tape speed</b><span>Is price reaching the level with building or fading force?</span></div></div>
+    <div class="row"><div class="ph"><b>3. Touching the level</b><span>inside the TPO zone</span></div><div class="tl of"><b>DOM + Tape</b><span>Are resting orders at the level holding or pulling? Do large orders hitting it move price?</span></div></div>
+    <div class="row"><div class="ph"><b>4. Trigger</b><span>closed M1 candle</span></div><div class="tl tr"><b>Footprint</b><span>Absorption, delta flip or stacked imbalance. No trigger, no entry.</span></div></div>
+    <div class="row"><div class="ph"><b>5. Management</b><span>after entry</span></div><div class="tl mg"><b>Stop beyond the signal zone, target VWAP or the next level</b><span>Exit when an invalidation condition appears.</span></div></div>
+  </div>
+</section>
+
+
+<section class="ch" id="ch-nen-tang" data-chapter="nen-tang">
+  <div class="chh"><span class="no">01</span><h2>Foundations: market orders, limit orders and the auction</h2>
+  <p>Every orderflow tool measures one of two things: resting orders (passive) or orders filled by the aggressive side (aggressive).</p></div>
+  <p class="def"><b>Orderflow</b> is reading the actual flow of orders being filled and resting to see which side controls price at a specific level, instead of only looking at the result, the candle.</p>
+  <div class="grid g2" style="margin-top:12px">
+    <div class="card"><h5>Limit order = passive</h5><p>Rests at a price, waiting for someone else to fill it. Buy limits sit on the bid, sell limits on the ask. Shown on the DOM. Can be pulled at any time, so it can be a spoof.</p></div>
+    <div class="card"><h5>Market order = aggressor</h5><p>Accepts the other side’s price to fill immediately. Market buys fill on the ask, market sells fill on the bid. Shown on the tape and footprint after the fill.</p></div>
+  </div>
+  <h3>How price moves</h3>
+  <ol class="steps">
+    <li><span>Price only ticks up when all sell limits at the current ask are eaten by market buys, or pulled by whoever placed them.</span></li>
+    <li><span>So market orders are the side that <b>creates movement</b>, limit orders are the side that <b>blocks it or lets it through</b>.</span></li>
+    <li><span>Heavy market buying without price rising means a large sell limit is absorbing: this is the root of the absorption concept.</span></li>
+    <li><span>Price moves fast through areas with few resting orders (LVN) and slows down in areas with many orders and much volume (HVN). This is the link between orderflow and TPO/volume profile.</span></li>
+  </ol>
+  <h3>Two kinds of activity in Auction Market Theory</h3>
+  <div class="grid g2">
+    <div class="card"><h5>Initiative</h5><p>The aggressive side pushes price out of the value area and it gets accepted. Orderflow: stacked imbalance, CVD confirms, fast tape. Fits the playbook <b>Break</b>.</p></div>
+    <div class="card"><h5>Responsive</h5><p>Price leaves value and gets pushed back. Orderflow: absorption, exhaustion, divergence, delta flip. Fits the playbook <b>Fade</b>.</p></div>
+  </div>
+  <div class="qz-slot" data-qz="tools:nen" data-title="Quick check · Foundations"></div>
+</section>
+
+<!-- ============ DOM ============ -->
+<section class="ch" id="ch-dom" data-chapter="dom">
+  <div class="chh"><span class="no">02</span><h2>DOM: the order book</h2><p>ATAS: Smart DOM. Used in phase 3 when price touches the level.</p></div>
+  <p class="def"><b>DOM (Depth of Market)</b> shows the number of limit contracts resting at each price around the current price: the bid side (resting buys) and the ask side (resting sells). The DOM shows passive liquidity, not trades that have happened.</p>
+  <h3>Concepts</h3>
+  <div class="grid g3">
+    <div class="card"><h5>Stacking</h5><p>Resting orders added at a price as price approaches. Someone wants to defend that level.</p></div>
+    <div class="card"><h5>Pulling</h5><p>Resting orders pulled just before price touches. An open road for price to pass.</p></div>
+    <div class="card"><h5>Wall</h5><p>A price with unusually large size compared with its neighbours. Only meaningful when volume trades into it and it still stands.</p></div>
+    <div class="card"><h5>Spoof</h5><p>A large order placed to create an impression, then pulled before it is filled. The reason not to trust the DOM alone.</p></div>
+    <div class="card"><h5>Iceberg / refill</h5><p>An order that shows only part of its size. Volume traded at the price far exceeds the displayed size, and the size keeps refilling.</p></div>
+    <div class="card"><h5>Heatmap</h5><p>DOM history over time (ATAS: DOM Levels). Shows how long a wall has existed and whether it was pulled before price arrived.</p></div>
+  </div>
+  <h3>How to read</h3>
+  <ol class="steps">
+    <li><span>Only watch the DOM when price is a few ticks from the chosen level. Do not use the DOM to find setups.</span></li>
+    <li><span>Compare size at the level with when price was far away: an increase is stacking, a decrease without traded volume is pulling.</span></li>
+    <li><span>Cross-check with the tape: size decreasing <b>because of fills</b> (the wall being eaten) is completely different from size decreasing <b>because of pulling</b>.</span></li>
+    <li><span>Watch the opposite side too: a long fade needs the ask above to thin out; a long break needs the bid below to follow price up.</span></li>
+  </ol>
+  <h3>Examples</h3>
+  <div class="grid g2">
+    <div class="ex"><div class="t">A. Stacking: the level holds</div><div class="vz pad"><table class="t dom" id="domA"></table></div>
+      <p class="cap">VAL 25,410.50. At T1 price is 6 ticks away, bid at the level is 140. At T2 price touches, the bid rises to <b>360</b> even though volume has traded into it; the ask above shrinks. Supports a <b>fade long</b> if the footprint gives a trigger.</p></div>
+    <div class="ex"><div class="t">B. Pulling: the level breaks</div><div class="vz pad"><table class="t dom" id="domB"></table></div>
+      <p class="cap">Same VAL. At T1 the bid at the level is 300. At T2, with price 1 tick away, the bid is only <b>18</b> with almost no traded volume: the orders were pulled. Do not fade; prepare for the scenario <b>break down</b>.</p></div>
+  </div>
+  <div class="ex"><div class="t">C. Iceberg on the bid</div><div class="vz pad"><table class="t" id="ice"></table></div>
+    <p class="cap">The DOM always shows 12 lots at 25,410.50 but the tape shows 186 lots traded at this price and price has not broken. A large player is absorbing with a hidden order. An iceberg at an extreme usually holds price; an iceberg that gets broken usually leads to a strong move in the break direction.</p></div>
+  <h3>Do and don’t</h3>
+  <div class="do-dont">
+    <div class="card"><h5>Do</h5><ul><li>Use the DOM to fine-tune entry at a level chosen in advance.</li><li>Always confirm with the tape: are there real fills?</li><li>Note whether the opposite side is thin or thick.</li></ul></div>
+    <div class="card"><h5>Don’t</h5><ul><li>Enter just because you see a big wall.</li><li>Watching the DOM around the 8:30, 10:00 ET news or the 9:30 spike.</li><li>Watching the DOM continuously all session, which causes fatigue and overtrading.</li></ul></div>
+  </div>
+  <div class="qz-slot" data-qz="tools:dom" data-title="Quick check · DOM"></div>
+</section>
+
+<!-- ============ TAPE ============ -->
+<section class="ch" id="ch-tape" data-chapter="tape">
+  <div class="chh"><span class="no">03</span><h2>Tape: time & sales</h2><p>ATAS: Smart Tape (2 columns Price + Volume, coloured by aggressor side). Used in phases 2 and 3.</p></div>
+  <p class="def"><b>Tape (Time &amp; Sales)</b> lists every filled trade: price, size, aggressor side (buy at the ask or sell at the bid) and time. Smart Tape merges orders split into pieces at the same moment into one line so you see the real size.</p>
+  <h3>Concepts</h3>
+  <div class="grid g3">
+    <div class="card"><h5>Print</h5><p>One line on the tape. Green: aggressive buy filled at the ask. Red: aggressive sell filled at the bid.</p></div>
+    <div class="card"><h5>Size filter</h5><p>Show only orders above a threshold. Set it by session percentile (e.g. top 1%), tuned separately for RTH and ETH.</p></div>
+    <div class="card"><h5>Big trades</h5><p>Orders above the size threshold, drawn as bubbles on the chart. Big trades at an extreme with no follow-through: that side is trapped.</p></div>
+    <div class="card"><h5>Speed of tape</h5><p>Trades per second. A burst when breaking a range is ignition; a burst at the end of a long leg is climax.</p></div>
+    <div class="card"><h5>Absorption on the tape</h5><p>Large orders keep hitting the same price but price does not follow through.</p></div>
+    <div class="card"><h5>Initiative on the tape</h5><p>A string of large one-sided orders, price jumps through several levels in a row.</p></div>
+  </div>
+  <h3>How to read</h3>
+  <ol class="steps">
+    <li><span>In the last 5–10 ticks before the level: slowing speed supports a fade, accelerating speed supports a break.</span></li>
+    <li><span>On touching the level ask one question only: do large orders hitting it make price follow through?</span></li>
+    <li><span>Combine with the DOM: large orders fill but displayed size does not shrink, meaning there is a refill.</span></li>
+    <li><span>After absorption, wait for a string of large orders from the opposite side: that is the sign of a side change.</span></li>
+  </ol>
+  <h3>Examples</h3>
+  <div class="grid g2">
+    <div class="ex"><div class="t">A. Absorption at VAL</div><div class="vz pad"><table class="t" id="tapeA"></table></div>
+      <p class="cap">Three sell orders of 48, 62, 55 lots in a row at 25,411.00 (yellow) without price dropping. Then buy orders of 31 and 24 lots lift price (green). The sellers were absorbed, supporting a long fade.</p></div>
+    <div class="ex"><div class="t">B. Initiative breaking VAH</div><div class="vz pad"><table class="t" id="tapeB"></table></div>
+      <p class="cap">A string of 40–70 lot buys in under 1 second, price jumps 4 ticks through 25,430.00. On the retest only 3–6 lot sells appear. Supports a long break.</p></div>
+  </div>
+  <h3>Do and don’t</h3>
+  <div class="do-dont">
+    <div class="card"><h5>Do</h5><ul><li>Always turn on the size filter, otherwise the NQ tape runs too fast to read.</li><li>Compare speed with the baseline for the same time of day.</li><li>Read the tape together with the DOM at the level.</li></ul></div>
+    <div class="card"><h5>Don’t</h5><ul><li>Treating a single large order as a signal.</li><li>Reading the tape mid-range when there is no level.</li><li>Trusting a speed spike during news as a signal.</li></ul></div>
+  </div>
+  <div class="qz-slot" data-qz="tools:tape" data-title="Quick check · Tape"></div>
+</section>
+
+<!-- ============ FOOTPRINT ============ -->
+<section class="ch" id="ch-footprint" data-chapter="footprint">
+  <div class="chh"><span class="no">04</span><h2>Footprint: cluster chart</h2><p>ATAS: Cluster chart, Bid × Ask, Imbalance. Used in phase 4, read only on closed M1 candles.</p></div>
+  <p class="def"><b>Footprint</b> splits each candle into price levels and shows, at each level, how much volume was filled by aggressive sellers (bid column, left) and aggressive buyers (ask column, right). It shows how the candle was built.</p>
+  <h3>Anatomy of a footprint candle</h3>
+  <p>The sample candle below is a bullish M1 candle. Each numbered circle matches a component in the table next to it; the last column is the value read from this very candle.</p>
+  <div class="anat-wrap">
+    <div class="vz" id="anat"></div>
+    <ol class="anat-list">
+      <li><i>1</i><div><b>Candle high</b><span>The highest traded price. A high with both bid and ask non-zero is an unfinished auction, price often comes back to visit.</span></div><em>25,412.25 · 6 × 18 · unfinished</em></li>
+      <li><i>2</i><div><b>Candle low</b><span>The lowest traded price. A low with 0 on the bid side is a finished auction: no aggressive sellers left below.</span></div><em>25,410.75 · 12 × 9 · unfinished</em></li>
+      <li><i>3</i><div><b>Body and wick</b><span>The vertical bar on the left. The bright part is the body, from Open to Close; the dark part is the wick. A blue-grey body is a bullish candle, grey is bearish.</span></div><em>Open 25,411.00 → Close 25,412.25, closes at the high</em></li>
+      <li><i>4</i><div><b>Price axis</b><span>Each row is one price: 1 tick (0.25 points) on NQ, or a group of ticks if row merging is on.</span></div><em>7 price levels, 1 tick per row</em></li>
+      <li><i>5</i><div><b>Bid column (left)</b><span>Volume filled by aggressive sellers into the bid (market sell orders).</span></div><em>Σ bid = 174</em></li>
+      <li><i>6</i><div><b>Ask column (right)</b><span>Volume filled by aggressive buyers into the ask (market buy orders).</span></div><em>Σ ask = 411</em></li>
+      <li><i>7</i><div><b>Imbalance (bold white numbers)</b><span>Ask at a level at least 3 times the bid one tick lower (or the reverse for the sell side), each cell at least 20 lots.</span></div><em>118 vs 35 = 337% · 40 vs 12 = 333%</em></li>
+      <li><i>8</i><div><b>Candle POC (orange box)</b><span>The level with the most total volume in the candle. POC in the middle of the body: price accepted; POC at the tail: price rejected there.</span></div><em>25,411.50 · 41 × 118 = 159</em></li>
+      <li><i>9</i><div><b>Volume bar and level delta</b><span>Length is the volume at that level (bid + ask). Blue when the level delta is positive, grey when negative. The number on the bar is the level delta: ask − bid.</span></div><em>At POC: 118 − 41 = +77</em></li>
+      <li><i>10</i><div><b>Candle delta</b><span>Total ask minus total bid for the whole candle: net aggressive buying.</span></div><em>411 − 174 = +237</em></li>
+      <li><i>11</i><div><b>Delta/Volume (Delta%)</b><span>Delta divided by candle volume. Shows how dominant one side is, regardless of candle size.</span></div><em>237 / 585 = 40.5%, ATAS rounds to 41%</em></li>
+      <li><i>12</i><div><b>Candle volume</b><span>All contracts traded in the candle: Σ bid + Σ ask.</span></div><em>174 + 411 = 585</em></li>
+    </ol>
+  </div>
+  <div class="grid g3" style="margin-top:12px">
+    <div class="card"><h5>Candle value area</h5><p>70% of the candle’s volume around the POC. ATAS can shade this zone in the cluster. On the sample candle: 25,411.25 – 25,412.00. A close outside the candle’s value area shows the pushing side was strong until the end of the candle.</p></div>
+    <div class="card"><h5>Max delta / Min delta</h5><p>The highest and lowest delta reached while the candle was running (Cluster Statistic). Not visible on a closed candle, but shows which side’s force was reversed inside the candle.</p></div>
+    <div class="card"><h5>Trades and time</h5><p>Number of trades and the candle time. Large volume with few trades means large orders; large volume with many trades is a crowd of small orders.</p></div>
+  </div>
+
+  <h3>Delta and Delta%</h3>
+  <p class="def"><b>Delta</b> = Σ ask − Σ bid, in contracts: net aggressive buying in the candle. <b>Delta%</b> = Delta ÷ Volume × 100, ranging from −100% to +100%: how dominant one side is. ATAS calls Delta% <b>Delta/Volume</b> in Cluster Statistic.</p>
+  <div class="grid g2" style="margin-top:12px">
+    <div class="vz pad"><table class="t" id="dcalc"></table></div>
+    <div>
+      <h4>Step-by-step calculation with the sample candle</h4>
+      <ol class="steps">
+        <li><span>Compute each level’s delta: ask − bid. This is the number on the ATAS horizontal bar.</span></li>
+        <li><span>Add up the level deltas, or take Σ ask − Σ bid: 411 − 174 = <b>+237</b>.</span></li>
+        <li><span>Candle volume = Σ bid + Σ ask = <b>585</b>.</span></li>
+        <li><span>Delta% = 237 ÷ 585 = <b>40.5%</b>. Aggressive buyers take about 70% of volume (411/585), sellers about 30%.</span></li>
+      </ol>
+      <p style="font-size:14px;color:var(--muted)">Tip: Delta% = (ask share − bid share). 70% − 30% = 40%.</p>
+    </div>
+  </div>
+  <h4 style="margin-top:18px">Delta% reading scale</h4>
+  <div class="dscale">
+    <div class="z s3"><b>≤ −30%</b><span>One-sided selling</span></div>
+    <div class="z s2"><b>−30 … −15%</b><span>Clear selling</span></div>
+    <div class="z s1"><b>−15 … −5%</b><span>Leaning sell</span></div>
+    <div class="z s0"><b>−5 … +5%</b><span>Balanced</span></div>
+    <div class="z b1"><b>+5 … +15%</b><span>Leaning buy</span></div>
+    <div class="z b2"><b>+15 … +30%</b><span>Clear buying</span></div>
+    <div class="z b3"><b>≥ +30%</b><span>One-sided buying</span></div>
+  </div>
+  <p style="font-size:13.5px;color:var(--muted);margin-top:8px">Thresholds are system conventions, adjust them after backtesting. The ±15% threshold is the one used for the delta flip trigger.</p>
+  <h4 style="margin-top:18px">Why you need Delta%, not just Delta</h4>
+  <div class="vz pad"><table class="t" id="dcomp"></table></div>
+  <p style="margin-top:10px">Candles A and B both have delta +210 but mean very different things. Candle A is a high-volume opening candle, +210 is only 5%: both sides almost balanced. Candle B is a low-volume lunchtime candle, +210 is 34%: buyers dominate. Absolute delta is for comparing with itself at the same time of day; Delta% is for comparing candles with different volume.</p>
+  <div class="do-dont">
+    <div class="card"><h5>Read correctly</h5><ul><li>Always read Delta% with the candle direction: delta% against the body direction at a level is a sign of absorption.</li><li>Large Delta% on the candle breaking a level, in the break direction: initiative.</li><li>Per-level Delta% (e.g. POC: 77 / 159 = 48%) shows which level one side took over.</li></ul></div>
+    <div class="card"><h5>Easy to misread</h5><ul><li>Very large Delta% at the end of a long leg can be a climax, not continuation force.</li><li>Delta% is only the end-of-candle result; a candle closing at +5% may have reached +40% and been reversed (see max delta).</li><li>Comparing absolute delta between 9:30 and 12:00 is a wrong comparison.</li></ul></div>
+  </div>
+
+  <h3>Diagonal imbalance</h3>
+  <div class="grid g2">
+    <div class="vz pad"><svg viewBox="0 0 360 150" role="img" aria-label="Diagonal comparison of the ask with the bid one tick lower">
+      <text x="10" y="20" font-size="11" fill="#7E8287" font-family="JetBrains Mono,monospace">Price</text><text x="150" y="20" font-size="11" fill="#7E8287" font-family="JetBrains Mono,monospace">Bid</text><text x="240" y="20" font-size="11" fill="#7E8287" font-family="JetBrains Mono,monospace">Ask</text>
+      <text x="10" y="58" font-size="13" fill="#A3A6AA" font-family="JetBrains Mono,monospace">25,412.25</text><text x="180" y="58" text-anchor="end" font-size="15" fill="#A3A6AA" font-family="Segoe UI,Arial">22</text><text x="240" y="58" font-size="15" font-weight="700" fill="#FFFFFF" font-family="Segoe UI,Arial">120</text>
+      <text x="10" y="104" font-size="13" fill="#A3A6AA" font-family="JetBrains Mono,monospace">25,412.00</text><text x="180" y="104" text-anchor="end" font-size="15" fill="#A3A6AA" font-family="Segoe UI,Arial">30</text><text x="240" y="104" font-size="15" fill="#A3A6AA" font-family="Segoe UI,Arial">41</text>
+      <path d="M186 98 L236 60" stroke="#E7B04B" stroke-width="2" fill="none"/><path d="M228 60 L236 60 L234 68" stroke="#E7B04B" stroke-width="2" fill="none"/>
+      <text x="10" y="138" font-size="12" fill="#E7B04B" font-family="JetBrains Mono,monospace">120 / 30 = 400% → buy imbalance at 25,412.25</text>
+    </svg></div>
+    <div>
+      <p>Imbalance does not compare bid and ask on the same row. An aggressive buyer at price P fills against sellers at ask P, while an aggressive seller fills at bid P − 1 tick. Therefore:</p>
+      <ul class="dots"><li><b>Buy imbalance</b> at P: ask(P) ≥ 3 × bid(P − 1 tick).</li><li><b>Sell imbalance</b> at P: bid(P) ≥ 3 × ask(P + 1 tick).</li><li>Add a minimum volume threshold (e.g. 20 lots) to drop meaningless 9 × 1 cells.</li><li>On NQ you can merge 2–4 ticks per row for easier reading.</li></ul>
+    </div>
+  </div>
+  <h3>Basic patterns</h3>
+  <div class="grid g3">
+    <div class="card"><h5>Stacked imbalance</h5><p>3 or more consecutive imbalance levels on the same side. An initiative zone, often becomes new support/resistance on the retest.</p></div>
+    <div class="card"><h5>Absorption</h5><p>1–2 extreme levels with unusually large volume from the attacking side, price does not follow through and the candle closes the other way.</p></div>
+    <div class="card"><h5>Exhaustion</h5><p>Attacking-side volume shrinks towards the extreme, the extreme has 0 on the attacking side. Nobody is chasing price any more.</p></div>
+    <div class="card"><h5>Unfinished auction</h5><p>The candle extreme still has volume on both bid and ask. Price often comes back to repair it. Use it as a target.</p></div>
+    <div class="card"><h5>Finished auction</h5><p>The extreme has 0 on the attacking side (e.g. a high with ask = 0). The auction on that side is over.</p></div>
+    <div class="card"><h5>Trapped traders</h5><p>Imbalance or big trades pile up at the extreme, then price closes the other way. That side is trapped, their stop-outs will push price faster.</p></div>
+    <div class="card"><h5>Imbalance failure</h5><p>Price closes through the stacked zone in the opposite direction. The old stacked zone flips into resistance/support.</p></div>
+    <div class="card"><h5>P-shape / b-shape</h5><p>Volume concentrated in the upper part (P) or lower part (b), the rest thin. Usually short covering or long liquidation.</p></div>
+    <div class="card"><h5>Candle POC</h5><p>POC at the end of a tail: price rejected there. POC in the body: price accepted.</p></div>
+  </div>
+  <h3>The 3 triggers allowed for entry</h3>
+  <dl class="kv">
+    <div><dt>Absorption</dt><dd>1–2 extreme levels with attacking-side volume of at least 60 lots and at least 2.5 times the average of the other levels in the candle. Price does not follow through, the candle closes in the opposite half.</dd></div>
+    <div><dt>Delta flip</dt><dd>The previous candle has clearly negative delta (around 15% of candle volume or more), the next is clearly positive and closes above the previous candle’s body high. The reverse for shorts. Only counts when it happens at a level.</dd></div>
+    <div><dt>Stacked</dt><dd>3 or more consecutive levels with imbalance ≥ 300% on the same side, each at least 20 lots. Trade in the stacked direction on the retest, do not chase price.</dd></div>
+    <div class="bad"><dt>Not allowed</dt><dd>A single imbalance cell, a big-delta candle not at a level, a candle still running and not closed.</dd></div>
+  </dl>
+  <div class="qz-slot" data-qz="tools:fp" data-title="Quick check · Footprint & scenarios"></div>
+</section>
+
+<!-- ============ DELTA ============ -->
+<section class="ch" id="ch-delta" data-chapter="delta">
+  <div class="chh"><span class="no">05</span><h2>Delta and CVD</h2><p>ATAS: Delta, Cumulative Delta, Cluster Statistic. CVD is used in phase 2, candle delta is part of the trigger in phase 4.</p></div>
+  <p class="def"><b>Delta</b> = total volume filled at the ask − total volume filled at the bid, i.e. aggressive buying minus aggressive selling. <b>CVD (Cumulative Volume Delta)</b> is delta accumulated from the start of the session.</p>
+  <h3>The numbers in Cluster Statistic</h3>
+  <div class="grid g2">
+    <div class="vz pad"><table class="t" id="cst"></table></div>
+    <dl class="kv">
+      <div><dt>Delta</dt><dd>Σ ask − Σ bid of the candle.</dd></div>
+      <div><dt>Delta/Vol</dt><dd>|Delta| / Volume. Around 15% or more is a clear delta; below 5% is balanced.</dd></div>
+      <div><dt>Max / Min Δ</dt><dd>Highest and lowest delta while the candle is running. Candle 5: max +410 but closes +35, buyers pushed and were reversed within the candle.</dd></div>
+      <div><dt>Volume</dt><dd>Far above average at an extreme: climax or absorption.</dd></div>
+    </dl>
+  </div>
+  <h3>Delta versus candle direction</h3>
+  <div class="quad">
+    <div></div><div class="h">Positive delta</div><div class="h">Negative delta</div>
+    <div class="r">Bullish candle</div>
+    <div class="c q-g"><b>Bullish agreement</b>Aggressive buying pushes price up. Supports continuation, confirms a long break.</div>
+    <div class="c q-a"><b>Selling absorbed</b>Sellers hit harder but price still rises. At support: a long fade signal.</div>
+    <div class="r">Bearish candle</div>
+    <div class="c q-a"><b>Buying absorbed</b>Buyers hit harder but price still falls. At resistance: a short fade signal.</div>
+    <div class="c q-r"><b>Bearish agreement</b>Aggressive selling pushes price down. Confirms a short break.</div>
+  </div>
+  <p style="margin-top:12px">The two yellow cells only matter when they happen at a key level. Mid-range, delta against the candle direction is usually noise.</p>
+  <h3>CVD divergence</h3>
+  <div class="grid g2">
+    <div class="vz pad"><svg id="cvd" viewBox="0 0 640 320" role="img" aria-label="Price makes a higher high while CVD makes a lower high"></svg></div>
+    <div>
+      <p>Price makes a higher high (HH) but CVD makes a lower high (LH): aggressive buyers are weakening, price is lifted mainly by sell limits being pulled.</p>
+      <ul class="dots"><li>Fade: you want to see divergence as price enters the level.</li><li>Break: you want CVD to make a new high/low with price. If there is divergence, do not trade the break.</li><li>In a strong trend divergence can last many legs; only consider it at a swing or a level.</li><li>Reset CVD consistently. Resetting at 9:30 ET matches the VWAP RTH anchor.</li></ul>
+    </div>
+  </div>
+  <h3>Delta flip</h3>
+  <p>A delta flip is when candle delta clearly changes sign right at the level and the next candle closes beyond the previous body. It is the fast version of CVD divergence over one or two candles. See the example "Delta divergence on a candle" in the 13 scenarios.</p>
+  <div class="qz-slot" data-qz="tools:delta" data-title="Quick check · Delta & CVD"></div>
+</section>
+
+
+<section class="ch" id="ch-kich-ban" data-chapter="kich-ban">
+  <div class="chh"><span class="no">06</span><h2>13 footprint scenarios</h2><p>Each scenario covers the required context, a 3-candle ATAS-style footprint, how to read it, the plan and the invalidation.</p></div>
+  <div class="legend" style="margin-bottom:14px">
+    <span><i class="sw" style="background:rgba(120,32,44,.6)"></i>Key level</span>
+    <span><i class="sw" style="border:2px dashed #4CC9F0"></i>Absorption</span>
+    <span><i class="sw" style="border:2px dotted #E7B04B"></i>Exhaustion</span>
+    <span><i class="sw" style="border:2px dashed #DCE3EE"></i>Unfinished auction</span>
+    <span><i class="sw" style="border:2px solid #4C9BF0"></i>Trapped side</span>
+    <span><i class="sw" style="border:1.5px solid #E07B39"></i>Candle POC</span>
+  </div>
+  <div class="sc-grid" id="scs"></div>
+</section>
+
+
+<section class="ch" id="ch-ket-hop" data-chapter="ket-hop">
+  <div class="chh"><span class="no">07</span><h2>Combining at a TPO key level</h2><p>VWAP is the filter gate, footprint is the mandatory trigger, CVD, DOM and tape decide the setup grade.</p></div>
+  <div class="grid g2">
+    <div class="ex"><div class="t">Fade at the level <span class="pill p-neu">Responsive</span></div>
+      <dl class="kv">
+        <div><dt>VWAP</dt><dd>The level lies outside VWAP, ideally matching the ±1σ/±2σ band. The distance to VWAP is TP1 and must be ≥ 1.5 times the stop.</dd></div>
+        <div><dt>CVD</dt><dd>No new high/low with price as it enters the level.</dd></div>
+        <div><dt>DOM</dt><dd>Resting orders at the level hold or are added to; the opposite side thins out.</dd></div>
+        <div><dt>Tape</dt><dd>Large orders hit the level but price does not follow through, with refills.</dd></div>
+        <div><dt>Footprint</dt><dd>Absorption, delta flip or stacked imbalance in the opposite direction on the confirmation candle.</dd></div>
+        <div class="ok"><dt>Plan</dt><dd>Enter when the trigger candle closes or on the retest. Stop 2–4 ticks beyond the absorption zone. TP1 VWAP/POC, TP2 the next TPO level.</dd></div>
+        <div class="bad"><dt>Invalidation</dt><dd>2 M1 candles close through the level with delta in the break direction: the level is accepted.</dd></div>
+      </dl></div>
+    <div class="ex"><div class="t">Break qua level <span class="pill p-neu">Initiative</span></div>
+      <dl class="kv">
+        <div><dt>VWAP</dt><dd>Price is on the break side of VWAP, VWAP sloping that way. The level is not at or beyond the ±2σ band.</dd></div>
+        <div><dt>CVD</dt><dd>New high/low with price on the break, no divergence.</dd></div>
+        <div><dt>DOM</dt><dd>Resting orders at the level get eaten or pulled; orders behind follow price.</dd></div>
+        <div><dt>Tape</dt><dd>A string of large orders through the level, speed spikes; on the retest opposing orders are small and sparse.</dd></div>
+        <div><dt>Footprint</dt><dd>Stacked in the break direction through the level, a clean retest or a delta flip on the retest.</dd></div>
+        <div class="ok"><dt>Plan</dt><dd>Limit inside the stacked zone on the retest. Stop behind the stacked zone. Targets: unfinished auction, ±1σ/±2σ band, next level.</dd></div>
+        <div class="bad"><dt>Invalidation</dt><dd>A candle closes back inside value with opposite delta: failed breakout, switch to fade.</dd></div>
+      </dl></div>
+  </div>
+  <h3>Grade the setup</h3>
+  <div class="ex">
+    <div class="ckl" id="ckl">
+      <label><input type="checkbox" id="k-g"><span>VWAP not against the hypothesis, R:R to TP1 ≥ 1.5<small>Mandatory filter gate</small></span></label>
+      <label><input type="checkbox" id="k-c"><span>CVD confirms<small>Fade: divergence/flat · Break: new extreme with price</small></span></label>
+      <label><input type="checkbox" id="k-d"><span>DOM confirms<small>Fade: resting orders hold/stack · Break: resting orders eaten/pulled</small></span></label>
+      <label><input type="checkbox" id="k-t"><span>Tape confirms<small>Fade: large orders fail to move price · Break: string of large orders through the level</small></span></label>
+      <label><input type="checkbox" id="k-f"><span>Footprint trigger on a closed M1 candle<small>Mandatory</small></span></label>
+      <label><input type="checkbox" id="k-x"><span>Red flag present<small>Around news, more than 3 candles without a trigger, tools disagree, third touch of the level, stop farther than TP1</small></span></label>
+    </div>
+    <div class="grade"><span class="g" id="gG">Waiting</span><span class="w" id="gW">Tick from top to bottom.</span></div>
+  </div>
+  <dl class="kv" style="margin-top:8px">
+    <div class="ok"><dt>A++</dt><dd>Footprint + VWAP + all 3 confirmations. Enter, full size.</dd></div>
+    <div class="ok"><dt>A+</dt><dd>Footprint + VWAP + 2/3 confirmations. Enter.</dd></div>
+    <div><dt>B</dt><dd>Only 1/3 confirmations. With a 2–3 trades/day limit: skip.</dd></div>
+    <div class="bad"><dt>Skip</dt><dd>Fails VWAP, red flag present, or footprint alone.</dd></div>
+  </dl>
+  <div class="qz-slot" data-qz="tools:kh" data-title="Quick check · Combining at the level"></div>
+</section>
+
+
+<section class="ch" id="ch-thuat-ngu" data-chapter="thuat-ngu">
+  <div class="chh"><span class="no">08</span><h2>Glossary</h2></div>
+  <dl class="gl" id="gloss"></dl>
+</section>
+</div>
+<footer class="ui-foot">Illustrative data · Indicator names as in ATAS · ATAS colours in #AARRGGBB: positive delta histogram #FF3F7FD9, negative #FF4A4A4A, POC #FFE07B39, key level #6B782C2C</footer>
+</main>
+<script src="assets/js/en/fp.js?v=4"></script>
+<script src="assets/js/en/bank-levels.js?v=4"></script>
+<script src="assets/js/en/bank-tools.js?v=4"></script>
+<script src="assets/js/en/quiz.js?v=4"></script>
+<script src="assets/js/en/core.js?v=4"></script>
+<script src="assets/js/en/tools-page.js?v=4"></script>
+</body>
+</html>
