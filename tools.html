@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=9">
-<link rel="stylesheet" href="assets/css/tools.css?v=9">
+<link rel="stylesheet" href="assets/css/app.css?v=10">
+<link rel="stylesheet" href="assets/css/tools.css?v=10">
 </head>
 <body data-page="tools">
 <main class="ui-main">
@@ -78,81 +78,9 @@
 <section class="ch" id="ch-thuat-ngu" data-chapter="thuat-ngu">
   <div class="chh"><span class="no">02</span><h2>Thuật ngữ</h2></div>
   <dl class="gl" id="gloss"></dl>
-</section><!-- ============ DOM ============ -->
-<section class="ch" id="ch-dom" data-chapter="dom">
-  <div class="chh"><span class="no">03</span><h2>DOM: sổ lệnh</h2><p>ATAS: Smart DOM. Dùng ở pha 3 khi giá chạm level.</p></div>
-  <p class="def"><b>DOM (Depth of Market)</b> hiển thị số hợp đồng limit đang treo ở từng mức giá quanh giá hiện tại: bên bid (lệnh mua chờ) và bên ask (lệnh bán chờ). DOM cho biết thanh khoản bị động, chưa phải là giao dịch đã xảy ra.</p>
-  <h3>Khái niệm</h3>
-  <div class="grid g3">
-    <div class="card"><h5>Stacking</h5><p>Lệnh chờ dồn thêm tại một mức khi giá tiến lại gần. Có người muốn bảo vệ mức đó.</p></div>
-    <div class="card"><h5>Pulling</h5><p>Lệnh chờ rút đi ngay trước khi giá chạm. Đường trống cho giá đi qua.</p></div>
-    <div class="card"><h5>Wall (tường)</h5><p>Mức có size lớn bất thường so với các mức xung quanh. Chỉ có ý nghĩa khi có volume khớp vào mà vẫn đứng.</p></div>
-    <div class="card"><h5>Spoof</h5><p>Lệnh lớn đặt để tạo ấn tượng rồi rút trước khi bị khớp. Lý do không được tin DOM một mình.</p></div>
-    <div class="card"><h5>Iceberg / refill</h5><p>Lệnh chỉ hiện một phần. Volume khớp tại giá vượt xa size hiển thị, size liên tục được nạp lại.</p></div>
-    <div class="card"><h5>Heatmap</h5><p>Lịch sử DOM theo thời gian (ATAS: DOM Levels). Thấy tường tồn tại bao lâu và có bị rút trước khi giá tới hay không.</p></div>
-  </div>
-  <h3>Cách đọc</h3>
-  <ol class="steps">
-    <li><span>Chỉ nhìn DOM khi giá còn vài tick tới level đã chọn. Không dùng DOM để tìm setup.</span></li>
-    <li><span>So size tại level với lúc giá còn xa: tăng là stacking, giảm mà không có volume khớp là pulling.</span></li>
-    <li><span>Đối chiếu với tape: size giảm <b>do khớp</b> (tường bị ăn) khác hoàn toàn size giảm <b>do rút</b>.</span></li>
-    <li><span>Nhìn cả phía đối diện: fade long cần ask phía trên mỏng đi; break long cần bid phía dưới dồn theo giá.</span></li>
-  </ol>
-  <h3>Ví dụ</h3>
-  <div class="grid g2">
-    <div class="ex"><div class="t">A. Stacking: level giữ</div><div class="vz pad"><table class="t dom" id="domA"></table></div>
-      <p class="cap">VAL 25,410.50. Lúc T1 giá còn cách 6 tick, bid tại level 140. Lúc T2 giá chạm, bid tăng lên <b>360</b> dù đã có volume khớp vào; ask phía trên giảm. Ủng hộ <b>fade long</b> nếu footprint cho trigger.</p></div>
-    <div class="ex"><div class="t">B. Pulling: level vỡ</div><div class="vz pad"><table class="t dom" id="domB"></table></div>
-      <p class="cap">Cùng VAL. Lúc T1 bid tại level 300. Lúc T2, khi giá còn 1 tick, bid chỉ còn <b>18</b> mà gần như không có volume khớp: lệnh đã bị rút. Không fade; chuẩn bị cho kịch bản <b>break xuống</b>.</p></div>
-  </div>
-  <div class="ex"><div class="t">C. Iceberg tại bid</div><div class="vz pad"><table class="t" id="ice"></table></div>
-    <p class="cap">DOM luôn hiện 12 lot tại 25,410.50 nhưng tape cho thấy đã khớp 186 lot ở giá này và giá chưa thủng. Có người chơi lớn đang hấp thụ bằng lệnh ẩn. Iceberg ở cực trị thường giữ giá; iceberg bị phá thủng thường dẫn tới chuyển động mạnh theo hướng phá.</p></div>
-  <h3>Nên và không nên</h3>
-  <div class="do-dont">
-    <div class="card"><h5>Nên</h5><ul><li>Dùng DOM để tinh chỉnh entry tại level đã chọn từ trước.</li><li>Luôn xác nhận bằng tape: có khớp thật không.</li><li>Ghi nhận phía đối diện mỏng hay dày.</li></ul></div>
-    <div class="card"><h5>Không nên</h5><ul><li>Vào lệnh chỉ vì thấy một tường lớn.</li><li>Nhìn DOM quanh tin 8:30, 10:00 ET hoặc cú spike lúc 9:30.</li><li>Nhìn DOM liên tục cả phiên, gây mệt và overtrade.</li></ul></div>
-  </div>
-  <div class="qz-slot" data-qz="tools:dom" data-title="Kiểm tra nhanh · DOM"></div>
-</section>
-
-<!-- ============ TAPE ============ -->
-<section class="ch" id="ch-tape" data-chapter="tape">
-  <div class="chh"><span class="no">04</span><h2>Tape: băng giao dịch</h2><p>ATAS: Smart Tape (cài đặt 2 cột Price + Volume, màu theo bên khớp). Dùng ở pha 2 và 3.</p></div>
-  <p class="def"><b>Tape (Time &amp; Sales)</b> liệt kê từng giao dịch đã khớp: giá, khối lượng, bên chủ động (mua tại ask hay bán tại bid) và thời gian. Smart Tape gộp các lệnh bị chia nhỏ khớp cùng lúc thành một dòng để thấy kích thước thật.</p>
-  <h3>Khái niệm</h3>
-  <div class="grid g3">
-    <div class="card"><h5>Print</h5><p>Một dòng trên băng. Màu xanh: mua chủ động khớp tại ask. Màu đỏ: bán chủ động khớp tại bid.</p></div>
-    <div class="card"><h5>Lọc size</h5><p>Chỉ hiện lệnh từ một ngưỡng trở lên. Đặt theo phân vị của phiên (ví dụ top 1%), chỉnh riêng RTH và ETH.</p></div>
-    <div class="card"><h5>Big trades</h5><p>Lệnh vượt ngưỡng size, vẽ bong bóng lên chart. Big trades ở cực trị mà giá không đi tiếp: phía đó bị kẹt.</p></div>
-    <div class="card"><h5>Speed of tape</h5><p>Số giao dịch mỗi giây. Bùng nổ khi phá range là ignition; bùng nổ ở cuối nhịp dài là climax.</p></div>
-    <div class="card"><h5>Absorption trên tape</h5><p>Lệnh lớn liên tục đập vào cùng một giá nhưng giá không đi tiếp.</p></div>
-    <div class="card"><h5>Initiative trên tape</h5><p>Chuỗi lệnh lớn một phía, giá nhảy qua nhiều mức liên tiếp.</p></div>
-  </div>
-  <h3>Cách đọc</h3>
-  <ol class="steps">
-    <li><span>Trong 5–10 tick cuối trước level: tốc độ chậm dần ủng hộ fade, nhanh dần ủng hộ break.</span></li>
-    <li><span>Khi chạm level: hỏi một câu duy nhất, lệnh lớn đập vào có làm giá đi tiếp không.</span></li>
-    <li><span>Ghép với DOM: lệnh lớn khớp nhưng size hiển thị không giảm, nghĩa là có refill.</span></li>
-    <li><span>Sau hấp thụ, chờ chuỗi lệnh lớn phía ngược lại xuất hiện, đó là dấu hiệu đổi phe.</span></li>
-  </ol>
-  <h3>Ví dụ</h3>
-  <div class="grid g2">
-    <div class="ex"><div class="t">A. Absorption tại VAL</div><div class="vz pad"><table class="t" id="tapeA"></table></div>
-      <p class="cap">Ba lệnh bán 48, 62, 55 lot liên tiếp tại 25,411.00 (tô vàng) mà giá không giảm. Sau đó lệnh mua 31 và 24 lot đẩy giá lên (tô xanh). Bên bán bị hấp thụ, ủng hộ fade long.</p></div>
-    <div class="ex"><div class="t">B. Initiative phá VAH</div><div class="vz pad"><table class="t" id="tapeB"></table></div>
-      <p class="cap">Chuỗi lệnh mua 40–70 lot trong chưa tới 1 giây, giá nhảy 4 tick qua 25,430.00. Khi retest, chỉ có lệnh bán 3–6 lot. Ủng hộ break long.</p></div>
-  </div>
-  <h3>Nên và không nên</h3>
-  <div class="do-dont">
-    <div class="card"><h5>Nên</h5><ul><li>Luôn bật lọc size, nếu không băng NQ chạy quá nhanh để đọc.</li><li>So tốc độ với mức nền cùng khung giờ.</li><li>Đọc tape cùng lúc với DOM tại level.</li></ul></div>
-    <div class="card"><h5>Không nên</h5><ul><li>Coi một lệnh lớn đơn lẻ là tín hiệu.</li><li>Đọc tape giữa range khi không có level.</li><li>Tin tốc độ tăng vọt lúc ra tin là tín hiệu.</li></ul></div>
-  </div>
-  <div class="qz-slot" data-qz="tools:tape" data-title="Kiểm tra nhanh · Tape"></div>
-</section>
-
-<!-- ============ FOOTPRINT ============ -->
+</section><!-- ============ FOOTPRINT ============ -->
 <section class="ch" id="ch-footprint" data-chapter="footprint">
-  <div class="chh"><span class="no">05</span><h2>Footprint: cluster chart</h2><p>ATAS: Cluster chart, Bid × Ask, Imbalance. Dùng ở pha 4, chỉ đọc trên nến M1 đã đóng.</p></div>
+  <div class="chh"><span class="no">03</span><h2>Footprint: cluster chart</h2><p>ATAS: Cluster chart, Bid × Ask, Imbalance. Dùng ở pha 4, chỉ đọc trên nến M1 đã đóng.</p></div>
   <p class="def"><b>Footprint</b> tách mỗi cây nến thành từng mức giá và cho biết tại mỗi mức có bao nhiêu volume khớp do bán chủ động (cột bid, bên trái) và mua chủ động (cột ask, bên phải). Nó cho thấy cây nến được tạo ra như thế nào.</p>
   <h3>Giải phẫu một cây nến footprint</h3>
   <p>Cây nến mẫu dưới đây là một nến M1 tăng. Mỗi số tròn trên hình ứng với một thành phần trong bảng bên cạnh; cột cuối là giá trị đọc được từ chính cây nến này.</p>
@@ -251,7 +179,7 @@
 
 <!-- ============ DELTA ============ -->
 <section class="ch" id="ch-delta" data-chapter="delta">
-  <div class="chh"><span class="no">06</span><h2>Delta và CVD</h2><p>ATAS: Delta, Cumulative Delta, Cluster Statistic. CVD dùng ở pha 2, delta nến là một phần của trigger ở pha 4.</p></div>
+  <div class="chh"><span class="no">04</span><h2>Delta và CVD</h2><p>ATAS: Delta, Cumulative Delta, Cluster Statistic. CVD dùng ở pha 2, delta nến là một phần của trigger ở pha 4.</p></div>
   <p class="def"><b>Delta</b> = tổng volume khớp ở ask − tổng volume khớp ở bid, tức mua chủ động trừ bán chủ động. <b>CVD (Cumulative Volume Delta)</b> là delta cộng dồn từ đầu phiên.</p>
   <h3>Các con số trong Cluster Statistic</h3>
   <div class="grid g2">
@@ -285,6 +213,78 @@
   <h3>Delta flip</h3>
   <p>Delta flip là khi delta nến đổi dấu rõ ràng ngay tại level và nến sau đóng vượt thân nến trước. Đây là phiên bản nhanh của CVD divergence trên một hai nến. Xem ví dụ "Delta divergence trên nến" trong 13 kịch bản.</p>
   <div class="qz-slot" data-qz="tools:delta" data-title="Kiểm tra nhanh · Delta & CVD"></div>
+</section>
+
+<!-- ============ DOM ============ -->
+<section class="ch" id="ch-dom" data-chapter="dom">
+  <div class="chh"><span class="no">05</span><h2>DOM: sổ lệnh</h2><p>ATAS: Smart DOM. Dùng ở pha 3 khi giá chạm level.</p></div>
+  <p class="def"><b>DOM (Depth of Market)</b> hiển thị số hợp đồng limit đang treo ở từng mức giá quanh giá hiện tại: bên bid (lệnh mua chờ) và bên ask (lệnh bán chờ). DOM cho biết thanh khoản bị động, chưa phải là giao dịch đã xảy ra.</p>
+  <h3>Khái niệm</h3>
+  <div class="grid g3">
+    <div class="card"><h5>Stacking</h5><p>Lệnh chờ dồn thêm tại một mức khi giá tiến lại gần. Có người muốn bảo vệ mức đó.</p></div>
+    <div class="card"><h5>Pulling</h5><p>Lệnh chờ rút đi ngay trước khi giá chạm. Đường trống cho giá đi qua.</p></div>
+    <div class="card"><h5>Wall (tường)</h5><p>Mức có size lớn bất thường so với các mức xung quanh. Chỉ có ý nghĩa khi có volume khớp vào mà vẫn đứng.</p></div>
+    <div class="card"><h5>Spoof</h5><p>Lệnh lớn đặt để tạo ấn tượng rồi rút trước khi bị khớp. Lý do không được tin DOM một mình.</p></div>
+    <div class="card"><h5>Iceberg / refill</h5><p>Lệnh chỉ hiện một phần. Volume khớp tại giá vượt xa size hiển thị, size liên tục được nạp lại.</p></div>
+    <div class="card"><h5>Heatmap</h5><p>Lịch sử DOM theo thời gian (ATAS: DOM Levels). Thấy tường tồn tại bao lâu và có bị rút trước khi giá tới hay không.</p></div>
+  </div>
+  <h3>Cách đọc</h3>
+  <ol class="steps">
+    <li><span>Chỉ nhìn DOM khi giá còn vài tick tới level đã chọn. Không dùng DOM để tìm setup.</span></li>
+    <li><span>So size tại level với lúc giá còn xa: tăng là stacking, giảm mà không có volume khớp là pulling.</span></li>
+    <li><span>Đối chiếu với tape: size giảm <b>do khớp</b> (tường bị ăn) khác hoàn toàn size giảm <b>do rút</b>.</span></li>
+    <li><span>Nhìn cả phía đối diện: fade long cần ask phía trên mỏng đi; break long cần bid phía dưới dồn theo giá.</span></li>
+  </ol>
+  <h3>Ví dụ</h3>
+  <div class="grid g2">
+    <div class="ex"><div class="t">A. Stacking: level giữ</div><div class="vz pad"><table class="t dom" id="domA"></table></div>
+      <p class="cap">VAL 25,410.50. Lúc T1 giá còn cách 6 tick, bid tại level 140. Lúc T2 giá chạm, bid tăng lên <b>360</b> dù đã có volume khớp vào; ask phía trên giảm. Ủng hộ <b>fade long</b> nếu footprint cho trigger.</p></div>
+    <div class="ex"><div class="t">B. Pulling: level vỡ</div><div class="vz pad"><table class="t dom" id="domB"></table></div>
+      <p class="cap">Cùng VAL. Lúc T1 bid tại level 300. Lúc T2, khi giá còn 1 tick, bid chỉ còn <b>18</b> mà gần như không có volume khớp: lệnh đã bị rút. Không fade; chuẩn bị cho kịch bản <b>break xuống</b>.</p></div>
+  </div>
+  <div class="ex"><div class="t">C. Iceberg tại bid</div><div class="vz pad"><table class="t" id="ice"></table></div>
+    <p class="cap">DOM luôn hiện 12 lot tại 25,410.50 nhưng tape cho thấy đã khớp 186 lot ở giá này và giá chưa thủng. Có người chơi lớn đang hấp thụ bằng lệnh ẩn. Iceberg ở cực trị thường giữ giá; iceberg bị phá thủng thường dẫn tới chuyển động mạnh theo hướng phá.</p></div>
+  <h3>Nên và không nên</h3>
+  <div class="do-dont">
+    <div class="card"><h5>Nên</h5><ul><li>Dùng DOM để tinh chỉnh entry tại level đã chọn từ trước.</li><li>Luôn xác nhận bằng tape: có khớp thật không.</li><li>Ghi nhận phía đối diện mỏng hay dày.</li></ul></div>
+    <div class="card"><h5>Không nên</h5><ul><li>Vào lệnh chỉ vì thấy một tường lớn.</li><li>Nhìn DOM quanh tin 8:30, 10:00 ET hoặc cú spike lúc 9:30.</li><li>Nhìn DOM liên tục cả phiên, gây mệt và overtrade.</li></ul></div>
+  </div>
+  <div class="qz-slot" data-qz="tools:dom" data-title="Kiểm tra nhanh · DOM"></div>
+</section>
+
+<!-- ============ TAPE ============ -->
+<section class="ch" id="ch-tape" data-chapter="tape">
+  <div class="chh"><span class="no">06</span><h2>Tape: băng giao dịch</h2><p>ATAS: Smart Tape (cài đặt 2 cột Price + Volume, màu theo bên khớp). Dùng ở pha 2 và 3.</p></div>
+  <p class="def"><b>Tape (Time &amp; Sales)</b> liệt kê từng giao dịch đã khớp: giá, khối lượng, bên chủ động (mua tại ask hay bán tại bid) và thời gian. Smart Tape gộp các lệnh bị chia nhỏ khớp cùng lúc thành một dòng để thấy kích thước thật.</p>
+  <h3>Khái niệm</h3>
+  <div class="grid g3">
+    <div class="card"><h5>Print</h5><p>Một dòng trên băng. Màu xanh: mua chủ động khớp tại ask. Màu đỏ: bán chủ động khớp tại bid.</p></div>
+    <div class="card"><h5>Lọc size</h5><p>Chỉ hiện lệnh từ một ngưỡng trở lên. Đặt theo phân vị của phiên (ví dụ top 1%), chỉnh riêng RTH và ETH.</p></div>
+    <div class="card"><h5>Big trades</h5><p>Lệnh vượt ngưỡng size, vẽ bong bóng lên chart. Big trades ở cực trị mà giá không đi tiếp: phía đó bị kẹt.</p></div>
+    <div class="card"><h5>Speed of tape</h5><p>Số giao dịch mỗi giây. Bùng nổ khi phá range là ignition; bùng nổ ở cuối nhịp dài là climax.</p></div>
+    <div class="card"><h5>Absorption trên tape</h5><p>Lệnh lớn liên tục đập vào cùng một giá nhưng giá không đi tiếp.</p></div>
+    <div class="card"><h5>Initiative trên tape</h5><p>Chuỗi lệnh lớn một phía, giá nhảy qua nhiều mức liên tiếp.</p></div>
+  </div>
+  <h3>Cách đọc</h3>
+  <ol class="steps">
+    <li><span>Trong 5–10 tick cuối trước level: tốc độ chậm dần ủng hộ fade, nhanh dần ủng hộ break.</span></li>
+    <li><span>Khi chạm level: hỏi một câu duy nhất, lệnh lớn đập vào có làm giá đi tiếp không.</span></li>
+    <li><span>Ghép với DOM: lệnh lớn khớp nhưng size hiển thị không giảm, nghĩa là có refill.</span></li>
+    <li><span>Sau hấp thụ, chờ chuỗi lệnh lớn phía ngược lại xuất hiện, đó là dấu hiệu đổi phe.</span></li>
+  </ol>
+  <h3>Ví dụ</h3>
+  <div class="grid g2">
+    <div class="ex"><div class="t">A. Absorption tại VAL</div><div class="vz pad"><table class="t" id="tapeA"></table></div>
+      <p class="cap">Ba lệnh bán 48, 62, 55 lot liên tiếp tại 25,411.00 (tô vàng) mà giá không giảm. Sau đó lệnh mua 31 và 24 lot đẩy giá lên (tô xanh). Bên bán bị hấp thụ, ủng hộ fade long.</p></div>
+    <div class="ex"><div class="t">B. Initiative phá VAH</div><div class="vz pad"><table class="t" id="tapeB"></table></div>
+      <p class="cap">Chuỗi lệnh mua 40–70 lot trong chưa tới 1 giây, giá nhảy 4 tick qua 25,430.00. Khi retest, chỉ có lệnh bán 3–6 lot. Ủng hộ break long.</p></div>
+  </div>
+  <h3>Nên và không nên</h3>
+  <div class="do-dont">
+    <div class="card"><h5>Nên</h5><ul><li>Luôn bật lọc size, nếu không băng NQ chạy quá nhanh để đọc.</li><li>So tốc độ với mức nền cùng khung giờ.</li><li>Đọc tape cùng lúc với DOM tại level.</li></ul></div>
+    <div class="card"><h5>Không nên</h5><ul><li>Coi một lệnh lớn đơn lẻ là tín hiệu.</li><li>Đọc tape giữa range khi không có level.</li><li>Tin tốc độ tăng vọt lúc ra tin là tín hiệu.</li></ul></div>
+  </div>
+  <div class="qz-slot" data-qz="tools:tape" data-title="Kiểm tra nhanh · Tape"></div>
 </section>
 
 <!-- ============ KỊCH BẢN ============ -->
@@ -351,11 +351,11 @@
 </div>
 <footer class="ui-foot">Dữ liệu minh hoạ · Tên indicator theo ATAS · Màu ATAS dạng #AARRGGBB: histogram delta dương #FF3F7FD9, âm #FF4A4A4A, POC #FFE07B39, key level #6B782C2C</footer>
 </main>
-<script src="assets/js/fp.js?v=9"></script>
-<script src="assets/js/bank-levels.js?v=9"></script>
-<script src="assets/js/bank-tools.js?v=9"></script>
-<script src="assets/js/quiz.js?v=9"></script>
-<script src="assets/js/core.js?v=9"></script>
-<script src="assets/js/tools-page.js?v=9"></script>
+<script src="assets/js/fp.js?v=10"></script>
+<script src="assets/js/bank-levels.js?v=10"></script>
+<script src="assets/js/bank-tools.js?v=10"></script>
+<script src="assets/js/quiz.js?v=10"></script>
+<script src="assets/js/core.js?v=10"></script>
+<script src="assets/js/tools-page.js?v=10"></script>
 </body>
 </html>

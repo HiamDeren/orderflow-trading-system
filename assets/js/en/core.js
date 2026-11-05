@@ -14,8 +14,8 @@ const NAV=[
     ['initial-balance','03','Initial Balance'],['levels','04','Level map'],['vwap','05','VWAP RTH'],
     ['cvd','06','CVD divergence'],['plan','07','Daily planning']]},
   {k:'tools',href:'tools.en.html',label:'Orderflow Tools',short:'Tools',sub:'DOM · Tape · Footprint · Delta',c:'var(--c-tools)',icon:'fp',chapters:[
-    ['tong-quan','00','Overview'],['nen-tang','01','Foundations'],['thuat-ngu','02','Glossary'],['dom','03','DOM'],
-    ['tape','04','Tape'],['footprint','05','Footprint'],['delta','06','Delta & CVD'],['kich-ban','07','13 scenarios'],
+    ['tong-quan','00','Overview'],['nen-tang','01','Foundations'],['thuat-ngu','02','Glossary'],['footprint','03','Footprint'],
+    ['delta','04','Delta & CVD'],['dom','05','DOM'],['tape','06','Tape'],['kich-ban','07','13 scenarios'],
     ['ket-hop','08','Combining at the level']]},
   {k:'plan',href:'plan.en.html',label:'Plan Builder',short:'Plan',sub:'Plan + level map',c:'var(--warn)',icon:'map'},
   {k:'quiz',href:'quiz.en.html',label:'Quiz',short:'Quiz',sub:'Practice · Mock exams',c:'var(--c-quiz)',icon:'quiz',chapters:[

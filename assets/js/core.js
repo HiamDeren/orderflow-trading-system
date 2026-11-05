@@ -17,8 +17,8 @@ const NAV=[
     ['initial-balance','03','Initial Balance'],['levels','04','Level map'],['vwap','05','VWAP RTH'],
     ['cvd','06','CVD divergence'],['plan','07','Lên plan mỗi ngày']]},
   {k:'tools',href:'tools.html',label:'Orderflow Tools',short:'Tools',sub:'DOM · Tape · Footprint · Delta',c:'var(--c-tools)',icon:'fp',chapters:[
-    ['tong-quan','00','Tổng quan'],['nen-tang','01','Nền tảng'],['thuat-ngu','02','Thuật ngữ'],['dom','03','DOM'],
-    ['tape','04','Tape'],['footprint','05','Footprint'],['delta','06','Delta & CVD'],['kich-ban','07','13 kịch bản'],
+    ['tong-quan','00','Tổng quan'],['nen-tang','01','Nền tảng'],['thuat-ngu','02','Thuật ngữ'],['footprint','03','Footprint'],
+    ['delta','04','Delta & CVD'],['dom','05','DOM'],['tape','06','Tape'],['kich-ban','07','13 kịch bản'],
     ['ket-hop','08','Kết hợp tại level']]},
   {k:'plan',href:'plan.html',label:'Plan Builder',short:'Plan',sub:'Plan + bản đồ level',c:'var(--warn)',icon:'map'},
   {k:'quiz',href:'quiz.html',label:'Trắc nghiệm',short:'Quiz',sub:'Luyện tập · Thi thử',c:'var(--c-quiz)',icon:'quiz',chapters:[

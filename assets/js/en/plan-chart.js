@@ -106,16 +106,24 @@ document.addEventListener('input',e=>{if(e.target.id&&e.target.id.startsWith('p-
 document.addEventListener('change',e=>{if(e.target.id&&e.target.id.startsWith('p-'))render();});
 document.addEventListener('click',e=>{if(e.target.id==='p-build')setTimeout(render,0);});
 
-function png(){
+function toBlob(cb){
   const svg=$('#p-chart svg'),msg=$('#p-chart-msg');if(!svg)return;
   const xml=new XMLSerializer().serializeToString(svg);
   const img=new Image(),W=+svg.getAttribute('width'),H=+svg.getAttribute('height'),S=2;
-  img.onload=()=>{const c=document.createElement('canvas');c.width=W*S;c.height=H*S;const x=c.getContext('2d');x.scale(S,S);x.drawImage(img,0,0,W,H);
-    c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);
-      const r=build();a.download=`plan-NQ-${(r&&r.date||'').replace(/[^\d]+/g,'-')||'map'}.png`;document.body.appendChild(a);a.click();a.remove();
-      if(msg){msg.textContent='Image downloaded.';setTimeout(()=>msg.textContent='',2500);}},'image/png');};
-  img.onerror=()=>{if(msg)msg.textContent='Could not export the image in this browser.';};
+  img.onload=()=>{const c=document.createElement('canvas');c.width=W*S;c.height=H*S;const x=c.getContext('2d');x.scale(S,S);x.drawImage(img,0,0,W,H);c.toBlob(cb,'image/png');};
+  img.onerror=()=>say('Could not export the image in this browser.');
   img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(xml);
 }
-document.addEventListener('DOMContentLoaded',()=>{render();const b=$('#p-chart-png');if(b)b.addEventListener('click',png);});
+function say(t){const m=$('#p-chart-msg');if(m){m.textContent=t;clearTimeout(say.t);say.t=setTimeout(()=>m.textContent='',2500);}}
+function png(){
+  toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);
+    const r=build();a.download=`plan-NQ-${(r&&r.date||'').replace(/[^\d]+/g,'-')||'map'}.png`;document.body.appendChild(a);a.click();a.remove();say('Image downloaded.');});
+}
+function copy(){
+  if(!navigator.clipboard||!window.ClipboardItem){say('This browser cannot copy images, use Download PNG.');return;}
+  
+  const p=new Promise((ok,no)=>toBlob(b=>b?ok(b):no()));
+  navigator.clipboard.write([new ClipboardItem({'image/png':p})]).then(()=>say('Image copied to clipboard.')).catch(()=>say('The browser blocked copying the image, use Download PNG.'));
+}
+document.addEventListener('DOMContentLoaded',()=>{render();const b=$('#p-chart-png');if(b)b.addEventListener('click',png);const c=$('#p-chart-copy');if(c)c.addEventListener('click',copy);});
 })();

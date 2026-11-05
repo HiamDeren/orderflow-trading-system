@@ -346,3 +346,7 @@ Luyện tập 173 câu	Practise 173 questions
 ${dn.score} mua	${dn.score} buy
 Tin: ${d.news}	News: ${d.news}
 Plan Builder và bản đồ level cho NQ.	Plan Builder and level map for NQ.
+Trình duyệt chặn copy ảnh, hãy dùng Tải ảnh PNG.	The browser blocked copying the image, use Download PNG.
+Trình duyệt không hỗ trợ copy ảnh, hãy dùng Tải ảnh PNG.	This browser cannot copy images, use Download PNG.
+Đã copy ảnh vào clipboard.	Image copied to clipboard.
+Copy ảnh	Copy image
