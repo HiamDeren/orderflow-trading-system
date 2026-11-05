@@ -14,24 +14,54 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=10">
-<link rel="stylesheet" href="assets/css/levels.css?v=10">
+<link rel="stylesheet" href="assets/css/app.css?v=11">
+<link rel="stylesheet" href="assets/css/levels.css?v=11">
 </head>
 <body data-page="levels">
 <main class="ui-main">
 <div class="ui-content pg-levels">
 
 
-<!-- ============ 01 NỀN TẢNG ============ -->
-<section class="tab" id="ch-nen-tang" data-chapter="nen-tang">
+<!-- ============ 00 TỔNG QUAN ============ -->
+<section class="tab" id="ch-tong-quan" data-chapter="tong-quan">
   <div class="ui-hero" style="--c:var(--c-levels)">
     <span class="ui-eyebrow">Khoá 1 · NQ · RTH 9:30–16:00 ET</span>
     <h1 class="ui-h1">TPO Level</h1>
     <p class="ui-lede">Context bằng TPO · Confluence bằng VWAP RTH + CVD · Trigger bằng orderflow.</p>
-    <div class="facts"><span><b>7</b> chương</span><span><b>86</b> câu trắc nghiệm</span><span>Plan Builder</span></div>
-    <div class="cta"><a class="ui-btn primary" href="plan.html">Mở Plan Builder</a><a class="ui-btn ghost" href="quiz.html#thi-thu">Thi thử 50 câu</a></div>
+    <div class="facts"><span><b>8</b> chương</span><span><b>86</b> câu trắc nghiệm</span><span>Plan Builder</span></div>
+    <div class="cta"><a class="ui-btn primary" href="#nen-tang">Bắt đầu học →</a><a class="ui-btn" href="plan.html">Mở Plan Builder</a><a class="ui-btn ghost" href="quiz.html#thi-thu">Thi thử 50 câu</a></div>
   </div>
 
+  <div class="head">
+    <span class="eyebrow">00 · Tổng quan</span>
+    <h2>Từ đọc profile đến lên plan và execute trong 2 tiếng NY AM</h2>
+    <p class="lead">TPO trong hệ thống của bạn đóng vai trò <b>context + location</b>: nó trả lời "thị trường đang balance hay imbalance, và mình chỉ được phép hành động ở đâu". VWAP RTH và CVD là lớp confluence. Trigger vào lệnh vẫn là thứ bạn đã chốt (OSR, IB, footprint/delta). Playbook này không thêm model mới, nó cho các model hiện có một bản đồ level rõ ràng.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Tài liệu gốc nên đọc</h3>
+      <ul class="clean">
+        <li><b>James Dalton — Mind Over Markets</b> (chương về TPO, day types, open types, value relationships). Đây là nguồn của gần như toàn bộ khái niệm trong tab 01–03.</li>
+        <li><b>James Dalton — Markets in Profile</b>: phần auction theo khung lớn, cách đọc nhiều ngày liền.</li>
+        <li><b>CBOT Market Profile Handbook</b> (Steidlmayer): định nghĩa gốc của TPO, IB, Rotation Factor.</li>
+        <li>Recap Notion của bạn: <i>Lecture 5 – TPO Part 2</i>, <i>TPO: Components</i>, <i>TPO/VPO (Chika)</i>. Tab 01 có phần giải đáp các câu hỏi mở bạn còn ghi lại.</li>
+      </ul>
+    </div>
+    <div class="panel stack">
+      <h3>Cách bạn đang dùng ATAS (giữ nguyên)</h3>
+      <ul class="clean">
+        <li><span class="chip">Weekly Profile</span> context khung lớn: weekly VA, composite.</li>
+        <li><span class="chip">Daily Profile ETH</span> overnight inventory, ON high/low, ON POC.</li>
+        <li><span class="chip va">Daily Profile RTH</span> chart chính để vẽ zone (template trong ảnh).</li>
+        <li><span class="chip vw">ETH M1 Execution</span> VWAP RTH ±1/2/3 SD + CVD + footprint để trigger.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 NỀN TẢNG ============ -->
+<section class="tab" id="ch-nen-tang" data-chapter="nen-tang">
   <div class="head">
     <span class="eyebrow">01 · Nền tảng</span>
     <h2>TPO là gì và đọc một profile như thế nào</h2>
@@ -519,12 +549,12 @@ Reset      = 9:30 ET (cùng mốc VWAP RTH và TPO RTH)</div>
 </div>
 <footer class="ui-foot">Playbook học tập cho NQ intraday. Không phải lời khuyên đầu tư. Các con số thống kê truyền thống (80% rule, tỉ lệ day type) cần được bạn tự kiểm chứng bằng backtest trước khi dùng với tiền thật.</footer>
 </main>
-<script src="assets/js/levels-data.js?v=10"></script>
-<script src="assets/js/fp.js?v=10"></script>
-<script src="assets/js/bank-levels.js?v=10"></script>
-<script src="assets/js/bank-tools.js?v=10"></script>
-<script src="assets/js/quiz.js?v=10"></script>
-<script src="assets/js/core.js?v=10"></script>
-<script src="assets/js/levels-page.js?v=10"></script>
+<script src="assets/js/levels-data.js?v=11"></script>
+<script src="assets/js/fp.js?v=11"></script>
+<script src="assets/js/bank-levels.js?v=11"></script>
+<script src="assets/js/bank-tools.js?v=11"></script>
+<script src="assets/js/quiz.js?v=11"></script>
+<script src="assets/js/core.js?v=11"></script>
+<script src="assets/js/levels-page.js?v=11"></script>
 </body>
 </html>
