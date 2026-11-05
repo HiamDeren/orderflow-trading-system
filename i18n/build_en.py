@@ -19,7 +19,7 @@ pat=re.compile('|'.join(re.escape(k) for k in sorted(M,key=len,reverse=True)))
 JSN=['core.js','quiz.js','home.js','fp.js','tools-page.js','levels-page.js','plan-chart.js','levels-data.js','bank-tools.js','bank-levels.js']
 CODE=[  # (regex, repl) applied after translation
  (r'<html lang="vi">','<html lang="en">'),
- (r'\b(index|tools|levels|quiz)\.html',r'\1.en.html'),
+ (r'\b(index|tools|levels|plan|quiz)\.html',r'\1.en.html'),
  (r'assets/js/('+'|'.join(re.escape(j) for j in JSN)+r')',r'assets/js/en/\1'),
  (r"'vi-VN'","'en-GB'"),
  (r'"vi-VN"','"en-GB"'),

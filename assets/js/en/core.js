@@ -17,6 +17,7 @@ const NAV=[
     ['tong-quan','00','Overview'],['nen-tang','01','Foundations'],['thuat-ngu','02','Glossary'],['dom','03','DOM'],
     ['tape','04','Tape'],['footprint','05','Footprint'],['delta','06','Delta & CVD'],['kich-ban','07','13 scenarios'],
     ['ket-hop','08','Combining at the level']]},
+  {k:'plan',href:'plan.en.html',label:'Plan Builder',short:'Plan',sub:'Plan + level map',c:'var(--warn)',icon:'map'},
   {k:'quiz',href:'quiz.en.html',label:'Quiz',short:'Quiz',sub:'Practice · Mock exams',c:'var(--c-quiz)',icon:'quiz',chapters:[
     ['luyen-tap','A','Practice'],['thi-thu','B','Mock exam'],['cau-sai','C','Review mistakes']]}
 ];
@@ -40,7 +41,7 @@ const cur=NAV.find(n=>n.k===page)||NAV[0];
 document.body.style.setProperty('--c',cur.c);
 
 const LANG=document.documentElement.lang==='en'?'en':'vi';
-const FILE={home:'index',tools:'tools',levels:'levels',quiz:'quiz'}[page]||'index';
+const FILE={home:'index',tools:'tools',levels:'levels',plan:'plan',quiz:'quiz'}[page]||'index';
 const langHref=to=>FILE+(to==='en'?'.en':'')+'.html'+location.hash;
 (function(){const pref=store.get('ofs.lang',null);if(pref&&pref!==LANG&&!/[?&]stay/.test(location.search))location.replace(langHref(pref));})();
 
@@ -52,7 +53,8 @@ function buildShell(){
   let h=`<a class="ui-logo" href="index.en.html">${LOGO}<span><b>Orderflow System</b><small>NQ · ATAS · Rithmic</small></span></a><nav class="ui-nav">`;
   NAV.forEach((n,i)=>{
     if(i===1) h+=`<div class="ui-sec-label">Courses</div>`;
-    if(n.k==='quiz') h+=`<div class="ui-sec-label">Tools</div><a class="ui-item" href="levels.en.html#plan" style="--c:var(--warn)"><span class="ico">${svg('map')}</span><span class="lbl">Plan Builder<small>Plan + level map</small></span></a><div class="ui-sec-label">Review</div>`;
+    if(n.k==='plan') h+=`<div class="ui-sec-label">Tools</div>`;
+    if(n.k==='quiz') h+=`<div class="ui-sec-label">Review</div>`;
     const on=n.k===page;
     h+=`<a class="ui-item${on?' on':''}" href="${n.href}" style="--c:${n.c}"${on?' aria-current="page"':''}><span class="ico">${svg(n.icon)}</span><span class="lbl">${n.label}<small>${n.sub}</small></span></a>`;
     if(on&&n.chapters){

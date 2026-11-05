@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080B10">
+<title>Plan Builder · Orderflow System</title>
+<meta name="description" content="Plan Builder và bản đồ level cho NQ.">
+<link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/css/app.css?v=9">
+<link rel="stylesheet" href="assets/css/levels.css?v=9">
+</head>
+<body data-page="plan">
+<main class="ui-main">
+<div class="ui-content pg-levels">
+<section class="tab">
+  <div class="panel stack">
+    <div class="qhead"><h3>Plan Builder</h3><span class="small muted">Số mặc định = minh hoạ đọc từ ảnh template ngày 04/11 (xấp xỉ). Thay bằng số thật trên ATAS.</span></div>
+    <div class="grid g2">
+      <div class="stack">
+        <fieldset><legend>Hôm qua (RTH)</legend>
+          <div class="form">
+            <div class="field"><label for="p-date">Ngày plan</label><input type="text" id="p-date" value="05/11/2026"></div>
+            <div class="field"><label for="p-pdh">PD High</label><input type="number" step="0.25" id="p-pdh" value="28975"></div>
+            <div class="field"><label for="p-pdl">PD Low</label><input type="number" step="0.25" id="p-pdl" value="28405"></div>
+            <div class="field"><label for="p-vah">PD VAH</label><input type="number" step="0.25" id="p-vah" value="28795"></div>
+            <div class="field"><label for="p-poc">PD POC</label><input type="number" step="0.25" id="p-poc" value="28680"></div>
+            <div class="field"><label for="p-val">PD VAL</label><input type="number" step="0.25" id="p-val" value="28505"></div>
+            <div class="field"><label for="p-close">PD Close</label><input type="number" step="0.25" id="p-close" value="28657"></div>
+            <div class="field"><label for="p-dtype">Day type</label><select id="p-dtype"><option>Normal</option><option selected>Normal Variation</option><option>Trend</option><option>Double Distribution</option><option>Neutral</option><option>Non-Trend</option></select></div>
+            <div class="field"><label for="p-shape">Shape</label><select id="p-shape"><option>D</option><option selected>P</option><option>b</option><option>B</option><option>Thin / elongated</option></select></div>
+            <div class="field"><label for="p-ph">Poor high?</label><select id="p-ph"><option value="0" selected>Không</option><option value="1">Có</option></select></div>
+            <div class="field"><label for="p-pl">Poor low?</label><select id="p-pl"><option value="0" selected>Không</option><option value="1">Có</option></select></div>
+          </div>
+        </fieldset>
+        <fieldset><legend>Overnight (ETH) & premarket</legend>
+          <div class="form">
+            <div class="field"><label for="p-onh">ON High</label><input type="number" step="0.25" id="p-onh" value="28760"></div>
+            <div class="field"><label for="p-onl">ON Low</label><input type="number" step="0.25" id="p-onl" value="28590"></div>
+            <div class="field"><label for="p-inv">ON inventory</label><select id="p-inv"><option value="long">Net long</option><option value="short">Net short</option><option value="neutral" selected>Trung tính</option></select></div>
+            <div class="field"><label for="p-px">Giá lúc 9:15 ET</label><input type="number" step="0.25" id="p-px" value="28700"></div>
+            <div class="field"><label for="p-news">Tin 8:30/10:00 ET</label><input type="text" id="p-news" value="Không có tin đỏ"></div>
+          </div>
+        </fieldset>
+        <fieldset><legend>Level &amp; vùng (mỗi dòng một mục)</legend>
+          <textarea id="p-levels" aria-label="Danh sách level khác" style="min-height:220px">[A12] 28628-28648 : POC pRTH naked · ORG · NDOG
+[B7] 28556-28580 : VAL composite · VAL pRTH
+[A8] 28384-28408 : VAL pETH · Đáy pRTH · TPO POC pETH
+[B7] 28968-28984 : Đáy pW+1 · Đỉnh pRTH/pETH
+[T] 28720-28816 : Target 10 · VAH pRTH
+[T] 29104-29180 : Target 11 · VAL pW · nPOC 23/10
+[T] 28296-28328 : Target 8 · nPOC RTH 03/11
+[TK] 28232-28236 : Đáy pW
+[GEX] Call Wall : 28903
+[GEX] Gamma Flip : 28459.5
+[TPO] TPO excess high pETH : 28968
+03/11 POC : 28330
+02/11 High : 28892</textarea>
+          <p class="small muted" style="margin-top:6px">Mỗi dòng: <code>tên : giá</code> (mốc tham chiếu), hoặc thêm nhãn ở đầu: <code>[A12] thấp-cao : nhãn</code> vùng A (điểm 12), <code>[B7]</code> vùng B, <code>[T]</code> target, <code>[TK]</code> đỉnh/đáy thanh khoản, <code>[GEX] tên : giá</code>, <code>[TPO] tên : giá</code>.</p>
+        </fieldset>
+        <div class="row"><button class="primary" id="p-build">Tạo plan</button><button id="p-copy">Copy plan</button><span class="small muted" id="p-msg" role="status"></span></div>
+      </div>
+      <div class="stack">
+        <div id="p-loc"></div>
+        <div class="tablewrap"><table class="ladder"><thead><tr><th>Level</th><th class="num">Giá</th><th class="num">Khoảng cách</th></tr></thead><tbody id="p-ladder"></tbody></table></div>
+        <div class="out" id="p-out"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel stack" id="p-chart-panel">
+    <div class="qhead"><h3>Bản đồ level</h3><div class="row"><button id="p-chart-png">Tải ảnh PNG</button><span class="small muted" id="p-chart-msg" role="status"></span></div></div>
+    <div class="svgwrap plan-chart" id="p-chart"></div>
+  </div>
+
+  
+</section>
+</div>
+</main>
+<script src="assets/js/levels-data.js?v=9"></script>
+<script src="assets/js/fp.js?v=9"></script>
+<script src="assets/js/bank-levels.js?v=9"></script>
+<script src="assets/js/bank-tools.js?v=9"></script>
+<script src="assets/js/quiz.js?v=9"></script>
+<script src="assets/js/core.js?v=9"></script>
+<script src="assets/js/levels-page.js?v=9"></script>
+<script src="assets/js/plan-chart.js?v=9"></script>
+</body>
+</html>

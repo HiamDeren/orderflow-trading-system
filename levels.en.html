@@ -14,28 +14,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=8">
-<link rel="stylesheet" href="assets/css/levels.css?v=8">
+<link rel="stylesheet" href="assets/css/app.css?v=9">
+<link rel="stylesheet" href="assets/css/levels.css?v=9">
 </head>
 <body data-page="levels">
 <main class="ui-main">
 <div class="ui-content pg-levels">
-<fieldset><legend>Levels &amp; zones (one per line)</legend>
-          <textarea id="p-levels" aria-label="List of other levels" style="min-height:220px">[A12] 28628-28648 : POC pRTH naked · ORG · NDOG
-[B7] 28556-28580 : VAL composite · VAL pRTH
-[A8] 28384-28408 : VAL pETH · pRTH low · TPO POC pETH
-[B7] 28968-28984 : pW+1 low · pRTH/pETH high
-[T] 28720-28816 : Target 10 · VAH pRTH
-[T] 29104-29180 : Target 11 · VAL pW · nPOC 23/10
-[T] 28296-28328 : Target 8 · nPOC RTH 03/11
-[TK] 28232-28236 : pW low
-[GEX] Call Wall : 28903
-[GEX] Gamma Flip : 28459.5
-[TPO] TPO excess high pETH : 28968
-03/11 POC : 28330
-02/11 High : 28892</textarea>
-          <p class="small muted" style="margin-top:6px">Each line: <code>name : price</code> (reference), or add a tag at the start: <code>[A12] low-high : label</code> zone A (score 12), <code>[B7]</code> zone B, <code>[T]</code> target, <code>[TK]</code> liquidity high/low, <code>[GEX] name : price</code>, <code>[TPO] name : price</code>.</p>
-        </fieldset>
+
 
 
 <section class="tab" id="ch-nen-tang" data-chapter="nen-tang">
@@ -44,7 +29,7 @@
     <h1 class="ui-h1">TPO Level</h1>
     <p class="ui-lede">Context from TPO · Confluence from VWAP RTH + CVD · Trigger from orderflow.</p>
     <div class="facts"><span><b>7</b> chapters</span><span><b>86</b> quiz questions</span><span>Plan Builder</span></div>
-    <div class="cta"><a class="ui-btn primary" href="#nen-tang">Start learning →</a><a class="ui-btn" href="#plan">Open Plan Builder</a><a class="ui-btn ghost" href="quiz.en.html#thi-thu">50-question mock exam</a></div>
+    <div class="cta"><a class="ui-btn primary" href="#nen-tang">Start learning →</a><a class="ui-btn" href="plan.en.html">Open Plan Builder</a><a class="ui-btn ghost" href="quiz.en.html#thi-thu">50-question mock exam</a></div>
   </div>
 
   <div class="head">
@@ -505,59 +490,6 @@ Reset      = 9:30 ET (same anchor as VWAP RTH and TPO RTH)</div>
     <div id="timeline" class="stack"></div>
   </div>
 
-  <div class="panel stack">
-    <div class="qhead"><h3>Plan Builder</h3><span class="small muted">Default numbers = illustration read from the 04/11 template screenshot (approximate). Replace them with real numbers from ATAS.</span></div>
-    <div class="grid g2">
-      <div class="stack">
-        <fieldset><legend>Yesterday (RTH)</legend>
-          <div class="form">
-            <div class="field"><label for="p-date">Plan date</label><input type="text" id="p-date" value="05/11/2026"></div>
-            <div class="field"><label for="p-pdh">PD High</label><input type="number" step="0.25" id="p-pdh" value="28975"></div>
-            <div class="field"><label for="p-pdl">PD Low</label><input type="number" step="0.25" id="p-pdl" value="28405"></div>
-            <div class="field"><label for="p-vah">PD VAH</label><input type="number" step="0.25" id="p-vah" value="28795"></div>
-            <div class="field"><label for="p-poc">PD POC</label><input type="number" step="0.25" id="p-poc" value="28680"></div>
-            <div class="field"><label for="p-val">PD VAL</label><input type="number" step="0.25" id="p-val" value="28505"></div>
-            <div class="field"><label for="p-close">PD Close</label><input type="number" step="0.25" id="p-close" value="28657"></div>
-            <div class="field"><label for="p-dtype">Day type</label><select id="p-dtype"><option>Normal</option><option selected>Normal Variation</option><option>Trend</option><option>Double Distribution</option><option>Neutral</option><option>Non-Trend</option></select></div>
-            <div class="field"><label for="p-shape">Shape</label><select id="p-shape"><option>D</option><option selected>P</option><option>b</option><option>B</option><option>Thin / elongated</option></select></div>
-            <div class="field"><label for="p-ph">Poor high?</label><select id="p-ph"><option value="0" selected>No</option><option value="1">Yes</option></select></div>
-            <div class="field"><label for="p-pl">Poor low?</label><select id="p-pl"><option value="0" selected>No</option><option value="1">Yes</option></select></div>
-          </div>
-        </fieldset>
-        <fieldset><legend>Overnight (ETH) & premarket</legend>
-          <div class="form">
-            <div class="field"><label for="p-onh">ON High</label><input type="number" step="0.25" id="p-onh" value="28760"></div>
-            <div class="field"><label for="p-onl">ON Low</label><input type="number" step="0.25" id="p-onl" value="28590"></div>
-            <div class="field"><label for="p-inv">ON inventory</label><select id="p-inv"><option value="long">Net long</option><option value="short">Net short</option><option value="neutral" selected>Neutral</option></select></div>
-            <div class="field"><label for="p-px">Price at 9:15 ET</label><input type="number" step="0.25" id="p-px" value="28700"></div>
-            <div class="field"><label for="p-news">News 8:30/10:00 ET</label><input type="text" id="p-news" value="No red-folder news"></div>
-          </div>
-        </fieldset>
-        <fieldset><legend>Other levels (one per line: name : price)</legend>
-          <textarea id="p-levels" aria-label="List of other levels">03/11 balance high : 28447
-03/11 POC : 28330
-02/11 POC : 28650
-02/11 High : 28892
-RTH gap bottom (30/10 High) : 28861
-RTH gap top (29/10 Low) : 29107
-29/10 POC : 29483
-Purple level : 28176</textarea>
-        </fieldset>
-        <div class="row"><button class="primary" id="p-build">Build plan</button><button id="p-copy">Copy plan</button><span class="small muted" id="p-msg" role="status"></span></div>
-      </div>
-      <div class="stack">
-        <div id="p-loc"></div>
-        <div class="tablewrap"><table class="ladder"><thead><tr><th>Level</th><th class="num">Price</th><th class="num">Distance</th></tr></thead><tbody id="p-ladder"></tbody></table></div>
-        <div class="out" id="p-out"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="panel stack" id="p-chart-panel">
-    <div class="qhead"><h3>Level map</h3><div class="row"><button id="p-chart-png">Download PNG</button><span class="small muted" id="p-chart-msg" role="status"></span></div></div>
-    <div class="svgwrap plan-chart" id="p-chart"></div>
-  </div>
-
   <div class="grid g2">
     <div class="panel stack">
       <h3>Pre-market checklist (before 9:25 ET)</h3>
@@ -587,13 +519,12 @@ Purple level : 28176</textarea>
 </div>
 <footer class="ui-foot">Study playbook for NQ intraday. Not investment advice. Traditional statistics (80% rule, day-type frequencies) must be verified with your own backtests before trading real money.</footer>
 </main>
-<script src="assets/js/en/levels-data.js?v=8"></script>
-<script src="assets/js/en/fp.js?v=8"></script>
-<script src="assets/js/en/bank-levels.js?v=8"></script>
-<script src="assets/js/en/bank-tools.js?v=8"></script>
-<script src="assets/js/en/quiz.js?v=8"></script>
-<script src="assets/js/en/core.js?v=8"></script>
-<script src="assets/js/en/levels-page.js?v=8"></script>
-<script src="assets/js/en/plan-chart.js?v=8"></script>
+<script src="assets/js/en/levels-data.js?v=9"></script>
+<script src="assets/js/en/fp.js?v=9"></script>
+<script src="assets/js/en/bank-levels.js?v=9"></script>
+<script src="assets/js/en/bank-tools.js?v=9"></script>
+<script src="assets/js/en/quiz.js?v=9"></script>
+<script src="assets/js/en/core.js?v=9"></script>
+<script src="assets/js/en/levels-page.js?v=9"></script>
 </body>
 </html>

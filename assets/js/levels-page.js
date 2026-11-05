@@ -631,16 +631,16 @@ function renderMigration(){
 }
 
 /* ---------- init ---------- */
-renderAnatomy();
-renderDayTypes();
-renderOpenTypes();
-renderOpenLoc();
-renderValRel();
-renderTiers();
-renderIB();
-renderVWAP();
-renderCVD();
-renderPlanStatic();
-initPlan();
+if($("#anatomy")) renderAnatomy();
+if($("#dt-buttons")) renderDayTypes();
+if($("#opentypes")) renderOpenTypes();
+if($("#openloc-svg")) renderOpenLoc();
+if($("#valrel")) renderValRel();
+if($("#tier-table")) renderTiers();
+if($("#ib-anatomy")) renderIB();
+if($("#vw-bal")) renderVWAP();
+if($("#cvd-matrix")) renderCVD();
+if($("#timeline")) renderPlanStatic();
+if($("#p-build")) initPlan();
 window.PLAN_READ = readPlan;
 })();
