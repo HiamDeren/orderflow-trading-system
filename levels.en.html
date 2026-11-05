@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#080B10">
-<title>TPO Level Playbook · Orderflow System</title>
+<title>TPO Level · Orderflow System</title>
 <meta name="description" content="TPO, Day & Open types, Level map, VWAP RTH, CVD divergence and the planning routine for NQ.">
 <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/icon-192.png">
@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=6">
-<link rel="stylesheet" href="assets/css/levels.css?v=6">
+<link rel="stylesheet" href="assets/css/app.css?v=7">
+<link rel="stylesheet" href="assets/css/levels.css?v=7">
 </head>
 <body data-page="levels">
 <main class="ui-main">
@@ -23,46 +23,15 @@
 
 
 
-<section class="tab" id="ch-lo-trinh" data-chapter="lo-trinh">
-  <div class="head">
-    <span class="eyebrow">00 · 9-week roadmap</span>
-    <h2>From reading a profile to planning and executing in the 2-hour NY AM window</h2>
-    <p class="lead">In your system TPO plays the role of <b>context + location</b>: it answers "is the market balanced or imbalanced, and where am I allowed to act". VWAP RTH and CVD are the confluence layer. The entry trigger remains what you have already settled on (OSR, IB, footprint/delta). This playbook adds no new model, it gives your existing models a clear level map.</p>
-  </div>
-
-  <div class="panel stack">
-    <div class="qhead"><h3>Overall progress</h3><span class="score" id="rm-score">0/0</span></div>
-    <div class="progress"><i id="rm-bar"></i></div>
-    <p class="small muted">Ticks are saved in this browser. Each phase has a "pass" criterion on its last line; do not move on until you meet it.</p>
-  </div>
-
-  <div class="stack" id="roadmap"></div>
-
-  <div class="grid g2">
-    <div class="panel stack">
-      <h3>Source material to read</h3>
-      <ul class="clean">
-        <li><b>James Dalton — Mind Over Markets</b> (chapters on TPO, day types, open types, value relationships). The source of almost every concept in tabs 01–03.</li>
-        <li><b>James Dalton — Markets in Profile</b>: the auction on higher timeframes, reading several days in a row.</li>
-        <li><b>CBOT Market Profile Handbook</b> (Steidlmayer): the original definitions of TPO, IB, Rotation Factor.</li>
-        <li>Your Notion recaps: <i>Lecture 5 – TPO Part 2</i>, <i>TPO: Components</i>, <i>TPO/VPO (Chika)</i>. Tab 01 answers the open questions you still have noted down.</li>
-      </ul>
-    </div>
-    <div class="panel stack">
-      <h3>How you use ATAS (unchanged)</h3>
-      <ul class="clean">
-        <li><span class="chip">Weekly Profile</span> higher-timeframe context: weekly VA, composite.</li>
-        <li><span class="chip">Daily Profile ETH</span> overnight inventory, ON high/low, ON POC.</li>
-        <li><span class="chip va">Daily Profile RTH</span> main chart for drawing zones (the template in the screenshot).</li>
-        <li><span class="chip vw">ETH M1 Execution</span> VWAP RTH ±1/2/3 SD + CVD + footprint for the trigger.</li>
-      </ul>
-      <p class="small muted">A principle from your own assessment: the reason you have not passed prop yet is changing strategy constantly. This roadmap is deliberately slow and measurable, to build conviction in a single framework.</p>
-    </div>
-  </div>
-</section>
-
-
 <section class="tab" id="ch-nen-tang" data-chapter="nen-tang">
+  <div class="ui-hero" style="--c:var(--c-levels)">
+    <span class="ui-eyebrow">Course 1 · NQ · RTH 9:30–16:00 ET</span>
+    <h1 class="ui-h1">TPO Level</h1>
+    <p class="ui-lede">Context from TPO · Confluence from VWAP RTH + CVD · Trigger from orderflow.</p>
+    <div class="facts"><span><b>8</b> chapters</span><span><b>93</b> quiz questions</span><span>Plan Builder</span></div>
+    <div class="cta"><a class="ui-btn primary" href="#nen-tang">Start learning →</a><a class="ui-btn" href="#plan">Open Plan Builder</a><a class="ui-btn ghost" href="quiz.en.html#thi-thu">50-question mock exam</a></div>
+  </div>
+
   <div class="head">
     <span class="eyebrow">01 · Foundations</span>
     <h2>What TPO is and how to read a profile</h2>
@@ -627,19 +596,19 @@ Purple level : 28176</textarea>
       </ul></div>
     </div>
   </div>
-  <div class="qz-slot" data-qz="levels:case" data-title="Quiz 07 · Case study template"></div>
+  <div class="qz-slot" data-qz="levels:case" data-title="Quiz 08 · Case study template"></div>
 </section>
 
 
 </div>
 <footer class="ui-foot">Study playbook for NQ intraday. Not investment advice. Traditional statistics (80% rule, day-type frequencies) must be verified with your own backtests before trading real money.</footer>
 </main>
-<script src="assets/js/en/levels-data.js?v=6"></script>
-<script src="assets/js/en/fp.js?v=6"></script>
-<script src="assets/js/en/bank-levels.js?v=6"></script>
-<script src="assets/js/en/bank-tools.js?v=6"></script>
-<script src="assets/js/en/quiz.js?v=6"></script>
-<script src="assets/js/en/core.js?v=6"></script>
-<script src="assets/js/en/levels-page.js?v=6"></script>
+<script src="assets/js/en/levels-data.js?v=7"></script>
+<script src="assets/js/en/fp.js?v=7"></script>
+<script src="assets/js/en/bank-levels.js?v=7"></script>
+<script src="assets/js/en/bank-tools.js?v=7"></script>
+<script src="assets/js/en/quiz.js?v=7"></script>
+<script src="assets/js/en/core.js?v=7"></script>
+<script src="assets/js/en/levels-page.js?v=7"></script>
 </body>
 </html>

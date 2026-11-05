@@ -9,14 +9,14 @@ const store={
 
 const NAV=[
   {k:'home',href:'index.en.html',label:'Overview',sub:'Dashboard',c:'var(--brand)',icon:'home'},
-  {k:'levels',href:'levels.en.html',label:'TPO Level Playbook',short:'Level',sub:'TPO · VWAP · CVD · Plan',c:'var(--c-levels)',icon:'tpo',chapters:[
-    ['lo-trinh','00','9-week roadmap'],['nen-tang','01','TPO foundations'],['cau-truc','02','Day & Open types'],
+  {k:'levels',href:'levels.en.html',label:'TPO Level',short:'Level',sub:'TPO · VWAP · CVD · Plan',c:'var(--c-levels)',icon:'tpo',chapters:[
+    ['nen-tang','01','TPO foundations'],['cau-truc','02','Day & Open types'],
     ['initial-balance','03','Initial Balance'],['levels','04','Level map'],['vwap','05','VWAP RTH'],
     ['cvd','06','CVD divergence'],['plan','07','Daily planning'],['template','08','Reading the template']]},
   {k:'tools',href:'tools.en.html',label:'Orderflow Tools',short:'Tools',sub:'DOM · Tape · Footprint · Delta',c:'var(--c-tools)',icon:'fp',chapters:[
-    ['tong-quan','00','Overview'],['nen-tang','01','Foundations'],['dom','02','DOM'],['tape','03','Tape'],
-    ['footprint','04','Footprint'],['delta','05','Delta & CVD'],['kich-ban','06','13 scenarios'],
-    ['ket-hop','07','Combining at the level'],['thuat-ngu','08','Glossary']]},
+    ['tong-quan','00','Overview'],['nen-tang','01','Foundations'],['thuat-ngu','02','Glossary'],['dom','03','DOM'],
+    ['tape','04','Tape'],['footprint','05','Footprint'],['delta','06','Delta & CVD'],['kich-ban','07','13 scenarios'],
+    ['ket-hop','08','Combining at the level']]},
   {k:'quiz',href:'quiz.en.html',label:'Quiz',short:'Quiz',sub:'Practice · Mock exams',c:'var(--c-quiz)',icon:'quiz',chapters:[
     ['luyen-tap','A','Practice'],['thi-thu','B','Mock exam'],['cau-sai','C','Review mistakes']]}
 ];

@@ -1,14 +1,14 @@
 # Orderflow Trading System
 
-Website học tập gộp hai playbook **Orderflow Tools** và **TPO Level Playbook** cho NQ intraday (ATAS · Rithmic), tối ưu cho cả desktop lẫn điện thoại.
+Website học tập gộp hai playbook **Orderflow Tools** và **TPO Level** cho NQ intraday (ATAS · Rithmic), tối ưu cho cả desktop lẫn điện thoại.
 
 ## Nội dung
 
 | Trang | Mô tả |
 |---|---|
 | `index.html` | Tổng quan: tiếp tục học, hệ thống 4 lớp, tiến độ 2 khoá, thống kê trắc nghiệm, sao lưu tiến độ |
-| `tools.html` | Khoá 1 · Orderflow Tools: DOM, Tape, Footprint, Delta & CVD, 13 kịch bản, kết hợp tại level, thuật ngữ |
-| `levels.html` | Khoá 2 · TPO Level Playbook: lộ trình 9 tuần, TPO, day/open types, level map, VWAP RTH, CVD, Plan Builder, case study |
+| `tools.html` | Khoá 2 · Orderflow Tools: DOM, Tape, Footprint, Delta & CVD, 13 kịch bản, kết hợp tại level, thuật ngữ |
+| `levels.html` | Khoá 1 · TPO Level: TPO, day/open types, level map, VWAP RTH, CVD, Plan Builder, case study |
 | `quiz.html` | Trung tâm trắc nghiệm: luyện tập, thi thử, ôn câu sai |
 
 **Ngân hàng câu hỏi: 180 câu, giữ nguyên văn** — 87 câu Orderflow Tools (`assets/js/bank-tools.js`, id `T001…T087`) và 93 câu TPO Level (`assets/js/bank-levels.js`, id `L001…L093`).

@@ -14,14 +14,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=6">
-<link rel="stylesheet" href="assets/css/tools.css?v=6">
+<link rel="stylesheet" href="assets/css/app.css?v=7">
+<link rel="stylesheet" href="assets/css/tools.css?v=7">
 </head>
 <body data-page="tools">
 <main class="ui-main">
 <div class="ui-content pg-tools">
 <!-- ============ TỔNG QUAN ============ -->
 <section class="ch" id="ch-tong-quan" data-chapter="tong-quan">
+  <div class="ui-hero" style="--c:var(--c-tools)">
+    <span class="ui-eyebrow">Khoá 2 · NQ · ATAS · Rithmic · intraday RTH</span>
+    <h1 class="ui-h1">Orderflow Tools Playbook</h1>
+    <p class="ui-lede">Toàn bộ kiến thức orderflow trong hệ thống ở một chỗ: DOM, tape, footprint, delta và CVD, cách kết hợp tại key level TPO, 13 kịch bản footprint và thuật ngữ. Hình minh hoạ vẽ theo kiểu cluster ATAS, số liệu là dữ liệu mẫu.</p>
+    <div class="facts"><span><b>9</b> chương</span><span><b>13</b> kịch bản footprint</span><span><b>87</b> câu trắc nghiệm</span><span><b>5</b> pha tại key level</span></div>
+    <div class="cta"><a class="ui-btn primary" href="#nen-tang">Bắt đầu học →</a><a class="ui-btn" href="#kich-ban">Xem 13 kịch bản</a><a class="ui-btn ghost" href="quiz.html#thi-thu">Thi thử 50 câu</a></div>
+  </div>
+
   <div class="chh"><span class="no">00</span><h2>Tổng quan: mỗi công cụ trả lời một câu hỏi</h2>
   <p>Orderflow không phải là nhìn càng nhiều càng tốt. Mỗi công cụ được dùng ở một thời điểm cụ thể khi giá tiến tới key level đã vẽ từ TPO.</p></div>
   <div class="grid g3">
@@ -66,9 +74,13 @@
   <div class="qz-slot" data-qz="tools:nen" data-title="Kiểm tra nhanh · Nền tảng"></div>
 </section>
 
-<!-- ============ DOM ============ -->
+<!-- ============ THUẬT NGỮ ============ -->
+<section class="ch" id="ch-thuat-ngu" data-chapter="thuat-ngu">
+  <div class="chh"><span class="no">02</span><h2>Thuật ngữ</h2></div>
+  <dl class="gl" id="gloss"></dl>
+</section><!-- ============ DOM ============ -->
 <section class="ch" id="ch-dom" data-chapter="dom">
-  <div class="chh"><span class="no">02</span><h2>DOM: sổ lệnh</h2><p>ATAS: Smart DOM. Dùng ở pha 3 khi giá chạm level.</p></div>
+  <div class="chh"><span class="no">03</span><h2>DOM: sổ lệnh</h2><p>ATAS: Smart DOM. Dùng ở pha 3 khi giá chạm level.</p></div>
   <p class="def"><b>DOM (Depth of Market)</b> hiển thị số hợp đồng limit đang treo ở từng mức giá quanh giá hiện tại: bên bid (lệnh mua chờ) và bên ask (lệnh bán chờ). DOM cho biết thanh khoản bị động, chưa phải là giao dịch đã xảy ra.</p>
   <h3>Khái niệm</h3>
   <div class="grid g3">
@@ -105,7 +117,7 @@
 
 <!-- ============ TAPE ============ -->
 <section class="ch" id="ch-tape" data-chapter="tape">
-  <div class="chh"><span class="no">03</span><h2>Tape: băng giao dịch</h2><p>ATAS: Smart Tape (cài đặt 2 cột Price + Volume, màu theo bên khớp). Dùng ở pha 2 và 3.</p></div>
+  <div class="chh"><span class="no">04</span><h2>Tape: băng giao dịch</h2><p>ATAS: Smart Tape (cài đặt 2 cột Price + Volume, màu theo bên khớp). Dùng ở pha 2 và 3.</p></div>
   <p class="def"><b>Tape (Time &amp; Sales)</b> liệt kê từng giao dịch đã khớp: giá, khối lượng, bên chủ động (mua tại ask hay bán tại bid) và thời gian. Smart Tape gộp các lệnh bị chia nhỏ khớp cùng lúc thành một dòng để thấy kích thước thật.</p>
   <h3>Khái niệm</h3>
   <div class="grid g3">
@@ -140,7 +152,7 @@
 
 <!-- ============ FOOTPRINT ============ -->
 <section class="ch" id="ch-footprint" data-chapter="footprint">
-  <div class="chh"><span class="no">04</span><h2>Footprint: cluster chart</h2><p>ATAS: Cluster chart, Bid × Ask, Imbalance. Dùng ở pha 4, chỉ đọc trên nến M1 đã đóng.</p></div>
+  <div class="chh"><span class="no">05</span><h2>Footprint: cluster chart</h2><p>ATAS: Cluster chart, Bid × Ask, Imbalance. Dùng ở pha 4, chỉ đọc trên nến M1 đã đóng.</p></div>
   <p class="def"><b>Footprint</b> tách mỗi cây nến thành từng mức giá và cho biết tại mỗi mức có bao nhiêu volume khớp do bán chủ động (cột bid, bên trái) và mua chủ động (cột ask, bên phải). Nó cho thấy cây nến được tạo ra như thế nào.</p>
   <h3>Giải phẫu một cây nến footprint</h3>
   <p>Cây nến mẫu dưới đây là một nến M1 tăng. Mỗi số tròn trên hình ứng với một thành phần trong bảng bên cạnh; cột cuối là giá trị đọc được từ chính cây nến này.</p>
@@ -239,7 +251,7 @@
 
 <!-- ============ DELTA ============ -->
 <section class="ch" id="ch-delta" data-chapter="delta">
-  <div class="chh"><span class="no">05</span><h2>Delta và CVD</h2><p>ATAS: Delta, Cumulative Delta, Cluster Statistic. CVD dùng ở pha 2, delta nến là một phần của trigger ở pha 4.</p></div>
+  <div class="chh"><span class="no">06</span><h2>Delta và CVD</h2><p>ATAS: Delta, Cumulative Delta, Cluster Statistic. CVD dùng ở pha 2, delta nến là một phần của trigger ở pha 4.</p></div>
   <p class="def"><b>Delta</b> = tổng volume khớp ở ask − tổng volume khớp ở bid, tức mua chủ động trừ bán chủ động. <b>CVD (Cumulative Volume Delta)</b> là delta cộng dồn từ đầu phiên.</p>
   <h3>Các con số trong Cluster Statistic</h3>
   <div class="grid g2">
@@ -277,7 +289,7 @@
 
 <!-- ============ KỊCH BẢN ============ -->
 <section class="ch" id="ch-kich-ban" data-chapter="kich-ban">
-  <div class="chh"><span class="no">06</span><h2>13 kịch bản footprint</h2><p>Mỗi kịch bản gồm bối cảnh cần có, footprint 3 nến kiểu ATAS, cách đọc, kế hoạch và điều kiện vô hiệu.</p></div>
+  <div class="chh"><span class="no">07</span><h2>13 kịch bản footprint</h2><p>Mỗi kịch bản gồm bối cảnh cần có, footprint 3 nến kiểu ATAS, cách đọc, kế hoạch và điều kiện vô hiệu.</p></div>
   <div class="legend" style="margin-bottom:14px">
     <span><i class="sw" style="background:rgba(120,32,44,.6)"></i>Key level</span>
     <span><i class="sw" style="border:2px dashed #4CC9F0"></i>Absorption</span>
@@ -291,7 +303,7 @@
 
 <!-- ============ KẾT HỢP ============ -->
 <section class="ch" id="ch-ket-hop" data-chapter="ket-hop">
-  <div class="chh"><span class="no">07</span><h2>Kết hợp tại key level TPO</h2><p>VWAP là cổng lọc, footprint là trigger bắt buộc, CVD, DOM và tape quyết định hạng setup.</p></div>
+  <div class="chh"><span class="no">08</span><h2>Kết hợp tại key level TPO</h2><p>VWAP là cổng lọc, footprint là trigger bắt buộc, CVD, DOM và tape quyết định hạng setup.</p></div>
   <div class="grid g2">
     <div class="ex"><div class="t">Fade tại level <span class="pill p-neu">Responsive</span></div>
       <dl class="kv">
@@ -335,19 +347,15 @@
   <div class="qz-slot" data-qz="tools:kh" data-title="Kiểm tra nhanh · Kết hợp tại level"></div>
 </section>
 
-<!-- ============ THUẬT NGỮ ============ -->
-<section class="ch" id="ch-thuat-ngu" data-chapter="thuat-ngu">
-  <div class="chh"><span class="no">08</span><h2>Thuật ngữ</h2></div>
-  <dl class="gl" id="gloss"></dl>
-</section>
+
 </div>
 <footer class="ui-foot">Dữ liệu minh hoạ · Tên indicator theo ATAS · Màu ATAS dạng #AARRGGBB: histogram delta dương #FF3F7FD9, âm #FF4A4A4A, POC #FFE07B39, key level #6B782C2C</footer>
 </main>
-<script src="assets/js/fp.js?v=6"></script>
-<script src="assets/js/bank-levels.js?v=6"></script>
-<script src="assets/js/bank-tools.js?v=6"></script>
-<script src="assets/js/quiz.js?v=6"></script>
-<script src="assets/js/core.js?v=6"></script>
-<script src="assets/js/tools-page.js?v=6"></script>
+<script src="assets/js/fp.js?v=7"></script>
+<script src="assets/js/bank-levels.js?v=7"></script>
+<script src="assets/js/bank-tools.js?v=7"></script>
+<script src="assets/js/quiz.js?v=7"></script>
+<script src="assets/js/core.js?v=7"></script>
+<script src="assets/js/tools-page.js?v=7"></script>
 </body>
 </html>

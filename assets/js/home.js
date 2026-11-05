@@ -58,8 +58,8 @@ function cont(){
     el.innerHTML=`<span class="ico">${svg(n.icon,20)}</span><span><small>Tiếp tục học · ${n.label}</small><b>${/\d/.test(last.no)?last.no+' · ':''}${last.title}</b></span><span class="arr">→</span>`;
     const b=$('#cta-cont');if(b){b.href=last.href;b.textContent='Tiếp tục: '+last.title;}
   }else{
-    el.style.setProperty('--c','var(--c-levels)');el.href='levels.html#lo-trinh';
-    el.innerHTML=`<span class="ico">${svg('tpo',20)}</span><span><small>Bắt đầu từ đây</small><b>Lộ trình 9 tuần · TPO Level Playbook</b></span><span class="arr">→</span>`;
+    el.style.setProperty('--c','var(--c-levels)');el.href='levels.html#nen-tang';
+    el.innerHTML=`<span class="ico">${svg('tpo',20)}</span><span><small>Bắt đầu từ đây</small><b>01 · Nền tảng TPO · TPO Level</b></span><span class="arr">→</span>`;
   }
 }
 

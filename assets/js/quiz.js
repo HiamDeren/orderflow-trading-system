@@ -10,7 +10,7 @@ const BANK=window.QBANK||[], MODS=window.QMODS||{};
 const BY={}; BANK.forEach(q=>{BY[q.id]=q;});
 const COURSE={
   tools:{name:'Orderflow Tools',short:'Tools',c:'var(--c-tools)'},
-  levels:{name:'TPO Level Playbook',short:'Level',c:'var(--c-levels)'}
+  levels:{name:'TPO Level',short:'Level',c:'var(--c-levels)'}
 };
 const KEY='ofs.quiz.v1', CUR='ofs.exam.cur', PASS=0.8;
 const LET='ABCD';
@@ -168,22 +168,22 @@ function Exam(root,opt={}){
     let h=`<div class="ex-pick">`+Object.entries(EXAMS).map(([k,x])=>{
       const H=hist(k),last=H[H.length-1],best=H.reduce((m,r)=>Math.max(m,pct(r.right,r.n)),0),st=streak(k);
       return`<div class="ex-card" style="--c:${x.c}"><span class="ui-eyebrow" style="--c:${x.c}">${x.short}</span><h3>${x.name}</h3>
-        <div class="big">${x.n}<small>câu</small></div>
+        <div class="big">${x.n}<small>câu</small></div><p>${x.desc}</p>
         <div class="row"><span>Gần nhất <b>${last?pct(last.right,last.n)+'%':'—'}</b></span><span>Tốt nhất <b>${H.length?best+'%':'—'}</b></span><span>Số lần <b>${H.length}</b></span></div>
         <div class="row" style="align-items:center"><span class="ex-streak">${[0,1,2].map(i=>`<i class="${i<st?'on':''}"></i>`).join('')}</span><span>${st>=3?'<b class="ex-pass">Đã qua bài</b>':`Đạt ≥80% liên tiếp: <b>${Math.min(st,3)}/3</b>`}</span></div>
         <button type="button" class="ui-btn primary" data-begin="${k}" style="${k!=='all'?`background:${x.c};border-color:${x.c}`:''}">Bắt đầu đề ${x.n} câu</button></div>`;}).join('')+`</div>
       <div class="ui-card" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:14px">
-        <div><b>Đề câu sai</b><div class="ui-note">${nWrong} câu</div></div>
+        <div><b>Đề câu sai</b><div class="ui-note">Tối đa 50 câu lấy từ danh sách câu bạn đang làm sai (${nWrong} câu). Không chấm qua bài, chỉ để ôn.</div></div>
         <button type="button" class="ui-btn" data-begin="wrong"${nWrong?'':' disabled'}>Làm đề câu sai</button></div>`;
     const H=hist().slice(-12).reverse();
-    h+=`<div class="ui-sec" style="margin-top:26px"><div class="ui-sec-h"><h3 class="ui-h2" style="font-size:19px">Lịch sử thi</h3></div>`;
+    h+=`<div class="ui-sec" style="margin-top:26px"><div class="ui-sec-h"><h3 class="ui-h2" style="font-size:19px">Lịch sử thi</h3><span class="ui-note">Qua bài khi đạt ≥ 80% ba lần liên tiếp cho cùng một đề</span></div>`;
     h+=H.length?`<div class="ui-tablewrap"><table class="ex-hist"><thead><tr><th>Thời điểm</th><th>Đề</th><th style="text-align:right">Điểm</th><th style="text-align:right">%</th><th style="text-align:right">Thời gian</th></tr></thead><tbody>${H.map(r=>{const p=pct(r.right,r.n);return`<tr><td>${new Date(r.ts).toLocaleString('vi-VN',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'})}</td><td>${meta(r.kind).name}</td><td class="num">${r.right}/${r.n}</td><td class="num ${p>=80?'ex-pass':'ex-fail'}">${p}%</td><td class="num">${fmtDur(r.dur)}</td></tr>`;}).join('')}</tbody></table></div>`:`<div class="ui-note">Chưa có lần thi nào.</div>`;
     root.innerHTML=h+'</div>';
   }
   function renderRun(scroll){keepFocus(root,()=>{
     root.classList.add('qz');root.tabIndex=-1;const m=meta(run.kind);root.style.setProperty('--qc',m.c);
     const n=run.ids.length,done=run.ids.filter(id=>run.ans[id]!==undefined).length,idx=run.idx,id=run.ids[idx];
-    let h=`<div class="qz-head"><div class="qz-title"><h3 class="qz-h">${m.name} · ${n} câu</h3></div>
+    let h=`<div class="qz-head"><div class="qz-title"><span class="ui-eyebrow">Đang thi · không hiện đáp án đến khi nộp</span><h3 class="qz-h">${m.name} · ${n} câu</h3></div>
       <div class="qz-score"><span class="ex-timer">${fmtDur(Date.now()-run.t0)}</span> · <b>${done}</b>/${n} đã chọn</div>
       <div class="qz-actions"><button type="button" class="qz-mini${armed==='quit'?' warn':''}" data-act="quit">${armed==='quit'?'Bấm lần nữa để huỷ':'Huỷ đề'}</button></div></div>
       <div class="qz-meter"><i style="width:${done/n*100}%;background:var(--qc)"></i></div>`;
@@ -255,7 +255,7 @@ function mountCenter(){
   const box=$('#qz-practice');if(!box)return;
   let course='',mod='',open=false;
   const bar=$('#qz-filter');
-  const P=Practice(box,{ids:()=>ids(),title:'Ngân hàng câu hỏi',c:'var(--c-quiz)'});
+  const P=Practice(box,{ids:()=>ids(),title:'Ngân hàng câu hỏi',eyebrow:'Luyện tập · có đáp án ngay',c:'var(--c-quiz)'});
   function ids(){let l=idsWhere(course||null,mod?[mod]:null);if(open)l=l.filter(id=>S.ans[id]===undefined);return l;}
   function chips(){
     const tot=c=>idsWhere(c||null).length;
@@ -272,7 +272,7 @@ function mountCenter(){
     chips();P.setIds(()=>ids());});
   chips();
   document.addEventListener('qz:change',chips);
-  const W=$('#qz-wrong')&&Practice($('#qz-wrong'),{ids:()=>BANK.map(q=>q.id),review:true,title:'Ôn câu sai',c:'var(--sell)'});
+  const W=$('#qz-wrong')&&Practice($('#qz-wrong'),{ids:()=>BANK.map(q=>q.id),review:true,title:'Ôn câu sai',eyebrow:'Trả lời đúng thì câu tự rời danh sách',c:'var(--sell)'});
   const E=$('#qz-exam')&&Exam($('#qz-exam'));
   document.addEventListener('ofs:chapter',e=>{const s=e.detail.slug;if(s==='cau-sai'&&W)W.refresh();if(s==='luyen-tap')P.refresh();if(s==='thi-thu'&&E)E.refresh();});
 }

@@ -14,14 +14,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=6">
-<link rel="stylesheet" href="assets/css/tools.css?v=6">
+<link rel="stylesheet" href="assets/css/app.css?v=7">
+<link rel="stylesheet" href="assets/css/tools.css?v=7">
 </head>
 <body data-page="tools">
 <main class="ui-main">
 <div class="ui-content pg-tools">
 
 <section class="ch" id="ch-tong-quan" data-chapter="tong-quan">
+  <div class="ui-hero" style="--c:var(--c-tools)">
+    <span class="ui-eyebrow">Course 2 · NQ · ATAS · Rithmic · intraday RTH</span>
+    <h1 class="ui-h1">Orderflow Tools Playbook</h1>
+    <p class="ui-lede">All the orderflow knowledge of the system in one place: DOM, tape, footprint, delta and CVD, how to combine them at TPO key levels, 13 footprint scenarios and a glossary. Illustrations are drawn in ATAS cluster style, numbers are sample data.</p>
+    <div class="facts"><span><b>9</b> chapters</span><span><b>13</b> footprint scenarios</span><span><b>87</b> quiz questions</span><span><b>5</b> phases at a key level</span></div>
+    <div class="cta"><a class="ui-btn primary" href="#nen-tang">Start learning →</a><a class="ui-btn" href="#kich-ban">See the 13 scenarios</a><a class="ui-btn ghost" href="quiz.en.html#thi-thu">50-question mock exam</a></div>
+  </div>
+
   <div class="chh"><span class="no">00</span><h2>Overview: each tool answers one question</h2>
   <p>Orderflow is not about watching as much as possible. Each tool is used at a specific moment as price approaches a key level drawn from TPO.</p></div>
   <div class="grid g3">
@@ -66,9 +74,13 @@
   <div class="qz-slot" data-qz="tools:nen" data-title="Quick check · Foundations"></div>
 </section>
 
-<!-- ============ DOM ============ -->
+
+<section class="ch" id="ch-thuat-ngu" data-chapter="thuat-ngu">
+  <div class="chh"><span class="no">02</span><h2>Glossary</h2></div>
+  <dl class="gl" id="gloss"></dl>
+</section><!-- ============ DOM ============ -->
 <section class="ch" id="ch-dom" data-chapter="dom">
-  <div class="chh"><span class="no">02</span><h2>DOM: the order book</h2><p>ATAS: Smart DOM. Used in phase 3 when price touches the level.</p></div>
+  <div class="chh"><span class="no">03</span><h2>DOM: the order book</h2><p>ATAS: Smart DOM. Used in phase 3 when price touches the level.</p></div>
   <p class="def"><b>DOM (Depth of Market)</b> shows the number of limit contracts resting at each price around the current price: the bid side (resting buys) and the ask side (resting sells). The DOM shows passive liquidity, not trades that have happened.</p>
   <h3>Concepts</h3>
   <div class="grid g3">
@@ -105,7 +117,7 @@
 
 <!-- ============ TAPE ============ -->
 <section class="ch" id="ch-tape" data-chapter="tape">
-  <div class="chh"><span class="no">03</span><h2>Tape: time & sales</h2><p>ATAS: Smart Tape (2 columns Price + Volume, coloured by aggressor side). Used in phases 2 and 3.</p></div>
+  <div class="chh"><span class="no">04</span><h2>Tape: time & sales</h2><p>ATAS: Smart Tape (2 columns Price + Volume, coloured by aggressor side). Used in phases 2 and 3.</p></div>
   <p class="def"><b>Tape (Time &amp; Sales)</b> lists every filled trade: price, size, aggressor side (buy at the ask or sell at the bid) and time. Smart Tape merges orders split into pieces at the same moment into one line so you see the real size.</p>
   <h3>Concepts</h3>
   <div class="grid g3">
@@ -140,7 +152,7 @@
 
 <!-- ============ FOOTPRINT ============ -->
 <section class="ch" id="ch-footprint" data-chapter="footprint">
-  <div class="chh"><span class="no">04</span><h2>Footprint: cluster chart</h2><p>ATAS: Cluster chart, Bid × Ask, Imbalance. Used in phase 4, read only on closed M1 candles.</p></div>
+  <div class="chh"><span class="no">05</span><h2>Footprint: cluster chart</h2><p>ATAS: Cluster chart, Bid × Ask, Imbalance. Used in phase 4, read only on closed M1 candles.</p></div>
   <p class="def"><b>Footprint</b> splits each candle into price levels and shows, at each level, how much volume was filled by aggressive sellers (bid column, left) and aggressive buyers (ask column, right). It shows how the candle was built.</p>
   <h3>Anatomy of a footprint candle</h3>
   <p>The sample candle below is a bullish M1 candle. Each numbered circle matches a component in the table next to it; the last column is the value read from this very candle.</p>
@@ -239,7 +251,7 @@
 
 <!-- ============ DELTA ============ -->
 <section class="ch" id="ch-delta" data-chapter="delta">
-  <div class="chh"><span class="no">05</span><h2>Delta and CVD</h2><p>ATAS: Delta, Cumulative Delta, Cluster Statistic. CVD is used in phase 2, candle delta is part of the trigger in phase 4.</p></div>
+  <div class="chh"><span class="no">06</span><h2>Delta and CVD</h2><p>ATAS: Delta, Cumulative Delta, Cluster Statistic. CVD is used in phase 2, candle delta is part of the trigger in phase 4.</p></div>
   <p class="def"><b>Delta</b> = total volume filled at the ask − total volume filled at the bid, i.e. aggressive buying minus aggressive selling. <b>CVD (Cumulative Volume Delta)</b> is delta accumulated from the start of the session.</p>
   <h3>The numbers in Cluster Statistic</h3>
   <div class="grid g2">
@@ -277,7 +289,7 @@
 
 
 <section class="ch" id="ch-kich-ban" data-chapter="kich-ban">
-  <div class="chh"><span class="no">06</span><h2>13 footprint scenarios</h2><p>Each scenario covers the required context, a 3-candle ATAS-style footprint, how to read it, the plan and the invalidation.</p></div>
+  <div class="chh"><span class="no">07</span><h2>13 footprint scenarios</h2><p>Each scenario covers the required context, a 3-candle ATAS-style footprint, how to read it, the plan and the invalidation.</p></div>
   <div class="legend" style="margin-bottom:14px">
     <span><i class="sw" style="background:rgba(120,32,44,.6)"></i>Key level</span>
     <span><i class="sw" style="border:2px dashed #4CC9F0"></i>Absorption</span>
@@ -291,7 +303,7 @@
 
 
 <section class="ch" id="ch-ket-hop" data-chapter="ket-hop">
-  <div class="chh"><span class="no">07</span><h2>Combining at a TPO key level</h2><p>VWAP is the filter gate, footprint is the mandatory trigger, CVD, DOM and tape decide the setup grade.</p></div>
+  <div class="chh"><span class="no">08</span><h2>Combining at a TPO key level</h2><p>VWAP is the filter gate, footprint is the mandatory trigger, CVD, DOM and tape decide the setup grade.</p></div>
   <div class="grid g2">
     <div class="ex"><div class="t">Fade at the level <span class="pill p-neu">Responsive</span></div>
       <dl class="kv">
@@ -336,18 +348,14 @@
 </section>
 
 
-<section class="ch" id="ch-thuat-ngu" data-chapter="thuat-ngu">
-  <div class="chh"><span class="no">08</span><h2>Glossary</h2></div>
-  <dl class="gl" id="gloss"></dl>
-</section>
 </div>
 <footer class="ui-foot">Illustrative data · Indicator names as in ATAS · ATAS colours in #AARRGGBB: positive delta histogram #FF3F7FD9, negative #FF4A4A4A, POC #FFE07B39, key level #6B782C2C</footer>
 </main>
-<script src="assets/js/en/fp.js?v=6"></script>
-<script src="assets/js/en/bank-levels.js?v=6"></script>
-<script src="assets/js/en/bank-tools.js?v=6"></script>
-<script src="assets/js/en/quiz.js?v=6"></script>
-<script src="assets/js/en/core.js?v=6"></script>
-<script src="assets/js/en/tools-page.js?v=6"></script>
+<script src="assets/js/en/fp.js?v=7"></script>
+<script src="assets/js/en/bank-levels.js?v=7"></script>
+<script src="assets/js/en/bank-tools.js?v=7"></script>
+<script src="assets/js/en/quiz.js?v=7"></script>
+<script src="assets/js/en/core.js?v=7"></script>
+<script src="assets/js/en/tools-page.js?v=7"></script>
 </body>
 </html>

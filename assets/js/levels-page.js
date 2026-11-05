@@ -1,4 +1,4 @@
-/* Render các widget khoá TPO Level Playbook (từ artifact gốc, bỏ router tab & quiz cũ). */
+/* Render các widget khoá TPO Level (từ artifact gốc, bỏ router tab & quiz cũ). */
 (function(){
 "use strict";
 const $ = (s, r=document) => r.querySelector(s);
@@ -619,7 +619,6 @@ function renderMigration(){
 }
 
 /* ---------- init ---------- */
-renderRoadmap();
 renderAnatomy();
 renderDayTypes();
 renderOpenTypes();

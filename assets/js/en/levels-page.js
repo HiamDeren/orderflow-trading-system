@@ -619,7 +619,6 @@ function renderMigration(){
 }
 
 /* ---------- init ---------- */
-renderRoadmap();
 renderAnatomy();
 renderDayTypes();
 renderOpenTypes();

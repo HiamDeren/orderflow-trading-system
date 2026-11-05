@@ -58,8 +58,8 @@ function cont(){
     el.innerHTML=`<span class="ico">${svg(n.icon,20)}</span><span><small>Continue · ${n.label}</small><b>${/\d/.test(last.no)?last.no+' · ':''}${last.title}</b></span><span class="arr">→</span>`;
     const b=$('#cta-cont');if(b){b.href=last.href;b.textContent='Continue: '+last.title;}
   }else{
-    el.style.setProperty('--c','var(--c-levels)');el.href='levels.en.html#lo-trinh';
-    el.innerHTML=`<span class="ico">${svg('tpo',20)}</span><span><small>Start here</small><b>9-week roadmap · TPO Level Playbook</b></span><span class="arr">→</span>`;
+    el.style.setProperty('--c','var(--c-levels)');el.href='levels.en.html#nen-tang';
+    el.innerHTML=`<span class="ico">${svg('tpo',20)}</span><span><small>Start here</small><b>01 · TPO foundations · TPO Level</b></span><span class="arr">→</span>`;
   }
 }
 

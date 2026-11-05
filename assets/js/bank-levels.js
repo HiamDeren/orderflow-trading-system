@@ -1,4 +1,4 @@
-/* Ngân hàng câu hỏi khoá TPO Level Playbook — 93 câu, giữ nguyên văn từ artifact gốc. */
+/* Ngân hàng câu hỏi khoá TPO Level — 93 câu, giữ nguyên văn từ artifact gốc. */
 (function(){
 'use strict';
 const PB={};
