@@ -56,9 +56,9 @@ function buildShell(){
     if(i===1) h+=`<div class="ui-sec-label">Khoá học</div>`;
     if(n.k==='quiz') h+=`<div class="ui-sec-label">Ôn luyện</div>`;
     const on=n.k===page;
-    h+=`<a class="ui-item${on?' on':''}" href="${n.href}" style="--c:${n.c}"${on?' aria-current="page"':''}><span class="ico">${svg(n.icon)}</span><span class="lbl">${n.label}<small>${n.sub}</small></span>${n.chapters?`<span class="cnt" data-cnt="${n.k}"></span>`:''}</a>`;
+    h+=`<a class="ui-item${on?' on':''}" href="${n.href}" style="--c:${n.c}"${on?' aria-current="page"':''}><span class="ico">${svg(n.icon)}</span><span class="lbl">${n.label}<small>${n.sub}</small></span></a>`;
     if(on&&n.chapters){
-      h+=`<ol class="ui-toc" style="--c:${n.c}">`+n.chapters.map(([s,no,t])=>`<li><a href="#${s}" data-slug="${s}"><span class="n">${no}</span><span>${t}</span><span class="ck">✓</span></a></li>`).join('')+`</ol>`;
+      h+=`<ol class="ui-toc" style="--c:${n.c}">`+n.chapters.map(([s,no,t])=>`<li><a href="#${s}" data-slug="${s}"><span class="n">${no}</span><span>${t}</span></a></li>`).join('')+`</ol>`;
     }
   });
   h+=`</nav><div class="ui-side-foot"><div class="ui-mini" id="ui-mini"></div></div>`;
@@ -92,7 +92,6 @@ function closeNav(){document.body.classList.remove('nav-open');const b=$('.ui-bu
 let tt;function toast(msg){const t=$('#ui-toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200);}
 
 /* ---------- chapter router ---------- */
-const seen=store.get('ofs.seen',{});
 function chapterRouter(){
   const secs=$$('[data-chapter]'); if(!secs.length||!cur.chapters) return;
   const list=cur.chapters.filter(([s])=>secs.some(x=>x.dataset.chapter===s));
@@ -129,16 +128,11 @@ function chapterRouter(){
     const sep=$('#ui-sep'); if(sep) sep.hidden=false;
     const pr=$('#ui-prog'); if(pr) pr.style.width=((i+1)/list.length*100)+'%';
     document.title=`${titleOf(slug)} · ${cur.label} · Orderflow System`;
-    seen[page+'/'+slug]=1; store.set('ofs.seen',seen); markSeen();
     store.set('ofs.last',{href:`${cur.href}#${slug}`,page,course:cur.label,title:titleOf(slug),no:list[i][1],ts:Date.now()});
     document.dispatchEvent(new CustomEvent('ofs:chapter',{detail:{slug}}));
   }
   window.addEventListener('hashchange',show);
   show();
-}
-function markSeen(){
-  $$('.ui-toc a').forEach(a=>a.classList.toggle('seen',!!seen[page+'/'+a.dataset.slug]));
-  NAV.forEach(n=>{if(!n.chapters||n.k==='quiz')return;const el=$(`[data-cnt="${n.k}"]`);if(el){const d=n.chapters.filter(c=>seen[n.k+'/'+c[0]]).length;el.textContent=`${d}/${n.chapters.length}`;}});
 }
 
 /* ---------- Phiên RTH: tính theo New York, hiển thị theo giờ Việt Nam (tự xử lý DST) ---------- */
@@ -200,9 +194,10 @@ function mini(){
     <div style="display:flex;justify-content:space-between;gap:8px"><a href="quiz.html#cau-sai">Câu sai: ${s.wrong}</a><a href="index.html#backup">Sao lưu tiến độ</a></div>`;
 }
 
-window.OFS={store,NAV,session,dur,clock,toast,svg,seen,mini,LANG};
+window.OFS={store,NAV,session,dur,clock,toast,svg,mini,LANG};
 
-buildShell(); markSeen(); tick(); (function loop(){tick();setTimeout(loop,1000-Date.now()%1000+5);})();
+try{localStorage.removeItem('ofs.seen');}catch(e){}
+buildShell(); tick(); (function loop(){tick();setTimeout(loop,1000-Date.now()%1000+5);})();
 document.addEventListener('DOMContentLoaded',()=>{chapterRouter();mini();});
 document.addEventListener('qz:change',mini);
 })();

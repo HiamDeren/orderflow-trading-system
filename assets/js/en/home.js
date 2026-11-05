@@ -3,7 +3,6 @@
 'use strict';
 const $=(s,r=document)=>r.querySelector(s);
 const {store,NAV,session,svg,toast}=window.OFS;
-const seen=store.get('ofs.seen',{});
 
 /* ---------- hero art: TPO profile + footprint ---------- */
 function art(){
@@ -68,10 +67,8 @@ function cont(){
 function courses(){
   ['levels','tools'].forEach(k=>{
     const el=$('#course-'+k);if(!el)return;const n=NAV.find(x=>x.k===k),s=QZ.stats(k);
-    const d=n.chapters.filter(c=>seen[k+'/'+c[0]]).length;
-    el.querySelector('.chs').innerHTML=n.chapters.map(([sl,no,t])=>`<a href="${n.href}#${sl}" class="${seen[k+'/'+sl]?'seen':''}"><span class="n">${no}</span>${t}</a>`).join('');
-    el.querySelector('.meters').innerHTML=`<div><div class="lbl"><span>Chapters viewed</span><b>${d}/${n.chapters.length}</b></div><div class="ui-bar"><i style="width:${d/n.chapters.length*100}%;background:var(--c)"></i></div></div>
-      <div><div class="lbl"><span>Correct answers</span><b>${s.ok}/${s.n}</b></div><div class="ui-bar"><i style="width:${s.ok/s.n*100}%;background:var(--buy)"></i><i style="width:${(s.done-s.ok)/s.n*100}%;background:var(--sell)"></i></div></div>`;
+    el.querySelector('.chs').innerHTML=n.chapters.map(([sl,no,t])=>`<a href="${n.href}#${sl}"><span class="n">${no}</span>${t}</a>`).join('');
+    el.querySelector('.meters').innerHTML=`<div><div class="lbl"><span>Correct answers</span><b>${s.ok}/${s.n}</b></div><div class="ui-bar"><i style="width:${s.ok/s.n*100}%;background:var(--buy)"></i><i style="width:${(s.done-s.ok)/s.n*100}%;background:var(--sell)"></i></div></div>`;
   });
   // roadmap ticks (levels)
   const r=$('#rm-mini');if(r&&window.PBR){let done=0,all=0;PBR.forEach(([id,n])=>{all+=n;for(let i=0;i<n;i++)if(store.get(`rm-${id}-${i}`,false))done++;});r.textContent=`${done}/${all}`;}

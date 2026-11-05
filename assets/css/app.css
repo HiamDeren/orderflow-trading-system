@@ -365,7 +365,7 @@ table.t th:first-child,table.t td:first-child{text-align:left}
 .course .chs a.seen{border-color:color-mix(in srgb,var(--c) 45%,transparent)}
 .course .chs a.seen .n{color:var(--c)}
 .course .chs a:hover{border-color:var(--c)}
-.course .meters{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.course .meters{display:grid;grid-template-columns:1fr;gap:14px}
 .course .meters .lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
 .course .meters .lbl b{font-family:var(--font-mono);font-weight:500;color:var(--text)}
 .course .act{display:flex;gap:8px;flex-wrap:wrap}
