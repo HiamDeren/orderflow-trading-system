@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=4">
-<link rel="stylesheet" href="assets/css/levels.css?v=4">
+<link rel="stylesheet" href="assets/css/app.css?v=5">
+<link rel="stylesheet" href="assets/css/levels.css?v=5">
 </head>
 <body data-page="levels">
 <main class="ui-main">
@@ -28,7 +28,7 @@
     <span class="ui-eyebrow">Khoá 1 · NQ · RTH 9:30–16:00 ET</span>
     <h1 class="ui-h1">TPO Level Playbook</h1>
     <p class="ui-lede">Context bằng TPO · Confluence bằng VWAP RTH + CVD · Trigger bằng orderflow. Lộ trình 9 tuần từ đọc profile đến lên plan và execute trong 2 tiếng NY AM.</p>
-    <div class="facts"><span><b>8</b> chương</span><span><b>5</b> giai đoạn lộ trình</span><span><b>79</b> câu trắc nghiệm</span><span>Plan Builder</span></div>
+    <div class="facts"><span><b>9</b> chương</span><span><b>5</b> giai đoạn lộ trình</span><span><b>93</b> câu trắc nghiệm</span><span>Plan Builder</span></div>
     <div class="cta"><a class="ui-btn primary" href="#nen-tang">Bắt đầu học →</a><a class="ui-btn" href="#plan">Mở Plan Builder</a><a class="ui-btn ghost" href="quiz.html#thi-thu">Thi thử 50 câu</a></div>
   </div>
 
@@ -116,7 +116,7 @@
       <li><b>Tail 1 print hay 2 print?</b> Hai cách đếm khác chiều nhau. "Hai prints ở đỉnh" trong video là <i>hai chữ cái khác nhau cùng chạm mức cao nhất</i> (đếm theo chiều ngang) → đó là poor high, nên không phải tail. Tail đếm theo <i>chiều dọc</i>: số dòng liên tiếp ở cực trị chỉ có một chữ. Theo Dalton, excess tối thiểu là 2 dòng single print. Với NQ, quy ước thực dụng: tail ≥ 2 dòng ở row size bạn đang dùng (ví dụ 5 điểm/dòng → tail ≥ 10 điểm).</li>
       <li><b>68.4% hay 70%?</b> 1 độ lệch chuẩn của phân phối chuẩn ≈ 68.27%, đó là gốc toán học. 70% là quy ước làm tròn của CBOT và là mặc định trên hầu hết nền tảng, kể cả ATAS. Chọn một con số và giữ cố định để các ngày so sánh được với nhau.</li>
       <li><b>RF tính thế nào?</b> Bảng ngay phía trên.</li>
-      <li><b>"Key contextual level" là gì?</b> Trong playbook này, đó là level Tier 1–2 ở tab 03 (weekly VA, prior day VAH/VAL/POC, naked POC, poor high/low, single prints). Giá đóng xuyên qua một level như vậy trong IB thường làm IB rộng và một chiều.</li>
+      <li><b>"Key contextual level" là gì?</b> Trong playbook này, đó là level Tier 1–2 ở tab 04 (weekly VA, prior day VAH/VAL/POC, naked POC, poor high/low, single prints). Giá đóng xuyên qua một level như vậy trong IB thường làm IB rộng và một chiều.</li>
     </ul>
   </div>
 
@@ -164,10 +164,148 @@
   <div class="qz-slot" data-qz="levels:structure" data-title="Quiz 02 · Day & Open types"></div>
 </section>
 
+<!-- ============ 03 INITIAL BALANCE ============ -->
+<section class="tab" id="ch-initial-balance" data-chapter="initial-balance">
+  <div class="head">
+    <span class="eyebrow">03 · Initial Balance</span>
+    <h2>60 phút đầu tiên quyết định cấu trúc của cả ngày</h2>
+    <p class="lead"><b>Initial Balance (IB)</b> là range của period A + B, tức <b>9:30–10:30 ET = 21:30–22:30 giờ VN</b> (mùa đông). Trong hệ thống của bạn, IB đã thay Range69 làm anchor cấu trúc, và cùng mốc với VWAP RTH và CVD reset. Nửa đầu cửa sổ 2 tiếng của bạn là lúc IB đang hình thành. Nửa sau (C–D, 10:30–11:30 ET) là lúc range extension đầu tiên xảy ra hoặc thất bại.</p>
+  </div>
+
+  <div class="grid g2">
+    <figure class="panel stack">
+      <h3>Giải phẫu IB</h3>
+      <div class="svgwrap" id="ib-anatomy"></div>
+      <figcaption>Trục ngang = 9:30–11:30 ET (cửa sổ trade của bạn). Vùng tô = IB (A + B). Ví dụ: C phá IBH, retest IBH cũ rồi đi tiếp tới extension 1.5x.</figcaption>
+    </figure>
+    <div class="panel stack">
+      <h3>Các thành phần</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Thành phần</th><th>Cách tính</th><th>Vai trò</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip ib">IBH / IBL</span></td><td>High / Low của 9:30–10:30 ET</td><td>Biên range extension, level Tier 3</td></tr>
+          <tr><td><span class="chip ib">IB width</span></td><td>IBH − IBL</td><td>Đo mức tham gia sớm của large timeframe</td></tr>
+          <tr><td><span class="chip ib">IB mid</span></td><td>(IBH + IBL) / 2</td><td>Ai đang thắng IB, đích của rotation</td></tr>
+          <tr><td><span class="chip">Opening range</span></td><td>Range của A (9:30–10:00)</td><td>IB "nửa đầu", cho scalp Tier 4</td></tr>
+          <tr><td><span class="chip ib">Range extension</span></td><td>Giá ra ngoài IB sau 10:30</td><td>Dấu hiệu other timeframe vào cuộc</td></tr>
+          <tr><td><span class="chip ib">Extension N×</span></td><td>Tổng range = N × IB width, đo từ cạnh IB đối diện</td><td>Target: 1.5x, 2x, 3x</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">Có hai quy ước tính extension. Playbook dùng quy ước "tổng range" (1.5x lên = IBL + 1.5 × width = IBH + 0.5 × width). Một số nguồn tính IBH + N × width. Chọn một quy ước, ghi rõ trên chart và trong journal, đừng trộn.</p>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Vì sao IB quan trọng</h3>
+    <div class="grid g3">
+      <div class="card"><h4><span class="chip">1</span> Balance đầu tiên của ngày</h4><p class="small">Trong giờ đầu, phần lớn giao dịch đến từ day-timeframe traders phản ứng với open và overnight. Họ tạo ra vùng cân bằng đầu tiên. Đây là phiên bản "mini" của value area.</p></div>
+      <div class="card"><h4><span class="chip">2</span> Phá IB = có người lớn hơn</h4><p class="small">Khi giá rời IB sau 10:30, thường là other timeframe (quỹ, người giữ lệnh nhiều ngày) đang hành động. Range extension một phía là initiative activity theo phía đó.</p></div>
+      <div class="card"><h4><span class="chip">3</span> Độ rộng cho biết phần còn lại</h4><p class="small">IB rộng: large timeframe đã vào sớm, phần lớn range ngày đã có. IB hẹp: chưa ai cam kết, năng lượng dồn cho range extension. Đây là thông tin bạn có ngay lúc 10:30.</p></div>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Phân loại độ rộng IB + công cụ tính</h3>
+    <div class="grid g2">
+      <div class="stack">
+        <div class="tablewrap"><table>
+          <thead><tr><th>IB width / TB 20 phiên</th><th>Loại</th><th>Day type hay gặp</th><th>Thiên hướng sau 10:30</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">&lt; 70%</td><td><span class="chip good">Hẹp</span></td><td>Trend, Normal Variation, Double Distribution</td><td>Ưu tiên breakout go-with (IB-1)</td></tr>
+            <tr><td class="mono">70–130%</td><td><span class="chip">Bình thường</span></td><td>Normal Variation, Neutral</td><td>Chờ RE một phía + VWAP dốc, hoặc rotation (IB-3)</td></tr>
+            <tr><td class="mono">&gt; 130%</td><td><span class="chip warn">Rộng</span></td><td>Normal, Neutral</td><td>Ưu tiên fade cạnh IB / failed break (IB-2)</td></tr>
+          </tbody>
+        </table></div>
+        <p class="small muted">Ngưỡng 70% / 130% là điểm xuất phát. Sau 30 phiên trong IB Journal bên dưới, thay bằng phân vị thật của bạn (ví dụ 25% và 75%).</p>
+      </div>
+      <div class="stack">
+        <div class="form">
+          <div class="field"><label for="ib-h">IB High</label><input type="number" id="ib-h" value="28795" step="0.25"></div>
+          <div class="field"><label for="ib-l">IB Low</label><input type="number" id="ib-l" value="28640" step="0.25"></div>
+          <div class="field"><label for="ib-avg">IB TB 20 phiên</label><input type="number" id="ib-avg" value="190" step="1"></div>
+          <div class="field"><label for="ib-px">Giá hiện tại</label><input type="number" id="ib-px" value="28760" step="0.25"></div>
+        </div>
+        <div class="out" id="ib-out"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Vị trí IB so với hôm qua × độ rộng IB</h3>
+    <p class="small muted">Đọc lúc 10:30 ET. Hàng = IB nằm ở đâu so với value / range hôm qua. Cột = độ rộng IB.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Vị trí IB</th><th>IB hẹp</th><th>IB bình thường</th><th>IB rộng</th></tr></thead>
+      <tbody>
+        <tr><td><b>Hoàn toàn ngoài range hôm qua</b></td><td><span class="chip good">Mạnh nhất</span> Bối cảnh trend. Breakout theo hướng gap/open được ưu tiên.</td><td>Thiên go-with. Chờ RE cùng hướng với vị trí IB.</td><td>Imbalance đã diễn ra trong IB. Dễ balance phần còn lại, đừng đuổi.</td></tr>
+        <tr><td><b>Cắt qua cạnh VA / PD High-Low</b></td><td>Breakout ra phía ngoài VA thường có nhiên liệu (stop của phe hôm qua).</td><td>Cạnh VA hôm qua là trọng tài: accept ngoài → go-with; quay vào → 80% rule.</td><td>Hai level chồng nhau (cạnh IB + cạnh VA) = zone fade tốt.</td></tr>
+        <tr><td><b>Nằm trong VA hôm qua</b></td><td>Năng lượng nén. Breakout cần xác nhận mạnh (CVD + VWAP) vì vẫn trong value cũ.</td><td>Balance. Rotation cạnh IB ↔ IB mid / PD POC.</td><td><span class="chip bad">Ít cơ hội</span> Đứng ngoài hoặc chỉ fade cạnh với trigger rõ.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel stack">
+    <h3>5 kịch bản sau 10:30 ET</h3>
+    <p class="small muted">Vùng tô = IB. Đường cam đứt = IB mid. Xác định kịch bản nào đang diễn ra trước khi chọn setup.</p>
+    <div class="grid g2" id="ib-scen"></div>
+  </div>
+
+  <div class="panel stack">
+    <h3>4 setup dựa trên IB</h3>
+    <p class="small muted">IB-1 và IB-2 tương ứng Playbook E (IB extension + VWAP continuation) và Playbook F (IB rotation + VWAP fade) trong page "12 — Entry Model" của bạn.</p>
+    <div class="grid g2" id="ib-setups"></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Checklist 10:30 ET (22:30 VN)</h3>
+      <div id="ib-check"></div>
+      <div class="row"><button id="ib-check-reset">Xoá tick cho ngày mới</button></div>
+    </div>
+    <div class="panel stack">
+      <h3>Lỗi hay gặp với IB</h3>
+      <ul class="clean small">
+        <li>Vào breakout ngay khi giá chạm IBH lúc 10:31, không chờ acceptance hoặc retest. Phần lớn cú chạm đầu là thăm dò.</li>
+        <li>Fade breakout của một IB hẹp. Đó là đi ngược cấu trúc đúng lúc nó có xác suất trend cao nhất.</li>
+        <li>Quên tin 10:00 ET (ISM, JOLTS, Consumer Confidence…). Tin làm méo period B nên IB width không còn đại diện. Ghi chú vào journal.</li>
+        <li>Timezone ATAS sai khiến IB bị tính lệch 1 giờ (đặc biệt tuần đổi DST). Kiểm tra IB bar có bắt đầu đúng 9:30 ET không.</li>
+        <li>Trộn hai quy ước tính extension giữa chart và journal.</li>
+        <li>Coi IB mid mạnh ngang IBH/IBL. IB mid là đích và chỗ dời stop, không phải zone vào lệnh chính.</li>
+        <li>Đánh kịch bản Neutral (phá cả hai phía) trong cửa sổ của bạn. Neutral thường chỉ hoàn thành sau 11:30, nên dùng nó làm context cho ngày sau.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <div class="qhead"><h3>IB Journal · thống kê của riêng bạn</h3><span class="small muted">Lưu trên trình duyệt này. Dùng Copy CSV để chuyển sang thiết bị khác hoặc Notion.</span></div>
+    <p class="small">Bạn đã xác định module <b>IB Breaks của nqstats</b> là phần áp dụng chính. Dùng nó làm baseline, rồi so với số liệu NQ do chính bạn ghi. Mỗi phiên chỉ cần 4 con số sau khi RTH đóng cửa.</p>
+    <div id="ibj-banner"></div>
+    <div class="form">
+      <div class="field"><label for="ibj-date">Ngày</label><input type="text" id="ibj-date" placeholder="05/11/2026"></div>
+      <div class="field"><label for="ibj-h">IB High</label><input type="number" id="ibj-h" step="0.25"></div>
+      <div class="field"><label for="ibj-l">IB Low</label><input type="number" id="ibj-l" step="0.25"></div>
+      <div class="field"><label for="ibj-dh">RTH High</label><input type="number" id="ibj-dh" step="0.25"></div>
+      <div class="field"><label for="ibj-dl">RTH Low</label><input type="number" id="ibj-dl" step="0.25"></div>
+      <div class="field"><label for="ibj-note">Ghi chú</label><input type="text" id="ibj-note" placeholder="tin 10:00, OD…"></div>
+    </div>
+    <div class="row"><button class="primary" id="ibj-add">Thêm phiên</button><button id="ibj-csv">Copy CSV</button><button id="ibj-import-toggle">Nhập CSV</button><span class="small muted" id="ibj-msg" role="status"></span></div>
+    <div id="ibj-import" hidden class="stack">
+      <textarea id="ibj-import-text" aria-label="Dán CSV" placeholder="date,ibh,ibl,rth_high,rth_low,note"></textarea>
+      <div class="row"><button id="ibj-import-go">Nhập (thêm vào cuối)</button></div>
+    </div>
+    <div class="grid g3" id="ibj-stats"></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Ngày</th><th class="num">IBH</th><th class="num">IBL</th><th class="num">Width</th><th class="num">% TB</th><th>Phá</th><th class="num">Ext lên</th><th class="num">Ext xuống</th><th>Ghi chú</th><th></th></tr></thead>
+      <tbody id="ibj-rows"></tbody>
+    </table></div>
+  </div>
+
+  <div class="qz-slot" data-qz="levels:ib" data-title="Quiz 03 · Initial Balance"></div>
+</section>
+
 <!-- ============ 03 LEVELS ============ -->
 <section class="tab" id="ch-levels" data-chapter="levels">
   <div class="head">
-    <span class="eyebrow">03 · Level map</span>
+    <span class="eyebrow">04 · Level map</span>
     <h2>Level nào đáng vẽ, level nào đáng trade, và khi nào level "hỏng"</h2>
     <p class="lead">Mỗi ngày bạn chỉ có 2–3 lệnh, nên số level phải ít và có thứ bậc. Quy tắc: chỉ <b>vẽ</b> Tier 1–3 trên chart RTH. Tier 4 (scalping) là tuỳ chọn, chỉ bật khi đã có 20 phiên liên tiếp tuân thủ plan.</p>
   </div>
@@ -215,7 +353,7 @@
           <tr><td>Ngoài spike ngược hướng</td><td><span class="chip bad">spike bị reject</span> → xuống</td><td><span class="chip bad">spike bị reject</span> → lên</td></tr>
         </tbody>
       </table></div>
-      <p class="small muted">Ví dụ thật trong template của bạn: 29/10 có spike bán cuối phiên, 30/10 open gap xuống dưới spike → tiếp diễn (xem tab 07).</p>
+      <p class="small muted">Ví dụ thật trong template của bạn: 29/10 có spike bán cuối phiên, 30/10 open gap xuống dưới spike → tiếp diễn (xem tab 08).</p>
     </div>
     <div class="panel stack">
       <h3>Chấm điểm một level trước khi trade</h3>
@@ -234,24 +372,18 @@
     </div>
   </div>
 
-  <div class="panel stack" id="scalp-panel">
-    <h3>Scalping add-in (tuỳ chọn) · công cụ tính IB</h3>
-    <p class="small muted">Nhập IB lúc 10:30 ET để có extension, IB mid và đánh giá độ rộng so với trung bình 20 phiên.</p>
-    <div class="form">
-      <div class="field"><label for="ib-h">IB High</label><input type="number" id="ib-h" value="28795" step="0.25"></div>
-      <div class="field"><label for="ib-l">IB Low</label><input type="number" id="ib-l" value="28640" step="0.25"></div>
-      <div class="field"><label for="ib-avg">IB trung bình 20 phiên</label><input type="number" id="ib-avg" value="190" step="1"></div>
-    </div>
-    <div class="out" id="ib-out"></div>
+  <div class="callout">
+    <h4>Công cụ tính IB đã chuyển sang tab 03 · Initial Balance</h4>
+    <p class="small">IB High/Low, IB mid, extension 1.5x/2x/3x, đánh giá độ rộng và IB Journal thống kê của riêng bạn đều ở đó. <a href="#initial-balance">Mở tab Initial Balance</a>.</p>
   </div>
 
-  <div class="qz-slot" data-qz="levels:levels" data-title="Quiz 03 · Level, acceptance & scalping"></div>
+  <div class="qz-slot" data-qz="levels:levels" data-title="Quiz 04 · Level, acceptance & scalping"></div>
 </section>
 
 <!-- ============ 04 VWAP ============ -->
 <section class="tab" id="ch-vwap" data-chapter="vwap">
   <div class="head">
-    <span class="eyebrow">04 · Add-in confluence #1</span>
+    <span class="eyebrow">05 · Add-in confluence #1</span>
     <h2>VWAP RTH: value động của chính phiên hôm nay</h2>
     <p class="lead">TPO cho biết value <i>đã</i> được xây ở đâu (thường là của hôm qua). VWAP RTH cho biết giá vốn trung bình của mọi người đã giao dịch <i>từ 9:30 hôm nay</i>. Kết hợp hai thứ: TPO là bản đồ, VWAP là la bàn trong phiên.</p>
   </div>
@@ -287,7 +419,7 @@ Band    = VWAP ± k·σ,   k = 1, 2, 3</div>
     <div class="grid g3">
       <div class="card"><h4><span class="chip vw">VWAP ≈ dPOC</span></h4><p class="small">Thời gian và volume đồng thuận cùng một giá → balance. Fade các cạnh VA đang hình thành và ±2 SD.</p></div>
       <div class="card"><h4><span class="chip vw">VWAP dẫn, dPOC kéo theo</span></h4><p class="small">dPOC di chuyển cùng chiều với VWAP sau 10:30 → value đang migrate, ngày có khả năng trend hoặc normal variation. Đánh go-with.</p></div>
-      <div class="card"><h4><span class="chip vw">VWAP trùng level TPO</span></h4><p class="small">VWAP hoặc band ±2 SD nằm trong vòng 10–15 điểm của VAH/VAL/POC hôm qua → zone A theo bảng chấm điểm tab 03.</p></div>
+      <div class="card"><h4><span class="chip vw">VWAP trùng level TPO</span></h4><p class="small">VWAP hoặc band ±2 SD nằm trong vòng 10–15 điểm của VAH/VAL/POC hôm qua → zone A theo bảng chấm điểm tab 04.</p></div>
     </div>
   </div>
 
@@ -321,13 +453,13 @@ Band    = VWAP ± k·σ,   k = 1, 2, 3</div>
     </div>
   </div>
 
-  <div class="qz-slot" data-qz="levels:vwap" data-title="Quiz 04 · VWAP RTH"></div>
+  <div class="qz-slot" data-qz="levels:vwap" data-title="Quiz 05 · VWAP RTH"></div>
 </section>
 
 <!-- ============ 05 CVD ============ -->
 <section class="tab" id="ch-cvd" data-chapter="cvd">
   <div class="head">
-    <span class="eyebrow">05 · Add-in confluence #2</span>
+    <span class="eyebrow">06 · Add-in confluence #2</span>
     <h2>CVD divergence: ai đang chủ động, và họ có còn đẩy được giá không</h2>
     <p class="lead">Bạn tự nhận lỗi chính hiện tại là đọc footprint/delta chưa chuẩn. CVD là cách đơn giản hoá: thay vì đọc từng ô bid × ask, chỉ so <b>hai swing liên tiếp</b> của giá với hai swing tương ứng của CVD, và <b>chỉ tại level TPO</b>.</p>
   </div>
@@ -347,7 +479,7 @@ Reset      = 9:30 ET (cùng mốc VWAP RTH và TPO RTH)</div>
     <div class="panel stack">
       <h3>Bộ lọc bắt buộc</h3>
       <ol class="clean small">
-        <li><b>Location trước</b>: chỉ xét divergence tại zone điểm ≥ 4 (tab 03). Divergence giữa không trung = nhiễu.</li>
+        <li><b>Location trước</b>: chỉ xét divergence tại zone điểm ≥ 4 (tab 04). Divergence giữa không trung = nhiễu.</li>
         <li><b>Regime</b>: ngày trend (Open Drive, IB extension, VWAP dốc) thì divergence ngược trend fail liên tục. Chỉ chấp nhận khi trùng Tier 1 + band ±2 SD.</li>
         <li><b>Trigger</b>: divergence không phải entry. Chờ phá micro-structure M1, reclaim level, hoặc delta flip.</li>
         <li><b>Invalidation</b>: ngoài cực trị đã tạo divergence. Giá vượt qua là ý tưởng sai.</li>
@@ -381,13 +513,13 @@ Reset      = 9:30 ET (cùng mốc VWAP RTH và TPO RTH)</div>
     </div>
   </div>
 
-  <div class="qz-slot" data-qz="levels:cvd" data-title="Quiz 05 · CVD divergence"></div>
+  <div class="qz-slot" data-qz="levels:cvd" data-title="Quiz 06 · CVD divergence"></div>
 </section>
 
 <!-- ============ 06 PLAN ============ -->
 <section class="tab" id="ch-plan" data-chapter="plan">
   <div class="head">
-    <span class="eyebrow">06 · Quy trình mỗi ngày</span>
+    <span class="eyebrow">07 · Quy trình mỗi ngày</span>
     <h2>Lên plan: từ profile hôm qua đến 2 kịch bản có invalidation</h2>
     <p class="lead">Mục tiêu của plan không phải dự đoán đúng hướng. Mục tiêu là trước 9:25 ET bạn biết: <b>mình trade ở đâu, theo điều kiện gì, và điều gì làm mình đứng ngoài</b>. Từ 01/11/2026 Mỹ đã hết DST, nên 9:30 ET = <b>21:30 giờ VN</b>.</p>
   </div>
@@ -473,7 +605,7 @@ Level tím : 28176</textarea>
 <!-- ============ 07 TEMPLATE ============ -->
 <section class="tab" id="ch-template" data-chapter="template">
   <div class="head">
-    <span class="eyebrow">07 · Case study từ ảnh của bạn</span>
+    <span class="eyebrow">08 · Case study từ ảnh của bạn</span>
     <h2>NQZ6 · Daily Profile RTH · 29/10 → 04/11/2026</h2>
     <p class="lead">Các số dưới đây đọc từ toạ độ trên ảnh chụp nên sai số khoảng ±10–15 điểm. Phiên 04/11 còn đang chạy lúc chụp (giá 28,657.25), nên VA/POC 04/11 là <i>developing</i>. Dùng tab này để luyện cách đọc, còn số để trade thì lấy trực tiếp trên ATAS.</p>
   </div>
@@ -510,12 +642,12 @@ Level tím : 28176</textarea>
 </div>
 <footer class="ui-foot">Playbook học tập cho NQ intraday. Không phải lời khuyên đầu tư. Các con số thống kê truyền thống (80% rule, tỉ lệ day type) cần được bạn tự kiểm chứng bằng backtest trước khi dùng với tiền thật.</footer>
 </main>
-<script src="assets/js/levels-data.js?v=4"></script>
-<script src="assets/js/fp.js?v=4"></script>
-<script src="assets/js/bank-levels.js?v=4"></script>
-<script src="assets/js/bank-tools.js?v=4"></script>
-<script src="assets/js/quiz.js?v=4"></script>
-<script src="assets/js/core.js?v=4"></script>
-<script src="assets/js/levels-page.js?v=4"></script>
+<script src="assets/js/levels-data.js?v=5"></script>
+<script src="assets/js/fp.js?v=5"></script>
+<script src="assets/js/bank-levels.js?v=5"></script>
+<script src="assets/js/bank-tools.js?v=5"></script>
+<script src="assets/js/quiz.js?v=5"></script>
+<script src="assets/js/core.js?v=5"></script>
+<script src="assets/js/levels-page.js?v=5"></script>
 </body>
 </html>

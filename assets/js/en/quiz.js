@@ -123,7 +123,7 @@ function Practice(root,opt){
    EXAM
    ========================================================= */
 const EXAMS={
-  levels:{name:'TPO Level exam',short:'Level',n:50,c:'var(--c-levels)',desc:'50 questions drawn at random from the 79 of the Level course, keeping the chapter proportions.',pick:()=>sampleStrat('levels',50)},
+  levels:{name:'TPO Level exam',short:'Level',n:50,c:'var(--c-levels)',desc:'50 questions drawn at random from the 93 of the Level course, keeping the chapter proportions.',pick:()=>sampleStrat('levels',50)},
   tools:{name:'Orderflow Tools exam',short:'Tools',n:50,c:'var(--c-tools)',desc:'50 questions drawn at random from the 87 of the Tools course, keeping the chapter proportions.',pick:()=>sampleStrat('tools',50)},
   all:{name:'Full exam',short:'Full',n:100,c:'var(--brand)',desc:'100 questions = 50 Level + 50 Tools, shuffled. The final test of the whole system.',pick:()=>shuffle(sampleStrat('levels',50).concat(sampleStrat('tools',50)))}
 };

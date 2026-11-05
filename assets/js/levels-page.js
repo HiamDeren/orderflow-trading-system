@@ -255,27 +255,131 @@ function renderTiers(){
     hlines:[{y:72,c:"#ff9cbf",dash:"3 3",label:"VAH"},{y:50,c:C.poc,label:"POC"},{y:28,c:"#ff9cbf",dash:"3 3",label:"VAL"}],
     paths:[{pts:[[0,84],[8,80],[14,76],[20,68],[26,64],[32,67],[38,62],[44,65],[52,58],[60,50],[70,42],[80,36],[90,30],[100,28]],c:"#e6e8eb",w:2.2}],
     dots:[{x:0,y:84,c:"#ff6b9a",t:"Open ngoài VA",dy:-8},{x:34,y:90,c:"transparent",t:"2 period trong VA",dx:0,anchor:"middle",tc:C.vwap},{x:100,y:28,c:C.good,t:"Chạm VAL",dx:-6,dy:14,anchor:"end",tc:"#bdf0d4"}] }], label:"Minh hoạ 80% rule" });
+}
 
-  const ib = () => {
-    const H = parseFloat($("#ib-h").value), Lw = parseFloat($("#ib-l").value), A = parseFloat($("#ib-avg").value);
+/* ---------- 03 Initial Balance ---------- */
+function renderIB(){
+  // anatomy: x 0..100 = 9:30–11:30, IB = x 0..50; IBL 30, IBH 60 → width 30
+  $("#ib-anatomy").innerHTML = mini({ w:480, panels:[{ h:250,
+    bands:[{x1:0,x2:25,y1:2,y2:98,fill:C.ib,op:.10},{x1:25,x2:50,y1:2,y2:98,fill:C.ib,op:.17}],
+    hlines:[{y:90,c:"#b388ff",dash:"2 3",label:"2x"},{y:75,c:"#b388ff",dash:"4 3",label:"1.5x"},
+      {y:60,c:C.ib,w:1.8,label:"IBH"},{y:45,c:C.poc,dash:"4 3",label:"IB mid"},{y:30,c:C.ib,w:1.8,label:"IBL"},
+      {y:15,c:"#b388ff",dash:"4 3",label:"1.5x ↓"}],
+    paths:[{pts:[[0,46],[6,55],[12,58],[18,40],[25,50],[30,60],[36,44],[42,30],[50,48],[56,58],[62,66],[68,72],[74,62],[80,68],[88,76],[94,80],[100,78]],c:"#e6e8eb",w:2.2}],
+    dots:[{x:12.5,y:96,c:"transparent",t:"A",dx:0,anchor:"middle",tc:"#f1e3c4"},{x:37.5,y:96,c:"transparent",t:"B",dx:0,anchor:"middle",tc:"#f1e3c4"},
+      {x:62.5,y:96,c:"transparent",t:"C",dx:0,anchor:"middle",tc:C.muted},{x:87.5,y:96,c:"transparent",t:"D",dx:0,anchor:"middle",tc:C.muted},
+      {x:62,y:66,c:C.good,t:"RE lên",dx:-4,dy:-8,anchor:"end",tc:"#bdf0d4"},{x:74,y:62,c:C.good,t:"Retest IBH",dy:14,tc:"#bdf0d4"}] }], label:"Giải phẫu Initial Balance" });
+
+  // calculator
+  const calc = () => {
+    const H = parseFloat($("#ib-h").value), Lw = parseFloat($("#ib-l").value), A = parseFloat($("#ib-avg").value), px = parseFloat($("#ib-px").value);
     if(isNaN(H)||isNaN(Lw)||H<=Lw){ $("#ib-out").textContent = "Nhập IB High lớn hơn IB Low."; return; }
-    const w = H-Lw, r = A>0 ? w/A : NaN;
-    const cls = isNaN(r) ? "chưa có trung bình" : r<0.7 ? "HẸP → ưu tiên range extension, đánh breakout có xác nhận" : r>1.3 ? "RỘNG → ưu tiên rotation trong IB, fade cạnh IB" : "TRUNG BÌNH → chờ RE một phía + VWAP dốc";
+    const w = H-Lw, r = A>0 ? w/A : NaN, mid = (H+Lw)/2;
+    const cls = isNaN(r) ? "chưa có trung bình" : r<0.7 ? "HẸP → ưu tiên breakout go-with (IB-1), cần acceptance" : r>1.3 ? "RỘNG → ưu tiên fade cạnh / failed break (IB-2)" : "BÌNH THƯỜNG → chờ RE một phía + VWAP dốc, hoặc rotation (IB-3)";
+    let pos = "—";
+    if(!isNaN(px)){
+      if(px > H){ const m = (px-Lw)/w; pos = `TRÊN IB · range hiện tại ≈ ${m.toFixed(2)}x · ${m>=2?"đã qua 2x":m>=1.5?"đã qua 1.5x, kế tiếp 2x "+fmt(H+w):"kế tiếp 1.5x "+fmt(H+0.5*w)}`; }
+      else if(px < Lw){ const m = (H-px)/w; pos = `DƯỚI IB · range hiện tại ≈ ${m.toFixed(2)}x · ${m>=2?"đã qua 2x":m>=1.5?"đã qua 1.5x, kế tiếp 2x "+fmt(Lw-w):"kế tiếp 1.5x "+fmt(Lw-0.5*w)}`; }
+      else { const q = (px-Lw)/w*100; pos = `TRONG IB · ${q.toFixed(0)}% từ IBL · ${px>=mid?"trên":"dưới"} IB mid (${(px-mid>0?"+":"")+fmt(px-mid)})`; }
+    }
     $("#ib-out").textContent =
-`IB width      : ${fmt(w)} điểm  (${isNaN(r)?"—":(r*100).toFixed(0)+"%"} so với trung bình)
-Đánh giá      : ${cls}
-IB mid        : ${fmt((H+Lw)/2)}
+`IB width   : ${fmt(w)} điểm (${isNaN(r)?"—":(r*100).toFixed(0)+"%"} so với TB)
+Đánh giá   : ${cls}
+IB mid     : ${fmt(mid)}
+Giá        : ${pos}
 
-Extension lên   1.5x: ${fmt(H+0.5*w)}    2x: ${fmt(H+w)}    3x: ${fmt(H+2*w)}
-Extension xuống 1.5x: ${fmt(Lw-0.5*w)}    2x: ${fmt(Lw-w)}    3x: ${fmt(Lw-2*w)}
+           1.5x        2x          3x
+Lên    ${fmt(H+0.5*w).padStart(10)}  ${fmt(H+w).padStart(10)}  ${fmt(H+2*w).padStart(10)}
+Xuống  ${fmt(Lw-0.5*w).padStart(10)}  ${fmt(Lw-w).padStart(10)}  ${fmt(Lw-2*w).padStart(10)}
 
-(1.5x / 2x tính theo tổng range = 1.5 / 2 lần IB width, đo từ cạnh IB đối diện)`;
-    store.set("ib-in", [$("#ib-h").value,$("#ib-l").value,$("#ib-avg").value]);
+Quy ước: N× = tổng range bằng N lần IB width, đo từ cạnh IB đối diện.`;
+    store.set("ib-in2", ["#ib-h","#ib-l","#ib-avg","#ib-px"].map(s=>$(s).value));
   };
-  const saved = store.get("ib-in", null);
-  if(saved){ $("#ib-h").value = saved[0]; $("#ib-l").value = saved[1]; $("#ib-avg").value = saved[2]; }
-  ["#ib-h","#ib-l","#ib-avg"].forEach(s => $(s).addEventListener("input", ib));
-  ib();
+  const saved = store.get("ib-in2", null);
+  if(saved && saved.length===4){ ["#ib-h","#ib-l","#ib-avg","#ib-px"].forEach((s,i)=>{ if(saved[i]!=null) $(s).value = saved[i]; }); }
+  ["#ib-h","#ib-l","#ib-avg","#ib-px"].forEach(s => $(s).addEventListener("input", calc));
+  calc();
+
+  // scenarios
+  $("#ib-scen").innerHTML = PB.ibScen.map(sc => {
+    const dots = sc.dot ? [{x:sc.dot[0],y:sc.dot[1],c:sc.chip==="bad"?C.bad:C.good,t:sc.dot[2],dy:-8,tc:"#e6e8eb"}] : [];
+    const svg = mini({ w:420, padR:58, panels:[{ h:150,
+      bands:[{x1:0,x2:35,y1:35,y2:60,fill:C.ib,op:.16}],
+      hlines:[{y:60,c:C.ib,w:1.6,label:"IBH"},{y:47.5,c:C.poc,dash:"4 3",label:"mid"},{y:35,c:C.ib,w:1.6,label:"IBL"}],
+      paths:[{pts:sc.pts,c:"#e6e8eb",w:2}], dots }], label:sc.n });
+    return `<div class="card"><h4>${sc.n} <span class="chip ${sc.chip}">${sc.dt}</span></h4><div class="svgwrap">${svg}</div>
+      <p class="small"><b>Nhận diện:</b> ${sc.sig}</p><p class="small"><b>Hành động:</b> ${sc.act}</p></div>`;
+  }).join("");
+
+  // setups
+  $("#ib-setups").innerHTML = PB.ibSetups.map(su => `<div class="card">
+    <h4><span class="chip ${su.chip}">${su.id}</span> ${su.n} <span class="chip">${su.pb}</span></h4>
+    <dl class="dl"><dt>Điều kiện</dt><dd class="small">${su.cond}</dd><dt>Entry</dt><dd class="small">${su.entry}</dd><dt>Stop</dt><dd class="small">${su.stop}</dd><dt>Target</dt><dd class="small">${su.tgt}</dd><dt>Invalidation</dt><dd class="small">${su.inv}</dd></dl></div>`).join("");
+
+  checklist($("#ib-check"), PB.ibCheck, "ibc");
+  $("#ib-check-reset").addEventListener("click", () => { PB.ibCheck.forEach((_,i)=>store.set(`ibc-${i}`,false)); checklist($("#ib-check"), PB.ibCheck, "ibc"); });
+
+  initIBJournal();
+}
+
+function initIBJournal(){
+  let rows = store.get("ibj-rows", null);
+  let sample = false;
+  if(!rows || !rows.length){ rows = PB.ibSample.map(r=>({...r})); sample = true; }
+  const save = () => { if(!sample) store.set("ibj-rows", rows); };
+  const msg = t => { $("#ibj-msg").textContent = t; setTimeout(()=>{ $("#ibj-msg").textContent = ""; }, 3000); };
+  const median = a => { if(!a.length) return NaN; const b = a.slice().sort((x,y)=>x-y), m = Math.floor(b.length/2); return b.length%2 ? b[m] : (b[m-1]+b[m])/2; };
+  const pct = (n,d) => d ? Math.round(n/d*100)+"%" : "—";
+
+  const draw = () => {
+    $("#ibj-banner").innerHTML = sample ? `<div class="callout red"><p class="small"><b>Đang hiển thị dữ liệu mẫu minh hoạ, không phải dữ liệu thật.</b> Thêm phiên đầu tiên của bạn hoặc bấm nút để xoá mẫu.</p><div class="row"><button id="ibj-clear-sample">Xoá mẫu, bắt đầu log thật</button></div></div>` : "";
+    if(sample) $("#ibj-clear-sample").addEventListener("click", () => { rows = []; sample = false; save(); draw(); });
+    const ws = rows.map(r => r.h - r.l);
+    const avg = ws.length ? ws.reduce((a,b)=>a+b,0)/ws.length : NaN;
+    const calc = r => { const w = r.h-r.l; return { w, up: r.dh > r.h, dn: r.dl < r.l, eu: (r.dh - r.l)/w, ed: (r.h - r.dl)/w, rel: avg ? w/avg : NaN }; };
+    const cs = rows.map(calc);
+    const n = rows.length;
+    const anyB = cs.filter(c=>c.up||c.dn).length, both = cs.filter(c=>c.up&&c.dn).length;
+    const r15 = cs.filter(c=>c.eu>=1.5||c.ed>=1.5).length, r2 = cs.filter(c=>c.eu>=2||c.ed>=2).length;
+    const nar = cs.filter(c=>c.rel<0.7), wid = cs.filter(c=>c.rel>1.3);
+    const tile = (k,v,sub) => `<div class="card"><span class="k">${k}</span><span class="num" style="font-size:1.35rem;font-weight:700">${v}</span><span class="small muted">${sub}</span></div>`;
+    $("#ibj-stats").innerHTML =
+      tile("Số phiên", n, sample?"mẫu":"đã log") +
+      tile("IB width TB / trung vị", `${fmt(Math.round(avg))} / ${fmt(Math.round(median(ws)))}`, "điểm") +
+      tile("Phá ít nhất 1 phía", pct(anyB,n), `cả hai phía: ${pct(both,n)}`) +
+      tile("Đạt 1.5x / 2x", `${pct(r15,n)} / ${pct(r2,n)}`, "một phía bất kỳ") +
+      tile("IB hẹp (<70% TB)", `${nar.length} phiên`, `đạt 1.5x: ${pct(nar.filter(c=>c.eu>=1.5||c.ed>=1.5).length, nar.length)}`) +
+      tile("IB rộng (>130% TB)", `${wid.length} phiên`, `phá ít nhất 1 phía: ${pct(wid.filter(c=>c.up||c.dn).length, wid.length)}`);
+    $("#ibj-rows").innerHTML = rows.map((r,i) => { const c = cs[i];
+      const br = c.up&&c.dn ? '<span class="chip warn">2 phía</span>' : c.up ? '<span class="chip good">lên</span>' : c.dn ? '<span class="chip bad">xuống</span>' : '<span class="chip">không</span>';
+      return `<tr><td class="mono">${r.d}</td><td class="num mono">${fmt(r.h)}</td><td class="num mono">${fmt(r.l)}</td><td class="num mono">${fmt(c.w)}</td><td class="num mono">${isNaN(c.rel)?"—":Math.round(c.rel*100)+"%"}</td><td>${br}</td><td class="num mono">${c.up?c.eu.toFixed(2)+"x":"—"}</td><td class="num mono">${c.dn?c.ed.toFixed(2)+"x":"—"}</td><td class="small">${r.n||""}</td><td><button data-del="${i}" aria-label="Xoá phiên ${r.d}">Xoá</button></td></tr>`; }).join("") || `<tr><td colspan="10" class="muted small">Chưa có phiên nào. Nhập 4 số sau khi RTH đóng cửa.</td></tr>`;
+  };
+  $("#ibj-rows").addEventListener("click", e => { const b = e.target.closest("button[data-del]"); if(!b) return; if(sample){ sample=false; } rows.splice(+b.dataset.del,1); save(); draw(); });
+  $("#ibj-add").addEventListener("click", () => {
+    const g = id => parseFloat($(id).value);
+    const r = { d: $("#ibj-date").value.trim() || new Date().toLocaleDateString("vi-VN"), h:g("#ibj-h"), l:g("#ibj-l"), dh:g("#ibj-dh"), dl:g("#ibj-dl"), n:$("#ibj-note").value.trim() };
+    if([r.h,r.l,r.dh,r.dl].some(isNaN)){ msg("Cần đủ IB High, IB Low, RTH High, RTH Low."); return; }
+    if(!(r.h>r.l && r.dh>=r.h && r.dl<=r.l)){ msg("Kiểm tra lại: RTH High ≥ IB High > IB Low ≥ RTH Low."); return; }
+    if(sample){ rows = []; sample = false; }
+    rows.push(r); save(); draw();
+    ["#ibj-date","#ibj-h","#ibj-l","#ibj-dh","#ibj-dl","#ibj-note"].forEach(s=>$(s).value="");
+    msg("Đã thêm phiên.");
+  });
+  $("#ibj-csv").addEventListener("click", async () => {
+    const csv = "date,ibh,ibl,rth_high,rth_low,note\n" + rows.map(r => [r.d,r.h,r.l,r.dh,r.dl,(r.n||"").replace(/,/g,";")].join(",")).join("\n");
+    try{ await navigator.clipboard.writeText(csv); msg("Đã copy CSV."); }catch(e){ msg("Trình duyệt chặn copy."); }
+  });
+  $("#ibj-import-toggle").addEventListener("click", () => { $("#ibj-import").hidden = !$("#ibj-import").hidden; });
+  $("#ibj-import-go").addEventListener("click", () => {
+    const lines = $("#ibj-import-text").value.split("\n").map(l=>l.trim()).filter(l=>l && !/^date/i.test(l));
+    const add = [];
+    lines.forEach(l => { const p = l.split(","); const r = { d:p[0], h:+p[1], l:+p[2], dh:+p[3], dl:+p[4], n:p[5]||"" };
+      if(![r.h,r.l,r.dh,r.dl].some(isNaN) && r.h>r.l) add.push(r); });
+    if(!add.length){ msg("Không đọc được dòng nào. Định dạng: date,ibh,ibl,rth_high,rth_low,note"); return; }
+    if(sample){ rows = []; sample = false; }
+    rows = rows.concat(add); save(); draw(); $("#ibj-import-text").value = ""; msg(`Đã nhập ${add.length} phiên.`);
+  });
+  draw();
 }
 
 /* ---------- 04 VWAP ---------- */
@@ -510,10 +614,9 @@ function renderMigration(){
         <div class="card"><h4><span class="chip good">B</span> Accept trên 28,890</h4><p class="small">Breakout tiếp diễn từ balance 03/11. Go-with, target lấp gap đến 29,105. Single prints 29,105–29,350 là kháng cự lần test đầu.</p></div>
         <div class="card"><h4><span class="chip bad">C</span> Accept dưới 28,445</h4><p class="small">Breakout 04/11 thất bại, quay lại balance 03/11. Target POC 03/11 28,330, sau đó level tím 28,176.</p></div>
       </div>
-      <p class="small muted">Thử ngay: mở tab 06, Plan Builder đã điền sẵn các số này. Đổi "Giá lúc 9:15" để xem open location và kịch bản thay đổi thế nào.</p>
+      <p class="small muted">Thử ngay: mở tab 07, Plan Builder đã điền sẵn các số này. Đổi "Giá lúc 9:15" để xem open location và kịch bản thay đổi thế nào.</p>
     </div>`;
 }
-
 
 /* ---------- init ---------- */
 renderRoadmap();
@@ -523,6 +626,7 @@ renderOpenTypes();
 renderOpenLoc();
 renderValRel();
 renderTiers();
+renderIB();
 renderVWAP();
 renderCVD();
 renderPlanStatic();

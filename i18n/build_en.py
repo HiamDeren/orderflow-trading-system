@@ -22,6 +22,7 @@ CODE=[  # (regex, repl) applied after translation
  (r'\b(index|tools|levels|quiz)\.html',r'\1.en.html'),
  (r'assets/js/('+'|'.join(re.escape(j) for j in JSN)+r')',r'assets/js/en/\1'),
  (r"'vi-VN'","'en-GB'"),
+ (r'"vi-VN"','"en-GB"'),
  (r"h<12\?'SA':'CH'","h<12?'AM':'PM'"),
  (r"'Mua'","'Buy'"),
  (r'• Tin: ','• News: '),

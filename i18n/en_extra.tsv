@@ -18,3 +18,281 @@ Stacked mua	Buy stacked
 Open trong VA	Open inside VA
 Ngay 9:30	Right at 9:30
 Cửa sổ trade ·	Trade window ·
+Hệ thống học Orderflow + TPO cho NQ intraday: 2 khoá, 180 câu trắc nghiệm, thi thử 50/100 câu.	Orderflow + TPO study system for NQ intraday: 2 courses, 180 quiz questions, 50/100-question mock exams.
+để execute. Học theo chương, luyện 180 câu trắc nghiệm, thi thử 50 hoặc 100 câu.	to execute. Learn chapter by chapter, practise 180 quiz questions, take 50- or 100-question mock exams.
+Lộ trình 9 tuần · TPO · Day &amp; Open types · Initial Balance · Level map · VWAP RTH · CVD · Plan mỗi ngày · Case study template ATAS.	9-week roadmap · TPO · Day &amp; Open types · Initial Balance · Level map · VWAP RTH · CVD · Daily plan · ATAS template case study.
+Luyện 93 câu	Practise 93 questions
+180 câu trắc nghiệm TPO Level và Orderflow Tools: luyện tập, thi thử 50/100 câu, ôn câu sai.	180 TPO Level and Orderflow Tools quiz questions: practice, 50/100-question mock exams, review mistakes.
+Luyện tập 180 câu	Practise 180 questions
+Trong playbook này, đó là level Tier 1–2 ở tab 04 (weekly VA, prior day VAH/VAL/POC, naked POC, poor high/low, single prints). Giá đóng xuyên qua một level như vậy trong IB thường làm IB rộng và một chiều.	In this playbook it means the Tier 1–2 levels in tab 04 (weekly VA, prior day VAH/VAL/POC, naked POC, poor high/low, single prints). Price closing through such a level during the IB usually makes the IB wide and one-directional.
+60 phút đầu tiên quyết định cấu trúc của cả ngày	The first 60 minutes decide the structure of the whole day
+là range của period A + B, tức	is the range of periods A + B, i.e.
+9:30–10:30 ET = 21:30–22:30 giờ VN	9:30–10:30 ET = 21:30–22:30 Vietnam time
+(mùa đông). Trong hệ thống của bạn, IB đã thay Range69 làm anchor cấu trúc, và cùng mốc với VWAP RTH và CVD reset. Nửa đầu cửa sổ 2 tiếng của bạn là lúc IB đang hình thành. Nửa sau (C–D, 10:30–11:30 ET) là lúc range extension đầu tiên xảy ra hoặc thất bại.	(winter). In your system the IB has replaced Range69 as the structural anchor, and shares its anchor with VWAP RTH and the CVD reset. The first half of your 2-hour window is when the IB is forming. The second half (C–D, 10:30–11:30 ET) is when the first range extension happens or fails.
+Giải phẫu IB	IB anatomy
+Trục ngang = 9:30–11:30 ET (cửa sổ trade của bạn). Vùng tô = IB (A + B). Ví dụ: C phá IBH, retest IBH cũ rồi đi tiếp tới extension 1.5x.	Horizontal axis = 9:30–11:30 ET (your trade window). Shaded zone = IB (A + B). Example: C breaks IBH, retests the old IBH, then continues to the 1.5x extension.
+Các thành phần	Components
+Thành phần	Component
+Cách tính	Calculation
+High / Low của 9:30–10:30 ET	High / Low of 9:30–10:30 ET
+Biên range extension, level Tier 3	Range extension boundary, Tier 3 level
+Đo mức tham gia sớm của large timeframe	Measures early large-timeframe participation
+Ai đang thắng IB, đích của rotation	Who is winning the IB, target of rotations
+Range của A (9:30–10:00)	Range of A (9:30–10:00)
+nửa đầu	first half
+Giá ra ngoài IB sau 10:30	Price moves outside the IB after 10:30
+Dấu hiệu other timeframe vào cuộc	Sign that the other timeframe has stepped in
+Tổng range = N × IB width, đo từ cạnh IB đối diện	Total range = N × IB width, measured from the opposite IB edge
+Có hai quy ước tính extension. Playbook dùng quy ước	There are two conventions for extensions. The playbook uses the
+tổng range	total range
+(1.5x lên = IBL + 1.5 × width = IBH + 0.5 × width). Một số nguồn tính IBH + N × width. Chọn một quy ước, ghi rõ trên chart và trong journal, đừng trộn.	convention (1.5x up = IBL + 1.5 × width = IBH + 0.5 × width). Some sources use IBH + N × width. Pick one convention, label it on the chart and in the journal, never mix them.
+Vì sao IB quan trọng	Why the IB matters
+Balance đầu tiên của ngày	The day’s first balance
+Trong giờ đầu, phần lớn giao dịch đến từ day-timeframe traders phản ứng với open và overnight. Họ tạo ra vùng cân bằng đầu tiên. Đây là phiên bản	In the first hour most trading comes from day-timeframe traders reacting to the open and overnight. They create the first area of balance. It is a
+của value area.	version of the value area.
+Phá IB = có người lớn hơn	IB break = someone bigger is here
+Khi giá rời IB sau 10:30, thường là other timeframe (quỹ, người giữ lệnh nhiều ngày) đang hành động. Range extension một phía là initiative activity theo phía đó.	When price leaves the IB after 10:30 it is usually the other timeframe (funds, multi-day position holders) acting. One-sided range extension is initiative activity on that side.
+Độ rộng cho biết phần còn lại	Width tells you about the rest of the day
+IB rộng: large timeframe đã vào sớm, phần lớn range ngày đã có. IB hẹp: chưa ai cam kết, năng lượng dồn cho range extension. Đây là thông tin bạn có ngay lúc 10:30.	Wide IB: the large timeframe came in early, most of the day’s range is already in. Narrow IB: nobody has committed yet, energy is building for range extension. You have this information right at 10:30.
+Phân loại độ rộng IB + công cụ tính	IB width classification + calculator
+IB width / TB 20 phiên	IB width / 20-session avg
+Loại	Type
+Day type hay gặp	Typical day types
+Thiên hướng sau 10:30	Bias after 10:30
+Hẹp	Narrow
+Ưu tiên breakout go-with (IB-1)	Favour go-with breakouts (IB-1)
+Bình thường	Normal
+Chờ RE một phía + VWAP dốc, hoặc rotation (IB-3)	Wait for one-sided RE + sloping VWAP, or rotation (IB-3)
+Rộng	Wide
+Ưu tiên fade cạnh IB / failed break (IB-2)	Favour fading the IB edges / failed breaks (IB-2)
+Ngưỡng 70% / 130% là điểm xuất phát. Sau 30 phiên trong IB Journal bên dưới, thay bằng phân vị thật của bạn (ví dụ 25% và 75%).	The 70% / 130% thresholds are a starting point. After 30 sessions in the IB Journal below, replace them with your own real percentiles (e.g. 25% and 75%).
+IB TB 20 phiên	IB 20-session avg
+Giá hiện tại	Current price
+Vị trí IB so với hôm qua × độ rộng IB	IB location versus yesterday × IB width
+Đọc lúc 10:30 ET. Hàng = IB nằm ở đâu so với value / range hôm qua. Cột = độ rộng IB.	Read at 10:30 ET. Row = where the IB sits relative to yesterday’s value / range. Column = IB width.
+Vị trí IB	IB location
+IB hẹp	Narrow IB
+IB bình thường	Normal IB
+IB rộng	Wide IB
+Hoàn toàn ngoài range hôm qua	Entirely outside yesterday’s range
+Mạnh nhất	Strongest
+Bối cảnh trend. Breakout theo hướng gap/open được ưu tiên.	Trend context. Breakouts in the gap/open direction are favoured.
+Thiên go-with. Chờ RE cùng hướng với vị trí IB.	Leaning go-with. Wait for RE in the same direction as the IB location.
+Imbalance đã diễn ra trong IB. Dễ balance phần còn lại, đừng đuổi.	The imbalance already happened inside the IB. The rest of the day easily balances, do not chase.
+Cắt qua cạnh VA / PD High-Low	Straddling a VA edge / PD High-Low
+Breakout ra phía ngoài VA thường có nhiên liệu (stop của phe hôm qua).	A breakout away from the VA usually has fuel (yesterday’s stops).
+Cạnh VA hôm qua là trọng tài: accept ngoài → go-with; quay vào → 80% rule.	Yesterday’s VA edge is the referee: accepted outside → go with it; back inside → 80% rule.
+Hai level chồng nhau (cạnh IB + cạnh VA) = zone fade tốt.	Two levels stacked (IB edge + VA edge) = a good fade zone.
+Nằm trong VA hôm qua	Inside yesterday’s VA
+Năng lượng nén. Breakout cần xác nhận mạnh (CVD + VWAP) vì vẫn trong value cũ.	Compressed energy. A breakout needs strong confirmation (CVD + VWAP) because it is still inside old value.
+Balance. Rotation cạnh IB ↔ IB mid / PD POC.	Balance. Rotate IB edge ↔ IB mid / PD POC.
+Ít cơ hội	Few opportunities
+Đứng ngoài hoặc chỉ fade cạnh với trigger rõ.	Stand aside or only fade the edges with a clear trigger.
+5 kịch bản sau 10:30 ET	5 scenarios after 10:30 ET
+Vùng tô = IB. Đường cam đứt = IB mid. Xác định kịch bản nào đang diễn ra trước khi chọn setup.	Shaded zone = IB. Dashed orange line = IB mid. Identify which scenario is playing out before picking a setup.
+4 setup dựa trên IB	4 IB-based setups
+IB-1 và IB-2 tương ứng Playbook E (IB extension + VWAP continuation) và Playbook F (IB rotation + VWAP fade) trong page	IB-1 and IB-2 correspond to Playbook E (IB extension + VWAP continuation) and Playbook F (IB rotation + VWAP fade) in your page
+Lỗi hay gặp với IB	Common IB mistakes
+Vào breakout ngay khi giá chạm IBH lúc 10:31, không chờ acceptance hoặc retest. Phần lớn cú chạm đầu là thăm dò.	Entering the breakout as soon as price touches IBH at 10:31, without waiting for acceptance or a retest. Most first touches are probes.
+Fade breakout của một IB hẹp. Đó là đi ngược cấu trúc đúng lúc nó có xác suất trend cao nhất.	Fading the breakout of a narrow IB. That goes against the structure exactly when it has the highest trend probability.
+Quên tin 10:00 ET (ISM, JOLTS, Consumer Confidence…). Tin làm méo period B nên IB width không còn đại diện. Ghi chú vào journal.	Forgetting the 10:00 ET news (ISM, JOLTS, Consumer Confidence…). News distorts period B so the IB width is no longer representative. Note it in the journal.
+Timezone ATAS sai khiến IB bị tính lệch 1 giờ (đặc biệt tuần đổi DST). Kiểm tra IB bar có bắt đầu đúng 9:30 ET không.	A wrong ATAS timezone shifting the IB by 1 hour (especially in DST change weeks). Check that the IB bar starts exactly at 9:30 ET.
+Trộn hai quy ước tính extension giữa chart và journal.	Mixing the two extension conventions between the chart and the journal.
+Coi IB mid mạnh ngang IBH/IBL. IB mid là đích và chỗ dời stop, không phải zone vào lệnh chính.	Treating the IB mid as strong as IBH/IBL. The IB mid is a target and a place to move the stop, not a main entry zone.
+Đánh kịch bản Neutral (phá cả hai phía) trong cửa sổ của bạn. Neutral thường chỉ hoàn thành sau 11:30, nên dùng nó làm context cho ngày sau.	Trading the Neutral scenario (both sides broken) in your window. Neutral usually only completes after 11:30, so use it as context for the next day.
+IB Journal · thống kê của riêng bạn	IB Journal · your own statistics
+Lưu trên trình duyệt này. Dùng Copy CSV để chuyển sang thiết bị khác hoặc Notion.	Saved in this browser. Use Copy CSV to move it to another device or to Notion.
+Bạn đã xác định module	You identified the module
+IB Breaks của nqstats	nqstats IB Breaks
+là phần áp dụng chính. Dùng nó làm baseline, rồi so với số liệu NQ do chính bạn ghi. Mỗi phiên chỉ cần 4 con số sau khi RTH đóng cửa.	as the main application. Use it as the baseline, then compare with the NQ numbers you record yourself. Each session needs only 4 numbers after the RTH close.
+Ngày	Date
+Thêm phiên	Add session
+Nhập CSV	Import CSV
+Dán CSV	Paste CSV
+Nhập (thêm vào cuối)	Import (append)
+Phá	Break
+Ext lên	Ext up
+Ext xuống	Ext down
+Ví dụ thật trong template của bạn: 29/10 có spike bán cuối phiên, 30/10 open gap xuống dưới spike → tiếp diễn (xem tab 08).	A real example in your template: 29/10 had a late selling spike, 30/10 opened with a gap below the spike → continuation (see tab 08).
+Công cụ tính IB đã chuyển sang tab 03 · Initial Balance	The IB calculator has moved to tab 03 · Initial Balance
+IB High/Low, IB mid, extension 1.5x/2x/3x, đánh giá độ rộng và IB Journal thống kê của riêng bạn đều ở đó.	IB High/Low, IB mid, 1.5x/2x/3x extensions, width assessment and your own IB Journal statistics are all there.
+Mở tab Initial Balance	Open the Initial Balance tab
+VWAP hoặc band ±2 SD nằm trong vòng 10–15 điểm của VAH/VAL/POC hôm qua → zone A theo bảng chấm điểm tab 04.	VWAP or the ±2 SD band within 10–15 points of yesterday’s VAH/VAL/POC → zone A per the scoring table in tab 04.
+: chỉ xét divergence tại zone điểm ≥ 4 (tab 04). Divergence giữa không trung = nhiễu.	: only consider divergence at a zone scoring ≥ 4 (tab 04). Divergence in mid-air = noise.
+07 · Quy trình mỗi ngày	07 · Daily routine
+08 · Case study từ ảnh của bạn	08 · Case study from your screenshot
+50 câu rút ngẫu nhiên từ 93 câu của khoá Level, giữ tỉ lệ theo chương.	50 questions drawn at random from the 93 of the Level course, keeping the chapter proportions.
+RE lên	RE up
+Giải phẫu Initial Balance	Initial Balance anatomy
+HẸP → ưu tiên breakout go-with (IB-1), cần acceptance	NARROW → favour go-with breakouts (IB-1), needs acceptance
+RỘNG → ưu tiên fade cạnh / failed break (IB-2)	WIDE → favour fading the edges / failed breaks (IB-2)
+BÌNH THƯỜNG → chờ RE một phía + VWAP dốc, hoặc rotation (IB-3)	NORMAL → wait for one-sided RE + sloping VWAP, or rotation (IB-3)
+TRÊN IB · range hiện tại ≈	ABOVE IB · current range ≈
+đã qua 2x	past 2x
+đã qua 1.5x, kế tiếp 2x	past 1.5x, next 2x
+kế tiếp 1.5x	next 1.5x
+DƯỚI IB · range hiện tại ≈	BELOW IB · current range ≈
+% từ IBL ·	% from IBL ·
+trên	above
+dưới	below
+điểm (	pts (
+so với TB)	of avg)
+Đánh giá   :	Assessment :
+Giá        :	Price      :
+Lên	Up 
+Xuống	Down 
+Quy ước: N× = tổng range bằng N lần IB width, đo từ cạnh IB đối diện.	Convention: N× = total range equal to N times the IB width, measured from the opposite IB edge.
+Đang hiển thị dữ liệu mẫu minh hoạ, không phải dữ liệu thật.	Showing illustrative sample data, not real data.
+Thêm phiên đầu tiên của bạn hoặc bấm nút để xoá mẫu.	Add your first session or press the button to clear the sample.
+Xoá mẫu, bắt đầu log thật	Clear sample, start real logging
+Số phiên	Sessions
+mẫu	sample
+đã log	logged
+IB width TB / trung vị	IB width avg / median
+điểm	pts
+Phá ít nhất 1 phía	Broke at least 1 side
+cả hai phía:	both sides:
+Đạt 1.5x / 2x	Reached 1.5x / 2x
+một phía bất kỳ	either side
+IB hẹp (	Narrow IB (
+phiên	sessions
+đạt 1.5x:	reached 1.5x:
+IB rộng (	Wide IB (
+phá ít nhất 1 phía:	broke at least 1 side:
+2 phía	both
+lên	up
+xuống	down
+không	none
+Xoá phiên	Delete session
+Xoá	Delete
+Chưa có phiên nào. Nhập 4 số sau khi RTH đóng cửa.	No sessions yet. Enter the 4 numbers after the RTH close.
+Cần đủ IB High, IB Low, RTH High, RTH Low.	Need IB High, IB Low, RTH High and RTH Low.
+Kiểm tra lại: RTH High ≥ IB High	Check again: RTH High ≥ IB High
+Đã thêm phiên.	Session added.
+Đã copy CSV.	CSV copied.
+Trình duyệt chặn copy.	The browser blocked copying.
+Không đọc được dòng nào. Định dạng: date,ibh,ibl,rth_high,rth_low,note	Could not read any line. Format: date,ibh,ibl,rth_high,rth_low,note
+Đã nhập	Imported
+phiên.	sessions.
+Thử ngay: mở tab 07, Plan Builder đã điền sẵn các số này. Đổi	Try it now: open tab 07, the Plan Builder is pre-filled with these numbers. Change
+Ghi IB Journal (tab 03) cho 30 phiên: IB width trung bình, % ngày có range extension, % đạt 1.5x/2x	Log the IB Journal (tab 03) for 30 sessions: average IB width, % of days with range extension, % reaching 1.5x/2x
+Mỗi tối dùng Plan Builder (tab 07) lên plan cho 10 phiên liên tiếp, trade trên sim	Every evening use the Plan Builder (tab 07) to plan 10 consecutive sessions, trade them on sim
+Chấm điểm level (bảng tab 04) cho mọi zone trước khi vào lệnh sim	Score levels (table in tab 04) for every zone before a sim entry
+Bài kiểm tra tổng 50 câu (tab 09) ≥ 40/50 ba lần liên tiếp	50-question final test (tab 09) ≥ 40/50 three times in a row
+Cạnh VA là level Tier 2 quan trọng nhất trong ngày: fade nếu bị reject, go-with nếu được accept (tab 04).	The VA edges are the most important Tier 2 levels of the day: fade on rejection, go with acceptance (tab 04).
+IB là anchor của model IB bạn đang dùng. So IB width với trung bình 20 phiên (công cụ ở tab 04).	The IB is the anchor of the IB model you use. Compare IB width with the 20-session average (tool in tab 04).
+Xem bảng spike rules ở tab 04.	See the spike rules table in tab 04.
+Giá đang ở zone TPO có điểm ≥ 4 (tab 04)?	Is price at a TPO zone scoring ≥ 4 (tab 04)?
+IB của NQ RTH tính theo giờ Việt Nam (mùa đông, EST) là khoảng nào?	What is the NQ RTH IB in Vietnam time (winter, EST)?
+9:30–10:30 ET, chênh 12 giờ khi Mỹ không áp dụng DST.	9:30–10:30 ET, a 12-hour difference when the US is not on DST.
+IB gồm những TPO period nào?	Which TPO periods make up the IB?
+Chỉ A	Only A
+A và B	A and B
+A, B và C	A, B and C
+Toàn bộ ETH	The whole ETH session
+IBH 28,800, IBL 28,650. IB mid là bao nhiêu?	IBH 28,800, IBL 28,650. What is the IB mid?
+IB width 150 điểm, trung bình 20 phiên 250 điểm. Đánh giá và thiên hướng?	IB width 150 points, 20-session average 250 points. Assessment and bias?
+Rộng, fade cạnh IB	Wide, fade the IB edges
+Hẹp (60%), ưu tiên chờ breakout go-with	Narrow (60%), favour waiting for a go-with breakout
+Bình thường, đứng ngoài	Normal, stand aside
+Không kết luận được	Cannot conclude
+Dưới 70% trung bình = IB hẹp, năng lượng dồn cho range extension.	Below 70% of the average = narrow IB, energy building for range extension.
+IBH 28,800, IBL 28,700. Theo quy ước	IBH 28,800, IBL 28,700. Under the playbook’s
+của playbook, extension 1.5x phía trên là:	convention, the 1.5x extension above is:
+10:45 ET giá phá IBH, nhưng period C đóng lại trong IB và CVD tạo lower high. Đây là kịch bản gì?	At 10:45 ET price breaks IBH, but period C closes back inside the IB and CVD makes a lower high. Which scenario is this?
+Breakout được accept	Breakout accepted
+Failed break: ưu tiên fade về IB mid rồi IBL	Failed break: favour fading to IB mid then IBL
+Setup IB-2. Stop ngoài extreme của cú phá.	Setup IB-2. Stop beyond the extreme of the break.
+Cả ngày giá không rời IB, IB lại rộng. Day type khả năng cao là:	Price never leaves the IB all day, and the IB is wide. The most likely day type is:
+Large timeframe đặt biên sớm, phần còn lại là rotation.	The large timeframe set the boundaries early, the rest is rotation.
+Vì sao không nên vào breakout ngay khi giá vừa chạm IBH lúc 10:31?	Why not enter the breakout as soon as price touches IBH at 10:31?
+Vì IBH không phải level	Because IBH is not a level
+Chưa có acceptance; cú chạm đầu thường là thăm dò, dễ fake-out	No acceptance yet; the first touch is usually a probe, prone to fake-outs
+Vì prop cấm	Because prop rules forbid it
+Vì VWAP chưa có	Because VWAP is not ready
+Chờ 1 period giữ ngoài IB hoặc retest IBH có trigger.	Wait for 1 period holding outside the IB or an IBH retest with a trigger.
+Setup IB-1 (breakout go-with), stop hợp lý nằm ở đâu?	Setup IB-1 (go-with breakout): where does a sensible stop go?
+Trên IBH khi long	Above IBH when long
+Dưới retest low, hoặc khi giá quay sâu lại trong IB	Below the retest low, or when price moves deep back inside the IB
+Tại IB mid đối diện	At the opposite IB mid
+Không cần stop	No stop needed
+Breakout hợp lệ thì IBH cũ phải giữ vai trò support.	In a valid breakout the old IBH must hold as support.
+Tin 10:00 ET (ISM, JOLTS…) ảnh hưởng gì đến IB?	How does the 10:00 ET news (ISM, JOLTS…) affect the IB?
+Làm méo period B, IB width có thể không đại diện cho cấu trúc	It distorts period B, the IB width may not represent the structure
+Luôn làm IB hẹp	Always makes the IB narrow
+Huỷ IB	Cancels the IB
+Ghi chú phiên có tin vào IB Journal để lọc khi thống kê.	Note sessions with news in the IB Journal so you can filter them in the statistics.
+IB nằm hoàn toàn trên range hôm qua và IB hẹp. Bối cảnh này gợi ý:	The IB sits entirely above yesterday’s range and is narrow. This context suggests:
+Fade mọi nhịp lên	Fade every rally
+Bối cảnh trend lên mạnh nhất, ưu tiên breakout lên	The strongest uptrend context, favour an upside breakout
+Imbalance theo hướng open + IB hẹp = xác suất RE cùng hướng cao.	Imbalance in the open direction + a narrow IB = high probability of RE in the same direction.
+Kịch bản Neutral (phá cả hai phía IB) thường hoàn thành khi nào, và bạn dùng nó thế nào?	When does the Neutral scenario (both sides of the IB broken) usually complete, and how do you use it?
+Trước 10:30, trade ngay	Before 10:30, trade it immediately
+Thường sau 11:30 (ngoài cửa sổ của bạn), dùng làm context cho ngày sau	Usually after 11:30 (outside your window), use it as context for the next day
+Không bao giờ xảy ra	It never happens
+Chỉ trong ETH	Only in ETH
+Cửa sổ 9:30–11:30 hiếm khi đủ thời gian cho cả hai phía bị phá.	The 9:30–11:30 window rarely has enough time for both sides to break.
+dPOC nằm nửa trên IB, giá giữ trên IB mid, VWAP dốc lên lúc 10:30. Gợi ý gì?	The dPOC sits in the upper half of the IB, price holds above IB mid, VWAP slopes up at 10:30. What does it suggest?
+Chắc chắn phá IBH	IBH will certainly break
+Thiên hướng breakout lên, nhưng vẫn cần acceptance + CVD xác nhận	A bias towards an upside breakout, but acceptance + CVD confirmation are still needed
+Context nghiêng một phía, chưa phải tín hiệu.	Context leaning one way, not a signal yet.
+IB mid nên được dùng chủ yếu như thế nào?	How should the IB mid mainly be used?
+Zone vào lệnh mạnh nhất	The strongest entry zone
+Đích của rotation và chỗ dời stop	A rotation target and a place to move the stop
+IBH/IBL mới là biên chính; IB mid là trọng tâm.	IBH/IBL are the main boundaries; the IB mid is the centre of gravity.
+Break một phía + accept	One-sided break + acceptance
+Giá ra ngoài IB và giữ ít nhất 1 period, VWAP dốc theo hướng phá.	Price leaves the IB and holds at least 1 period, VWAP sloping in the break direction.
+Setup IB-1. Target 1.5x rồi 2x hoặc level Tier 1–2 kế tiếp.	Setup IB-1. Target 1.5x then 2x or the next Tier 1–2 level.
+Break + retest cạnh IB	Break + retest of the IB edge
+Phá IBH, quay lại test IBH cũ, giữ được (absorption / delta flip).	Breaks IBH, comes back to test the old IBH and holds (absorption / delta flip).
+Entry đẹp nhất của IB-1: vào tại retest, stop dưới retest low.	The best IB-1 entry: enter on the retest, stop below the retest low.
+Break thất bại	Failed break
+Phá ra ngoài nhưng đóng period lại trong IB, CVD divergence tại extreme.	Breaks out but the period closes back inside the IB, CVD divergence at the extreme.
+Setup IB-2. Target IB mid rồi cạnh IB đối diện.	Setup IB-2. Target IB mid then the opposite IB edge.
+Phá cả hai phía	Both sides broken
+Range extension cả trên lẫn dưới IB.	Range extension both above and below the IB.
+Thường hoàn thành sau 11:30. Close ở giữa = balance; close ở cực trị = hướng cho ngày sau.	Usually completes after 11:30. Close in the middle = balance; close at an extreme = direction for the next day.
+Không phá IB	No IB break
+Giá xoay trong IB, VWAP phẳng gần IB mid.	Price rotates inside the IB, VWAP flat near the IB mid.
+Setup IB-3 (scalp cạnh ↔ mid) hoặc đứng ngoài. Ngày sau chú ý breakout khỏi vùng này.	Setup IB-3 (scalp edge ↔ mid) or stand aside. The next day watch for a breakout from this area.
+IB hẹp hoặc bình thường-hẹp; break trong C–D; VWAP dốc cùng hướng; CVD tạo cực trị mới cùng giá; phía trước có level chưa bị chạm.	Narrow or normal-to-narrow IB; break during C–D; VWAP sloping the same way; CVD making new extremes with price; an untouched level ahead.
+Retest IB edge (IBH cũ thành support) với absorption / delta flip; hoặc pullback về VWAP / +1 SD.	Retest of the IB edge (old IBH turned support) with absorption / delta flip; or a pullback to VWAP / +1 SD.
+Dưới retest low; hoặc khi giá quay lại trong IB quá 25% IB width.	Below the retest low; or when price comes back inside the IB by more than 25% of the IB width.
+1.5x → 2x, hoặc level Tier 1–2 gần nhất (lấy cái gần hơn).	1.5x → 2x, or the nearest Tier 1–2 level (whichever is closer).
+Period đóng trở lại trong IB.	A period closes back inside the IB.
+IB rộng, hoặc cạnh IB trùng level Tier 1–2; cú phá có volume mỏng; CVD divergence / absorption tại extreme.	Wide IB, or an IB edge matching a Tier 1–2 level; the break has thin volume; CVD divergence / absorption at the extreme.
+Khi giá đóng lại trong IB và có trigger (phá cấu trúc M1, delta flip).	When price closes back inside the IB with a trigger (M1 structure break, delta flip).
+Ngoài extreme của cú phá.	Beyond the extreme of the break.
+IB mid, sau đó cạnh IB đối diện.	IB mid, then the opposite IB edge.
+Giá phá lại và giữ ngoài IB 1 period.	Price breaks again and holds outside the IB for 1 period.
+Tuỳ chọn	Optional
+IB bình thường / rộng, chưa có RE, VWAP phẳng gần IB mid.	Normal / wide IB, no RE yet, VWAP flat near the IB mid.
+Fade IBH / IBL với CVD exhaustion, hoặc reclaim IB mid.	Fade IBH / IBL on CVD exhaustion, or an IB mid reclaim.
+Ngoài cạnh IB một khoảng nhỏ (ví dụ 10% width).	A small distance beyond the IB edge (e.g. 10% of width).
+IB mid. Không giữ lệnh qua mid.	IB mid. Do not hold through the mid.
+RE một phía có VWAP bắt đầu dốc.	One-sided RE with VWAP starting to slope.
+Open Drive / OTD rõ ràng, A period range hẹp, khớp kịch bản A của plan.	A clear Open Drive / OTD, narrow A-period range, matching scenario A of the plan.
+Retest A-high / A-low sau khi B phá ra.	Retest of the A-high / A-low after B breaks out.
+Quay lại giữa A range.	Back to the middle of the A range.
+Level kế tiếp trong plan; IB còn đang hình thành nên giữ target ngắn.	The next level in the plan; the IB is still forming so keep targets short.
+B quay ngược xuyên open (chuyển thành ORR).	B reverses back through the open (turning into an ORR).
+Ghi IBH, IBL, IB width và % so với trung bình 20 phiên	Record IBH, IBL, IB width and % versus the 20-session average
+IB nằm ở đâu so với VA / range hôm qua (ngoài / cắt cạnh / trong)	Where the IB sits relative to yesterday’s VA / range (outside / straddling an edge / inside)
+Open type đã phân loại lúc 10:00 có khớp với hình dạng IB không	Does the open type classified at 10:00 match the IB shape?
+VWAP RTH dốc hay phẳng, giá đang trên hay dưới VWAP	Is VWAP RTH sloping or flat, is price above or below VWAP?
+dPOC nằm nửa trên hay nửa dưới IB	Is the dPOC in the upper or lower half of the IB?
+Level Tier 1–2 nào nằm ngay ngoài IBH / IBL (nhiên liệu cho breakout hoặc tường cho fade)	Which Tier 1–2 level sits just outside IBH / IBL (fuel for a breakout or a wall for a fade)?
+Có tin 10:00 ET làm méo period B không	Did the 10:00 ET news distort period B?
+Chọn bias sau IB: IB-1 breakout / IB-2 fade / IB-3 rotation / đứng ngoài, và viết invalidation	Pick the post-IB bias: IB-1 breakout / IB-2 fade / IB-3 rotation / stand aside, and write the invalidation
+mẫu-1	sample-1
+dữ liệu mẫu	sample data
+mẫu-2	sample-2
+mẫu-3	sample-3
+mẫu-4	sample-4
+mẫu-5	sample-5
+mẫu-6	sample-6
+70% TB)	70% avg)
+130% TB)	130% avg)
+% TB	% avg
+tin 10:00, OD…	news 10:00, OD…
+TRONG IB ·	INSIDE IB ·

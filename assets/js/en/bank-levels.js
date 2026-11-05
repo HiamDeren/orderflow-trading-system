@@ -102,9 +102,24 @@ PB.quiz = [
   
   {m:"cvd",q:"The core difference between absorption and exhaustion?",o:["No difference","Absorption: the aggressor is still strong but blocked by passive orders; exhaustion: the aggressor fades","Absorption only happens at lows","Exhaustion is stronger than absorption"],a:1,e:"Absorption is usually stronger because a large player is standing at the level."},
   {m:"cvd",q:"Which ATAS tool helps confirm a large order standing and absorbing at the level?",o:["Weekly VWAP","Smart Tape (Price + Volume) / DOM","RSI","Moving average"],a:1,e:"You have already set up Smart Tape with 2 columns, Price + Volume, for exactly this."},
-  {m:"cvd",q:"What does an A++ setup need?",o:["Only CVD divergence","TPO zone ≥ 6 + VWAP/band match + CVD divergence + trigger","Only VWAP","Any open type"],a:1,e:"Three confluence layers + trigger = A++."}
-];
+  {m:"cvd",q:"What does an A++ setup need?",o:["Only CVD divergence","TPO zone ≥ 6 + VWAP/band match + CVD divergence + trigger","Only VWAP","Any open type"],a:1,e:"Three confluence layers + trigger = A++."},
 
+  /* ib */
+  {m:"ib",q:"What is the NQ RTH IB in Vietnam time (winter, EST)?",o:["20:30–21:30","21:30–22:30","22:30–23:30","21:30–22:00"],a:1,e:"9:30–10:30 ET, a 12-hour difference when the US is not on DST."},
+  {m:"ib",q:"Which TPO periods make up the IB?",o:["Only A","A and B","A, B and C","The whole ETH session"],a:1,e:"A (9:30–10:00) + B (10:00–10:30)."},
+  {m:"ib",q:"IBH 28,800, IBL 28,650. What is the IB mid?",o:["28,700","28,725","28,750","28,650"],a:1,e:"(28,800 + 28,650) / 2 = 28,725."},
+  {m:"ib",q:"IB width 150 points, 20-session average 250 points. Assessment and bias?",o:["Wide, fade the IB edges","Narrow (60%), favour waiting for a go-with breakout","Normal, stand aside","Cannot conclude"],a:1,e:"Below 70% of the average = narrow IB, energy building for range extension."},
+  {m:"ib",q:"IBH 28,800, IBL 28,700. Under the playbook’s 'total range' convention, the 1.5x extension above is:",o:["28,850","28,950","28,900","28,825"],a:0,e:"Width 100. 1.5x = IBL + 150 = IBH + 50 = 28,850. 2x = 28,900."},
+  {m:"ib",q:"At 10:45 ET price breaks IBH, but period C closes back inside the IB and CVD makes a lower high. Which scenario is this?",o:["Breakout accepted","Failed break: favour fading to IB mid then IBL","Neutral day","Trend day"],a:1,e:"Setup IB-2. Stop beyond the extreme of the break."},
+  {m:"ib",q:"Price never leaves the IB all day, and the IB is wide. The most likely day type is:",o:["Trend","Normal","Double Distribution","Neutral"],a:1,e:"The large timeframe set the boundaries early, the rest is rotation."},
+  {m:"ib",q:"Why not enter the breakout as soon as price touches IBH at 10:31?",o:["Because IBH is not a level","No acceptance yet; the first touch is usually a probe, prone to fake-outs","Because prop rules forbid it","Because VWAP is not ready"],a:1,e:"Wait for 1 period holding outside the IB or an IBH retest with a trigger."},
+  {m:"ib",q:"Setup IB-1 (go-with breakout): where does a sensible stop go?",o:["Above IBH when long","Below the retest low, or when price moves deep back inside the IB","At the opposite IB mid","No stop needed"],a:1,e:"In a valid breakout the old IBH must hold as support."},
+  {m:"ib",q:"How does the 10:00 ET news (ISM, JOLTS…) affect the IB?",o:["No effect","It distorts period B, the IB width may not represent the structure","Always makes the IB narrow","Cancels the IB"],a:1,e:"Note sessions with news in the IB Journal so you can filter them in the statistics."},
+  {m:"ib",q:"The IB sits entirely above yesterday’s range and is narrow. This context suggests:",o:["Fade every rally","The strongest uptrend context, favour an upside breakout","Balance","No trade"],a:1,e:"Imbalance in the open direction + a narrow IB = high probability of RE in the same direction."},
+  {m:"ib",q:"When does the Neutral scenario (both sides of the IB broken) usually complete, and how do you use it?",o:["Before 10:30, trade it immediately","Usually after 11:30 (outside your window), use it as context for the next day","It never happens","Only in ETH"],a:1,e:"The 9:30–11:30 window rarely has enough time for both sides to break."},
+  {m:"ib",q:"The dPOC sits in the upper half of the IB, price holds above IB mid, VWAP slopes up at 10:30. What does it suggest?",o:["IBH will certainly break","A bias towards an upside breakout, but acceptance + CVD confirmation are still needed","Short IBH","Stand aside all day"],a:1,e:"Context leaning one way, not a signal yet."},
+  {m:"ib",q:"How should the IB mid mainly be used?",o:["The strongest entry zone","A rotation target and a place to move the stop","Level Tier 1","Not allowed"],a:1,e:"IBH/IBL are the main boundaries; the IB mid is the centre of gravity."}
+];
 window.QBANK=(window.QBANK||[]).concat(PB.quiz.map((q,i)=>({id:'L'+String(i+1).padStart(3,'0'),course:'levels',mod:q.m,q:q.q,o:q.o,a:q.a,e:q.e,vis:null})));
-window.QMODS=window.QMODS||{};window.QMODS.levels={tpo:'TPO foundations',structure:'Day & Open types',case:'Case study',levels:'Level map',vwap:'VWAP RTH',cvd:'CVD divergence'};
+window.QMODS=window.QMODS||{};window.QMODS.levels={tpo:'TPO foundations',structure:'Day & Open types',case:'Case study',ib:'Initial Balance',levels:'Level map',vwap:'VWAP RTH',cvd:'CVD divergence'};
 })();

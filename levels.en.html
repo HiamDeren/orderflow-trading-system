@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=4">
-<link rel="stylesheet" href="assets/css/levels.css?v=4">
+<link rel="stylesheet" href="assets/css/app.css?v=5">
+<link rel="stylesheet" href="assets/css/levels.css?v=5">
 </head>
 <body data-page="levels">
 <main class="ui-main">
@@ -28,7 +28,7 @@
     <span class="ui-eyebrow">Course 1 · NQ · RTH 9:30–16:00 ET</span>
     <h1 class="ui-h1">TPO Level Playbook</h1>
     <p class="ui-lede">Context from TPO · Confluence from VWAP RTH + CVD · Trigger from orderflow. A 9-week roadmap from reading a profile to planning and executing in the 2-hour NY AM window.</p>
-    <div class="facts"><span><b>8</b> chapters</span><span><b>5</b> roadmap phases</span><span><b>79</b> quiz questions</span><span>Plan Builder</span></div>
+    <div class="facts"><span><b>9</b> chapters</span><span><b>5</b> roadmap phases</span><span><b>93</b> quiz questions</span><span>Plan Builder</span></div>
     <div class="cta"><a class="ui-btn primary" href="#nen-tang">Start learning →</a><a class="ui-btn" href="#plan">Open Plan Builder</a><a class="ui-btn ghost" href="quiz.en.html#thi-thu">50-question mock exam</a></div>
   </div>
 
@@ -116,7 +116,7 @@
       <li><b>Tail: 1 print or 2 prints?</b> The two counts run in different directions. "Two prints at the top" in the video means <i>two different letters touching the highest price</i> (counted horizontally) → that is a poor high, so not a tail. A tail is counted <i>vertically</i>: the number of consecutive rows at the extreme with a single letter. According to Dalton, the minimum excess is 2 single-print rows. For NQ, a practical convention: tail ≥ 2 rows at the row size you use (e.g. 5 points/row → tail ≥ 10 points).</li>
       <li><b>68.4% or 70%?</b> 1 standard deviation of a normal distribution ≈ 68.27%, that is the mathematical root. 70% is the CBOT rounding convention and the default on most platforms, including ATAS. Pick one number and keep it fixed so days are comparable.</li>
       <li><b>How is RF calculated?</b> The table just above.</li>
-      <li><b>"Key contextual level" what is it?</b> In this playbook it means the Tier 1–2 levels in tab 03 (weekly VA, prior day VAH/VAL/POC, naked POC, poor high/low, single prints). Price closing through such a level during the IB usually makes the IB wide and one-directional.</li>
+      <li><b>"Key contextual level" what is it?</b> In this playbook it means the Tier 1–2 levels in tab 04 (weekly VA, prior day VAH/VAL/POC, naked POC, poor high/low, single prints). Price closing through such a level during the IB usually makes the IB wide and one-directional.</li>
     </ul>
   </div>
 
@@ -164,10 +164,148 @@
   <div class="qz-slot" data-qz="levels:structure" data-title="Quiz 02 · Day & Open types"></div>
 </section>
 
+<!-- ============ 03 INITIAL BALANCE ============ -->
+<section class="tab" id="ch-initial-balance" data-chapter="initial-balance">
+  <div class="head">
+    <span class="eyebrow">03 · Initial Balance</span>
+    <h2>The first 60 minutes decide the structure of the whole day</h2>
+    <p class="lead"><b>Initial Balance (IB)</b> is the range of periods A + B, i.e. <b>9:30–10:30 ET = 21:30–22:30 Vietnam time</b> (winter). In your system the IB has replaced Range69 as the structural anchor, and shares its anchor with VWAP RTH and the CVD reset. The first half of your 2-hour window is when the IB is forming. The second half (C–D, 10:30–11:30 ET) is when the first range extension happens or fails.</p>
+  </div>
+
+  <div class="grid g2">
+    <figure class="panel stack">
+      <h3>IB anatomy</h3>
+      <div class="svgwrap" id="ib-anatomy"></div>
+      <figcaption>Horizontal axis = 9:30–11:30 ET (your trade window). Shaded zone = IB (A + B). Example: C breaks IBH, retests the old IBH, then continues to the 1.5x extension.</figcaption>
+    </figure>
+    <div class="panel stack">
+      <h3>Components</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Component</th><th>Calculation</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip ib">IBH / IBL</span></td><td>High / Low of 9:30–10:30 ET</td><td>Range extension boundary, Tier 3 level</td></tr>
+          <tr><td><span class="chip ib">IB width</span></td><td>IBH − IBL</td><td>Measures early large-timeframe participation</td></tr>
+          <tr><td><span class="chip ib">IB mid</span></td><td>(IBH + IBL) / 2</td><td>Who is winning the IB, target of rotations</td></tr>
+          <tr><td><span class="chip">Opening range</span></td><td>Range of A (9:30–10:00)</td><td>IB "first half", cho scalp Tier 4</td></tr>
+          <tr><td><span class="chip ib">Range extension</span></td><td>Price moves outside the IB after 10:30</td><td>Sign that the other timeframe has stepped in</td></tr>
+          <tr><td><span class="chip ib">Extension N×</span></td><td>Total range = N × IB width, measured from the opposite IB edge</td><td>Target: 1.5x, 2x, 3x</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">There are two conventions for extensions. The playbook uses the "total range" convention (1.5x up = IBL + 1.5 × width = IBH + 0.5 × width). Some sources use IBH + N × width. Pick one convention, label it on the chart and in the journal, never mix them.</p>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Why the IB matters</h3>
+    <div class="grid g3">
+      <div class="card"><h4><span class="chip">1</span> The day’s first balance</h4><p class="small">In the first hour most trading comes from day-timeframe traders reacting to the open and overnight. They create the first area of balance. It is a "mini" version of the value area.</p></div>
+      <div class="card"><h4><span class="chip">2</span> IB break = someone bigger is here</h4><p class="small">When price leaves the IB after 10:30 it is usually the other timeframe (funds, multi-day position holders) acting. One-sided range extension is initiative activity on that side.</p></div>
+      <div class="card"><h4><span class="chip">3</span> Width tells you about the rest of the day</h4><p class="small">Wide IB: the large timeframe came in early, most of the day’s range is already in. Narrow IB: nobody has committed yet, energy is building for range extension. You have this information right at 10:30.</p></div>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>IB width classification + calculator</h3>
+    <div class="grid g2">
+      <div class="stack">
+        <div class="tablewrap"><table>
+          <thead><tr><th>IB width / 20-session avg</th><th>Type</th><th>Typical day types</th><th>Bias after 10:30</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">&lt; 70%</td><td><span class="chip good">Narrow</span></td><td>Trend, Normal Variation, Double Distribution</td><td>Favour go-with breakouts (IB-1)</td></tr>
+            <tr><td class="mono">70–130%</td><td><span class="chip">Normal</span></td><td>Normal Variation, Neutral</td><td>Wait for one-sided RE + sloping VWAP, or rotation (IB-3)</td></tr>
+            <tr><td class="mono">&gt; 130%</td><td><span class="chip warn">Wide</span></td><td>Normal, Neutral</td><td>Favour fading the IB edges / failed breaks (IB-2)</td></tr>
+          </tbody>
+        </table></div>
+        <p class="small muted">The 70% / 130% thresholds are a starting point. After 30 sessions in the IB Journal below, replace them with your own real percentiles (e.g. 25% and 75%).</p>
+      </div>
+      <div class="stack">
+        <div class="form">
+          <div class="field"><label for="ib-h">IB High</label><input type="number" id="ib-h" value="28795" step="0.25"></div>
+          <div class="field"><label for="ib-l">IB Low</label><input type="number" id="ib-l" value="28640" step="0.25"></div>
+          <div class="field"><label for="ib-avg">IB 20-session avg</label><input type="number" id="ib-avg" value="190" step="1"></div>
+          <div class="field"><label for="ib-px">Current price</label><input type="number" id="ib-px" value="28760" step="0.25"></div>
+        </div>
+        <div class="out" id="ib-out"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>IB location versus yesterday × IB width</h3>
+    <p class="small muted">Read at 10:30 ET. Row = where the IB sits relative to yesterday’s value / range. Column = IB width.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>IB location</th><th>Narrow IB</th><th>Normal IB</th><th>Wide IB</th></tr></thead>
+      <tbody>
+        <tr><td><b>Entirely outside yesterday’s range</b></td><td><span class="chip good">Strongest</span> Trend context. Breakouts in the gap/open direction are favoured.</td><td>Leaning go-with. Wait for RE in the same direction as the IB location.</td><td>The imbalance already happened inside the IB. The rest of the day easily balances, do not chase.</td></tr>
+        <tr><td><b>Straddling a VA edge / PD High-Low</b></td><td>A breakout away from the VA usually has fuel (yesterday’s stops).</td><td>Yesterday’s VA edge is the referee: accepted outside → go with it; back inside → 80% rule.</td><td>Two levels stacked (IB edge + VA edge) = a good fade zone.</td></tr>
+        <tr><td><b>Inside yesterday’s VA</b></td><td>Compressed energy. A breakout needs strong confirmation (CVD + VWAP) because it is still inside old value.</td><td>Balance. Rotate IB edge ↔ IB mid / PD POC.</td><td><span class="chip bad">Few opportunities</span> Stand aside or only fade the edges with a clear trigger.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel stack">
+    <h3>5 scenarios after 10:30 ET</h3>
+    <p class="small muted">Shaded zone = IB. Dashed orange line = IB mid. Identify which scenario is playing out before picking a setup.</p>
+    <div class="grid g2" id="ib-scen"></div>
+  </div>
+
+  <div class="panel stack">
+    <h3>4 IB-based setups</h3>
+    <p class="small muted">IB-1 and IB-2 correspond to Playbook E (IB extension + VWAP continuation) and Playbook F (IB rotation + VWAP fade) in your page "12 — Entry Model" .</p>
+    <div class="grid g2" id="ib-setups"></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Checklist 10:30 ET (22:30 VN)</h3>
+      <div id="ib-check"></div>
+      <div class="row"><button id="ib-check-reset">Clear ticks for a new day</button></div>
+    </div>
+    <div class="panel stack">
+      <h3>Common IB mistakes</h3>
+      <ul class="clean small">
+        <li>Entering the breakout as soon as price touches IBH at 10:31, without waiting for acceptance or a retest. Most first touches are probes.</li>
+        <li>Fading the breakout of a narrow IB. That goes against the structure exactly when it has the highest trend probability.</li>
+        <li>Forgetting the 10:00 ET news (ISM, JOLTS, Consumer Confidence…). News distorts period B so the IB width is no longer representative. Note it in the journal.</li>
+        <li>A wrong ATAS timezone shifting the IB by 1 hour (especially in DST change weeks). Check that the IB bar starts exactly at 9:30 ET.</li>
+        <li>Mixing the two extension conventions between the chart and the journal.</li>
+        <li>Treating the IB mid as strong as IBH/IBL. The IB mid is a target and a place to move the stop, not a main entry zone.</li>
+        <li>Trading the Neutral scenario (both sides broken) in your window. Neutral usually only completes after 11:30, so use it as context for the next day.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <div class="qhead"><h3>IB Journal · your own statistics</h3><span class="small muted">Saved in this browser. Use Copy CSV to move it to another device or to Notion.</span></div>
+    <p class="small">You identified the module <b>nqstats IB Breaks</b> as the main application. Use it as the baseline, then compare with the NQ numbers you record yourself. Each session needs only 4 numbers after the RTH close.</p>
+    <div id="ibj-banner"></div>
+    <div class="form">
+      <div class="field"><label for="ibj-date">Date</label><input type="text" id="ibj-date" placeholder="05/11/2026"></div>
+      <div class="field"><label for="ibj-h">IB High</label><input type="number" id="ibj-h" step="0.25"></div>
+      <div class="field"><label for="ibj-l">IB Low</label><input type="number" id="ibj-l" step="0.25"></div>
+      <div class="field"><label for="ibj-dh">RTH High</label><input type="number" id="ibj-dh" step="0.25"></div>
+      <div class="field"><label for="ibj-dl">RTH Low</label><input type="number" id="ibj-dl" step="0.25"></div>
+      <div class="field"><label for="ibj-note">Note</label><input type="text" id="ibj-note" placeholder="news 10:00, OD…"></div>
+    </div>
+    <div class="row"><button class="primary" id="ibj-add">Add session</button><button id="ibj-csv">Copy CSV</button><button id="ibj-import-toggle">Import CSV</button><span class="small muted" id="ibj-msg" role="status"></span></div>
+    <div id="ibj-import" hidden class="stack">
+      <textarea id="ibj-import-text" aria-label="Paste CSV" placeholder="date,ibh,ibl,rth_high,rth_low,note"></textarea>
+      <div class="row"><button id="ibj-import-go">Import (append)</button></div>
+    </div>
+    <div class="grid g3" id="ibj-stats"></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Date</th><th class="num">IBH</th><th class="num">IBL</th><th class="num">Width</th><th class="num">% avg</th><th>Break</th><th class="num">Ext up</th><th class="num">Ext down</th><th>Note</th><th></th></tr></thead>
+      <tbody id="ibj-rows"></tbody>
+    </table></div>
+  </div>
+
+  <div class="qz-slot" data-qz="levels:ib" data-title="Quiz 03 · Initial Balance"></div>
+</section>
+
 <!-- ============ 03 LEVELS ============ -->
 <section class="tab" id="ch-levels" data-chapter="levels">
   <div class="head">
-    <span class="eyebrow">03 · Level map</span>
+    <span class="eyebrow">04 · Level map</span>
     <h2>Which levels are worth drawing, which are worth trading, and when a level is "broken"</h2>
     <p class="lead">You only have 2–3 trades a day, so levels must be few and ranked. Rule: only <b>draw</b> Tier 1–3 on the RTH chart. Tier 4 (scalping) is optional, only switched on after 20 consecutive sessions following the plan.</p>
   </div>
@@ -215,7 +353,7 @@
           <tr><td>Beyond the spike against its direction</td><td><span class="chip bad">spike rejected</span> → down</td><td><span class="chip bad">spike rejected</span> → up</td></tr>
         </tbody>
       </table></div>
-      <p class="small muted">A real example in your template: 29/10 had a late selling spike, 30/10 opened with a gap below the spike → continuation (see tab 07).</p>
+      <p class="small muted">A real example in your template: 29/10 had a late selling spike, 30/10 opened with a gap below the spike → continuation (see tab 08).</p>
     </div>
     <div class="panel stack">
       <h3>Scoring a level before trading it</h3>
@@ -234,24 +372,18 @@
     </div>
   </div>
 
-  <div class="panel stack" id="scalp-panel">
-    <h3>Scalping add-in (optional) · IB calculator</h3>
-    <p class="small muted">Enter the IB at 10:30 ET to get extensions, IB mid and a width assessment versus the 20-session average.</p>
-    <div class="form">
-      <div class="field"><label for="ib-h">IB High</label><input type="number" id="ib-h" value="28795" step="0.25"></div>
-      <div class="field"><label for="ib-l">IB Low</label><input type="number" id="ib-l" value="28640" step="0.25"></div>
-      <div class="field"><label for="ib-avg">20-session average IB</label><input type="number" id="ib-avg" value="190" step="1"></div>
-    </div>
-    <div class="out" id="ib-out"></div>
+  <div class="callout">
+    <h4>The IB calculator has moved to tab 03 · Initial Balance</h4>
+    <p class="small">IB High/Low, IB mid, 1.5x/2x/3x extensions, width assessment and your own IB Journal statistics are all there. <a href="#initial-balance">Open the Initial Balance tab</a>.</p>
   </div>
 
-  <div class="qz-slot" data-qz="levels:levels" data-title="Quiz 03 · Level, acceptance & scalping"></div>
+  <div class="qz-slot" data-qz="levels:levels" data-title="Quiz 04 · Level, acceptance & scalping"></div>
 </section>
 
 <!-- ============ 04 VWAP ============ -->
 <section class="tab" id="ch-vwap" data-chapter="vwap">
   <div class="head">
-    <span class="eyebrow">04 · Add-in confluence #1</span>
+    <span class="eyebrow">05 · Add-in confluence #1</span>
     <h2>VWAP RTH: the dynamic value of today’s session</h2>
     <p class="lead">TPO tells you where value <i>has been</i> built (usually yesterday’s). VWAP RTH tells you the average cost of everyone who has traded <i>since 9:30 today</i>. Combine the two: TPO is the map, VWAP is the in-session compass.</p>
   </div>
@@ -287,7 +419,7 @@ Band    = VWAP ± k·σ,   k = 1, 2, 3</div>
     <div class="grid g3">
       <div class="card"><h4><span class="chip vw">VWAP ≈ dPOC</span></h4><p class="small">Time and volume agree on the same price → balance. Fade the developing VA edges and ±2 SD.</p></div>
       <div class="card"><h4><span class="chip vw">VWAP leads, dPOC follows</span></h4><p class="small">dPOC moves in the same direction as VWAP after 10:30 → value is migrating, the day is likely a trend or normal variation day. Go with it.</p></div>
-      <div class="card"><h4><span class="chip vw">VWAP matches a TPO level</span></h4><p class="small">VWAP or the ±2 SD band within 10–15 points of yesterday’s VAH/VAL/POC → zone A per the scoring table in tab 03.</p></div>
+      <div class="card"><h4><span class="chip vw">VWAP matches a TPO level</span></h4><p class="small">VWAP or the ±2 SD band within 10–15 points of yesterday’s VAH/VAL/POC → zone A per the scoring table in tab 04.</p></div>
     </div>
   </div>
 
@@ -321,13 +453,13 @@ Band    = VWAP ± k·σ,   k = 1, 2, 3</div>
     </div>
   </div>
 
-  <div class="qz-slot" data-qz="levels:vwap" data-title="Quiz 04 · VWAP RTH"></div>
+  <div class="qz-slot" data-qz="levels:vwap" data-title="Quiz 05 · VWAP RTH"></div>
 </section>
 
 <!-- ============ 05 CVD ============ -->
 <section class="tab" id="ch-cvd" data-chapter="cvd">
   <div class="head">
-    <span class="eyebrow">05 · Add-in confluence #2</span>
+    <span class="eyebrow">06 · Add-in confluence #2</span>
     <h2>CVD divergence: who is aggressive, and can they still move price?</h2>
     <p class="lead">You said your main weakness right now is reading footprint/delta inaccurately. CVD is the simplification: instead of reading every bid × ask cell, just compare <b>two consecutive swings</b> of price with the two matching CVD swings, and <b>only at a TPO level</b>.</p>
   </div>
@@ -347,7 +479,7 @@ Reset      = 9:30 ET (same anchor as VWAP RTH and TPO RTH)</div>
     <div class="panel stack">
       <h3>Mandatory filters</h3>
       <ol class="clean small">
-        <li><b>Location first</b>: only consider divergence at a zone scoring ≥ 4 (tab 03). Divergence in mid-air = noise.</li>
+        <li><b>Location first</b>: only consider divergence at a zone scoring ≥ 4 (tab 04). Divergence in mid-air = noise.</li>
         <li><b>Regime</b>: on trend days (Open Drive, IB extension, sloping VWAP) counter-trend divergence fails repeatedly. Only accept it when it coincides with Tier 1 + the ±2 SD band.</li>
         <li><b>Trigger</b>: divergence is not an entry. Wait for an M1 micro-structure break, a level reclaim, or a delta flip.</li>
         <li><b>Invalidation</b>: beyond the extreme that created the divergence. Price going past it means the idea is wrong.</li>
@@ -381,13 +513,13 @@ Reset      = 9:30 ET (same anchor as VWAP RTH and TPO RTH)</div>
     </div>
   </div>
 
-  <div class="qz-slot" data-qz="levels:cvd" data-title="Quiz 05 · CVD divergence"></div>
+  <div class="qz-slot" data-qz="levels:cvd" data-title="Quiz 06 · CVD divergence"></div>
 </section>
 
 <!-- ============ 06 PLAN ============ -->
 <section class="tab" id="ch-plan" data-chapter="plan">
   <div class="head">
-    <span class="eyebrow">06 · Daily routine</span>
+    <span class="eyebrow">07 · Daily routine</span>
     <h2>Planning: from yesterday’s profile to 2 scenarios with invalidation</h2>
     <p class="lead">The goal of the plan is not predicting direction correctly. The goal is that before 9:25 ET you know: <b>where you trade, under which conditions, and what keeps you out</b>. From 01/11/2026 the US has left DST, so 9:30 ET = <b>21:30 Vietnam time</b>.</p>
   </div>
@@ -473,7 +605,7 @@ Purple level : 28176</textarea>
 <!-- ============ 07 TEMPLATE ============ -->
 <section class="tab" id="ch-template" data-chapter="template">
   <div class="head">
-    <span class="eyebrow">07 · Case study from your screenshot</span>
+    <span class="eyebrow">08 · Case study from your screenshot</span>
     <h2>NQZ6 · Daily Profile RTH · 29/10 → 04/11/2026</h2>
     <p class="lead">The numbers below are read from screenshot coordinates, so the error is about ±10–15 points. The 04/11 session was still running when captured (price 28,657.25), so the 04/11 VA/POC is <i>developing</i>. Use this tab to practise reading; take tradeable numbers directly from ATAS.</p>
   </div>
@@ -510,12 +642,12 @@ Purple level : 28176</textarea>
 </div>
 <footer class="ui-foot">Study playbook for NQ intraday. Not investment advice. Traditional statistics (80% rule, day-type frequencies) must be verified with your own backtests before trading real money.</footer>
 </main>
-<script src="assets/js/en/levels-data.js?v=4"></script>
-<script src="assets/js/en/fp.js?v=4"></script>
-<script src="assets/js/en/bank-levels.js?v=4"></script>
-<script src="assets/js/en/bank-tools.js?v=4"></script>
-<script src="assets/js/en/quiz.js?v=4"></script>
-<script src="assets/js/en/core.js?v=4"></script>
-<script src="assets/js/en/levels-page.js?v=4"></script>
+<script src="assets/js/en/levels-data.js?v=5"></script>
+<script src="assets/js/en/fp.js?v=5"></script>
+<script src="assets/js/en/bank-levels.js?v=5"></script>
+<script src="assets/js/en/bank-tools.js?v=5"></script>
+<script src="assets/js/en/quiz.js?v=5"></script>
+<script src="assets/js/en/core.js?v=5"></script>
+<script src="assets/js/en/levels-page.js?v=5"></script>
 </body>
 </html>

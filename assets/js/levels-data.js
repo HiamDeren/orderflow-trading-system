@@ -13,17 +13,17 @@ PB.roadmap = [
   { id:"p2", title:"Giai đoạn 2 · Cấu trúc ngày", when:"Tuần 3–4", items:[
     "Phân loại day type + shape + open type cho 30 phiên (lưu vào database Notion hoặc sheet)",
     "Ghi value relationship ngày-với-ngày cho 30 phiên đó",
-    "Đo IB width trung bình 20 phiên NQ và % ngày có range extension (dùng làm baseline cho Plan Builder)",
+    "Ghi IB Journal (tab 03) cho 30 phiên: IB width trung bình, % ngày có range extension, % đạt 1.5x/2x",
     "Đếm: bao nhiêu % ngày IB bị phá cả hai phía (neutral) trên NQ của bạn",
     "Luyện spike rules: tìm 10 ngày có spike cuối phiên, ghi ngày sau open ở đâu và kết quả",
     "Qua bài: Quiz 02 ≥ 80%, phân loại lại 10 phiên ngẫu nhiên đúng ≥ 8"
   ]},
   { id:"p3", title:"Giai đoạn 3 · Level & Plan", when:"Tuần 5–6", items:[
-    "Mỗi tối dùng Plan Builder (tab 06) lên plan cho 10 phiên liên tiếp, trade trên sim",
+    "Mỗi tối dùng Plan Builder (tab 07) lên plan cho 10 phiên liên tiếp, trade trên sim",
     "Mỗi plan có đúng 2 kịch bản (A/B), mỗi kịch bản có zone, trigger, target, invalidation",
     "Backtest 80% rule trên ATAS Market Replay: 20 lần, ghi tỉ lệ đi hết VA",
     "Backtest IB extension 1.5x/2x khi IB hẹp: 20 lần",
-    "Chấm điểm level (bảng tab 03) cho mọi zone trước khi vào lệnh sim",
+    "Chấm điểm level (bảng tab 04) cho mọi zone trước khi vào lệnh sim",
     "Qua bài: 10 plan liên tiếp viết trước 9:25 ET, ≥ 90% lệnh nằm trong plan"
   ]},
   { id:"p4", title:"Giai đoạn 4 · Add-in VWAP RTH + CVD", when:"Tuần 7–8", items:[
@@ -38,7 +38,7 @@ PB.roadmap = [
     "Live: tối đa 2–3 lệnh/ngày, chỉ setup A+ trở lên, dừng 11:30 ET (23:30 VN)",
     "Weekly review: tỉ lệ kịch bản A/B đúng, lỗi lặp lại, lệnh ngoài plan",
     "Tuỳ chọn: bật Tier 4 scalping chỉ khi 20 phiên liên tiếp ≥ 90% lệnh trong plan",
-    "Bài kiểm tra tổng 50 câu (tab 08) ≥ 40/50 ba lần liên tiếp"
+    "Bài kiểm tra tổng 50 câu (tab 09) ≥ 40/50 ba lần liên tiếp"
   ]}
 ];
 
@@ -46,8 +46,8 @@ PB.glossary = [
   { n:"TPO & Period", c:"", def:"Mỗi ô (hoặc chữ cái) = giá đã được giao dịch trong một khoảng 30 phút. RTH NQ có 13 period: A 9:30, B 10:00, C 10:30, D 11:00, E 11:30, F 12:00, G 12:30, H 13:00, I 13:30, J 14:00, K 14:30, L 15:00, M 15:30 ET.", read:"Càng nhiều ô xếp ngang ở một giá, thị trường càng dành nhiều thời gian ở đó.", use:"Cửa sổ trade của bạn (9:30–11:30 ET) chỉ gồm A–D. Mọi quyết định trong phiên dựa trên A–D so với profile hôm qua." },
   { n:"Presence vs Participation", c:"", def:"Presence = thời gian có mặt ở giá (TPO). Participation = volume thực sự khớp ở giá (volume profile).", read:"TPO dày + volume mỏng = có mặt nhưng ít người tham gia: value yếu. TPO mỏng + volume dày = giao dịch lớn đi qua nhanh: level mạnh.", use:"Đây là lý do template của bạn đặt TPO và volume profile cạnh nhau. Ưu tiên level mà cả hai cùng xác nhận." },
   { n:"POC (TPOC vs VPOC)", c:"poc", def:"TPOC = giá có nhiều TPO nhất (thời gian). VPOC = giá có volume lớn nhất. Thường gần nhau nhưng không bắt buộc.", read:"POC là giá 'công bằng nhất' của phiên. POC nằm cao = buyers xây value cao (P); POC thấp = b.", use:"POC hôm qua là target tự nhiên của mọi rotation trong VA. POC chưa bị chạm lại = naked POC, magnet." },
-  { n:"Value Area (VAH / VAL)", c:"va", def:"Vùng chứa ~70% TPO (hoặc volume) quanh POC. Cạnh trên VAH, cạnh dưới VAL.", read:"Trong VA = fair value, hai bên đồng thuận. Ngoài VA = giá 'không công bằng', thị trường hoặc từ chối nhanh, hoặc chấp nhận và xây value mới.", use:"Cạnh VA là level Tier 2 quan trọng nhất trong ngày: fade nếu bị reject, go-with nếu được accept (tab 03)." },
-  { n:"Initial Balance (IB)", c:"ib", def:"Range của A + B, tức 9:30–10:30 ET. IB width = IB High − IB Low.", read:"IB hẹp so với trung bình = hai bên chưa đồng thuận, dễ có range extension mạnh. IB rộng = phần lớn range ngày đã có, thiên về rotation.", use:"IB là anchor của model IB bạn đang dùng. So IB width với trung bình 20 phiên (công cụ ở tab 03)." },
+  { n:"Value Area (VAH / VAL)", c:"va", def:"Vùng chứa ~70% TPO (hoặc volume) quanh POC. Cạnh trên VAH, cạnh dưới VAL.", read:"Trong VA = fair value, hai bên đồng thuận. Ngoài VA = giá 'không công bằng', thị trường hoặc từ chối nhanh, hoặc chấp nhận và xây value mới.", use:"Cạnh VA là level Tier 2 quan trọng nhất trong ngày: fade nếu bị reject, go-with nếu được accept (tab 04)." },
+  { n:"Initial Balance (IB)", c:"ib", def:"Range của A + B, tức 9:30–10:30 ET. IB width = IB High − IB Low.", read:"IB hẹp so với trung bình = hai bên chưa đồng thuận, dễ có range extension mạnh. IB rộng = phần lớn range ngày đã có, thiên về rotation.", use:"IB là anchor của model IB bạn đang dùng. So IB width với trung bình 20 phiên (công cụ ở tab 04)." },
   { n:"Range Extension (RE)", c:"ib", def:"Giá đi ra ngoài IB sau 10:30 ET.", read:"RE một phía = initiative activity theo phía đó. RE hai phía = Neutral day.", use:"RE kèm VWAP dốc và CVD cùng chiều → đánh go-with, target IB 1.5x/2x." },
   { n:"Single prints", c:"", def:"Các dòng giá chỉ có duy nhất một chữ cái, nằm bên trong profile (không phải ở cực trị).", read:"Giá đi nhanh một chiều, không có trao đổi hai chiều = vùng imbalance.", use:"Lần test đầu thường là support/resistance. Nếu bị lấp hết và giá được accept, imbalance đã được sửa, level hết tác dụng." },
   { n:"Tail / Excess", c:"va", def:"≥ 2 dòng single print liên tiếp ở cực trị của phiên. Buying tail ở đáy, selling tail ở đỉnh.", read:"Responsive participant từ chối giá rất nhanh: auction ở phía đó đã hoàn tất.", use:"Đỉnh/đáy có tail là level mạnh, không kỳ vọng quay lại quét. Stop có thể đặt ngoài tail." },
@@ -56,7 +56,7 @@ PB.glossary = [
   { n:"Halfback & IB mid", c:"", def:"Halfback = điểm giữa range hiện tại của ngày. IB mid = điểm giữa IB.", read:"Giá trên halfback = buyers đang thắng phiên; dưới = sellers.", use:"Level scalping Tier 4, cũng là chỗ dời stop về hoà vốn." },
   { n:"Rotation Factor (RF)", c:"", def:"Tổng điểm so sánh high/low của từng period với period trước (+1 cao hơn, −1 thấp hơn, 0 bằng).", read:"RF dương lớn = rotation lên chiếm ưu thế; gần 0 = hai chiều.", use:"Xác nhận nhanh open type sau A–C. Không dùng làm tín hiệu vào lệnh." },
   { n:"Naked POC (nPOC)", c:"poc", def:"POC của một phiên cũ mà giá chưa quay lại chạm.", read:"Fair value cũ chưa được kiểm tra lại.", use:"Target có xác suất cao. Nhiều nPOC xếp gần nhau = zone Tier 1." },
-  { n:"Spike", c:"", def:"Cú đi mạnh một chiều trong 1–2 period cuối phiên (L, M).", read:"Chưa được thị trường kiểm chứng. Ngày sau open ở đâu so với spike cho biết spike thật hay giả.", use:"Xem bảng spike rules ở tab 03." },
+  { n:"Spike", c:"", def:"Cú đi mạnh một chiều trong 1–2 period cuối phiên (L, M).", read:"Chưa được thị trường kiểm chứng. Ngày sau open ở đâu so với spike cho biết spike thật hay giả.", use:"Xem bảng spike rules ở tab 04." },
   { n:"Overnight inventory", c:"lvl", def:"Phần lớn giao dịch ETH nằm trên (net long) hay dưới (net short) close RTH hôm qua.", read:"Inventory lệch nhiều một phía hay bị 'xả' ngược trong 30–60 phút đầu RTH.", use:"Overnight inventory net long + open ở ON high → cẩn thận long ngay open; kết hợp với model OSR (sweep ON range → reclaim)." },
   { n:"Composite profile", c:"lvl", def:"Gộp nhiều ngày có VA chồng nhau thành một profile lớn.", read:"VA nhiều ngày chồng nhau = fair value bền. Cạnh composite mạnh hơn cạnh VA một ngày.", use:"Ví dụ trong template: 30/10, 02/11, 04/11 có VA chồng nhau quanh 28,360–28,880, rất hợp để composite." }
 ];
@@ -73,7 +73,7 @@ PB.tiers = [
   ["3","ON High / ON Low / ON POC","Tab Daily Profile ETH","Biên inventory overnight","Model OSR của bạn: sweep biên ON → reclaim → retest",false],
   ["3","RTH Open (9:30)","Marker open","Mốc phân loại open type","Giữ trên/dưới open sau 30 phút = ai thắng A period",false],
   ["3","IB High / IB Low","10:30 ET","Biên range extension","IB hẹp → breakout go-with; IB rộng → fade cạnh IB",false],
-  ["3","VWAP RTH ± SD","Chart M1 execution","Value động của phiên","Confluence, xem tab 04",false],
+  ["3","VWAP RTH ± SD","Chart M1 execution","Value động của phiên","Confluence, xem tab 05",false],
   ["4","A-period High / Low","30 phút đầu","Opening range","Break + retest; fail break = ORR",true],
   ["4","IB mid, IB 1.5x / 2x","Tính từ IB","Target extension","Chốt lời từng phần; 2x hiếm, chỉ ngày trend",true],
   ["4","Developing POC (dPOC)","Profile hôm nay","Value đang dịch chuyển","dPOC migrate theo hướng trade → pullback về dPOC là điểm thêm",true],
@@ -187,7 +187,7 @@ PB.valRel = [
 })();
 
 PB.cvdCheck = [
-  "Giá đang ở zone TPO có điểm ≥ 4 (tab 03)?",
+  "Giá đang ở zone TPO có điểm ≥ 4 (tab 04)?",
   "Regime hôm nay: balance hay trend? (open type, IB, độ dốc VWAP)",
   "So 2 swing gần nhất của giá tại zone với 2 swing CVD tương ứng (reset 9:30 ET)",
   "Đó là exhaustion hay absorption? Smart Tape thấy lệnh lớn đứng ở level → cộng thêm tự tin",
@@ -270,3 +270,68 @@ PB.caseLevels = [
 ];
 
 /* ===== Quiz ===== */
+
+PB.ibScen = [
+  { n:"Break một phía + accept", dt:"Normal Variation / Trend", chip:"good",
+    pts:[[0,48],[10,58],[20,40],[35,52],[45,62],[52,66],[60,64],[68,72],[78,76],[90,84],[100,86]],
+    sig:"Giá ra ngoài IB và giữ ít nhất 1 period, VWAP dốc theo hướng phá.", act:"Setup IB-1. Target 1.5x rồi 2x hoặc level Tier 1–2 kế tiếp." },
+  { n:"Break + retest cạnh IB", dt:"Normal Variation", chip:"good", dot:[56,61,"Retest IBH"],
+    pts:[[0,48],[10,58],[20,40],[35,52],[42,63],[48,70],[56,61],[62,64],[72,74],[85,80],[100,85]],
+    sig:"Phá IBH, quay lại test IBH cũ, giữ được (absorption / delta flip).", act:"Entry đẹp nhất của IB-1: vào tại retest, stop dưới retest low." },
+  { n:"Failed break (fake-out)", dt:"Normal / Neutral", chip:"bad", dot:[48,66,"Break thất bại"],
+    pts:[[0,48],[10,58],[20,40],[35,52],[42,62],[48,66],[54,60],[60,55],[70,47],[80,40],[90,36],[100,38]],
+    sig:"Phá ra ngoài nhưng đóng period lại trong IB, CVD divergence tại extreme.", act:"Setup IB-2. Target IB mid rồi cạnh IB đối diện." },
+  { n:"Phá cả hai phía", dt:"Neutral", chip:"warn",
+    pts:[[0,48],[10,58],[20,40],[35,52],[44,66],[52,60],[62,44],[70,30],[78,28],[88,40],[100,47]],
+    sig:"Range extension cả trên lẫn dưới IB.", act:"Thường hoàn thành sau 11:30. Close ở giữa = balance; close ở cực trị = hướng cho ngày sau." },
+  { n:"Không phá IB", dt:"Normal / Non-Trend", chip:"",
+    pts:[[0,48],[10,58],[20,40],[35,52],[45,56],[55,44],[65,54],[75,42],[85,52],[100,49]],
+    sig:"Giá xoay trong IB, VWAP phẳng gần IB mid.", act:"Setup IB-3 (scalp cạnh ↔ mid) hoặc đứng ngoài. Ngày sau chú ý breakout khỏi vùng này." }
+];
+
+PB.ibSetups = [
+  { id:"IB-1", n:"IB Breakout go-with", pb:"Playbook E", chip:"good",
+    cond:"IB hẹp hoặc bình thường-hẹp; break trong C–D; VWAP dốc cùng hướng; CVD tạo cực trị mới cùng giá; phía trước có level chưa bị chạm.",
+    entry:"Retest IB edge (IBH cũ thành support) với absorption / delta flip; hoặc pullback về VWAP / +1 SD.",
+    stop:"Dưới retest low; hoặc khi giá quay lại trong IB quá 25% IB width.",
+    tgt:"1.5x → 2x, hoặc level Tier 1–2 gần nhất (lấy cái gần hơn).",
+    inv:"Period đóng trở lại trong IB." },
+  { id:"IB-2", n:"Failed break / fade", pb:"Playbook F", chip:"bad",
+    cond:"IB rộng, hoặc cạnh IB trùng level Tier 1–2; cú phá có volume mỏng; CVD divergence / absorption tại extreme.",
+    entry:"Khi giá đóng lại trong IB và có trigger (phá cấu trúc M1, delta flip).",
+    stop:"Ngoài extreme của cú phá.",
+    tgt:"IB mid, sau đó cạnh IB đối diện.",
+    inv:"Giá phá lại và giữ ngoài IB 1 period." },
+  { id:"IB-3", n:"IB rotation (scalp, Tier 4)", pb:"Tuỳ chọn", chip:"vw",
+    cond:"IB bình thường / rộng, chưa có RE, VWAP phẳng gần IB mid.",
+    entry:"Fade IBH / IBL với CVD exhaustion, hoặc reclaim IB mid.",
+    stop:"Ngoài cạnh IB một khoảng nhỏ (ví dụ 10% width).",
+    tgt:"IB mid. Không giữ lệnh qua mid.",
+    inv:"RE một phía có VWAP bắt đầu dốc." },
+  { id:"IB-4", n:"Opening range (A period) break", pb:"Tuỳ chọn", chip:"vw",
+    cond:"Open Drive / OTD rõ ràng, A period range hẹp, khớp kịch bản A của plan.",
+    entry:"Retest A-high / A-low sau khi B phá ra.",
+    stop:"Quay lại giữa A range.",
+    tgt:"Level kế tiếp trong plan; IB còn đang hình thành nên giữ target ngắn.",
+    inv:"B quay ngược xuyên open (chuyển thành ORR)." }
+];
+
+PB.ibCheck = [
+  "Ghi IBH, IBL, IB width và % so với trung bình 20 phiên",
+  "IB nằm ở đâu so với VA / range hôm qua (ngoài / cắt cạnh / trong)",
+  "Open type đã phân loại lúc 10:00 có khớp với hình dạng IB không",
+  "VWAP RTH dốc hay phẳng, giá đang trên hay dưới VWAP",
+  "dPOC nằm nửa trên hay nửa dưới IB",
+  "Level Tier 1–2 nào nằm ngay ngoài IBH / IBL (nhiên liệu cho breakout hoặc tường cho fade)",
+  "Có tin 10:00 ET làm méo period B không",
+  "Chọn bias sau IB: IB-1 breakout / IB-2 fade / IB-3 rotation / đứng ngoài, và viết invalidation"
+];
+
+PB.ibSample = [
+  {d:"mẫu-1",h:28700,l:28600,dh:28790,dl:28580,n:"dữ liệu mẫu"},
+  {d:"mẫu-2",h:28520,l:28300,dh:28560,dl:28290,n:"dữ liệu mẫu"},
+  {d:"mẫu-3",h:28450,l:28380,dh:28640,dl:28370,n:"dữ liệu mẫu"},
+  {d:"mẫu-4",h:28900,l:28700,dh:28910,dl:28650,n:"dữ liệu mẫu"},
+  {d:"mẫu-5",h:28330,l:28220,dh:28340,dl:28120,n:"dữ liệu mẫu"},
+  {d:"mẫu-6",h:28800,l:28640,dh:28800,dl:28640,n:"dữ liệu mẫu"}
+];

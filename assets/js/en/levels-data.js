@@ -13,17 +13,17 @@ PB.roadmap = [
   { id:"p2", title:"Phase 2 · Day structure", when:"Weeks 3–4", items:[
     "Classify day type + shape + open type for 30 sessions (store in a Notion database or a sheet)",
     "Record the day-to-day value relationship for those 30 sessions",
-    "Measure the average NQ IB width over 20 sessions and the % of days with range extension (baseline for the Plan Builder)",
+    "Log the IB Journal (tab 03) for 30 sessions: average IB width, % of days with range extension, % reaching 1.5x/2x",
     "Count: what % of days the IB is broken on both sides (neutral) on your NQ",
     "Practise spike rules: find 10 days with a late spike, record where the next day opened and the outcome",
     "Pass: Quiz 02 ≥ 80%, reclassify 10 random sessions with ≥ 8 correct"
   ]},
   { id:"p3", title:"Phase 3 · Levels & Plan", when:"Weeks 5–6", items:[
-    "Every evening use the Plan Builder (tab 06) to plan 10 consecutive sessions, trade them on sim",
+    "Every evening use the Plan Builder (tab 07) to plan 10 consecutive sessions, trade them on sim",
     "Each plan has exactly 2 scenarios (A/B), each with zone, trigger, target, invalidation",
     "Backtest the 80% rule on ATAS Market Replay: 20 times, record how often the VA is traversed",
     "Backtest IB extension 1.5x/2x when the IB is narrow: 20 times",
-    "Score levels (table in tab 03) for every zone before a sim entry",
+    "Score levels (table in tab 04) for every zone before a sim entry",
     "Pass: 10 consecutive plans written before 9:25 ET, ≥ 90% of trades inside the plan"
   ]},
   { id:"p4", title:"Phase 4 · VWAP RTH + CVD add-in", when:"Weeks 7–8", items:[
@@ -38,7 +38,7 @@ PB.roadmap = [
     "Live: max 2–3 trades/day, A+ setups or better only, stop at 11:30 ET (23:30 Vietnam)",
     "Weekly review: rate of correct A/B scenarios, repeated mistakes, trades outside the plan",
     "Optional: switch on Tier 4 scalping only after 20 consecutive sessions with ≥ 90% of trades in plan",
-    "50-question final test (tab 08) ≥ 40/50 three times in a row"
+    "50-question final test (tab 09) ≥ 40/50 three times in a row"
   ]}
 ];
 
@@ -46,8 +46,8 @@ PB.glossary = [
   { n:"TPO & Period", c:"", def:"Each cell (or letter) = a price traded during a 30-minute period. NQ RTH has 13 periods: A 9:30, B 10:00, C 10:30, D 11:00, E 11:30, F 12:00, G 12:30, H 13:00, I 13:30, J 14:00, K 14:30, L 15:00, M 15:30 ET.", read:"The more cells stacked horizontally at a price, the more time the market spent there.", use:"Your trade window (9:30–11:30 ET) only covers A–D. Every in-session decision is based on A–D versus yesterday’s profile." },
   { n:"Presence vs Participation", c:"", def:"Presence = time spent at a price (TPO). Participation = volume actually traded at a price (volume profile).", read:"Thick TPO + thin volume = present but few participants: weak value. Thin TPO + thick volume = big business passing quickly: a strong level.", use:"This is why your template puts TPO and volume profile side by side. Prefer levels that both confirm." },
   { n:"POC (TPOC vs VPOC)", c:"poc", def:"TPOC = the price with the most TPOs (time). VPOC = the price with the most volume. Usually close to each other but not necessarily.", read:"The POC is the 'fairest' price of the session. A high POC = buyers built value high (P); a low POC = b.", use:"Yesterday’s POC is the natural target of every rotation inside the VA. A POC not yet revisited = naked POC, a magnet." },
-  { n:"Value Area (VAH / VAL)", c:"va", def:"The area holding ~70% of TPOs (or volume) around the POC. Upper edge VAH, lower edge VAL.", read:"Inside the VA = fair value, both sides agree. Outside the VA = an 'unfair'price, the market either rejects it quickly or accepts it and builds new value.", use:"The VA edges are the most important Tier 2 levels of the day: fade on rejection, go with acceptance (tab 03)." },
-  { n:"Initial Balance (IB)", c:"ib", def:"The range of A + B, i.e. 9:30–10:30 ET. IB width = IB High − IB Low.", read:"An IB narrow versus average = the two sides have not agreed yet, a strong range extension is likely. A wide IB = most of the day’s range is in, leaning to rotation.", use:"The IB is the anchor of the IB model you use. Compare IB width with the 20-session average (tool in tab 03)." },
+  { n:"Value Area (VAH / VAL)", c:"va", def:"The area holding ~70% of TPOs (or volume) around the POC. Upper edge VAH, lower edge VAL.", read:"Inside the VA = fair value, both sides agree. Outside the VA = an 'unfair'price, the market either rejects it quickly or accepts it and builds new value.", use:"The VA edges are the most important Tier 2 levels of the day: fade on rejection, go with acceptance (tab 04)." },
+  { n:"Initial Balance (IB)", c:"ib", def:"The range of A + B, i.e. 9:30–10:30 ET. IB width = IB High − IB Low.", read:"An IB narrow versus average = the two sides have not agreed yet, a strong range extension is likely. A wide IB = most of the day’s range is in, leaning to rotation.", use:"The IB is the anchor of the IB model you use. Compare IB width with the 20-session average (tool in tab 04)." },
   { n:"Range Extension (RE)", c:"ib", def:"Price moves outside the IB after 10:30 ET.", read:"One-sided RE = initiative activity on that side. Two-sided RE = Neutral day.", use:"RE with a sloping VWAP and CVD in the same direction → go with it, target IB 1.5x/2x." },
   { n:"Single prints", c:"", def:"Price rows with only a single letter, inside the profile (not at an extreme).", read:"Price moved fast in one direction with no two-way trade = an imbalance area.", use:"The first test is usually support/resistance. If fully filled and price is accepted, the imbalance has been repaired and the level is spent." },
   { n:"Tail / Excess", c:"va", def:"≥ 2 consecutive single-print rows at a session extreme. Buying tail at the low, selling tail at the high.", read:"Responsive participants rejected price very fast: the auction on that side is complete.", use:"A high/low with a tail is a strong level, do not expect it to be swept soon. A stop can sit beyond the tail." },
@@ -56,7 +56,7 @@ PB.glossary = [
   { n:"Halfback & IB mid", c:"", def:"Halfback = the midpoint of the day’s current range. IB mid = the midpoint of the IB.", read:"Price above halfback = buyers are winning the session; below = sellers.", use:"A Tier 4 scalping level, also where to move the stop to breakeven." },
   { n:"Rotation Factor (RF)", c:"", def:"The total score comparing each period’s high/low with the previous period (+1 higher, −1 lower, 0 equal).", read:"Large positive RF = upward rotation dominates; near 0 = two-sided.", use:"Quick confirmation of the open type after A–C. Not an entry signal." },
   { n:"Naked POC (nPOC)", c:"poc", def:"The POC of an older session that price has not come back to touch.", read:"Old fair value not yet retested.", use:"A high-probability target. Several nPOCs close together = a Tier 1 zone." },
-  { n:"Spike", c:"", def:"A strong one-directional move in the last 1–2 periods of the session (L, M).", read:"Not yet validated by the market. Where the next day opens relative to the spike tells you whether it was real or fake.", use:"See the spike rules table in tab 03." },
+  { n:"Spike", c:"", def:"A strong one-directional move in the last 1–2 periods of the session (L, M).", read:"Not yet validated by the market. Where the next day opens relative to the spike tells you whether it was real or fake.", use:"See the spike rules table in tab 04." },
   { n:"Overnight inventory", c:"lvl", def:"Whether most ETH trading sits above (net long) or below (net short) yesterday’s RTH close.", read:"Heavily one-sided inventory often gets 'unwound' in the opposite direction in the first 30–60 minutes of RTH.", use:"Overnight inventory net long + open at the ON high → be careful buying the open; combine with the OSR model (sweep ON range → reclaim)." },
   { n:"Composite profile", c:"lvl", def:"Merging several days with overlapping VAs into one large profile.", read:"Overlapping multi-day VAs = durable fair value. Composite edges are stronger than a single-day VA edge.", use:"Example in the template: 30/10, 02/11, 04/11 have overlapping VAs around 28,360–28,880, ideal for a composite." }
 ];
@@ -73,7 +73,7 @@ PB.tiers = [
   ["3","ON High / ON Low / ON POC","Tab Daily Profile ETH","Overnight inventory boundary","Your OSR model: sweep the ON edge → reclaim → retest",false],
   ["3","RTH Open (9:30)","Marker open","Open-type classification anchor","Holding above/below the open after 30 minutes = who won the A period",false],
   ["3","IB High / IB Low","10:30 ET","Range extension boundary","Narrow IB → go with the breakout; wide IB → fade the IB edges",false],
-  ["3","VWAP RTH ± SD","Chart M1 execution","The session’s dynamic value","Confluence, xem tab 04",false],
+  ["3","VWAP RTH ± SD","Chart M1 execution","The session’s dynamic value","Confluence, xem tab 05",false],
   ["4","A-period High / Low","First 30 minutes","Opening range","Break + retest; fail break = ORR",true],
   ["4","IB mid, IB 1.5x / 2x","Computed from the IB","Target extension","Take partial profits; 2x is rare, trend days only",true],
   ["4","Developing POC (dPOC)","Today’s profile","Value in motion","dPOC migrates in the trade direction → pullbacks to the dPOC are add points",true],
@@ -187,7 +187,7 @@ PB.valRel = [
 })();
 
 PB.cvdCheck = [
-  "Is price at a TPO zone scoring ≥ 4 (tab 03)?",
+  "Is price at a TPO zone scoring ≥ 4 (tab 04)?",
   "Today’s regime: balance or trend? (open type, IB, VWAP slope)",
   "Compare the last 2 price swings at the zone with the 2 matching CVD swings (reset 9:30 ET)",
   "Is it exhaustion or absorption? Smart Tape showing large orders standing at the level → extra confidence",
@@ -270,3 +270,68 @@ PB.caseLevels = [
 ];
 
 /* ===== Quiz ===== */
+
+PB.ibScen = [
+  { n:"One-sided break + acceptance", dt:"Normal Variation / Trend", chip:"good",
+    pts:[[0,48],[10,58],[20,40],[35,52],[45,62],[52,66],[60,64],[68,72],[78,76],[90,84],[100,86]],
+    sig:"Price leaves the IB and holds at least 1 period, VWAP sloping in the break direction.", act:"Setup IB-1. Target 1.5x then 2x or the next Tier 1–2 level." },
+  { n:"Break + retest of the IB edge", dt:"Normal Variation", chip:"good", dot:[56,61,"Retest IBH"],
+    pts:[[0,48],[10,58],[20,40],[35,52],[42,63],[48,70],[56,61],[62,64],[72,74],[85,80],[100,85]],
+    sig:"Breaks IBH, comes back to test the old IBH and holds (absorption / delta flip).", act:"The best IB-1 entry: enter on the retest, stop below the retest low." },
+  { n:"Failed break (fake-out)", dt:"Normal / Neutral", chip:"bad", dot:[48,66,"Failed break"],
+    pts:[[0,48],[10,58],[20,40],[35,52],[42,62],[48,66],[54,60],[60,55],[70,47],[80,40],[90,36],[100,38]],
+    sig:"Breaks out but the period closes back inside the IB, CVD divergence at the extreme.", act:"Setup IB-2. Target IB mid then the opposite IB edge." },
+  { n:"Both sides broken", dt:"Neutral", chip:"warn",
+    pts:[[0,48],[10,58],[20,40],[35,52],[44,66],[52,60],[62,44],[70,30],[78,28],[88,40],[100,47]],
+    sig:"Range extension both above and below the IB.", act:"Usually completes after 11:30. Close in the middle = balance; close at an extreme = direction for the next day." },
+  { n:"No IB break", dt:"Normal / Non-Trend", chip:"",
+    pts:[[0,48],[10,58],[20,40],[35,52],[45,56],[55,44],[65,54],[75,42],[85,52],[100,49]],
+    sig:"Price rotates inside the IB, VWAP flat near the IB mid.", act:"Setup IB-3 (scalp edge ↔ mid) or stand aside. The next day watch for a breakout from this area." }
+];
+
+PB.ibSetups = [
+  { id:"IB-1", n:"IB Breakout go-with", pb:"Playbook E", chip:"good",
+    cond:"Narrow or normal-to-narrow IB; break during C–D; VWAP sloping the same way; CVD making new extremes with price; an untouched level ahead.",
+    entry:"Retest of the IB edge (old IBH turned support) with absorption / delta flip; or a pullback to VWAP / +1 SD.",
+    stop:"Below the retest low; or when price comes back inside the IB by more than 25% of the IB width.",
+    tgt:"1.5x → 2x, or the nearest Tier 1–2 level (whichever is closer).",
+    inv:"A period closes back inside the IB." },
+  { id:"IB-2", n:"Failed break / fade", pb:"Playbook F", chip:"bad",
+    cond:"Wide IB, or an IB edge matching a Tier 1–2 level; the break has thin volume; CVD divergence / absorption at the extreme.",
+    entry:"When price closes back inside the IB with a trigger (M1 structure break, delta flip).",
+    stop:"Beyond the extreme of the break.",
+    tgt:"IB mid, then the opposite IB edge.",
+    inv:"Price breaks again and holds outside the IB for 1 period." },
+  { id:"IB-3", n:"IB rotation (scalp, Tier 4)", pb:"Optional", chip:"vw",
+    cond:"Normal / wide IB, no RE yet, VWAP flat near the IB mid.",
+    entry:"Fade IBH / IBL on CVD exhaustion, or an IB mid reclaim.",
+    stop:"A small distance beyond the IB edge (e.g. 10% of width).",
+    tgt:"IB mid. Do not hold through the mid.",
+    inv:"One-sided RE with VWAP starting to slope." },
+  { id:"IB-4", n:"Opening range (A period) break", pb:"Optional", chip:"vw",
+    cond:"A clear Open Drive / OTD, narrow A-period range, matching scenario A of the plan.",
+    entry:"Retest of the A-high / A-low after B breaks out.",
+    stop:"Back to the middle of the A range.",
+    tgt:"The next level in the plan; the IB is still forming so keep targets short.",
+    inv:"B reverses back through the open (turning into an ORR)." }
+];
+
+PB.ibCheck = [
+  "Record IBH, IBL, IB width and % versus the 20-session average",
+  "Where the IB sits relative to yesterday’s VA / range (outside / straddling an edge / inside)",
+  "Does the open type classified at 10:00 match the IB shape?",
+  "Is VWAP RTH sloping or flat, is price above or below VWAP?",
+  "Is the dPOC in the upper or lower half of the IB?",
+  "Which Tier 1–2 level sits just outside IBH / IBL (fuel for a breakout or a wall for a fade)?",
+  "Did the 10:00 ET news distort period B?",
+  "Pick the post-IB bias: IB-1 breakout / IB-2 fade / IB-3 rotation / stand aside, and write the invalidation"
+];
+
+PB.ibSample = [
+  {d:"sample-1",h:28700,l:28600,dh:28790,dl:28580,n:"sample data"},
+  {d:"sample-2",h:28520,l:28300,dh:28560,dl:28290,n:"sample data"},
+  {d:"sample-3",h:28450,l:28380,dh:28640,dl:28370,n:"sample data"},
+  {d:"sample-4",h:28900,l:28700,dh:28910,dl:28650,n:"sample data"},
+  {d:"sample-5",h:28330,l:28220,dh:28340,dl:28120,n:"sample data"},
+  {d:"sample-6",h:28800,l:28640,dh:28800,dl:28640,n:"sample data"}
+];

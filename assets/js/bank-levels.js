@@ -1,4 +1,4 @@
-/* Ngân hàng câu hỏi khoá TPO Level Playbook — 79 câu, giữ nguyên văn từ artifact gốc. */
+/* Ngân hàng câu hỏi khoá TPO Level Playbook — 93 câu, giữ nguyên văn từ artifact gốc. */
 (function(){
 'use strict';
 const PB={};
@@ -102,9 +102,24 @@ PB.quiz = [
   /* thêm: cvd */
   {m:"cvd",q:"Khác biệt cốt lõi giữa absorption và exhaustion?",o:["Không khác","Absorption: aggressor vẫn mạnh nhưng bị passive chặn; exhaustion: aggressor yếu dần","Absorption chỉ có ở đáy","Exhaustion mạnh hơn absorption"],a:1,e:"Absorption thường mạnh hơn vì có người lớn đứng ở level."},
   {m:"cvd",q:"Công cụ nào trên ATAS giúp xác nhận có lệnh lớn đứng hấp thụ ở level?",o:["Weekly VWAP","Smart Tape (Price + Volume) / DOM","RSI","Moving average"],a:1,e:"Bạn đã setup Smart Tape 2 cột Price + Volume đúng cho việc này."},
-  {m:"cvd",q:"Setup grade A++ cần những gì?",o:["Chỉ CVD divergence","Zone TPO ≥ 6 + VWAP/band trùng + CVD divergence + trigger","Chỉ VWAP","Open type bất kỳ"],a:1,e:"Ba lớp confluence + trigger = A++."}
-];
+  {m:"cvd",q:"Setup grade A++ cần những gì?",o:["Chỉ CVD divergence","Zone TPO ≥ 6 + VWAP/band trùng + CVD divergence + trigger","Chỉ VWAP","Open type bất kỳ"],a:1,e:"Ba lớp confluence + trigger = A++."},
 
+  /* ib */
+  {m:"ib",q:"IB của NQ RTH tính theo giờ Việt Nam (mùa đông, EST) là khoảng nào?",o:["20:30–21:30","21:30–22:30","22:30–23:30","21:30–22:00"],a:1,e:"9:30–10:30 ET, chênh 12 giờ khi Mỹ không áp dụng DST."},
+  {m:"ib",q:"IB gồm những TPO period nào?",o:["Chỉ A","A và B","A, B và C","Toàn bộ ETH"],a:1,e:"A (9:30–10:00) + B (10:00–10:30)."},
+  {m:"ib",q:"IBH 28,800, IBL 28,650. IB mid là bao nhiêu?",o:["28,700","28,725","28,750","28,650"],a:1,e:"(28,800 + 28,650) / 2 = 28,725."},
+  {m:"ib",q:"IB width 150 điểm, trung bình 20 phiên 250 điểm. Đánh giá và thiên hướng?",o:["Rộng, fade cạnh IB","Hẹp (60%), ưu tiên chờ breakout go-with","Bình thường, đứng ngoài","Không kết luận được"],a:1,e:"Dưới 70% trung bình = IB hẹp, năng lượng dồn cho range extension."},
+  {m:"ib",q:"IBH 28,800, IBL 28,700. Theo quy ước 'tổng range' của playbook, extension 1.5x phía trên là:",o:["28,850","28,950","28,900","28,825"],a:0,e:"Width 100. 1.5x = IBL + 150 = IBH + 50 = 28,850. 2x = 28,900."},
+  {m:"ib",q:"10:45 ET giá phá IBH, nhưng period C đóng lại trong IB và CVD tạo lower high. Đây là kịch bản gì?",o:["Breakout được accept","Failed break: ưu tiên fade về IB mid rồi IBL","Neutral day","Trend day"],a:1,e:"Setup IB-2. Stop ngoài extreme của cú phá."},
+  {m:"ib",q:"Cả ngày giá không rời IB, IB lại rộng. Day type khả năng cao là:",o:["Trend","Normal","Double Distribution","Neutral"],a:1,e:"Large timeframe đặt biên sớm, phần còn lại là rotation."},
+  {m:"ib",q:"Vì sao không nên vào breakout ngay khi giá vừa chạm IBH lúc 10:31?",o:["Vì IBH không phải level","Chưa có acceptance; cú chạm đầu thường là thăm dò, dễ fake-out","Vì prop cấm","Vì VWAP chưa có"],a:1,e:"Chờ 1 period giữ ngoài IB hoặc retest IBH có trigger."},
+  {m:"ib",q:"Setup IB-1 (breakout go-with), stop hợp lý nằm ở đâu?",o:["Trên IBH khi long","Dưới retest low, hoặc khi giá quay sâu lại trong IB","Tại IB mid đối diện","Không cần stop"],a:1,e:"Breakout hợp lệ thì IBH cũ phải giữ vai trò support."},
+  {m:"ib",q:"Tin 10:00 ET (ISM, JOLTS…) ảnh hưởng gì đến IB?",o:["Không ảnh hưởng","Làm méo period B, IB width có thể không đại diện cho cấu trúc","Luôn làm IB hẹp","Huỷ IB"],a:1,e:"Ghi chú phiên có tin vào IB Journal để lọc khi thống kê."},
+  {m:"ib",q:"IB nằm hoàn toàn trên range hôm qua và IB hẹp. Bối cảnh này gợi ý:",o:["Fade mọi nhịp lên","Bối cảnh trend lên mạnh nhất, ưu tiên breakout lên","Balance","Không trade"],a:1,e:"Imbalance theo hướng open + IB hẹp = xác suất RE cùng hướng cao."},
+  {m:"ib",q:"Kịch bản Neutral (phá cả hai phía IB) thường hoàn thành khi nào, và bạn dùng nó thế nào?",o:["Trước 10:30, trade ngay","Thường sau 11:30 (ngoài cửa sổ của bạn), dùng làm context cho ngày sau","Không bao giờ xảy ra","Chỉ trong ETH"],a:1,e:"Cửa sổ 9:30–11:30 hiếm khi đủ thời gian cho cả hai phía bị phá."},
+  {m:"ib",q:"dPOC nằm nửa trên IB, giá giữ trên IB mid, VWAP dốc lên lúc 10:30. Gợi ý gì?",o:["Chắc chắn phá IBH","Thiên hướng breakout lên, nhưng vẫn cần acceptance + CVD xác nhận","Short IBH","Đứng ngoài cả ngày"],a:1,e:"Context nghiêng một phía, chưa phải tín hiệu."},
+  {m:"ib",q:"IB mid nên được dùng chủ yếu như thế nào?",o:["Zone vào lệnh mạnh nhất","Đích của rotation và chỗ dời stop","Level Tier 1","Không dùng"],a:1,e:"IBH/IBL mới là biên chính; IB mid là trọng tâm."}
+];
 window.QBANK=(window.QBANK||[]).concat(PB.quiz.map((q,i)=>({id:'L'+String(i+1).padStart(3,'0'),course:'levels',mod:q.m,q:q.q,o:q.o,a:q.a,e:q.e,vis:null})));
-window.QMODS=window.QMODS||{};window.QMODS.levels={tpo:'Nền tảng TPO',structure:'Day & Open types',case:'Case study',levels:'Level map',vwap:'VWAP RTH',cvd:'CVD divergence'};
+window.QMODS=window.QMODS||{};window.QMODS.levels={tpo:'Nền tảng TPO',structure:'Day & Open types',case:'Case study',ib:'Initial Balance',levels:'Level map',vwap:'VWAP RTH',cvd:'CVD divergence'};
 })();

@@ -255,27 +255,131 @@ function renderTiers(){
     hlines:[{y:72,c:"#ff9cbf",dash:"3 3",label:"VAH"},{y:50,c:C.poc,label:"POC"},{y:28,c:"#ff9cbf",dash:"3 3",label:"VAL"}],
     paths:[{pts:[[0,84],[8,80],[14,76],[20,68],[26,64],[32,67],[38,62],[44,65],[52,58],[60,50],[70,42],[80,36],[90,30],[100,28]],c:"#e6e8eb",w:2.2}],
     dots:[{x:0,y:84,c:"#ff6b9a",t:"Open outside VA",dy:-8},{x:34,y:90,c:"transparent",t:"2 periods inside VA",dx:0,anchor:"middle",tc:C.vwap},{x:100,y:28,c:C.good,t:"Touch VAL",dx:-6,dy:14,anchor:"end",tc:"#bdf0d4"}] }], label:"80% rule illustration" });
+}
 
-  const ib = () => {
-    const H = parseFloat($("#ib-h").value), Lw = parseFloat($("#ib-l").value), A = parseFloat($("#ib-avg").value);
+/* ---------- 03 Initial Balance ---------- */
+function renderIB(){
+  // anatomy: x 0..100 = 9:30–11:30, IB = x 0..50; IBL 30, IBH 60 → width 30
+  $("#ib-anatomy").innerHTML = mini({ w:480, panels:[{ h:250,
+    bands:[{x1:0,x2:25,y1:2,y2:98,fill:C.ib,op:.10},{x1:25,x2:50,y1:2,y2:98,fill:C.ib,op:.17}],
+    hlines:[{y:90,c:"#b388ff",dash:"2 3",label:"2x"},{y:75,c:"#b388ff",dash:"4 3",label:"1.5x"},
+      {y:60,c:C.ib,w:1.8,label:"IBH"},{y:45,c:C.poc,dash:"4 3",label:"IB mid"},{y:30,c:C.ib,w:1.8,label:"IBL"},
+      {y:15,c:"#b388ff",dash:"4 3",label:"1.5x ↓"}],
+    paths:[{pts:[[0,46],[6,55],[12,58],[18,40],[25,50],[30,60],[36,44],[42,30],[50,48],[56,58],[62,66],[68,72],[74,62],[80,68],[88,76],[94,80],[100,78]],c:"#e6e8eb",w:2.2}],
+    dots:[{x:12.5,y:96,c:"transparent",t:"A",dx:0,anchor:"middle",tc:"#f1e3c4"},{x:37.5,y:96,c:"transparent",t:"B",dx:0,anchor:"middle",tc:"#f1e3c4"},
+      {x:62.5,y:96,c:"transparent",t:"C",dx:0,anchor:"middle",tc:C.muted},{x:87.5,y:96,c:"transparent",t:"D",dx:0,anchor:"middle",tc:C.muted},
+      {x:62,y:66,c:C.good,t:"RE up",dx:-4,dy:-8,anchor:"end",tc:"#bdf0d4"},{x:74,y:62,c:C.good,t:"Retest IBH",dy:14,tc:"#bdf0d4"}] }], label:"Initial Balance anatomy" });
+
+  // calculator
+  const calc = () => {
+    const H = parseFloat($("#ib-h").value), Lw = parseFloat($("#ib-l").value), A = parseFloat($("#ib-avg").value), px = parseFloat($("#ib-px").value);
     if(isNaN(H)||isNaN(Lw)||H<=Lw){ $("#ib-out").textContent = "Enter an IB High greater than the IB Low."; return; }
-    const w = H-Lw, r = A>0 ? w/A : NaN;
-    const cls = isNaN(r) ? "no average yet" : r<0.7 ? "NARROW → favour range extension, trade confirmed breakouts" : r>1.3 ? "WIDE → favour rotation inside the IB, fade the IB edges" : "AVERAGE → wait for one-sided RE + sloping VWAP";
+    const w = H-Lw, r = A>0 ? w/A : NaN, mid = (H+Lw)/2;
+    const cls = isNaN(r) ? "no average yet" : r<0.7 ? "NARROW → favour go-with breakouts (IB-1), needs acceptance" : r>1.3 ? "WIDE → favour fading the edges / failed breaks (IB-2)" : "NORMAL → wait for one-sided RE + sloping VWAP, or rotation (IB-3)";
+    let pos = "—";
+    if(!isNaN(px)){
+      if(px > H){ const m = (px-Lw)/w; pos = `ABOVE IB · current range ≈ ${m.toFixed(2)}x · ${m>=2?"past 2x":m>=1.5?"past 1.5x, next 2x "+fmt(H+w):"next 1.5x "+fmt(H+0.5*w)}`; }
+      else if(px < Lw){ const m = (H-px)/w; pos = `BELOW IB · current range ≈ ${m.toFixed(2)}x · ${m>=2?"past 2x":m>=1.5?"past 1.5x, next 2x "+fmt(Lw-w):"next 1.5x "+fmt(Lw-0.5*w)}`; }
+      else { const q = (px-Lw)/w*100; pos = `INSIDE IB · ${q.toFixed(0)}% from IBL · ${px>=mid?"above":"below"} IB mid (${(px-mid>0?"+":"")+fmt(px-mid)})`; }
+    }
     $("#ib-out").textContent =
-`IB width      : ${fmt(w)} pts  (${isNaN(r)?"—":(r*100).toFixed(0)+"%"} of average)
-Assessment    : ${cls}
-IB mid        : ${fmt((H+Lw)/2)}
+`IB width   : ${fmt(w)} pts (${isNaN(r)?"—":(r*100).toFixed(0)+"%"} of avg)
+Assessment : ${cls}
+IB mid     : ${fmt(mid)}
+Price      : ${pos}
 
-Extension up    1.5x: ${fmt(H+0.5*w)}    2x: ${fmt(H+w)}    3x: ${fmt(H+2*w)}
-Extension down  1.5x: ${fmt(Lw-0.5*w)}    2x: ${fmt(Lw-w)}    3x: ${fmt(Lw-2*w)}
+           1.5x        2x          3x
+Up     ${fmt(H+0.5*w).padStart(10)}  ${fmt(H+w).padStart(10)}  ${fmt(H+2*w).padStart(10)}
+Down   ${fmt(Lw-0.5*w).padStart(10)}  ${fmt(Lw-w).padStart(10)}  ${fmt(Lw-2*w).padStart(10)}
 
-(1.5x / 2x measured on total range = 1.5 / 2 times the IB width, from the opposite IB edge)`;
-    store.set("ib-in", [$("#ib-h").value,$("#ib-l").value,$("#ib-avg").value]);
+Convention: N× = total range equal to N times the IB width, measured from the opposite IB edge.`;
+    store.set("ib-in2", ["#ib-h","#ib-l","#ib-avg","#ib-px"].map(s=>$(s).value));
   };
-  const saved = store.get("ib-in", null);
-  if(saved){ $("#ib-h").value = saved[0]; $("#ib-l").value = saved[1]; $("#ib-avg").value = saved[2]; }
-  ["#ib-h","#ib-l","#ib-avg"].forEach(s => $(s).addEventListener("input", ib));
-  ib();
+  const saved = store.get("ib-in2", null);
+  if(saved && saved.length===4){ ["#ib-h","#ib-l","#ib-avg","#ib-px"].forEach((s,i)=>{ if(saved[i]!=null) $(s).value = saved[i]; }); }
+  ["#ib-h","#ib-l","#ib-avg","#ib-px"].forEach(s => $(s).addEventListener("input", calc));
+  calc();
+
+  // scenarios
+  $("#ib-scen").innerHTML = PB.ibScen.map(sc => {
+    const dots = sc.dot ? [{x:sc.dot[0],y:sc.dot[1],c:sc.chip==="bad"?C.bad:C.good,t:sc.dot[2],dy:-8,tc:"#e6e8eb"}] : [];
+    const svg = mini({ w:420, padR:58, panels:[{ h:150,
+      bands:[{x1:0,x2:35,y1:35,y2:60,fill:C.ib,op:.16}],
+      hlines:[{y:60,c:C.ib,w:1.6,label:"IBH"},{y:47.5,c:C.poc,dash:"4 3",label:"mid"},{y:35,c:C.ib,w:1.6,label:"IBL"}],
+      paths:[{pts:sc.pts,c:"#e6e8eb",w:2}], dots }], label:sc.n });
+    return `<div class="card"><h4>${sc.n} <span class="chip ${sc.chip}">${sc.dt}</span></h4><div class="svgwrap">${svg}</div>
+      <p class="small"><b>Recognition:</b> ${sc.sig}</p><p class="small"><b>Action:</b> ${sc.act}</p></div>`;
+  }).join("");
+
+  // setups
+  $("#ib-setups").innerHTML = PB.ibSetups.map(su => `<div class="card">
+    <h4><span class="chip ${su.chip}">${su.id}</span> ${su.n} <span class="chip">${su.pb}</span></h4>
+    <dl class="dl"><dt>Condition</dt><dd class="small">${su.cond}</dd><dt>Entry</dt><dd class="small">${su.entry}</dd><dt>Stop</dt><dd class="small">${su.stop}</dd><dt>Target</dt><dd class="small">${su.tgt}</dd><dt>Invalidation</dt><dd class="small">${su.inv}</dd></dl></div>`).join("");
+
+  checklist($("#ib-check"), PB.ibCheck, "ibc");
+  $("#ib-check-reset").addEventListener("click", () => { PB.ibCheck.forEach((_,i)=>store.set(`ibc-${i}`,false)); checklist($("#ib-check"), PB.ibCheck, "ibc"); });
+
+  initIBJournal();
+}
+
+function initIBJournal(){
+  let rows = store.get("ibj-rows", null);
+  let sample = false;
+  if(!rows || !rows.length){ rows = PB.ibSample.map(r=>({...r})); sample = true; }
+  const save = () => { if(!sample) store.set("ibj-rows", rows); };
+  const msg = t => { $("#ibj-msg").textContent = t; setTimeout(()=>{ $("#ibj-msg").textContent = ""; }, 3000); };
+  const median = a => { if(!a.length) return NaN; const b = a.slice().sort((x,y)=>x-y), m = Math.floor(b.length/2); return b.length%2 ? b[m] : (b[m-1]+b[m])/2; };
+  const pct = (n,d) => d ? Math.round(n/d*100)+"%" : "—";
+
+  const draw = () => {
+    $("#ibj-banner").innerHTML = sample ? `<div class="callout red"><p class="small"><b>Showing illustrative sample data, not real data.</b> Add your first session or press the button to clear the sample.</p><div class="row"><button id="ibj-clear-sample">Clear sample, start real logging</button></div></div>` : "";
+    if(sample) $("#ibj-clear-sample").addEventListener("click", () => { rows = []; sample = false; save(); draw(); });
+    const ws = rows.map(r => r.h - r.l);
+    const avg = ws.length ? ws.reduce((a,b)=>a+b,0)/ws.length : NaN;
+    const calc = r => { const w = r.h-r.l; return { w, up: r.dh > r.h, dn: r.dl < r.l, eu: (r.dh - r.l)/w, ed: (r.h - r.dl)/w, rel: avg ? w/avg : NaN }; };
+    const cs = rows.map(calc);
+    const n = rows.length;
+    const anyB = cs.filter(c=>c.up||c.dn).length, both = cs.filter(c=>c.up&&c.dn).length;
+    const r15 = cs.filter(c=>c.eu>=1.5||c.ed>=1.5).length, r2 = cs.filter(c=>c.eu>=2||c.ed>=2).length;
+    const nar = cs.filter(c=>c.rel<0.7), wid = cs.filter(c=>c.rel>1.3);
+    const tile = (k,v,sub) => `<div class="card"><span class="k">${k}</span><span class="num" style="font-size:1.35rem;font-weight:700">${v}</span><span class="small muted">${sub}</span></div>`;
+    $("#ibj-stats").innerHTML =
+      tile("Sessions", n, sample?"sample":"logged") +
+      tile("IB width avg / median", `${fmt(Math.round(avg))} / ${fmt(Math.round(median(ws)))}`, "pts") +
+      tile("Broke at least 1 side", pct(anyB,n), `both sides: ${pct(both,n)}`) +
+      tile("Reached 1.5x / 2x", `${pct(r15,n)} / ${pct(r2,n)}`, "either side") +
+      tile("Narrow IB (<70% avg)", `${nar.length} sessions`, `reached 1.5x: ${pct(nar.filter(c=>c.eu>=1.5||c.ed>=1.5).length, nar.length)}`) +
+      tile("Wide IB (>130% avg)", `${wid.length} sessions`, `broke at least 1 side: ${pct(wid.filter(c=>c.up||c.dn).length, wid.length)}`);
+    $("#ibj-rows").innerHTML = rows.map((r,i) => { const c = cs[i];
+      const br = c.up&&c.dn ? '<span class="chip warn">both</span>' : c.up ? '<span class="chip good">up</span>' : c.dn ? '<span class="chip bad">down</span>' : '<span class="chip">none</span>';
+      return `<tr><td class="mono">${r.d}</td><td class="num mono">${fmt(r.h)}</td><td class="num mono">${fmt(r.l)}</td><td class="num mono">${fmt(c.w)}</td><td class="num mono">${isNaN(c.rel)?"—":Math.round(c.rel*100)+"%"}</td><td>${br}</td><td class="num mono">${c.up?c.eu.toFixed(2)+"x":"—"}</td><td class="num mono">${c.dn?c.ed.toFixed(2)+"x":"—"}</td><td class="small">${r.n||""}</td><td><button data-del="${i}" aria-label="Delete session ${r.d}">Delete</button></td></tr>`; }).join("") || `<tr><td colspan="10" class="muted small">No sessions yet. Enter the 4 numbers after the RTH close.</td></tr>`;
+  };
+  $("#ibj-rows").addEventListener("click", e => { const b = e.target.closest("button[data-del]"); if(!b) return; if(sample){ sample=false; } rows.splice(+b.dataset.del,1); save(); draw(); });
+  $("#ibj-add").addEventListener("click", () => {
+    const g = id => parseFloat($(id).value);
+    const r = { d: $("#ibj-date").value.trim() || new Date().toLocaleDateString("en-GB"), h:g("#ibj-h"), l:g("#ibj-l"), dh:g("#ibj-dh"), dl:g("#ibj-dl"), n:$("#ibj-note").value.trim() };
+    if([r.h,r.l,r.dh,r.dl].some(isNaN)){ msg("Need IB High, IB Low, RTH High and RTH Low."); return; }
+    if(!(r.h>r.l && r.dh>=r.h && r.dl<=r.l)){ msg("Check again: RTH High ≥ IB High > IB Low ≥ RTH Low."); return; }
+    if(sample){ rows = []; sample = false; }
+    rows.push(r); save(); draw();
+    ["#ibj-date","#ibj-h","#ibj-l","#ibj-dh","#ibj-dl","#ibj-note"].forEach(s=>$(s).value="");
+    msg("Session added.");
+  });
+  $("#ibj-csv").addEventListener("click", async () => {
+    const csv = "date,ibh,ibl,rth_high,rth_low,note\n" + rows.map(r => [r.d,r.h,r.l,r.dh,r.dl,(r.n||"").replace(/,/g,";")].join(",")).join("\n");
+    try{ await navigator.clipboard.writeText(csv); msg("CSV copied."); }catch(e){ msg("The browser blocked copying."); }
+  });
+  $("#ibj-import-toggle").addEventListener("click", () => { $("#ibj-import").hidden = !$("#ibj-import").hidden; });
+  $("#ibj-import-go").addEventListener("click", () => {
+    const lines = $("#ibj-import-text").value.split("\n").map(l=>l.trim()).filter(l=>l && !/^date/i.test(l));
+    const add = [];
+    lines.forEach(l => { const p = l.split(","); const r = { d:p[0], h:+p[1], l:+p[2], dh:+p[3], dl:+p[4], n:p[5]||"" };
+      if(![r.h,r.l,r.dh,r.dl].some(isNaN) && r.h>r.l) add.push(r); });
+    if(!add.length){ msg("Could not read any line. Format: date,ibh,ibl,rth_high,rth_low,note"); return; }
+    if(sample){ rows = []; sample = false; }
+    rows = rows.concat(add); save(); draw(); $("#ibj-import-text").value = ""; msg(`Imported ${add.length} sessions.`);
+  });
+  draw();
 }
 
 /* ---------- 04 VWAP ---------- */
@@ -510,10 +614,9 @@ function renderMigration(){
         <div class="card"><h4><span class="chip good">B</span> Accepted above 28,890</h4><p class="small">Continuation breakout from the 03/11 balance. Go with it, target the gap fill to 29,105. Single prints 29,105–29,350 are resistance on the first test.</p></div>
         <div class="card"><h4><span class="chip bad">C</span> Accepted below 28,445</h4><p class="small">The 04/11 breakout fails, back to the 03/11 balance. Target 03/11 POC 28,330, then the purple level 28,176.</p></div>
       </div>
-      <p class="small muted">Try it now: open tab 06, the Plan Builder is pre-filled with these numbers. Change "Price at 9:15" to see how the open location and scenarios change.</p>
+      <p class="small muted">Try it now: open tab 07, the Plan Builder is pre-filled with these numbers. Change "Price at 9:15" to see how the open location and scenarios change.</p>
     </div>`;
 }
-
 
 /* ---------- init ---------- */
 renderRoadmap();
@@ -523,6 +626,7 @@ renderOpenTypes();
 renderOpenLoc();
 renderValRel();
 renderTiers();
+renderIB();
 renderVWAP();
 renderCVD();
 renderPlanStatic();
