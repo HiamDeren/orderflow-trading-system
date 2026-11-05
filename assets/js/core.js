@@ -12,14 +12,14 @@ const store={
 
 const NAV=[
   {k:'home',href:'index.html',label:'Tổng quan',sub:'Bảng điều khiển',c:'var(--brand)',icon:'home'},
-  {k:'tools',href:'tools.html',label:'Orderflow Tools',short:'Tools',sub:'DOM · Tape · Footprint · Delta',c:'var(--c-tools)',icon:'fp',chapters:[
-    ['tong-quan','00','Tổng quan'],['nen-tang','01','Nền tảng'],['dom','02','DOM'],['tape','03','Tape'],
-    ['footprint','04','Footprint'],['delta','05','Delta & CVD'],['kich-ban','06','13 kịch bản'],
-    ['ket-hop','07','Kết hợp tại level'],['thuat-ngu','08','Thuật ngữ']]},
   {k:'levels',href:'levels.html',label:'TPO Level Playbook',short:'Level',sub:'TPO · VWAP · CVD · Plan',c:'var(--c-levels)',icon:'tpo',chapters:[
     ['lo-trinh','00','Lộ trình 9 tuần'],['nen-tang','01','Nền tảng TPO'],['cau-truc','02','Day & Open types'],
     ['levels','03','Level map'],['vwap','04','VWAP RTH'],['cvd','05','CVD divergence'],
     ['plan','06','Lên plan mỗi ngày'],['template','07','Đọc template']]},
+  {k:'tools',href:'tools.html',label:'Orderflow Tools',short:'Tools',sub:'DOM · Tape · Footprint · Delta',c:'var(--c-tools)',icon:'fp',chapters:[
+    ['tong-quan','00','Tổng quan'],['nen-tang','01','Nền tảng'],['dom','02','DOM'],['tape','03','Tape'],
+    ['footprint','04','Footprint'],['delta','05','Delta & CVD'],['kich-ban','06','13 kịch bản'],
+    ['ket-hop','07','Kết hợp tại level'],['thuat-ngu','08','Thuật ngữ']]},
   {k:'quiz',href:'quiz.html',label:'Trắc nghiệm',short:'Quiz',sub:'Luyện tập · Thi thử',c:'var(--c-quiz)',icon:'quiz',chapters:[
     ['luyen-tap','A','Luyện tập'],['thi-thu','B','Thi thử'],['cau-sai','C','Ôn câu sai']]}
 ];
@@ -134,29 +134,49 @@ function markSeen(){
   NAV.forEach(n=>{if(!n.chapters||n.k==='quiz')return;const el=$(`[data-cnt="${n.k}"]`);if(el){const d=n.chapters.filter(c=>seen[n.k+'/'+c[0]]).length;el.textContent=`${d}/${n.chapters.length}`;}});
 }
 
-/* ---------- NY session clock ---------- */
-function nyParts(d){
-  const f=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false});
+/* ---------- Phiên RTH: tính theo New York, hiển thị theo giờ Việt Nam (tự xử lý DST) ---------- */
+const TZ_NY='America/New_York', TZ_VN='Asia/Ho_Chi_Minh';
+function zparts(d,tz){
+  const f=new Intl.DateTimeFormat('en-US',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
   const p=Object.fromEntries(f.formatToParts(d).map(x=>[x.type,x.value]));
-  const wd=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(p.weekday);
-  return {wd,h:+p.hour%24,m:+p.minute};
+  return{y:+p.year,mo:+p.month,d:+p.day,h:+p.hour%24,mi:+p.minute};
 }
-const hm=m=>`${Math.floor(m/60)}h${String(m%60).padStart(2,'0')}`;
-function session(d=new Date()){
-  const {wd,h,m}=nyParts(d), mins=h*60+m, open=570, close=960, wk=wd>=1&&wd<=5;
-  let state='closed',msg;
-  if(wk&&mins>=open&&mins<close){state='open';msg=`RTH đang mở · còn ${hm(close-mins)}`;}
-  else{
-    let add=0,dd=wd;
-    if(wk&&mins<open){add=open-mins;state=mins>=240?'pre':'closed';}
-    else{add=1440-mins+open;dd=(wd+1)%7;while(dd===0||dd===6){add+=1440;dd=(dd+1)%7;}}
-    msg=`RTH mở sau ${hm(add)}`;
+function nyDate(y,mo,d,h,mi){ // giờ NY → Date thật
+  const want=Date.UTC(y,mo-1,d,h,mi);let t=want;
+  for(let k=0;k<3;k++){const p=zparts(new Date(t),TZ_NY);t-=Date.UTC(p.y,p.mo-1,p.d,p.h,p.mi)-want;}
+  return new Date(t);
+}
+const hhmm=(d,tz)=>{const p=zparts(d,tz);return`${String(p.h).padStart(2,'0')}:${String(p.mi).padStart(2,'0')}`;};
+const dayVN=d=>d.toLocaleDateString('vi-VN',{timeZone:TZ_VN,weekday:'long',day:'2-digit',month:'2-digit'});
+const dkey=(d,tz)=>{const p=zparts(d,tz);return p.y*10000+p.mo*100+p.d;};
+function relDay(d,now=new Date()){const a=dkey(d,TZ_VN),b=dkey(now,TZ_VN),t=dkey(new Date(now.getTime()+864e5),TZ_VN);
+  return a===b?'hôm nay':a===t?'ngày mai':dayVN(d);}
+function dur(ms,short){const m=Math.max(0,Math.round(ms/6e4)),h=Math.floor(m/60),r=m%60;
+  if(short)return h>=24?`${Math.floor(h/24)}n${h%24}g`:h?`${h}g${String(r).padStart(2,'0')}p`:`${r}p`;
+  if(h>=24)return`${Math.floor(h/24)} ngày ${h%24} giờ`;
+  return h?`${h} giờ ${r} phút`:`${r} phút`;}
+function session(now=new Date()){
+  const p=zparts(now,TZ_NY);
+  for(let k=0;k<9;k++){
+    const b=new Date(Date.UTC(p.y,p.mo-1,p.d+k)),wd=b.getUTCDay();if(wd===0||wd===6)continue;
+    const y=b.getUTCFullYear(),mo=b.getUTCMonth()+1,d=b.getUTCDate();
+    const open=nyDate(y,mo,d,9,30),wEnd=nyDate(y,mo,d,11,30),close=nyDate(y,mo,d,16,0);
+    if(now<close){
+      const state=now>=open?'open':(open-now<=5.5*36e5?'pre':'closed');
+      return{now,open,wEnd,close,state,inWindow:now>=open&&now<wEnd,
+        vnNow:hhmm(now,TZ_VN),nyNow:hhmm(now,TZ_NY),openVN:hhmm(open,TZ_VN),wEndVN:hhmm(wEnd,TZ_VN),closeVN:hhmm(close,TZ_VN),
+        openDay:relDay(open,now),nyDay:now.toLocaleDateString('vi-VN',{timeZone:TZ_NY,weekday:'long',day:'2-digit',month:'2-digit'})};
+    }
   }
-  return {state,msg,et:`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`};
 }
 function tick(){
-  const s=session(),c=$('#ui-clock'),t=$('#ui-clock-t');if(!c||!t)return;
-  c.className='ui-clock '+s.state; t.innerHTML=`<span class="txt-long">NY ${s.et} · </span>${s.msg}`;
+  const s=session(),c=$('#ui-clock'),t=$('#ui-clock-t');if(!c||!t||!s)return;
+  let msg;
+  if(s.inWindow)msg=`Cửa sổ trade · còn ${dur(s.wEnd-s.now,1)}`;
+  else if(s.state==='open')msg=`RTH đang mở · đóng ${s.closeVN}`;
+  else msg=`RTH ${s.openVN} · còn ${dur(s.open-s.now,1)}`;
+  c.className='ui-clock '+s.state;c.title=`Giờ Việt Nam. RTH NQ 9:30–16:00 ET = ${s.openVN}–${s.closeVN} giờ VN`;
+  t.innerHTML=`<span class="txt-long">VN ${s.vnNow} · </span>${msg}`;
 }
 
 /* ---------- sidebar mini stats ---------- */
@@ -169,9 +189,9 @@ function mini(){
     <div style="display:flex;justify-content:space-between;gap:8px"><a href="quiz.html#cau-sai">Câu sai: ${s.wrong}</a><a href="index.html#backup">Sao lưu tiến độ</a></div>`;
 }
 
-window.OFS={store,NAV,session,toast,svg,seen,mini};
+window.OFS={store,NAV,session,dur,toast,svg,seen,mini};
 
-buildShell(); markSeen(); tick(); setInterval(tick,30000);
+buildShell(); markSeen(); tick(); setInterval(tick,15000);
 document.addEventListener('DOMContentLoaded',()=>{chapterRouter();mini();});
 document.addEventListener('qz:change',mini);
 })();

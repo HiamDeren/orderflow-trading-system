@@ -334,9 +334,10 @@ table.t th:first-child,table.t td:first-child{text-align:left}
 .cont small{display:block;font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
 .cont b{font-size:15.5px}
 .cont .arr{margin-left:auto;color:var(--muted);font-size:20px}
-.sess{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-family:var(--font-mono);font-size:12.5px;color:var(--muted)}
-.sess b{color:var(--text);font-weight:500}
-.sess .led{width:8px;height:8px;border-radius:50%;background:var(--dim);display:inline-block;margin-right:6px}
+.sess{display:grid;gap:4px;font-size:13.5px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;max-width:560px}
+.sess>div:first-child{font-size:14.5px;color:#C9D1DE}
+.sess b{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}
+.sess .led{width:8px;height:8px;border-radius:50%;background:var(--dim);display:inline-block;margin-right:8px;vertical-align:1px}
 .sess.open .led{background:var(--good);box-shadow:0 0 0 4px rgba(63,191,127,.15)} .sess.pre .led{background:var(--warn)}
 
 .layers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;counter-reset:ly}

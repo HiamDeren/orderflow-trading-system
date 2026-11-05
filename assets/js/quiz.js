@@ -127,9 +127,9 @@ function Practice(root,opt){
    EXAM
    ========================================================= */
 const EXAMS={
-  tools:{name:'Đề Orderflow Tools',short:'Tools',n:50,c:'var(--c-tools)',desc:'50 câu rút ngẫu nhiên từ 87 câu của khoá Tools, giữ tỉ lệ theo chương.',pick:()=>sampleStrat('tools',50)},
   levels:{name:'Đề TPO Level',short:'Level',n:50,c:'var(--c-levels)',desc:'50 câu rút ngẫu nhiên từ 79 câu của khoá Level, giữ tỉ lệ theo chương.',pick:()=>sampleStrat('levels',50)},
-  all:{name:'Đề tổng hợp',short:'Tổng',n:100,c:'var(--brand)',desc:'100 câu = 50 Tools + 50 Level, xáo trộn. Bài kiểm tra cuối của cả hệ thống.',pick:()=>shuffle(sampleStrat('tools',50).concat(sampleStrat('levels',50)))}
+  tools:{name:'Đề Orderflow Tools',short:'Tools',n:50,c:'var(--c-tools)',desc:'50 câu rút ngẫu nhiên từ 87 câu của khoá Tools, giữ tỉ lệ theo chương.',pick:()=>sampleStrat('tools',50)},
+  all:{name:'Đề tổng hợp',short:'Tổng',n:100,c:'var(--brand)',desc:'100 câu = 50 Level + 50 Tools, xáo trộn. Bài kiểm tra cuối của cả hệ thống.',pick:()=>shuffle(sampleStrat('levels',50).concat(sampleStrat('tools',50)))}
 };
 const hist=kind=>S.exams.filter(x=>!kind||x.kind===kind);
 function streak(kind){let s=0;const h=hist(kind);for(let i=h.length-1;i>=0;i--){if(h[i].right/h[i].n>=PASS)s++;else break;}return s;}
@@ -259,7 +259,7 @@ function mountCenter(){
   function ids(){let l=idsWhere(course||null,mod?[mod]:null);if(open)l=l.filter(id=>S.ans[id]===undefined);return l;}
   function chips(){
     const tot=c=>idsWhere(c||null).length;
-    let h=`<div class="ui-chips">`+[['','Tất cả','var(--brand)'],['tools','Orderflow Tools','var(--c-tools)'],['levels','TPO Level','var(--c-levels)']].map(([k,t,c])=>`<button type="button" class="ui-chip" data-course="${k}" style="--c:${c}" aria-pressed="${course===k}">${t} <span class="c">${tot(k)}</span></button>`).join('')+
+    let h=`<div class="ui-chips">`+[['','Tất cả','var(--brand)'],['levels','TPO Level','var(--c-levels)'],['tools','Orderflow Tools','var(--c-tools)']].map(([k,t,c])=>`<button type="button" class="ui-chip" data-course="${k}" style="--c:${c}" aria-pressed="${course===k}">${t} <span class="c">${tot(k)}</span></button>`).join('')+
       `<button type="button" class="ui-chip" data-open="1" aria-pressed="${open}" style="margin-left:auto">Chỉ câu chưa làm</button></div>`;
     if(course){const M=MODS[course]||{};h+=`<div class="ui-chips"><button type="button" class="ui-chip" data-mod="" aria-pressed="${!mod}" style="--c:${COURSE[course].c}">Mọi chương</button>`+
       Object.entries(M).map(([k,t])=>{const s=stats(course,[k]);return`<button type="button" class="ui-chip" data-mod="${k}" aria-pressed="${mod===k}" style="--c:${COURSE[course].c}">${t} <span class="c">${s.ok}/${s.n}</span></button>`;}).join('')+`</div>`;}

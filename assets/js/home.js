@@ -37,12 +37,17 @@ function art(){
   el.innerHTML=`<svg viewBox="0 0 460 300" role="img" aria-label="Minh hoạ TPO profile với value area, POC, VWAP và một nến footprint">${g}</svg>`;
 }
 
-/* ---------- session ---------- */
+/* ---------- session (giờ Việt Nam) ---------- */
 function sess(){
-  const el=$('#sess');if(!el)return;const s=session();
-  const vn=new Date().toLocaleTimeString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit'});
+  const el=$('#sess');if(!el)return;const s=session();if(!s)return;const {dur}=window.OFS;
+  let head;
+  if(s.inWindow)head=`<b>Đang trong cửa sổ trade</b> · kết thúc ${s.wEndVN} (còn ${dur(s.wEnd-s.now)})`;
+  else if(s.state==='open')head=`<b>RTH đang mở</b> · đóng lúc ${s.closeVN} (còn ${dur(s.close-s.now)})`;
+  else head=`<b>RTH mở lúc ${s.openVN} ${s.openDay}</b> · <span style="white-space:nowrap">còn ${dur(s.open-s.now)}</span>`;
   el.className='sess '+s.state;
-  el.innerHTML=`<span><i class="led"></i><b>${s.msg}</b></span><span>New York <b>${s.et}</b> ET</span><span>Việt Nam <b>${vn}</b></span><span>Cửa sổ trade: 9:30–11:30 ET</span>`;
+  el.innerHTML=`<div><i class="led"></i>${head}</div>
+    <div>Giờ VN <b>${s.vnNow}</b> · New York <b>${s.nyNow}</b> (${s.nyDay})</div>
+    <div>Cửa sổ trade <b>${s.openVN}–${s.wEndVN}</b> giờ VN · <span style="white-space:nowrap">RTH ${s.openVN}–${s.closeVN}</span></div>`;
 }
 
 /* ---------- continue ---------- */
@@ -61,7 +66,7 @@ function cont(){
 
 /* ---------- courses ---------- */
 function courses(){
-  ['tools','levels'].forEach(k=>{
+  ['levels','tools'].forEach(k=>{
     const el=$('#course-'+k);if(!el)return;const n=NAV.find(x=>x.k===k),s=QZ.stats(k);
     const d=n.chapters.filter(c=>seen[k+'/'+c[0]]).length;
     el.querySelector('.chs').innerHTML=n.chapters.map(([sl,no,t])=>`<a href="${n.href}#${sl}" class="${seen[k+'/'+sl]?'seen':''}"><span class="n">${no}</span>${t}</a>`).join('');
@@ -103,6 +108,6 @@ function backup(){
     localStorage.clear();toast('Đã xoá');setTimeout(()=>location.reload(),600);});
 }
 
-document.addEventListener('DOMContentLoaded',()=>{art();sess();cont();courses();quiz();backup();setInterval(sess,30000);});
+document.addEventListener('DOMContentLoaded',()=>{art();sess();cont();courses();quiz();backup();setInterval(sess,15000);});
 document.addEventListener('qz:change',()=>{quiz();courses();});
 })();
