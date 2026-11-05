@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080B10">
+<title>TPO Level Playbook · Orderflow System</title>
+<meta name="description" content="TPO, Day & Open types, Level map, VWAP RTH, CVD divergence và quy trình lên plan cho NQ.">
+<link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/css/app.css?v=3">
+<link rel="stylesheet" href="assets/css/levels.css?v=3">
+</head>
+<body data-page="levels">
+<main class="ui-main">
+<div class="ui-content pg-levels">
+
+
+<!-- ============ 00 LỘ TRÌNH ============ -->
+<section class="tab" id="ch-lo-trinh" data-chapter="lo-trinh">
+  <div class="ui-hero" style="--c:var(--c-levels)">
+    <span class="ui-eyebrow">Khoá 2 · NQ · RTH 9:30–16:00 ET</span>
+    <h1 class="ui-h1">TPO Level Playbook</h1>
+    <p class="ui-lede">Context bằng TPO · Confluence bằng VWAP RTH + CVD · Trigger bằng orderflow. Lộ trình 9 tuần từ đọc profile đến lên plan và execute trong 2 tiếng NY AM.</p>
+    <div class="facts"><span><b>8</b> chương</span><span><b>5</b> giai đoạn lộ trình</span><span><b>79</b> câu trắc nghiệm</span><span>Plan Builder</span></div>
+    <div class="cta"><a class="ui-btn primary" href="#nen-tang">Bắt đầu học →</a><a class="ui-btn" href="#plan">Mở Plan Builder</a><a class="ui-btn ghost" href="quiz.html#thi-thu">Thi thử 50 câu</a></div>
+  </div>
+
+  <div class="head">
+    <span class="eyebrow">00 · Lộ trình 9 tuần</span>
+    <h2>Từ đọc profile đến lên plan và execute trong 2 tiếng NY AM</h2>
+    <p class="lead">TPO trong hệ thống của bạn đóng vai trò <b>context + location</b>: nó trả lời "thị trường đang balance hay imbalance, và mình chỉ được phép hành động ở đâu". VWAP RTH và CVD là lớp confluence. Trigger vào lệnh vẫn là thứ bạn đã chốt (OSR, IB, footprint/delta). Playbook này không thêm model mới, nó cho các model hiện có một bản đồ level rõ ràng.</p>
+  </div>
+
+  <div class="panel stack">
+    <div class="qhead"><h3>Tiến độ tổng</h3><span class="score" id="rm-score">0/0</span></div>
+    <div class="progress"><i id="rm-bar"></i></div>
+    <p class="small muted">Tick lưu trên trình duyệt này. Mỗi giai đoạn có tiêu chí "qua bài" ở dòng cuối, chưa đạt thì chưa sang giai đoạn sau.</p>
+  </div>
+
+  <div class="stack" id="roadmap"></div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Tài liệu gốc nên đọc</h3>
+      <ul class="clean">
+        <li><b>James Dalton — Mind Over Markets</b> (chương về TPO, day types, open types, value relationships). Đây là nguồn của gần như toàn bộ khái niệm trong tab 01–03.</li>
+        <li><b>James Dalton — Markets in Profile</b>: phần auction theo khung lớn, cách đọc nhiều ngày liền.</li>
+        <li><b>CBOT Market Profile Handbook</b> (Steidlmayer): định nghĩa gốc của TPO, IB, Rotation Factor.</li>
+        <li>Recap Notion của bạn: <i>Lecture 5 – TPO Part 2</i>, <i>TPO: Components</i>, <i>TPO/VPO (Chika)</i>. Tab 01 có phần giải đáp các câu hỏi mở bạn còn ghi lại.</li>
+      </ul>
+    </div>
+    <div class="panel stack">
+      <h3>Cách bạn đang dùng ATAS (giữ nguyên)</h3>
+      <ul class="clean">
+        <li><span class="chip">Weekly Profile</span> context khung lớn: weekly VA, composite.</li>
+        <li><span class="chip">Daily Profile ETH</span> overnight inventory, ON high/low, ON POC.</li>
+        <li><span class="chip va">Daily Profile RTH</span> chart chính để vẽ zone (template trong ảnh).</li>
+        <li><span class="chip vw">ETH M1 Execution</span> VWAP RTH ±1/2/3 SD + CVD + footprint để trigger.</li>
+      </ul>
+      <p class="small muted">Một nguyên tắc từ chính nhận định của bạn: lý do chưa pass prop là đổi strategy liên tục. Lộ trình này cố tình chậm và đo được, để tạo conviction cho một bộ khung duy nhất.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 NỀN TẢNG ============ -->
+<section class="tab" id="ch-nen-tang" data-chapter="nen-tang">
+  <div class="head">
+    <span class="eyebrow">01 · Nền tảng</span>
+    <h2>TPO là gì và đọc một profile như thế nào</h2>
+    <p class="lead"><b>TPO (Time Price Opportunity)</b> ghi lại mỗi mức giá mà thị trường "có mặt" trong từng khoảng 30 phút. Xếp chồng các khoảng đó theo chiều ngang, ta được một phân phối: chỗ dày là nơi thị trường chấp nhận giá (value), chỗ mỏng là nơi thị trường từ chối hoặc đi qua rất nhanh. Candle cho biết giá đi thế nào, profile cho biết giá được <i>chấp nhận</i> ở đâu.</p>
+  </div>
+
+  <div class="grid g2">
+    <figure class="panel">
+      <h3>Giải phẫu một profile RTH</h3>
+      <div class="svgwrap" id="anatomy"></div>
+      <figcaption>Profile mẫu sinh từ dữ liệu 13 period (A = 9:30 … M = 15:30 ET). POC, VA tính tự động theo đúng quy tắc 70%. Ô hồng = value area, ô cam = POC, thanh vàng nhạt bên trái = Initial Balance.</figcaption>
+    </figure>
+    <div class="panel stack">
+      <h3>Đọc profile mẫu bên trái</h3>
+      <ol class="clean">
+        <li><b>Open</b> trong A period, A đẩy lên cao rồi bị bán mạnh: 4 dòng chỉ có chữ A ở đỉnh = <span class="chip va">selling tail</span>. Người bán phản ứng (responsive) đã từ chối giá cao. Đỉnh này "hoàn tất".</li>
+        <li><b>IB</b> = A + B. C phá IB low = <span class="chip ib">range extension xuống</span>. Initiative sellers xuất hiện.</li>
+        <li>C đi nhanh để lại <span class="chip">single prints</span> giữa profile: vùng imbalance, thường làm kháng cự khi giá quay lại, hoặc bị lấp nếu thị trường đổi ý.</li>
+        <li>Phần dưới xây value dày (D → M): <span class="chip poc">POC</span> nằm thấp, profile hình chữ <b>b</b> → long liquidation.</li>
+        <li>Đáy có 3 chữ khác nhau cùng chạm một giá, không có tail: <span class="chip warn">poor low</span>. Auction phía dưới chưa xong, ngày sau dễ quay lại quét.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <div class="qhead"><h3>Từ điển TPO (bấm để mở)</h3><span class="small muted">Mỗi mục: định nghĩa · cách đọc · cách dùng cho NQ intraday</span></div>
+    <div class="grid g2" id="glossary"></div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Rotation Factor: tự tính trong 2 phút</h3>
+    <p>So sánh từng period với period ngay trước nó. High cao hơn: <b>+1</b>, thấp hơn: <b>−1</b>, bằng: <b>0</b>. Làm tương tự với Low. Cộng hết lại.</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Period</th><th class="num">High</th><th class="num">Low</th><th class="num">Điểm High</th><th class="num">Điểm Low</th><th class="num">Luỹ kế</th></tr></thead>
+      <tbody id="rf-table"></tbody>
+    </table></div>
+    <p class="small muted">RF dương lớn = rotation lên chiếm ưu thế (buyers điều khiển). Gần 0 = hai chiều, balance. Dùng RF của A–C để xác nhận open type, không dùng làm tín hiệu vào lệnh.</p>
+  </div>
+
+  <div class="callout purple">
+    <h4>Giải đáp các "câu hỏi mở" trong recap Lecture 5 của bạn</h4>
+    <ul class="clean small">
+      <li><b>Tail 1 print hay 2 print?</b> Hai cách đếm khác chiều nhau. "Hai prints ở đỉnh" trong video là <i>hai chữ cái khác nhau cùng chạm mức cao nhất</i> (đếm theo chiều ngang) → đó là poor high, nên không phải tail. Tail đếm theo <i>chiều dọc</i>: số dòng liên tiếp ở cực trị chỉ có một chữ. Theo Dalton, excess tối thiểu là 2 dòng single print. Với NQ, quy ước thực dụng: tail ≥ 2 dòng ở row size bạn đang dùng (ví dụ 5 điểm/dòng → tail ≥ 10 điểm).</li>
+      <li><b>68.4% hay 70%?</b> 1 độ lệch chuẩn của phân phối chuẩn ≈ 68.27%, đó là gốc toán học. 70% là quy ước làm tròn của CBOT và là mặc định trên hầu hết nền tảng, kể cả ATAS. Chọn một con số và giữ cố định để các ngày so sánh được với nhau.</li>
+      <li><b>RF tính thế nào?</b> Bảng ngay phía trên.</li>
+      <li><b>"Key contextual level" là gì?</b> Trong playbook này, đó là level Tier 1–2 ở tab 03 (weekly VA, prior day VAH/VAL/POC, naked POC, poor high/low, single prints). Giá đóng xuyên qua một level như vậy trong IB thường làm IB rộng và một chiều.</li>
+    </ul>
+  </div>
+
+  <div class="qz-slot" data-qz="levels:tpo" data-title="Quiz 01 · Nền tảng TPO"></div>
+</section>
+
+<!-- ============ 02 CẤU TRÚC ============ -->
+<section class="tab" id="ch-cau-truc" data-chapter="cau-truc">
+  <div class="head">
+    <span class="eyebrow">02 · Cấu trúc ngày</span>
+    <h2>Day types, profile shapes, open types và quan hệ value giữa các ngày</h2>
+    <p class="lead">Bốn bộ phân loại này trả lời bốn câu hỏi khác nhau. <b>Open type</b>: 30 phút đầu ai đang chủ động. <b>IB + range extension</b>: hôm nay có khả năng trend hay rotation. <b>Day type / shape</b>: hôm qua kết thúc ra sao. <b>Value relationship</b>: value đang di chuyển hay đứng yên qua nhiều ngày.</p>
+  </div>
+
+  <div class="panel stack">
+    <h3>Day types (Dalton) · chọn để xem profile</h3>
+    <div class="seg" id="dt-buttons"></div>
+    <div class="grid g2">
+      <div class="svgwrap" id="dt-svg"></div>
+      <div class="stack" id="dt-info"></div>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Open types · 30 phút đầu tiên</h3>
+    <p class="small muted">Đường nét đứt = giá open 9:30. Phân loại open type xong trước 10:00 ET (21:30–22:00 giờ VN), sau đó mới quyết định có trade theo kịch bản A hay B trong plan.</p>
+    <div class="grid g2" id="opentypes"></div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Open location so với hôm qua · bấm từng ô</h3>
+    <p class="small muted">Đây là câu hỏi đầu tiên của plan mỗi ngày. Mức tự tin về imbalance tăng dần khi open càng xa value.</p>
+    <div class="grid g2">
+      <div class="svgwrap" id="openloc-svg"></div>
+      <div class="stack" id="openloc-info"></div>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Quan hệ value giữa hai ngày</h3>
+    <p class="small muted">Hộp xám = VA hôm qua, hộp hồng = VA hôm nay. Đánh giá sau khi phiên đóng cửa, ghi vào phần Post-session review.</p>
+    <div class="grid g3" id="valrel"></div>
+  </div>
+
+  <div class="qz-slot" data-qz="levels:structure" data-title="Quiz 02 · Day & Open types"></div>
+</section>
+
+<!-- ============ 03 LEVELS ============ -->
+<section class="tab" id="ch-levels" data-chapter="levels">
+  <div class="head">
+    <span class="eyebrow">03 · Level map</span>
+    <h2>Level nào đáng vẽ, level nào đáng trade, và khi nào level "hỏng"</h2>
+    <p class="lead">Mỗi ngày bạn chỉ có 2–3 lệnh, nên số level phải ít và có thứ bậc. Quy tắc: chỉ <b>vẽ</b> Tier 1–3 trên chart RTH. Tier 4 (scalping) là tuỳ chọn, chỉ bật khi đã có 20 phiên liên tiếp tuân thủ plan.</p>
+  </div>
+
+  <div class="panel stack">
+    <div class="qhead"><h3>Thứ bậc level</h3>
+      <label class="row small" for="tog-scalp"><input type="checkbox" id="tog-scalp"> Hiện Tier 4 · scalping add-in</label></div>
+    <div class="tablewrap"><table id="tier-table">
+      <thead><tr><th>Tier</th><th>Level</th><th>Nguồn trên ATAS</th><th>Ý nghĩa</th><th>Cách dùng</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Acceptance hay Rejection?</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Dấu hiệu</th><th>Acceptance</th><th>Rejection</th></tr></thead>
+        <tbody>
+          <tr><td>Thời gian</td><td>Giá ở ngoài level ≥ 2 period TPO (60 phút) hoặc xây TPO dày ở đó</td><td>Chỉ 1 period chạm rồi quay lại, để lại tail</td></tr>
+          <tr><td>Volume</td><td>Volume profile dày lên ngoài level (participation)</td><td>Volume mỏng, single prints</td></tr>
+          <tr><td>VWAP RTH</td><td>VWAP dốc theo hướng phá, giá giữ phía đó</td><td>Giá chạm ±2 SD rồi quay về VWAP</td></tr>
+          <tr><td>CVD</td><td>CVD tạo đỉnh/đáy mới cùng giá</td><td>CVD divergence ngay tại level</td></tr>
+          <tr><td>Kết luận</td><td><span class="chip good">go-with</span> level cũ thành support/resistance</td><td><span class="chip bad">fade</span> về POC / cạnh VA đối diện</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">Trong 2 tiếng NY AM bạn khó chờ đủ 2 period. Phiên bản nhanh: 1 period (30 phút) đóng ngoài level + VWAP + CVD cùng xác nhận.</p>
+    </div>
+    <figure class="panel stack">
+      <h3>80% rule (Steidlmayer / Dalton)</h3>
+      <div class="svgwrap" id="rule80"></div>
+      <figcaption>Open (hoặc đi) ra ngoài VA hôm qua, quay lại vào trong và được chấp nhận 2 period TPO liên tiếp → xác suất cao đi hết VA sang cạnh còn lại. "80%" là tên gọi truyền thống, không phải thống kê đã kiểm chứng cho NQ hiện tại. Hãy tự đo trên Market Replay (bài tập ở Giai đoạn 3).</figcaption>
+    </figure>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Spike rules · late-day breakout</h3>
+      <p class="small">Spike là cú đi mạnh trong 1–2 period cuối phiên (L, M). Nó chưa kịp được thị trường kiểm chứng, nên ngày hôm sau open ở đâu so với spike cho biết spike là thật hay giả.</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Ngày sau open</th><th>Spike lên (bullish)</th><th>Spike xuống (bearish)</th></tr></thead>
+        <tbody>
+          <tr><td>Ngoài spike theo hướng spike</td><td><span class="chip good">tiếp diễn lên</span></td><td><span class="chip good">tiếp diễn xuống</span></td></tr>
+          <tr><td>Trong vùng spike</td><td colspan="2">Spike trở thành vùng balance mới, đánh rotation trong spike</td></tr>
+          <tr><td>Ngoài spike ngược hướng</td><td><span class="chip bad">spike bị reject</span> → xuống</td><td><span class="chip bad">spike bị reject</span> → lên</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">Ví dụ thật trong template của bạn: 29/10 có spike bán cuối phiên, 30/10 open gap xuống dưới spike → tiếp diễn (xem tab 07).</p>
+    </div>
+    <div class="panel stack">
+      <h3>Chấm điểm một level trước khi trade</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Yếu tố</th><th class="num">Điểm</th></tr></thead>
+        <tbody>
+          <tr><td>Tier 1 (weekly VA, composite, nPOC nhiều ngày)</td><td class="num mono">+3</td></tr>
+          <tr><td>Tier 2 (VAH/VAL/POC hôm qua, poor H/L, single prints)</td><td class="num mono">+2</td></tr>
+          <tr><td>Trùng ≥ 2 level trong vòng 10–15 điểm NQ</td><td class="num mono">+2</td></tr>
+          <tr><td>Trùng VWAP RTH hoặc band ±2 SD</td><td class="num mono">+2</td></tr>
+          <tr><td>Chưa được test trong phiên hiện tại (fresh)</td><td class="num mono">+1</td></tr>
+          <tr><td>Đã bị xuyên qua và accept hôm nay</td><td class="num mono">−3</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small"><span class="chip good">≥ 6</span> zone A, được trade. <span class="chip warn">4–5</span> chỉ trade khi CVD + trigger rõ. <span class="chip bad">≤ 3</span> không trade, chỉ dùng làm target.</p>
+    </div>
+  </div>
+
+  <div class="panel stack" id="scalp-panel">
+    <h3>Scalping add-in (tuỳ chọn) · công cụ tính IB</h3>
+    <p class="small muted">Nhập IB lúc 10:30 ET để có extension, IB mid và đánh giá độ rộng so với trung bình 20 phiên.</p>
+    <div class="form">
+      <div class="field"><label for="ib-h">IB High</label><input type="number" id="ib-h" value="28795" step="0.25"></div>
+      <div class="field"><label for="ib-l">IB Low</label><input type="number" id="ib-l" value="28640" step="0.25"></div>
+      <div class="field"><label for="ib-avg">IB trung bình 20 phiên</label><input type="number" id="ib-avg" value="190" step="1"></div>
+    </div>
+    <div class="out" id="ib-out"></div>
+  </div>
+
+  <div class="qz-slot" data-qz="levels:levels" data-title="Quiz 03 · Level, acceptance & scalping"></div>
+</section>
+
+<!-- ============ 04 VWAP ============ -->
+<section class="tab" id="ch-vwap" data-chapter="vwap">
+  <div class="head">
+    <span class="eyebrow">04 · Add-in confluence #1</span>
+    <h2>VWAP RTH: value động của chính phiên hôm nay</h2>
+    <p class="lead">TPO cho biết value <i>đã</i> được xây ở đâu (thường là của hôm qua). VWAP RTH cho biết giá vốn trung bình của mọi người đã giao dịch <i>từ 9:30 hôm nay</i>. Kết hợp hai thứ: TPO là bản đồ, VWAP là la bàn trong phiên.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Định nghĩa</h3>
+      <div class="out" style="max-height:none">VWAP(t) = Σ (Pᵢ × Vᵢ) / Σ Vᵢ      với i chạy từ 9:30 ET đến t
+σ(t)    = √[ Σ Vᵢ × (Pᵢ − VWAP)² / Σ Vᵢ ]
+Band    = VWAP ± k·σ,   k = 1, 2, 3</div>
+      <ul class="clean small">
+        <li><b>Anchor 9:30 ET</b>: cùng mốc với IB và TPO RTH, nên ba công cụ nói cùng một ngôn ngữ thời gian. VWAP ETH (18:00 ET) chỉ là lớp phụ khi volume overnight bất thường, như bạn đã chốt.</li>
+        <li><b>Giá trên VWAP</b>: người mua trung bình hôm nay đang lãi → buyers kiểm soát intraday. Dưới VWAP thì ngược lại.</li>
+        <li><b>15–20 phút đầu</b> σ còn nhỏ và nhảy liên tục, band rất hẹp. Đừng fade band trước 10:00 ET.</li>
+      </ul>
+    </div>
+    <div class="panel stack">
+      <h3>Bốn trạng thái VWAP</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Trạng thái</th><th>Nhận diện</th><th>Hành động</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip">Balance</span></td><td>VWAP phẳng, giá cắt qua lại nhiều lần, ở trong ±1 SD</td><td>Bingbong ±1 SD, fade ±2/±3 SD về VWAP</td></tr>
+          <tr><td><span class="chip good">Trend lên</span></td><td>VWAP dốc lên, giá giữ trên VWAP, chạy dọc +1/+2 SD</td><td>Buy pullback về VWAP / +1 SD. Cấm short +2 SD</td></tr>
+          <tr><td><span class="chip bad">Trend xuống</span></td><td>Đối xứng</td><td>Sell pullback về VWAP / −1 SD</td></tr>
+          <tr><td><span class="chip warn">Chuyển pha</span></td><td>Giá reclaim / mất VWAP sau IB, VWAP bắt đầu đổi độ dốc</td><td>Trade retest VWAP theo hướng mới, cần CVD xác nhận</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>VWAP × TPO: đọc cùng nhau</h3>
+    <div class="grid g3">
+      <div class="card"><h4><span class="chip vw">VWAP ≈ dPOC</span></h4><p class="small">Thời gian và volume đồng thuận cùng một giá → balance. Fade các cạnh VA đang hình thành và ±2 SD.</p></div>
+      <div class="card"><h4><span class="chip vw">VWAP dẫn, dPOC kéo theo</span></h4><p class="small">dPOC di chuyển cùng chiều với VWAP sau 10:30 → value đang migrate, ngày có khả năng trend hoặc normal variation. Đánh go-with.</p></div>
+      <div class="card"><h4><span class="chip vw">VWAP trùng level TPO</span></h4><p class="small">VWAP hoặc band ±2 SD nằm trong vòng 10–15 điểm của VAH/VAL/POC hôm qua → zone A theo bảng chấm điểm tab 03.</p></div>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <figure class="panel"><h3>Balance day: fade band</h3><div class="svgwrap" id="vw-bal"></div><figcaption>VWAP phẳng, giá chạm −2 SD tại VAL hôm qua (zone A) rồi quay về VWAP, chạm +2 SD tại VAH rồi quay lại.</figcaption></figure>
+    <figure class="panel"><h3>Trend day: band là chỗ thêm lệnh, không phải chỗ đảo</h3><div class="svgwrap" id="vw-trend"></div><figcaption>Giá chạy dọc +1/+2 SD, mỗi lần pullback về +1 SD hoặc VWAP là điểm mua. Người fade +2 SD bị cuốn.</figcaption></figure>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Màu ATAS gợi ý (ARGB)</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Đường</th><th>ARGB</th><th>Ghi chú</th></tr></thead>
+        <tbody>
+          <tr><td>VWAP RTH</td><td class="mono">#FF26C6DA</td><td>Cyan đậm, dày 2px, tách hẳn khỏi POC cam</td></tr>
+          <tr><td>±1 SD</td><td class="mono">#9926C6DA</td><td>Cùng màu, alpha 60%, nét đứt</td></tr>
+          <tr><td>±2 SD</td><td class="mono">#CCB388FF</td><td>Tím nhạt, vùng reversal</td></tr>
+          <tr><td>±3 SD</td><td class="mono">#CCEF5350</td><td>Đỏ, cực trị</td></tr>
+          <tr><td>VWAP ETH</td><td class="mono">#80FFFFFF</td><td>Trắng mờ, chỉ để tham chiếu</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="panel stack">
+      <h3>Lỗi hay gặp</h3>
+      <ul class="clean small">
+        <li>Fade ±2 SD trong ngày Open Drive + IB extension. Đó là ngày trend, band chỉ là chỗ thêm lệnh.</li>
+        <li>Nhầm VWAP ETH với VWAP RTH trên chart M1. Đặt tên và màu khác nhau rõ ràng.</li>
+        <li>Dùng VWAP như một level độc lập, bỏ qua TPO. VWAP chỉ được cộng điểm khi trùng location.</li>
+        <li>Coi chạm VWAP là tín hiệu. Chạm chỉ là location, vẫn cần CVD + trigger.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qz-slot" data-qz="levels:vwap" data-title="Quiz 04 · VWAP RTH"></div>
+</section>
+
+<!-- ============ 05 CVD ============ -->
+<section class="tab" id="ch-cvd" data-chapter="cvd">
+  <div class="head">
+    <span class="eyebrow">05 · Add-in confluence #2</span>
+    <h2>CVD divergence: ai đang chủ động, và họ có còn đẩy được giá không</h2>
+    <p class="lead">Bạn tự nhận lỗi chính hiện tại là đọc footprint/delta chưa chuẩn. CVD là cách đơn giản hoá: thay vì đọc từng ô bid × ask, chỉ so <b>hai swing liên tiếp</b> của giá với hai swing tương ứng của CVD, và <b>chỉ tại level TPO</b>.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Định nghĩa</h3>
+      <div class="out" style="max-height:none">Delta(bar) = Volume khớp ở Ask (market buy) − Volume khớp ở Bid (market sell)
+CVD(t)     = Σ Delta từ mốc reset đến t
+Reset      = 9:30 ET (cùng mốc VWAP RTH và TPO RTH)</div>
+      <ul class="clean small">
+        <li><b>Aggressive (initiator)</b>: lệnh market, tạo ra delta. <b>Passive</b>: lệnh limit trên DOM, hấp thụ delta.</li>
+        <li>Giá di chuyển khi aggression lớn hơn lượng passive liquidity. Divergence xảy ra khi hai thứ này lệch nhau.</li>
+        <li>So CVD theo <i>hình dạng swing trong cùng phiên</i>, không so giá trị tuyệt đối giữa các ngày.</li>
+      </ul>
+    </div>
+    <div class="panel stack">
+      <h3>Bộ lọc bắt buộc</h3>
+      <ol class="clean small">
+        <li><b>Location trước</b>: chỉ xét divergence tại zone điểm ≥ 4 (tab 03). Divergence giữa không trung = nhiễu.</li>
+        <li><b>Regime</b>: ngày trend (Open Drive, IB extension, VWAP dốc) thì divergence ngược trend fail liên tục. Chỉ chấp nhận khi trùng Tier 1 + band ±2 SD.</li>
+        <li><b>Trigger</b>: divergence không phải entry. Chờ phá micro-structure M1, reclaim level, hoặc delta flip.</li>
+        <li><b>Invalidation</b>: ngoài cực trị đã tạo divergence. Giá vượt qua là ý tưởng sai.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Ma trận 4 loại divergence</h3>
+    <p class="small muted">Panel trên: giá. Panel dưới: CVD. Đường tím = level TPO. Hai loại "exhaustion" là aggressor yếu đi; hai loại "absorption" là aggressor vẫn mạnh nhưng bị passive chặn lại. Absorption thường mạnh hơn vì có người lớn đứng ở level.</p>
+    <div class="grid g2" id="cvd-matrix"></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Checklist đọc CVD tại level (5 bước)</h3>
+      <div id="cvd-check"></div>
+    </div>
+    <div class="panel stack">
+      <h3>Ghép vào stack xác nhận của bạn</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Grade</th><th>Điều kiện</th><th>Size</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip good">A++</span></td><td>Zone TPO ≥ 6 điểm + VWAP/band trùng + CVD divergence + trigger (delta flip / DOM)</td><td>Full</td></tr>
+          <tr><td><span class="chip good">A+</span></td><td>Zone TPO ≥ 6 + một trong hai (VWAP hoặc CVD) + trigger</td><td>Full hoặc 75%</td></tr>
+          <tr><td><span class="chip warn">B</span></td><td>Zone TPO + trigger, không có confluence</td><td>Sim / bỏ qua</td></tr>
+          <tr><td><span class="chip bad">C</span></td><td>Không có location TPO</td><td>Không trade</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">Khớp với quy ước triple-layer = A++, double = A+ trong page "12 — Entry Model" của bạn.</p>
+    </div>
+  </div>
+
+  <div class="qz-slot" data-qz="levels:cvd" data-title="Quiz 05 · CVD divergence"></div>
+</section>
+
+<!-- ============ 06 PLAN ============ -->
+<section class="tab" id="ch-plan" data-chapter="plan">
+  <div class="head">
+    <span class="eyebrow">06 · Quy trình mỗi ngày</span>
+    <h2>Lên plan: từ profile hôm qua đến 2 kịch bản có invalidation</h2>
+    <p class="lead">Mục tiêu của plan không phải dự đoán đúng hướng. Mục tiêu là trước 9:25 ET bạn biết: <b>mình trade ở đâu, theo điều kiện gì, và điều gì làm mình đứng ngoài</b>. Từ 01/11/2026 Mỹ đã hết DST, nên 9:30 ET = <b>21:30 giờ VN</b>.</p>
+  </div>
+
+  <div class="panel stack">
+    <h3>Timeline (ET / giờ VN, mùa đông EST)</h3>
+    <div id="timeline" class="stack"></div>
+  </div>
+
+  <div class="panel stack">
+    <div class="qhead"><h3>Plan Builder</h3><span class="small muted">Số mặc định = minh hoạ đọc từ ảnh template ngày 04/11 (xấp xỉ). Thay bằng số thật trên ATAS.</span></div>
+    <div class="grid g2">
+      <div class="stack">
+        <fieldset><legend>Hôm qua (RTH)</legend>
+          <div class="form">
+            <div class="field"><label for="p-date">Ngày plan</label><input type="text" id="p-date" value="05/11/2026"></div>
+            <div class="field"><label for="p-pdh">PD High</label><input type="number" step="0.25" id="p-pdh" value="28975"></div>
+            <div class="field"><label for="p-pdl">PD Low</label><input type="number" step="0.25" id="p-pdl" value="28405"></div>
+            <div class="field"><label for="p-vah">PD VAH</label><input type="number" step="0.25" id="p-vah" value="28795"></div>
+            <div class="field"><label for="p-poc">PD POC</label><input type="number" step="0.25" id="p-poc" value="28680"></div>
+            <div class="field"><label for="p-val">PD VAL</label><input type="number" step="0.25" id="p-val" value="28505"></div>
+            <div class="field"><label for="p-close">PD Close</label><input type="number" step="0.25" id="p-close" value="28657"></div>
+            <div class="field"><label for="p-dtype">Day type</label><select id="p-dtype"><option>Normal</option><option selected>Normal Variation</option><option>Trend</option><option>Double Distribution</option><option>Neutral</option><option>Non-Trend</option></select></div>
+            <div class="field"><label for="p-shape">Shape</label><select id="p-shape"><option>D</option><option selected>P</option><option>b</option><option>B</option><option>Thin / elongated</option></select></div>
+            <div class="field"><label for="p-ph">Poor high?</label><select id="p-ph"><option value="0" selected>Không</option><option value="1">Có</option></select></div>
+            <div class="field"><label for="p-pl">Poor low?</label><select id="p-pl"><option value="0" selected>Không</option><option value="1">Có</option></select></div>
+          </div>
+        </fieldset>
+        <fieldset><legend>Overnight (ETH) & premarket</legend>
+          <div class="form">
+            <div class="field"><label for="p-onh">ON High</label><input type="number" step="0.25" id="p-onh" value="28760"></div>
+            <div class="field"><label for="p-onl">ON Low</label><input type="number" step="0.25" id="p-onl" value="28590"></div>
+            <div class="field"><label for="p-inv">ON inventory</label><select id="p-inv"><option value="long">Net long</option><option value="short">Net short</option><option value="neutral" selected>Trung tính</option></select></div>
+            <div class="field"><label for="p-px">Giá lúc 9:15 ET</label><input type="number" step="0.25" id="p-px" value="28700"></div>
+            <div class="field"><label for="p-news">Tin 8:30/10:00 ET</label><input type="text" id="p-news" value="Không có tin đỏ"></div>
+          </div>
+        </fieldset>
+        <fieldset><legend>Level khác (mỗi dòng: tên : giá)</legend>
+          <textarea id="p-levels" aria-label="Danh sách level khác">03/11 balance high : 28447
+03/11 POC : 28330
+02/11 POC : 28650
+02/11 High : 28892
+RTH gap đáy (30/10 High) : 28861
+RTH gap đỉnh (29/10 Low) : 29107
+29/10 POC : 29483
+Level tím : 28176</textarea>
+        </fieldset>
+        <div class="row"><button class="primary" id="p-build">Tạo plan</button><button id="p-copy">Copy plan</button><span class="small muted" id="p-msg" role="status"></span></div>
+      </div>
+      <div class="stack">
+        <div id="p-loc"></div>
+        <div class="tablewrap"><table class="ladder"><thead><tr><th>Level</th><th class="num">Giá</th><th class="num">Khoảng cách</th></tr></thead><tbody id="p-ladder"></tbody></table></div>
+        <div class="out" id="p-out"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel stack">
+      <h3>Pre-market checklist (trước 9:25 ET)</h3>
+      <div id="pre-check"></div>
+      <div class="row"><button id="pre-reset">Xoá tick cho ngày mới</button></div>
+    </div>
+    <div class="panel stack">
+      <h3>In-session: cây quyết định</h3>
+      <div class="ex-list" id="decision"></div>
+    </div>
+  </div>
+
+  <div class="panel stack">
+    <h3>Post-session review (sau 16:00 ET, sáng hôm sau giờ VN)</h3>
+    <div class="grid g2">
+      <div id="post-check"></div>
+      <div class="callout">
+        <h4>Chấm điểm process, không chấm kết quả</h4>
+        <p class="small">Với mỗi phiên ghi 3 con số: <b>(1)</b> kịch bản nào xảy ra (A / B / không cái nào), <b>(2)</b> số lệnh nằm trong plan / tổng số lệnh, <b>(3)</b> có dừng đúng 11:30 ET không. Sau 20 phiên, tỉ lệ (2) phải ≥ 90% trước khi bật Tier 4 scalping.</p>
+      </div>
+    </div>
+    <div class="row"><button id="post-reset">Xoá tick</button></div>
+  </div>
+</section>
+
+<!-- ============ 07 TEMPLATE ============ -->
+<section class="tab" id="ch-template" data-chapter="template">
+  <div class="head">
+    <span class="eyebrow">07 · Case study từ ảnh của bạn</span>
+    <h2>NQZ6 · Daily Profile RTH · 29/10 → 04/11/2026</h2>
+    <p class="lead">Các số dưới đây đọc từ toạ độ trên ảnh chụp nên sai số khoảng ±10–15 điểm. Phiên 04/11 còn đang chạy lúc chụp (giá 28,657.25), nên VA/POC 04/11 là <i>developing</i>. Dùng tab này để luyện cách đọc, còn số để trade thì lấy trực tiếp trên ATAS.</p>
+  </div>
+
+  <figure class="panel stack">
+    <h3>Value migration 5 phiên</h3>
+    <div class="svgwrap" id="migration"></div>
+    <figcaption>Thanh mảnh = range RTH, hộp hồng = VA, vạch cam = POC, gạch trái/phải = open/close. Vùng xám nét đứt = RTH gap chưa lấp, vùng sọc = single prints 29/10.</figcaption>
+  </figure>
+
+  <div class="stack" id="days"></div>
+
+  <div class="panel stack">
+    <h3>Template của bạn đang tốt ở đâu, nên thêm gì</h3>
+    <div class="grid g2">
+      <div class="card"><h4><span class="chip good">Đã có</span></h4><ul class="clean small">
+        <li>TPO + volume profile chồng nhau: thấy được presence vs participation.</li>
+        <li>VA tô màu và POC kéo dài sang phải: dễ thấy level nào còn "naked".</li>
+        <li>IB bar bên trái mỗi ngày, marker open/close.</li>
+        <li>Tách 3 tab Weekly / ETH / RTH.</li>
+      </ul></div>
+      <div class="card"><h4><span class="chip warn">Nên thêm</span></h4><ul class="clean small">
+        <li>Bật đánh dấu <b>single prints</b> và <b>poor high/low</b> (hoặc vẽ tay) để không bỏ sót magnet.</li>
+        <li>Chỉ kéo dài POC/VA của 3–5 ngày gần nhất và các level còn naked. Nhiều dải ngang mờ trong ảnh làm khó phân biệt Tier.</li>
+        <li>Hiện <b>IB extension 1.5x/2x</b> trên chart M1 execution.</li>
+        <li>Một chart composite 5–10 ngày khi các VA chồng nhau (như 30/10–04/11).</li>
+      </ul></div>
+    </div>
+  </div>
+  <div class="qz-slot" data-qz="levels:case" data-title="Quiz 07 · Case study template"></div>
+</section>
+
+
+</div>
+<footer class="ui-foot">Playbook học tập cho NQ intraday. Không phải lời khuyên đầu tư. Các con số thống kê truyền thống (80% rule, tỉ lệ day type) cần được bạn tự kiểm chứng bằng backtest trước khi dùng với tiền thật.</footer>
+</main>
+<script src="assets/js/levels-data.js?v=3"></script>
+<script src="assets/js/fp.js?v=3"></script>
+<script src="assets/js/bank-tools.js?v=3"></script>
+<script src="assets/js/bank-levels.js?v=3"></script>
+<script src="assets/js/quiz.js?v=3"></script>
+<script src="assets/js/core.js?v=3"></script>
+<script src="assets/js/levels-page.js?v=3"></script>
+</body>
+</html>

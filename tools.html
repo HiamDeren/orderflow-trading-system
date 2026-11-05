@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080B10">
+<title>Orderflow Tools · Orderflow System</title>
+<meta name="description" content="DOM, Tape, Footprint, Delta & CVD, 13 kịch bản footprint cho NQ intraday trên ATAS.">
+<link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/css/app.css?v=3">
+<link rel="stylesheet" href="assets/css/tools.css?v=3">
+</head>
+<body data-page="tools">
+<main class="ui-main">
+<div class="ui-content pg-tools">
+<!-- ============ TỔNG QUAN ============ -->
+<section class="ch" id="ch-tong-quan" data-chapter="tong-quan">
+  <div class="ui-hero" style="--c:var(--c-tools)">
+    <span class="ui-eyebrow">Khoá 1 · NQ · ATAS · Rithmic · intraday RTH</span>
+    <h1 class="ui-h1">Orderflow Tools Playbook</h1>
+    <p class="ui-lede">Toàn bộ kiến thức orderflow trong hệ thống ở một chỗ: DOM, tape, footprint, delta và CVD, cách kết hợp tại key level TPO, 13 kịch bản footprint và thuật ngữ. Hình minh hoạ vẽ theo kiểu cluster ATAS, số liệu là dữ liệu mẫu.</p>
+    <div class="facts"><span><b>9</b> chương</span><span><b>13</b> kịch bản footprint</span><span><b>87</b> câu trắc nghiệm</span><span><b>5</b> pha tại key level</span></div>
+    <div class="cta"><a class="ui-btn primary" href="#nen-tang">Bắt đầu học →</a><a class="ui-btn" href="#kich-ban">Xem 13 kịch bản</a><a class="ui-btn ghost" href="quiz.html#thi-thu">Thi thử 50 câu</a></div>
+  </div>
+
+  <div class="chh"><span class="no">00</span><h2>Tổng quan: mỗi công cụ trả lời một câu hỏi</h2>
+  <p>Orderflow không phải là nhìn càng nhiều càng tốt. Mỗi công cụ được dùng ở một thời điểm cụ thể khi giá tiến tới key level đã vẽ từ TPO.</p></div>
+  <div class="grid g3">
+    <div class="card"><span class="en">Depth of Market</span><h5>DOM</h5><p>Ai đang chờ ở đâu? Lệnh limit treo tại từng mức giá, có giữ hay bị rút.</p></div>
+    <div class="card"><span class="en">Time &amp; Sales / Smart Tape</span><h5>Tape</h5><p>Ai đang tấn công, với kích thước nào, nhanh hay chậm? Từng giao dịch khớp theo thời gian thực.</p></div>
+    <div class="card"><span class="en">Cluster chart</span><h5>Footprint</h5><p>Trong nến vừa đóng, bên nào thắng ở từng mức giá? Đây là trigger vào lệnh.</p></div>
+    <div class="card"><span class="en">Delta</span><h5>Delta nến</h5><p>Tổng lực mua chủ động trừ bán chủ động trong một nến. So với hướng nến để biết đồng thuận hay hấp thụ.</p></div>
+    <div class="card"><span class="en">Cumulative Delta</span><h5>CVD</h5><p>Delta cộng dồn trong phiên. Giá đến level bằng lực mạnh dần hay yếu dần.</p></div>
+    <div class="card"><span class="en">Context</span><h5>TPO + VWAP</h5><p>Ở đâu thì đáng giao dịch, và nên fade hay break. Không phải orderflow nhưng quyết định orderflow có ý nghĩa hay không.</p></div>
+  </div>
+  <h3>Trình tự 5 pha khi giá tới key level</h3>
+  <div class="flow">
+    <div class="row"><div class="ph"><b>1. Trước khi tới</b><span>15–20 tick trước level</span></div><div class="tl ctx"><b>VWAP: cổng lọc</b><span>Level nằm đâu so với VWAP RTH và band σ. Chọn giả thuyết fade hay break, ước R:R.</span></div></div>
+    <div class="row"><div class="ph"><b>2. Tiếp cận</b><span>5–10 tick cuối</span></div><div class="tl of"><b>CVD + tốc độ tape</b><span>Giá đến level bằng lực mạnh dần hay yếu dần.</span></div></div>
+    <div class="row"><div class="ph"><b>3. Chạm level</b><span>trong vùng TPO</span></div><div class="tl of"><b>DOM + Tape</b><span>Lệnh chờ tại level giữ hay rút. Lệnh lớn đập vào có đẩy được giá không.</span></div></div>
+    <div class="row"><div class="ph"><b>4. Trigger</b><span>nến M1 đã đóng</span></div><div class="tl tr"><b>Footprint</b><span>Absorption, delta flip hoặc stacked imbalance. Không có trigger thì không vào.</span></div></div>
+    <div class="row"><div class="ph"><b>5. Quản lý</b><span>sau khi vào</span></div><div class="tl mg"><b>Stop ngoài vùng tín hiệu, target VWAP hoặc level kế tiếp</b><span>Thoát khi điều kiện vô hiệu xuất hiện.</span></div></div>
+  </div>
+</section>
+
+<!-- ============ NỀN TẢNG ============ -->
+<section class="ch" id="ch-nen-tang" data-chapter="nen-tang">
+  <div class="chh"><span class="no">01</span><h2>Nền tảng: lệnh market, lệnh limit và phiên đấu giá</h2>
+  <p>Mọi công cụ orderflow đều đo một trong hai thứ: lệnh đang chờ (passive) hoặc lệnh đã khớp do bên chủ động gây ra (aggressive).</p></div>
+  <p class="def"><b>Orderflow</b> là việc đọc dòng lệnh thực tế đang khớp và đang chờ để biết bên nào đang kiểm soát giá tại một mức cụ thể, thay vì chỉ nhìn kết quả là cây nến.</p>
+  <div class="grid g2" style="margin-top:12px">
+    <div class="card"><h5>Lệnh limit = passive</h5><p>Treo sẵn ở một giá, chờ người khác khớp vào. Limit mua nằm ở bid, limit bán nằm ở ask. Hiện trên DOM. Có thể rút bất cứ lúc nào, nên có thể là spoof.</p></div>
+    <div class="card"><h5>Lệnh market = aggressor</h5><p>Chấp nhận giá của bên kia để khớp ngay. Market mua khớp vào ask, market bán khớp vào bid. Hiện trên tape và footprint sau khi khớp.</p></div>
+  </div>
+  <h3>Giá di chuyển như thế nào</h3>
+  <ol class="steps">
+    <li><span>Giá chỉ lên một tick khi toàn bộ lệnh limit bán ở ask hiện tại bị market mua ăn hết, hoặc bị người đặt rút đi.</span></li>
+    <li><span>Vì vậy lệnh market là bên <b>tạo chuyển động</b>, lệnh limit là bên <b>cản hoặc cho qua</b>.</span></li>
+    <li><span>Market mua nhiều mà giá không lên nghĩa là có limit bán lớn hấp thụ: đây là gốc của khái niệm absorption.</span></li>
+    <li><span>Giá đi nhanh qua vùng ít lệnh chờ (LVN), chậm lại ở vùng nhiều lệnh và nhiều volume (HVN). Đây là phần nối giữa orderflow và TPO/volume profile.</span></li>
+  </ol>
+  <h3>Hai kiểu hoạt động theo Auction Market Theory</h3>
+  <div class="grid g2">
+    <div class="card"><h5>Initiative</h5><p>Bên chủ động đẩy giá ra khỏi vùng giá trị (value) và được chấp nhận. Orderflow: stacked imbalance, CVD xác nhận, tape nhanh. Phù hợp playbook <b>Break</b>.</p></div>
+    <div class="card"><h5>Responsive</h5><p>Giá ra khỏi value bị đẩy ngược về. Orderflow: absorption, exhaustion, divergence, delta flip. Phù hợp playbook <b>Fade</b>.</p></div>
+  </div>
+  <div class="qz-slot" data-qz="tools:nen" data-title="Kiểm tra nhanh · Nền tảng"></div>
+</section>
+
+<!-- ============ DOM ============ -->
+<section class="ch" id="ch-dom" data-chapter="dom">
+  <div class="chh"><span class="no">02</span><h2>DOM: sổ lệnh</h2><p>ATAS: Smart DOM. Dùng ở pha 3 khi giá chạm level.</p></div>
+  <p class="def"><b>DOM (Depth of Market)</b> hiển thị số hợp đồng limit đang treo ở từng mức giá quanh giá hiện tại: bên bid (lệnh mua chờ) và bên ask (lệnh bán chờ). DOM cho biết thanh khoản bị động, chưa phải là giao dịch đã xảy ra.</p>
+  <h3>Khái niệm</h3>
+  <div class="grid g3">
+    <div class="card"><h5>Stacking</h5><p>Lệnh chờ dồn thêm tại một mức khi giá tiến lại gần. Có người muốn bảo vệ mức đó.</p></div>
+    <div class="card"><h5>Pulling</h5><p>Lệnh chờ rút đi ngay trước khi giá chạm. Đường trống cho giá đi qua.</p></div>
+    <div class="card"><h5>Wall (tường)</h5><p>Mức có size lớn bất thường so với các mức xung quanh. Chỉ có ý nghĩa khi có volume khớp vào mà vẫn đứng.</p></div>
+    <div class="card"><h5>Spoof</h5><p>Lệnh lớn đặt để tạo ấn tượng rồi rút trước khi bị khớp. Lý do không được tin DOM một mình.</p></div>
+    <div class="card"><h5>Iceberg / refill</h5><p>Lệnh chỉ hiện một phần. Volume khớp tại giá vượt xa size hiển thị, size liên tục được nạp lại.</p></div>
+    <div class="card"><h5>Heatmap</h5><p>Lịch sử DOM theo thời gian (ATAS: DOM Levels). Thấy tường tồn tại bao lâu và có bị rút trước khi giá tới hay không.</p></div>
+  </div>
+  <h3>Cách đọc</h3>
+  <ol class="steps">
+    <li><span>Chỉ nhìn DOM khi giá còn vài tick tới level đã chọn. Không dùng DOM để tìm setup.</span></li>
+    <li><span>So size tại level với lúc giá còn xa: tăng là stacking, giảm mà không có volume khớp là pulling.</span></li>
+    <li><span>Đối chiếu với tape: size giảm <b>do khớp</b> (tường bị ăn) khác hoàn toàn size giảm <b>do rút</b>.</span></li>
+    <li><span>Nhìn cả phía đối diện: fade long cần ask phía trên mỏng đi; break long cần bid phía dưới dồn theo giá.</span></li>
+  </ol>
+  <h3>Ví dụ</h3>
+  <div class="grid g2">
+    <div class="ex"><div class="t">A. Stacking: level giữ</div><div class="vz pad"><table class="t dom" id="domA"></table></div>
+      <p class="cap">VAL 25,410.50. Lúc T1 giá còn cách 6 tick, bid tại level 140. Lúc T2 giá chạm, bid tăng lên <b>360</b> dù đã có volume khớp vào; ask phía trên giảm. Ủng hộ <b>fade long</b> nếu footprint cho trigger.</p></div>
+    <div class="ex"><div class="t">B. Pulling: level vỡ</div><div class="vz pad"><table class="t dom" id="domB"></table></div>
+      <p class="cap">Cùng VAL. Lúc T1 bid tại level 300. Lúc T2, khi giá còn 1 tick, bid chỉ còn <b>18</b> mà gần như không có volume khớp: lệnh đã bị rút. Không fade; chuẩn bị cho kịch bản <b>break xuống</b>.</p></div>
+  </div>
+  <div class="ex"><div class="t">C. Iceberg tại bid</div><div class="vz pad"><table class="t" id="ice"></table></div>
+    <p class="cap">DOM luôn hiện 12 lot tại 25,410.50 nhưng tape cho thấy đã khớp 186 lot ở giá này và giá chưa thủng. Có người chơi lớn đang hấp thụ bằng lệnh ẩn. Iceberg ở cực trị thường giữ giá; iceberg bị phá thủng thường dẫn tới chuyển động mạnh theo hướng phá.</p></div>
+  <h3>Nên và không nên</h3>
+  <div class="do-dont">
+    <div class="card"><h5>Nên</h5><ul><li>Dùng DOM để tinh chỉnh entry tại level đã chọn từ trước.</li><li>Luôn xác nhận bằng tape: có khớp thật không.</li><li>Ghi nhận phía đối diện mỏng hay dày.</li></ul></div>
+    <div class="card"><h5>Không nên</h5><ul><li>Vào lệnh chỉ vì thấy một tường lớn.</li><li>Nhìn DOM quanh tin 8:30, 10:00 ET hoặc cú spike lúc 9:30.</li><li>Nhìn DOM liên tục cả phiên, gây mệt và overtrade.</li></ul></div>
+  </div>
+  <div class="qz-slot" data-qz="tools:dom" data-title="Kiểm tra nhanh · DOM"></div>
+</section>
+
+<!-- ============ TAPE ============ -->
+<section class="ch" id="ch-tape" data-chapter="tape">
+  <div class="chh"><span class="no">03</span><h2>Tape: băng giao dịch</h2><p>ATAS: Smart Tape (cài đặt 2 cột Price + Volume, màu theo bên khớp). Dùng ở pha 2 và 3.</p></div>
+  <p class="def"><b>Tape (Time &amp; Sales)</b> liệt kê từng giao dịch đã khớp: giá, khối lượng, bên chủ động (mua tại ask hay bán tại bid) và thời gian. Smart Tape gộp các lệnh bị chia nhỏ khớp cùng lúc thành một dòng để thấy kích thước thật.</p>
+  <h3>Khái niệm</h3>
+  <div class="grid g3">
+    <div class="card"><h5>Print</h5><p>Một dòng trên băng. Màu xanh: mua chủ động khớp tại ask. Màu đỏ: bán chủ động khớp tại bid.</p></div>
+    <div class="card"><h5>Lọc size</h5><p>Chỉ hiện lệnh từ một ngưỡng trở lên. Đặt theo phân vị của phiên (ví dụ top 1%), chỉnh riêng RTH và ETH.</p></div>
+    <div class="card"><h5>Big trades</h5><p>Lệnh vượt ngưỡng size, vẽ bong bóng lên chart. Big trades ở cực trị mà giá không đi tiếp: phía đó bị kẹt.</p></div>
+    <div class="card"><h5>Speed of tape</h5><p>Số giao dịch mỗi giây. Bùng nổ khi phá range là ignition; bùng nổ ở cuối nhịp dài là climax.</p></div>
+    <div class="card"><h5>Absorption trên tape</h5><p>Lệnh lớn liên tục đập vào cùng một giá nhưng giá không đi tiếp.</p></div>
+    <div class="card"><h5>Initiative trên tape</h5><p>Chuỗi lệnh lớn một phía, giá nhảy qua nhiều mức liên tiếp.</p></div>
+  </div>
+  <h3>Cách đọc</h3>
+  <ol class="steps">
+    <li><span>Trong 5–10 tick cuối trước level: tốc độ chậm dần ủng hộ fade, nhanh dần ủng hộ break.</span></li>
+    <li><span>Khi chạm level: hỏi một câu duy nhất, lệnh lớn đập vào có làm giá đi tiếp không.</span></li>
+    <li><span>Ghép với DOM: lệnh lớn khớp nhưng size hiển thị không giảm, nghĩa là có refill.</span></li>
+    <li><span>Sau hấp thụ, chờ chuỗi lệnh lớn phía ngược lại xuất hiện, đó là dấu hiệu đổi phe.</span></li>
+  </ol>
+  <h3>Ví dụ</h3>
+  <div class="grid g2">
+    <div class="ex"><div class="t">A. Absorption tại VAL</div><div class="vz pad"><table class="t" id="tapeA"></table></div>
+      <p class="cap">Ba lệnh bán 48, 62, 55 lot liên tiếp tại 25,411.00 (tô vàng) mà giá không giảm. Sau đó lệnh mua 31 và 24 lot đẩy giá lên (tô xanh). Bên bán bị hấp thụ, ủng hộ fade long.</p></div>
+    <div class="ex"><div class="t">B. Initiative phá VAH</div><div class="vz pad"><table class="t" id="tapeB"></table></div>
+      <p class="cap">Chuỗi lệnh mua 40–70 lot trong chưa tới 1 giây, giá nhảy 4 tick qua 25,430.00. Khi retest, chỉ có lệnh bán 3–6 lot. Ủng hộ break long.</p></div>
+  </div>
+  <h3>Nên và không nên</h3>
+  <div class="do-dont">
+    <div class="card"><h5>Nên</h5><ul><li>Luôn bật lọc size, nếu không băng NQ chạy quá nhanh để đọc.</li><li>So tốc độ với mức nền cùng khung giờ.</li><li>Đọc tape cùng lúc với DOM tại level.</li></ul></div>
+    <div class="card"><h5>Không nên</h5><ul><li>Coi một lệnh lớn đơn lẻ là tín hiệu.</li><li>Đọc tape giữa range khi không có level.</li><li>Tin tốc độ tăng vọt lúc ra tin là tín hiệu.</li></ul></div>
+  </div>
+  <div class="qz-slot" data-qz="tools:tape" data-title="Kiểm tra nhanh · Tape"></div>
+</section>
+
+<!-- ============ FOOTPRINT ============ -->
+<section class="ch" id="ch-footprint" data-chapter="footprint">
+  <div class="chh"><span class="no">04</span><h2>Footprint: cluster chart</h2><p>ATAS: Cluster chart, Bid × Ask, Imbalance. Dùng ở pha 4, chỉ đọc trên nến M1 đã đóng.</p></div>
+  <p class="def"><b>Footprint</b> tách mỗi cây nến thành từng mức giá và cho biết tại mỗi mức có bao nhiêu volume khớp do bán chủ động (cột bid, bên trái) và mua chủ động (cột ask, bên phải). Nó cho thấy cây nến được tạo ra như thế nào.</p>
+  <h3>Giải phẫu một cây nến footprint</h3>
+  <p>Cây nến mẫu dưới đây là một nến M1 tăng. Mỗi số tròn trên hình ứng với một thành phần trong bảng bên cạnh; cột cuối là giá trị đọc được từ chính cây nến này.</p>
+  <div class="anat-wrap">
+    <div class="vz" id="anat"></div>
+    <ol class="anat-list">
+      <li><i>1</i><div><b>Đỉnh nến (High)</b><span>Mức giá cao nhất có giao dịch. Đỉnh có cả bid và ask khác 0 là unfinished auction, giá hay quay lại thăm.</span></div><em>25,412.25 · 6 × 18 · unfinished</em></li>
+      <li><i>2</i><div><b>Đáy nến (Low)</b><span>Mức giá thấp nhất có giao dịch. Đáy có 0 ở phía bid là finished auction: không còn người bán chủ động bên dưới.</span></div><em>25,410.75 · 12 × 9 · unfinished</em></li>
+      <li><i>3</i><div><b>Thân và râu</b><span>Thanh dọc bên trái. Phần sáng là thân, từ giá mở (Open) tới giá đóng (Close); phần tối là râu. Thân xanh xám là nến tăng, xám là nến giảm.</span></div><em>Open 25,411.00 → Close 25,412.25, đóng tại đỉnh</em></li>
+      <li><i>4</i><div><b>Trục giá</b><span>Mỗi hàng là một mức giá: 1 tick (0.25 điểm) trên NQ, hoặc một nhóm tick nếu bật gộp hàng.</span></div><em>7 mức giá, 1 tick mỗi hàng</em></li>
+      <li><i>5</i><div><b>Cột bid (trái)</b><span>Volume do người bán chủ động khớp vào giá bid (lệnh market sell).</span></div><em>Σ bid = 174</em></li>
+      <li><i>6</i><div><b>Cột ask (phải)</b><span>Volume do người mua chủ động khớp vào giá ask (lệnh market buy).</span></div><em>Σ ask = 411</em></li>
+      <li><i>7</i><div><b>Imbalance (số trắng đậm)</b><span>Ask tại một mức gấp từ 3 lần bid ở mức thấp hơn 1 tick (hoặc ngược lại cho phía bán), mỗi ô tối thiểu 20 lot.</span></div><em>118 vs 35 = 337% · 40 vs 12 = 333%</em></li>
+      <li><i>8</i><div><b>POC của nến (khung cam)</b><span>Mức có tổng volume lớn nhất trong nến. POC ở giữa thân: giá được chấp nhận; POC ở đuôi nến: giá bị từ chối ở đó.</span></div><em>25,411.50 · 41 × 118 = 159</em></li>
+      <li><i>9</i><div><b>Thanh volume và delta mức giá</b><span>Chiều dài là volume tại mức đó (bid + ask). Màu xanh khi delta mức dương, xám khi âm. Số trên thanh là delta mức: ask − bid.</span></div><em>Tại POC: 118 − 41 = +77</em></li>
+      <li><i>10</i><div><b>Delta nến</b><span>Tổng ask trừ tổng bid của cả nến: lực mua chủ động ròng.</span></div><em>411 − 174 = +237</em></li>
+      <li><i>11</i><div><b>Delta/Volume (Delta%)</b><span>Delta chia volume nến. Cho biết một phía áp đảo đến mức nào, không phụ thuộc nến to hay nhỏ.</span></div><em>237 / 585 = 40.5%, ATAS làm tròn 41%</em></li>
+      <li><i>12</i><div><b>Volume nến</b><span>Tổng mọi hợp đồng khớp trong nến: Σ bid + Σ ask.</span></div><em>174 + 411 = 585</em></li>
+    </ol>
+  </div>
+  <div class="grid g3" style="margin-top:12px">
+    <div class="card"><h5>Value area của nến</h5><p>70% volume của nến quanh POC. ATAS có thể tô vùng này trong cluster. Ở nến mẫu: 25,411.25 – 25,412.00. Giá đóng ngoài value area của nến cho thấy bên đẩy giá mạnh tới cuối nến.</p></div>
+    <div class="card"><h5>Max delta / Min delta</h5><p>Delta cao nhất và thấp nhất đạt được trong lúc nến đang chạy (Cluster Statistic). Không nhìn được trên nến đã đóng, nhưng cho biết lực bên nào đã bị đảo ngược trong nến.</p></div>
+    <div class="card"><h5>Trades và thời gian</h5><p>Số giao dịch và giờ của nến. Volume lớn với ít trades là lệnh lớn; volume lớn với rất nhiều trades là đám đông lệnh nhỏ.</p></div>
+  </div>
+
+  <h3>Delta và Delta%</h3>
+  <p class="def"><b>Delta</b> = Σ ask − Σ bid, đơn vị hợp đồng: lực mua chủ động ròng trong nến. <b>Delta%</b> = Delta ÷ Volume × 100, chạy từ −100% đến +100%: tỷ lệ áp đảo của một phía. ATAS gọi Delta% là <b>Delta/Volume</b> trong Cluster Statistic.</p>
+  <div class="grid g2" style="margin-top:12px">
+    <div class="vz pad"><table class="t" id="dcalc"></table></div>
+    <div>
+      <h4>Cách tính từng bước với nến mẫu</h4>
+      <ol class="steps">
+        <li><span>Tính delta từng mức: ask − bid. Đây là số trên thanh ngang của ATAS.</span></li>
+        <li><span>Cộng delta các mức, hoặc lấy Σ ask − Σ bid: 411 − 174 = <b>+237</b>.</span></li>
+        <li><span>Volume nến = Σ bid + Σ ask = <b>585</b>.</span></li>
+        <li><span>Delta% = 237 ÷ 585 = <b>40.5%</b>. Bên mua chủ động chiếm khoảng 70% volume (411/585), bên bán khoảng 30%.</span></li>
+      </ol>
+      <p style="font-size:14px;color:var(--muted)">Mẹo: Delta% = (tỷ lệ ask − tỷ lệ bid). 70% − 30% = 40%.</p>
+    </div>
+  </div>
+  <h4 style="margin-top:18px">Thang đọc Delta%</h4>
+  <div class="dscale">
+    <div class="z s3"><b>≤ −30%</b><span>Bán áp đảo một phía</span></div>
+    <div class="z s2"><b>−30 … −15%</b><span>Bán rõ ràng</span></div>
+    <div class="z s1"><b>−15 … −5%</b><span>Nghiêng bán</span></div>
+    <div class="z s0"><b>−5 … +5%</b><span>Cân bằng</span></div>
+    <div class="z b1"><b>+5 … +15%</b><span>Nghiêng mua</span></div>
+    <div class="z b2"><b>+15 … +30%</b><span>Mua rõ ràng</span></div>
+    <div class="z b3"><b>≥ +30%</b><span>Mua áp đảo một phía</span></div>
+  </div>
+  <p style="font-size:13.5px;color:var(--muted);margin-top:8px">Ngưỡng là quy ước của hệ thống, chỉnh lại sau khi backtest. Ngưỡng ±15% là mức dùng cho trigger delta flip.</p>
+  <h4 style="margin-top:18px">Vì sao cần Delta% chứ không chỉ Delta</h4>
+  <div class="vz pad"><table class="t" id="dcomp"></table></div>
+  <p style="margin-top:10px">Nến A và B cùng delta +210 nhưng ý nghĩa khác hẳn. Nến A là nến mở cửa volume lớn, +210 chỉ là 5%: hai bên gần như cân bằng. Nến B là nến giờ trưa volume nhỏ, +210 là 34%: bên mua áp đảo. Delta tuyệt đối dùng để so với chính nó trong cùng khung giờ; Delta% dùng để so giữa các nến khác volume.</p>
+  <div class="do-dont">
+    <div class="card"><h5>Đọc đúng</h5><ul><li>Luôn đọc Delta% cùng hướng nến: delta% ngược hướng thân nến tại level là dấu hiệu hấp thụ.</li><li>Delta% lớn ở nến phá level, cùng hướng phá: initiative.</li><li>Delta% từng mức (ví dụ POC: 77 / 159 = 48%) cho biết mức nào bị một phía chiếm.</li></ul></div>
+    <div class="card"><h5>Dễ đọc sai</h5><ul><li>Delta% rất lớn ở cuối một nhịp dài có thể là climax, không phải lực tiếp diễn.</li><li>Delta% chỉ là kết quả cuối nến; nến đóng +5% có thể từng đạt +40% rồi bị đảo (xem max delta).</li><li>So delta tuyệt đối giữa 9:30 và 12:00 là so sai.</li></ul></div>
+  </div>
+
+  <h3>Imbalance chéo</h3>
+  <div class="grid g2">
+    <div class="vz pad"><svg viewBox="0 0 360 150" role="img" aria-label="So sánh chéo ask với bid một tick thấp hơn">
+      <text x="10" y="20" font-size="11" fill="#7E8287" font-family="JetBrains Mono,monospace">Giá</text><text x="150" y="20" font-size="11" fill="#7E8287" font-family="JetBrains Mono,monospace">Bid</text><text x="240" y="20" font-size="11" fill="#7E8287" font-family="JetBrains Mono,monospace">Ask</text>
+      <text x="10" y="58" font-size="13" fill="#A3A6AA" font-family="JetBrains Mono,monospace">25,412.25</text><text x="180" y="58" text-anchor="end" font-size="15" fill="#A3A6AA" font-family="Segoe UI,Arial">22</text><text x="240" y="58" font-size="15" font-weight="700" fill="#FFFFFF" font-family="Segoe UI,Arial">120</text>
+      <text x="10" y="104" font-size="13" fill="#A3A6AA" font-family="JetBrains Mono,monospace">25,412.00</text><text x="180" y="104" text-anchor="end" font-size="15" fill="#A3A6AA" font-family="Segoe UI,Arial">30</text><text x="240" y="104" font-size="15" fill="#A3A6AA" font-family="Segoe UI,Arial">41</text>
+      <path d="M186 98 L236 60" stroke="#E7B04B" stroke-width="2" fill="none"/><path d="M228 60 L236 60 L234 68" stroke="#E7B04B" stroke-width="2" fill="none"/>
+      <text x="10" y="138" font-size="12" fill="#E7B04B" font-family="JetBrains Mono,monospace">120 / 30 = 400% → imbalance mua tại 25,412.25</text>
+    </svg></div>
+    <div>
+      <p>Imbalance không so bid và ask trên cùng một hàng. Người mua chủ động tại giá P khớp với người bán ở ask P, còn người bán chủ động khớp ở bid P − 1 tick. Vì vậy:</p>
+      <ul class="dots"><li><b>Imbalance mua</b> tại P: ask(P) ≥ 3 × bid(P − 1 tick).</li><li><b>Imbalance bán</b> tại P: bid(P) ≥ 3 × ask(P + 1 tick).</li><li>Thêm ngưỡng volume tối thiểu (ví dụ 20 lot) để bỏ các ô 9 × 1 vô nghĩa.</li><li>Trên NQ có thể gộp 2–4 tick mỗi hàng để dễ đọc.</li></ul>
+    </div>
+  </div>
+  <h3>Các mẫu hình cơ bản</h3>
+  <div class="grid g3">
+    <div class="card"><h5>Stacked imbalance</h5><p>Từ 3 mức imbalance liên tiếp cùng phía. Vùng initiative, thường thành hỗ trợ/kháng cự mới khi retest.</p></div>
+    <div class="card"><h5>Absorption</h5><p>1–2 mức cực trị có volume phía tấn công lớn bất thường, giá không đi tiếp và nến đóng ngược lại.</p></div>
+    <div class="card"><h5>Exhaustion</h5><p>Volume phía tấn công nhỏ dần về cực trị, cực trị có 0 ở phía tấn công. Không còn ai đuổi giá.</p></div>
+    <div class="card"><h5>Unfinished auction</h5><p>Cực trị nến còn volume ở cả bid và ask. Giá hay quay lại sửa. Dùng làm target.</p></div>
+    <div class="card"><h5>Finished auction</h5><p>Cực trị có 0 ở phía tấn công (ví dụ đỉnh có ask = 0). Đấu giá phía đó đã kết thúc.</p></div>
+    <div class="card"><h5>Trapped traders</h5><p>Imbalance hoặc big trades dồn ở cực trị rồi giá đóng ngược lại. Phe đó bị kẹt, cắt lỗ sẽ đẩy giá nhanh hơn.</p></div>
+    <div class="card"><h5>Imbalance failure</h5><p>Giá đóng xuyên qua vùng stacked theo chiều ngược. Vùng stacked cũ lật thành kháng cự/hỗ trợ.</p></div>
+    <div class="card"><h5>P-shape / b-shape</h5><p>Volume dồn ở phần trên (P) hoặc dưới (b), phần còn lại mỏng. Thường là short covering hoặc long liquidation.</p></div>
+    <div class="card"><h5>POC nến</h5><p>POC ở đầu đuôi nến: giá bị từ chối ở đó. POC ở thân: giá được chấp nhận.</p></div>
+  </div>
+  <h3>3 trigger được phép dùng để vào lệnh</h3>
+  <dl class="kv">
+    <div><dt>Absorption</dt><dd>1–2 mức cực trị có volume phía tấn công từ 60 lot và gấp từ 2.5 lần trung bình các mức khác trong nến. Giá không đi tiếp, nến đóng ở nửa đối diện.</dd></div>
+    <div><dt>Delta flip</dt><dd>Nến trước delta âm rõ (từ khoảng 15% volume nến), nến sau dương rõ và đóng vượt đỉnh thân nến trước. Ngược lại khi short. Chỉ tính khi xảy ra tại level.</dd></div>
+    <div><dt>Stacked</dt><dd>Từ 3 mức liên tiếp imbalance ≥ 300% cùng phía, mỗi mức tối thiểu 20 lot. Đánh theo hướng stacked khi retest, không đuổi giá.</dd></div>
+    <div class="bad"><dt>Không dùng</dt><dd>Một ô imbalance lẻ, nến delta lớn nhưng không ở level, nến đang chạy chưa đóng.</dd></div>
+  </dl>
+  <div class="qz-slot" data-qz="tools:fp" data-title="Kiểm tra nhanh · Footprint & kịch bản"></div>
+</section>
+
+<!-- ============ DELTA ============ -->
+<section class="ch" id="ch-delta" data-chapter="delta">
+  <div class="chh"><span class="no">05</span><h2>Delta và CVD</h2><p>ATAS: Delta, Cumulative Delta, Cluster Statistic. CVD dùng ở pha 2, delta nến là một phần của trigger ở pha 4.</p></div>
+  <p class="def"><b>Delta</b> = tổng volume khớp ở ask − tổng volume khớp ở bid, tức mua chủ động trừ bán chủ động. <b>CVD (Cumulative Volume Delta)</b> là delta cộng dồn từ đầu phiên.</p>
+  <h3>Các con số trong Cluster Statistic</h3>
+  <div class="grid g2">
+    <div class="vz pad"><table class="t" id="cst"></table></div>
+    <dl class="kv">
+      <div><dt>Delta</dt><dd>Σ ask − Σ bid của nến.</dd></div>
+      <div><dt>Delta/Vol</dt><dd>|Delta| / Volume. Từ khoảng 15% trở lên là delta rõ ràng; dưới 5% là cân bằng.</dd></div>
+      <div><dt>Max / Min Δ</dt><dd>Delta cao nhất và thấp nhất trong lúc nến chạy. Nến 5: max +410 nhưng đóng +35, bên mua đẩy rồi bị đảo ngay trong nến.</dd></div>
+      <div><dt>Volume</dt><dd>Vượt xa trung bình ở cực trị: climax hoặc absorption.</dd></div>
+    </dl>
+  </div>
+  <h3>Delta so với hướng nến</h3>
+  <div class="quad">
+    <div></div><div class="h">Delta dương</div><div class="h">Delta âm</div>
+    <div class="r">Nến tăng</div>
+    <div class="c q-g"><b>Đồng thuận tăng</b>Mua chủ động đẩy giá lên. Ủng hộ tiếp diễn, xác nhận break long.</div>
+    <div class="c q-a"><b>Bán bị hấp thụ</b>Bên bán đập nhiều hơn mà giá vẫn tăng. Tại hỗ trợ: dấu hiệu fade long.</div>
+    <div class="r">Nến giảm</div>
+    <div class="c q-a"><b>Mua bị hấp thụ</b>Bên mua đập nhiều hơn mà giá vẫn giảm. Tại kháng cự: dấu hiệu fade short.</div>
+    <div class="c q-r"><b>Đồng thuận giảm</b>Bán chủ động đẩy giá xuống. Xác nhận break short.</div>
+  </div>
+  <p style="margin-top:12px">Hai ô vàng chỉ có giá trị khi xảy ra tại key level. Giữa range, delta ngược hướng nến thường là nhiễu.</p>
+  <h3>CVD divergence</h3>
+  <div class="grid g2">
+    <div class="vz pad"><svg id="cvd" viewBox="0 0 640 320" role="img" aria-label="Giá tạo đỉnh cao hơn trong khi CVD tạo đỉnh thấp hơn"></svg></div>
+    <div>
+      <p>Giá tạo đỉnh cao hơn (HH) nhưng CVD tạo đỉnh thấp hơn (LH): người mua chủ động đang yếu đi, giá được kéo lên chủ yếu do limit sell rút.</p>
+      <ul class="dots"><li>Fade: muốn thấy divergence khi giá vào level.</li><li>Break: muốn CVD tạo đỉnh/đáy mới cùng giá. Có divergence thì không đánh break.</li><li>Trong trend mạnh divergence kéo dài nhiều nhịp; chỉ xét tại swing hoặc level.</li><li>Reset CVD nhất quán. Reset lúc 9:30 ET trùng anchor của VWAP RTH.</li></ul>
+    </div>
+  </div>
+  <h3>Delta flip</h3>
+  <p>Delta flip là khi delta nến đổi dấu rõ ràng ngay tại level và nến sau đóng vượt thân nến trước. Đây là phiên bản nhanh của CVD divergence trên một hai nến. Xem ví dụ "Delta divergence trên nến" trong 13 kịch bản.</p>
+  <div class="qz-slot" data-qz="tools:delta" data-title="Kiểm tra nhanh · Delta & CVD"></div>
+</section>
+
+<!-- ============ KỊCH BẢN ============ -->
+<section class="ch" id="ch-kich-ban" data-chapter="kich-ban">
+  <div class="chh"><span class="no">06</span><h2>13 kịch bản footprint</h2><p>Mỗi kịch bản gồm bối cảnh cần có, footprint 3 nến kiểu ATAS, cách đọc, kế hoạch và điều kiện vô hiệu.</p></div>
+  <div class="legend" style="margin-bottom:14px">
+    <span><i class="sw" style="background:rgba(120,32,44,.6)"></i>Key level</span>
+    <span><i class="sw" style="border:2px dashed #4CC9F0"></i>Absorption</span>
+    <span><i class="sw" style="border:2px dotted #E7B04B"></i>Exhaustion</span>
+    <span><i class="sw" style="border:2px dashed #DCE3EE"></i>Unfinished auction</span>
+    <span><i class="sw" style="border:2px solid #4C9BF0"></i>Phe bị kẹt</span>
+    <span><i class="sw" style="border:1.5px solid #E07B39"></i>POC nến</span>
+  </div>
+  <div class="sc-grid" id="scs"></div>
+</section>
+
+<!-- ============ KẾT HỢP ============ -->
+<section class="ch" id="ch-ket-hop" data-chapter="ket-hop">
+  <div class="chh"><span class="no">07</span><h2>Kết hợp tại key level TPO</h2><p>VWAP là cổng lọc, footprint là trigger bắt buộc, CVD, DOM và tape quyết định hạng setup.</p></div>
+  <div class="grid g2">
+    <div class="ex"><div class="t">Fade tại level <span class="pill p-neu">Responsive</span></div>
+      <dl class="kv">
+        <div><dt>VWAP</dt><dd>Level nằm phía ngoài VWAP, lý tưởng trùng band ±1σ/±2σ. Khoảng tới VWAP là TP1, phải ≥ 1.5 lần stop.</dd></div>
+        <div><dt>CVD</dt><dd>Không tạo đỉnh/đáy mới cùng giá khi vào level.</dd></div>
+        <div><dt>DOM</dt><dd>Lệnh chờ tại level giữ hoặc dồn thêm; phía đối diện mỏng đi.</dd></div>
+        <div><dt>Tape</dt><dd>Lệnh lớn đập vào level nhưng giá không đi tiếp, có refill.</dd></div>
+        <div><dt>Footprint</dt><dd>Absorption, delta flip hoặc stacked ngược hướng trên nến xác nhận.</dd></div>
+        <div class="ok"><dt>Kế hoạch</dt><dd>Vào khi nến trigger đóng hoặc retest. Stop 2–4 tick ngoài vùng absorption. TP1 VWAP/POC, TP2 level TPO kế tiếp.</dd></div>
+        <div class="bad"><dt>Vô hiệu</dt><dd>2 nến M1 đóng xuyên level với delta theo chiều phá: level bị chấp nhận.</dd></div>
+      </dl></div>
+    <div class="ex"><div class="t">Break qua level <span class="pill p-neu">Initiative</span></div>
+      <dl class="kv">
+        <div><dt>VWAP</dt><dd>Giá cùng phía hướng phá so với VWAP, VWAP dốc theo hướng đó. Level không nằm từ band ±2σ trở ra.</dd></div>
+        <div><dt>CVD</dt><dd>Tạo đỉnh/đáy mới cùng giá khi phá, không divergence.</dd></div>
+        <div><dt>DOM</dt><dd>Lệnh chờ tại level bị ăn dần hoặc bị rút; phía sau dồn theo giá.</dd></div>
+        <div><dt>Tape</dt><dd>Chuỗi lệnh lớn xuyên level, tốc độ tăng vọt; khi retest lệnh ngược nhỏ và thưa.</dd></div>
+        <div><dt>Footprint</dt><dd>Stacked theo hướng phá xuyên level, retest sạch hoặc delta flip khi retest.</dd></div>
+        <div class="ok"><dt>Kế hoạch</dt><dd>Limit trong vùng stacked khi retest. Stop sau vùng stacked. Target unfinished, band ±1σ/±2σ, level kế tiếp.</dd></div>
+        <div class="bad"><dt>Vô hiệu</dt><dd>Nến đóng lại trong value với delta ngược: breakout thất bại, chuyển sang fade.</dd></div>
+      </dl></div>
+  </div>
+  <h3>Chấm hạng setup</h3>
+  <div class="ex">
+    <div class="ckl" id="ckl">
+      <label><input type="checkbox" id="k-g"><span>VWAP không ngược giả thuyết, R:R tới TP1 ≥ 1.5<small>Cổng lọc bắt buộc</small></span></label>
+      <label><input type="checkbox" id="k-c"><span>CVD xác nhận<small>Fade: divergence/đi ngang · Break: tạo mới cùng giá</small></span></label>
+      <label><input type="checkbox" id="k-d"><span>DOM xác nhận<small>Fade: lệnh chờ giữ/dồn · Break: lệnh chờ bị ăn/rút</small></span></label>
+      <label><input type="checkbox" id="k-t"><span>Tape xác nhận<small>Fade: lệnh lớn không đẩy được giá · Break: chuỗi lệnh lớn xuyên level</small></span></label>
+      <label><input type="checkbox" id="k-f"><span>Footprint có trigger trên nến M1 đã đóng<small>Bắt buộc</small></span></label>
+      <label><input type="checkbox" id="k-x"><span>Có dấu hiệu đỏ<small>Quanh tin, quá 3 nến chưa trigger, công cụ mâu thuẫn, level chạm lần 3, stop xa hơn TP1</small></span></label>
+    </div>
+    <div class="grade"><span class="g" id="gG">Chờ</span><span class="w" id="gW">Tick theo thứ tự từ trên xuống.</span></div>
+  </div>
+  <dl class="kv" style="margin-top:8px">
+    <div class="ok"><dt>A++</dt><dd>Footprint + VWAP + cả 3 xác nhận. Vào lệnh, size đầy đủ.</dd></div>
+    <div class="ok"><dt>A+</dt><dd>Footprint + VWAP + 2/3 xác nhận. Vào lệnh.</dd></div>
+    <div><dt>B</dt><dd>Chỉ 1/3 xác nhận. Với giới hạn 2–3 lệnh/ngày: bỏ qua.</dd></div>
+    <div class="bad"><dt>Bỏ</dt><dd>Không qua VWAP, có dấu hiệu đỏ, hoặc footprint đơn lẻ.</dd></div>
+  </dl>
+  <div class="qz-slot" data-qz="tools:kh" data-title="Kiểm tra nhanh · Kết hợp tại level"></div>
+</section>
+
+<!-- ============ THUẬT NGỮ ============ -->
+<section class="ch" id="ch-thuat-ngu" data-chapter="thuat-ngu">
+  <div class="chh"><span class="no">08</span><h2>Thuật ngữ</h2></div>
+  <dl class="gl" id="gloss"></dl>
+</section>
+</div>
+<footer class="ui-foot">Dữ liệu minh hoạ · Tên indicator theo ATAS · Màu ATAS dạng #AARRGGBB: histogram delta dương #FF3F7FD9, âm #FF4A4A4A, POC #FFE07B39, key level #6B782C2C</footer>
+</main>
+<script src="assets/js/fp.js?v=3"></script>
+<script src="assets/js/bank-tools.js?v=3"></script>
+<script src="assets/js/bank-levels.js?v=3"></script>
+<script src="assets/js/quiz.js?v=3"></script>
+<script src="assets/js/core.js?v=3"></script>
+<script src="assets/js/tools-page.js?v=3"></script>
+</body>
+</html>
