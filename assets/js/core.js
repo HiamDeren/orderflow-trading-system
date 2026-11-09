@@ -12,10 +12,10 @@ const store={
 
 const NAV=[
   {k:'home',href:'index.html',label:'Tổng quan',sub:'Bảng điều khiển',c:'var(--brand)',icon:'home'},
-  {k:'levels',href:'levels.html',label:'TPO Level',short:'Level',sub:'TPO · VWAP · CVD · Plan',c:'var(--c-levels)',icon:'tpo',chapters:[
+  {k:'levels',href:'levels.html',label:'TPO Level',short:'Level',sub:'TPO · VWAP · EMA · CVD',c:'var(--c-levels)',icon:'tpo',chapters:[
     ['tong-quan','00','Tổng quan'],['nen-tang','01','Nền tảng TPO'],['cau-truc','02','Day & Open types'],
     ['initial-balance','03','Initial Balance'],['levels','04','Level map'],['vwap','05','VWAP RTH'],
-    ['cvd','06','CVD divergence'],['plan','07','Lên plan mỗi ngày']]},
+    ['ema','06','EMA 9/34'],['cvd','07','CVD divergence'],['plan','08','Lên plan mỗi ngày']]},
   {k:'tools',href:'tools.html',label:'Orderflow Tools',short:'Tools',sub:'DOM · Tape · Footprint · Delta',c:'var(--c-tools)',icon:'fp',chapters:[
     ['tong-quan','00','Tổng quan'],['nen-tang','01','Nền tảng'],['thuat-ngu','02','Thuật ngữ'],['footprint','03','Footprint'],
     ['delta','04','Delta & CVD'],['dom','05','DOM'],['tape','06','Tape'],['kich-ban','07','13 kịch bản'],

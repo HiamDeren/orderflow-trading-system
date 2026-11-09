@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#080B10">
 <title>TPO Level · Orderflow System</title>
-<meta name="description" content="TPO, Day & Open types, Level map, VWAP RTH, CVD divergence and the planning routine for NQ.">
+<meta name="description" content="TPO, Day & Open types, Level map, VWAP RTH, EMA 9/34, CVD divergence and the NQ planning routine.">
 <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=12">
-<link rel="stylesheet" href="assets/css/levels.css?v=12">
+<link rel="stylesheet" href="assets/css/app.css?v=13">
+<link rel="stylesheet" href="assets/css/levels.css?v=13"><link rel="stylesheet" href="assets/css/ema.css?v=13">
 </head>
 <body data-page="levels">
 <main class="ui-main">
@@ -28,7 +28,7 @@
     <span class="ui-eyebrow">Course 1 · NQ · RTH 9:30–16:00 ET</span>
     <h1 class="ui-h1">TPO Level</h1>
     <p class="ui-lede">Context from TPO · Confluence from VWAP RTH + CVD · Trigger from orderflow.</p>
-    <div class="facts"><span><b>8</b> chapters</span><span><b>86</b> quiz questions</span><span>Plan Builder</span></div>
+    <div class="facts"><span><b>9</b> chapters</span><span><b>101</b> quiz questions</span><span>Plan Builder</span></div>
     <div class="cta"><a class="ui-btn primary" href="#nen-tang">Start learning →</a><a class="ui-btn" href="plan.en.html">Open Plan Builder</a><a class="ui-btn ghost" href="quiz.en.html#thi-thu">50-question mock exam</a></div>
   </div>
 
@@ -447,10 +447,252 @@ Band    = VWAP ± k·σ,   k = 1, 2, 3</div>
   <div class="qz-slot" data-qz="levels:vwap" data-title="Quiz 05 · VWAP RTH"></div>
 </section>
 
+<!-- ============ 06 EMA ============ -->
+<section class="tab" id="ch-ema" data-chapter="ema">
+  <div class="head">
+    <span class="eyebrow">06 · Add-in confluence #2</span>
+    <h2>EMA 9/34: market state, directional permission and the hold rule</h2>
+    <p class="lead">The EMA is not an entry signal. In your system it does three things: read the <b>state</b> of the market, grant <b>permission</b> to trade a direction, and decide whether to <b>hold or cut</b> the trade. The trigger is still orderflow at a key level. Stack: ICT bias → TPO zone / PD array → EMA state → footprint, delta, CVD.</p>
+  </div>
+  <div class="ema">
+  <div class="chips">
+    <span class="chip"><i style="background:#4CC9F0"></i>EMA 9 · nhanh</span>
+    <span class="chip"><i style="background:#E7B04B"></i>EMA 34 · slow</span>
+    <span class="chip"><i style="background:none;border:1.5px solid #C4B5FD;width:10px;height:10px;border-radius:50%"></i>cross points</span>
+    <span class="chip">Khung: 30s (open) · 1m · 2m</span>
+  </div>
+  <div class="emas" id="ema-stack">
+  <h3>Role of the EMA in the stack</h3>
+  <div class="grid g4">
+    <div class="card"><span class="en">Layer 1 · Context</span><h5>ICT bias / DOL</h5><p>Daily premium/discount, DOL, V-Shape IFVG. Decides the preferred direction of the day.</p></div>
+    <div class="card"><span class="en">Layer 2 · Location</span><h5>TPO zone · PD array</h5><p>VAH/VAL/POC of the 4 profiles, FVG/SIBI/BISI. Decides <b>where</b> to trade.</p></div>
+    <div class="card" style="border-color:rgba(76,201,240,.5)"><span class="en" style="color:#BAE6FD">Layer 3 · State</span><h5>EMA 9/34</h5><p>States S1–S5, directional permission, the hold/cut rule. <b>This chapter.</b></p></div>
+    <div class="card"><span class="en">Layer 4 · Trigger</span><h5>Footprint · Delta · CVD</h5><p>Absorption, delta flip, stacked imbalance at the location. Decides <b>when</b> to enter.</p></div>
+  </div>
+</div>
+<div class="emas" id="ema-dinh-nghia">
+  <div class="chh"><span class="no">6.1</span><h2>Definition &amp; formula</h2>
+  <p>Understand the mechanics to know how much the EMA lags and how fast it reacts. Only then do you know when to trust it.</p></div>
+  <p class="def"><b>EMA (Exponential Moving Average)</b> is a weighted moving average: the newer the candle, the larger its weight; weights decay exponentially into the past and never quite reach 0.</p>
+  <div class="grid g2">
+    <div class="card"><h4>Formula</h4>
+      <p class="mono" style="font-size:15px;color:#F1F5FA">EMA<sub>t</sub> = α · Close<sub>t</sub> + (1 − α) · EMA<sub>t−1</sub><br>α = 2 / (N + 1)</p>
+      <p>Initialisation: the first EMA = SMA of the first N candles. On each new candle the EMA moves toward the close by α × the distance.</p>
+      <p style="margin:0">EMA9 example (α = 0.2): old EMA 27,250, candle closes 27,270 → new EMA = 27,250 + 0.2 × 20 = <b>27.254</b>.</p></div>
+    <div class="card"><h4>Quick read of the two lines</h4>
+      <div class="tw" style="background:none;border:0;padding:0"><table class="t">
+        <tr><th></th><th>EMA 9</th><th>EMA 34</th></tr>
+        <tr><td>α</td><td class="n">0,200</td><td class="n">0,057</td></tr>
+        <tr><td>Newest candle weight</td><td class="n">20%</td><td class="n">5,7%</td></tr>
+        <tr><td>The latest N candles carry</td><td class="n">86,6%</td><td class="n">86,5%</td></tr>
+        <tr><td>Half-life (half the weight)</td><td class="n">3.1 candles</td><td class="n">11.8 candles</td></tr>
+        <tr><td>Average lag</td><td class="n">~4 candles</td><td class="n">~16.5 candles</td></tr>
+      </table></div></div>
+  </div>
+  <div class="ex"><div class="t">Widget: the weight of each candle in the EMA</div>
+    <div class="ctrl"><label>Period N <input type="range" id="wN" min="3" max="60" value="9"><output id="wNo">9</output></label>
+      <button class="btn" data-wn="9">N = 9</button><button class="btn" data-wn="34">N = 34</button></div>
+    <div class="vz" id="wChart"></div>
+    <div class="stats" id="wStats"></div>
+    <p class="cap">Cyan bars are the latest N candles, grey bars are the older tail. Try N = 9, then N = 34: the N candles always carry about 86.5%. That is why “EMA9 ≈ 9-candle average” sounds right but is not exact.</p></div>
+  <h3>How much time does the EMA cover on each timeframe?</h3>
+  <div class="tw"><table class="t">
+    <tr><th>Khung</th><th>When to use</th><th>EMA9 covers</th><th>EMA34 covers</th><th>Consequence</th></tr>
+    <tr><td class="n">30s</td><td>Open, heavy volume, 1m candles too long</td><td class="n">~4.5 min</td><td class="n">~17 min</td><td>Tighter stops, more noise. Only for the first 15–30 minutes of RTH.</td></tr>
+    <tr><td class="n">1m</td><td>Default, Asia session</td><td class="n">9 min</td><td class="n">34 min</td><td>Standard timeframe for backtesting and comparing data.</td></tr>
+    <tr><td class="n">2m</td><td>Slow market, choppy 1m candles</td><td class="n">18 min</td><td class="n">68 min</td><td>Fewer false crosses but later entries. R:R is usually worse.</td></tr>
+  </table></div>
+  <div class="note"><b>Why 9 and 34?</b> 9 tracks short momentum, about one small swing on M1. 34 is a Fibonacci number and represents the trend “backbone” over roughly half an hour. The ~1:4 ratio is wide enough for the gap between the lines to mean something. There is no magic number. What matters is <b>keep it fixed</b> so backtest data stays comparable.</div>
+</div>
+<div class="emas" id="ema-khai-niem">
+  <div class="chh"><span class="no">6.2</span><h2>8 core concepts</h2>
+  <p>Every EMA decision comes down to these 8 questions. Read the chart in order from 1 to 8.</p></div>
+  <div class="grid g4">
+    <div class="card"><span class="en">01 · Close location</span><h5>Where does the candle close?</h5><p>Only counts <b>body close</b> versus EMA9. A wick that pierces and closes back is a reaction, not yet a change.</p></div>
+    <div class="card"><span class="en">02 · Slope</span><h5>Slope</h5><p>A clearly sloping EMA9 means momentum. A flat EMA9 means the market is balancing. EMA34 flipping slope means the underlying trend is changing.</p></div>
+    <div class="card"><span class="en">03 · Stack</span><h5>Order</h5><p>Bull: <span class="mono">Price &gt; 9 &gt; 34</span>. Bear: <span class="mono">Price &lt; 9 &lt; 34</span>. Mixed means transition.</p></div>
+    <div class="card"><span class="en">04 · Spread</span><h5>9–34 spread</h5><p>Widening means the trend is accelerating. Narrowing means momentum is fading. Braided lines mean a range.</p></div>
+    <div class="card"><span class="en">05 · Cross</span><h5>Cross</h5><p>Always comes <b>sau</b> the top/bottom. Use it to confirm the state has changed, not as an entry point.</p></div>
+    <div class="card"><span class="en">06 · Dynamic S/R</span><h5>Dynamic support / resistance</h5><p>Strong trend: price retests EMA9. Normal trend: price returns to the zone between 9 and 34. A close through 34 means the trend is in trouble.</p></div>
+    <div class="card"><span class="en">07 · Extension</span><h5>Overextended</h5><p>When price is unusually far from EMA9, do not chase. Wait for price to come back to the EMA or a PD array.</p></div>
+    <div class="card"><span class="en">08 · Compression</span><h5>Compressed</h5><p>9 and 34 merge and go flat: no signal left. Switch to trading TPO edges with orderflow.</p></div>
+  </div>
+  <div class="ex"><div class="t">Anatomy of an uptrend leg</div>
+    <div class="vz" id="chAnat"></div>
+    <div class="legend"><span><i class="sw" style="background:#4CC9F0"></i>EMA9</span><span><i class="sw" style="background:#E7B04B"></i>EMA34</span><span><i class="swb" style="border:1.5px solid #C4B5FD;border-radius:50%;width:10px;height:10px"></i>cross</span></div>
+    <p class="cap">① Bullish cross confirms the trend <b>sau</b> after price has already run. ② Spread widens, price hugs EMA9: strong trend. ③ Price pulls back into 9–34 and holds: healthy pullback. ④ Spread narrows, EMA9 flattens: momentum is fading.</p></div>
+</div>
+<div class="emas" id="ema-trang-thai">
+  <div class="chh"><span class="no">6.3</span><h2>5 market states (S1–S5)</h2>
+  <p>Before every decision, label the state. Each state has its own default action. If you cannot label it, treat it as S3 or S4 and stand aside.</p></div>
+  <div class="tabs" role="tablist" data-tabs="reg">
+    <button role="tab" aria-selected="true" data-t="s1">S1 Strong trend</button>
+    <button role="tab" aria-selected="false" data-t="s2">S2 Healthy trend</button>
+    <button role="tab" aria-selected="false" data-t="s3">S3 Transition</button>
+    <button role="tab" aria-selected="false" data-t="s4">S4 Range</button>
+    <button role="tab" aria-selected="false" data-t="s5">S5 Reversal</button>
+  </div>
+  <div class="tp on" data-p="s1"><div class="ex">
+    <div class="vz" data-chart="s1"></div>
+    <div class="grid g2"><div class="card"><h4>Sign</h4><ul><li>Correct stack: price &gt; 9 &gt; 34 (or the reverse in a downtrend)</li><li>Spread widening, both lines sloping</li><li>Almost no candle closes on the wrong side of EMA9</li></ul></div>
+    <div class="card"><h4>Action</h4><ul><li><b>Trade with the trend only</b>. Do not fade.</li><li>Entry: retest of EMA9 or an FVG near EMA9 (model E1)</li><li>Do not chase when price is far from EMA9</li></ul></div></div></div></div>
+  <div class="tp" data-p="s2"><div class="ex">
+    <div class="vz" data-chart="s2"></div>
+    <div class="grid g2"><div class="card"><h4>Sign</h4><ul><li>Candles close through EMA9 but price holds the zone between 9 and 34</li><li>EMA34 still sloping, no cross</li><li>Structured pullback (small lower high in an uptrend)</li></ul></div>
+    <div class="card"><h4>Action</h4><ul><li>Wait for price to enter the 9–34 zone <b>aligns</b> TPO zone or FVG</li><li>Trigger with OF: absorption, delta flip (model E2)</li><li>Stop beyond EMA34 and beyond the zone</li></ul></div></div></div></div>
+  <div class="tp" data-p="s3"><div class="ex">
+    <div class="vz" data-chart="s3"></div>
+    <div class="grid g2"><div class="card"><h4>Sign</h4><ul><li>Price stuck between 9 and 34, closing back and forth across EMA9</li><li>EMA9 flips slope, spread narrows fast</li><li>Cross about to happen or just happened</li></ul></div>
+    <div class="card"><h4>Action</h4><ul><li>Reduce size or <b>stand aside</b></li><li>The nearest PD array (SIBI/BISI) decides the direction</li><li>This is when you need more information before acting</li></ul></div></div></div></div>
+  <div class="tp" data-p="s4"><div class="ex">
+    <div class="vz" data-chart="s4"></div>
+    <div class="grid g2"><div class="card"><h4>Sign</h4><ul><li>EMA9 and 34 flat and braided together</li><li>3 or more crosses in 30 candles</li><li>Candles keep closing back and forth across EMA9</li></ul></div>
+    <div class="card"><h4>Action</h4><ul><li><b>Turn the EMA off as a signal.</b> The EMA9 hold/cut rule is off too.</li><li>Trade range edges: VAH/VAL, ON range edges, with OF</li><li>Target the POC/mid-range, do not expect a trend</li></ul></div></div></div></div>
+  <div class="tp" data-p="s5"><div class="ex">
+    <div class="vz" data-chart="s5"></div>
+    <div class="grid g2"><div class="card"><h4>Signs (in order)</h4><ul><li>① Liquidity sweep (BSL/SSL, session high/low)</li><li>② Displacement candle closes back across EMA9</li><li>③ PD array retest (SIBI/IFVG) holds</li><li>④ The 9/34 cross arrives <b>last</b></li></ul></div>
+    <div class="card"><h4>Action</h4><ul><li>Entry at step ③, do not wait for ④ (model E3)</li><li>Stop above the sweep high or above the PD array</li><li>A late cross only helps you hold with more confidence</li></ul></div></div></div></div>
+
+  <h3>Simulator: watch the EMA react to each market type</h3>
+  <div class="ex">
+    <div class="ctrl">
+      <label>Type <select id="simReg"><option value="up">Uptrend</option><option value="down">Downtrend</option><option value="range">Range</option><option value="vtop">V-top reversal</option><option value="walk">Random</option></select></label>
+      <label>Fast <input type="range" id="simF" min="3" max="21" value="9"><output id="simFo">9</output></label>
+      <label>Slow <input type="range" id="simS" min="13" max="89" value="34"><output id="simSo">34</output></label>
+      <button class="btn" id="simNew">New data</button>
+    </div>
+    <div class="vz" id="simChart"></div>
+    <div class="stats" id="simStats"></div>
+    <p class="cap">Pick “Range” and press “New data” a few times, counting crosses. Then pick “Uptrend”. You will see why a range keeps crossing. Try setting Fast to 5: the number of side-switching closes jumps, which is the price of reacting quickly.</p>
+  </div>
+</div>
+<div class="emas" id="ema-entry">
+  <div class="chh"><span class="no">6.4</span><h2>Confirm entry: 4 models + 5-layer checklist</h2>
+  <p>The EMA never pulls the trigger. Every model below needs a location (zone/PD array) and an orderflow trigger. The EMA only answers “am I allowed” and “how long do I hold”.</p></div>
+  <div class="tabs" role="tablist" data-tabs="mdl">
+    <button role="tab" aria-selected="true" data-t="e1">E1 Retest EMA9</button>
+    <button role="tab" aria-selected="false" data-t="e2">E2 Pullback 9–34</button>
+    <button role="tab" aria-selected="false" data-t="e3">E3 Sweep → Reclaim</button>
+    <button role="tab" aria-selected="false" data-t="e4">E4 First pullback sau cross</button>
+  </div>
+  <div class="tp on" data-p="e1"><div class="ex">
+    <div class="t">E1 · Retest EMA9 <span class="pill p-neu">Continuation</span> <span class="pill p-acc">State S1</span></div>
+    <p class="cap"><b>Idea:</b> in a strong trend EMA9 is a dynamic “floor”. Price touching EMA9 for the first time, right where there is an FVG or imbalance, is the lowest-risk entry.</p>
+    <div class="plan"><div class="tr"><b>Trigger</b>Wick touches/pierces EMA9, candle <b>closes back</b> on the right side + OF confirms (absorption at the wick low, delta flip)</div><div class="st"><b>Stop</b>Beyond the nearest swing. If EMA34 is closer, place it beyond EMA34</div><div class="tg"><b>Target</b>Previous swing high/low, next DOL; runner follows the EMA9 ladder</div><div class="iv"><b>Invalidation</b>A close through EMA34, or the spread narrowing fast (S1 turning into S3)</div></div>
+    <p class="cap" style="margin-top:6px"><b>Trap:</b> the 3rd–4th retest in the same leg has much lower odds than the first. Only take the first retest after each new high/low.</p></div></div>
+  <div class="tp" data-p="e2"><div class="ex">
+    <div class="t">E2 · Pullback into 9–34 at a key level <span class="pill p-neu">Continuation</span> <span class="pill p-acc">State S2</span></div>
+    <p class="cap"><b>Idea:</b> a deeper pullback than E1. Price enters the “cloud” between the two EMAs. Only take it when the cloud <b>aligns</b> TPO zone (VAH/VAL/POC) or an M5–M15 FVG.</p>
+    <div class="plan"><div class="tr"><b>Trigger</b>Price enters the cloud + touches the zone, a rejection candle closes back across EMA9 + delta flip / stacked imbalance in the trade direction</div><div class="st"><b>Stop</b>Beyond EMA34 <b>and</b> beyond the zone, whichever is farther</div><div class="tg"><b>Target</b>Prior high/low of the trend; TP1 at 1R or at a structural level</div><div class="iv"><b>Invalidation</b>A decisive close beyond EMA34 and beyond the zone; EMA34 flat or flipping</div></div>
+    <p class="cap" style="margin-top:6px"><b>Fit with the system:</b> this is exactly the “VAH/VAL holds” read from the TPO chapters, with EMA34 added to confirm the underlying trend is still alive.</p></div></div>
+  <div class="tp" data-p="e3"><div class="ex">
+    <div class="t">E3 · Sweep → Reclaim EMA9 → PD array <span class="pill p-short">Reversal</span> <span class="pill p-acc">State S5</span></div>
+    <p class="cap"><b>Idea:</b> the reversal-after-sweep model. After liquidity is swept, a candle closing back across EMA9 signals a momentum shift. A SIBI/BISI that holds is where the order goes.</p>
+    <div class="plan"><div class="tr"><b>Trigger</b>① Sweep BSL/SSL → ② a displacement candle closes back across EMA9 → ③ price retests the SIBI/BISI/IFVG and closes back <b>below EMA9</b> (short) + OF at the PD array</div><div class="st"><b>Stop</b>Above the sweep high (safe) or above the SIBI (tight)</div><div class="tg"><b>Target</b>Next key level: TPO VAL/POC, round number, low of the up leg; runner to the DOL</div><div class="iv"><b>Invalidation</b>Candle closes <b>above the SIBI</b>. At that point the PD array is broken and the bias flips</div></div>
+    <div class="note"><b>When the EMA and the SIBI disagree</b> (candle closes above 9 and 34 but still below the SIBI): do not add, do not panic-exit. Cut to half, stop above the SIBI, read the footprint at the SIBI. Seller absorption and negative delta at the high mean the SIBI wins. Buy stacked imbalance through the SIBI means the EMA wins.</div></div></div>
+  <div class="tp" data-p="e4"><div class="ex">
+    <div class="t">E4 · First pullback sau cross <span class="pill p-neu">Filter</span> <span class="pill p-acc">S5 turning into S1/S2</span></div>
+    <p class="cap"><b>Idea:</b> the cross is not a trigger, but a <b>clean</b> (after a sweep, with displacement) opens one opportunity: the first pullback into the 9–34 cloud after the cross.</p>
+    <div class="plan"><div class="tr"><b>Trigger</b>First pullback after the cross touches the 9–34 cloud at a PD array + OF confirms</div><div class="st"><b>Stop</b>Beyond the swing that created the cross</div><div class="tg"><b>Target</b>Extreme of the displacement leg, then the DOL</div><div class="iv"><b>Invalidation</b>3 or more crosses in 30 candles (S4); or price closes back through EMA34 before target 1</div></div>
+    <p class="cap" style="margin-top:6px"><b>S4 filter:</b> before considering E4, count crosses in the last 30 candles. 3 or more means skip it and go back to trading range edges.</p></div></div>
+
+  <h3>Pre-trade scoring checklist</h3>
+  <div class="card" id="score">
+    <ul class="ck">
+      <li><label><input type="checkbox" data-pt="1" data-g="L1"><span><b>L1 Context</b>: trade aligned with the ICT bias / DOL of the day<small>Daily premium/discount, V-Shape IFVG, clear DOL</small></span><span class="pt">+1</span></label></li>
+      <li><label><input type="checkbox" data-pt="1" data-g="L2"><span><b>L2 Location</b>: at a TPO zone (VAH/VAL/POC) or PD array (FVG/SIBI/BISI)</span><span class="pt">+1</span></label></li>
+      <li><label><input type="checkbox" data-pt="1" data-g="L3"><span><b>L3 EMA state</b>: stack in the right direction (E1/E2/E4) or a candle closing back across EMA9 after a sweep (E3)</span><span class="pt">+1</span></label></li>
+      <li><label><input type="checkbox" data-pt="1" data-g="L4"><span><b>L4 OF trigger</b>: absorption / delta flip / stacked imbalance / CVD confirms</span><span class="pt">+1</span></label></li>
+      <li><label><input type="checkbox" data-pt="1" data-g="L5"><span><b>L5 No conflict</b>: not in S4; no candle has closed through the PD array; price not overextended from EMA9</span><span class="pt">+1</span></label></li>
+    </ul>
+    <h4 style="margin-top:14px">Mandatory gates (miss one and you do not trade)</h4>
+    <ul class="ck">
+      <li><label><input type="checkbox" data-gate="1"><span>Within my trading window (NY AM, 2 hours)</span></label></li>
+      <li><label><input type="checkbox" data-gate="1"><span>Trade quota left today (max 2–3 trades)</span></label></li>
+      <li><label><input type="checkbox" data-gate="1"><span>Stop known in advance, R:R ≥ 1:2 to target 1</span></label></li>
+    </ul>
+    <div class="grade" id="gradeBox"><span class="g" id="gradeG">–</span><span class="d" id="gradeD">Tick the layers to score.</span><button class="btn" id="scoreReset">Delete</button></div>
+  </div>
+</div>
+<div class="emas" id="ema-quan-ly">
+  <div class="chh"><span class="no">6.5</span><h2>Managing trades with EMA9: a 4-step ladder</h2>
+  <p>The rule “close below EMA9 means hold, close above means cut”, written as 4 concrete steps. The example below is a short; reverse it for a long.</p></div>
+  <div class="grid g2">
+    <div class="card"><ol class="steps">
+      <li><div><b>Hold</b>: candle closes below EMA9. The rule starts from the candle <b>sau</b> the trigger candle. At +1R, move the stop above the most recent candle high.</div></li>
+      <li><div><b>Warning</b>: candle <b>first</b> closes above EMA9. Take 50% <i>or</i> move the stop to breakeven. Choose one when writing the plan, not while in the trade.</div></li>
+      <li><div><b>Exit all</b>: a 2nd consecutive candle closes above EMA9, <i>or</i> 1 candle closes above EMA34.</div></li>
+      <li><div><b>PD array exception</b>: a close above EMA9 but still below the SIBI keeps the remainder, stop above the SIBI, read OF. A close above the SIBI exits everything, no exceptions.</div></li>
+    </ol></div>
+    <div class="card"><h4>Why this ladder suits prop accounts</h4>
+      <p>The biggest risk to a prop account is the trailing drawdown. It trails unrealised profit, so letting a winner fall back to breakeven or a loss is what loses the account. Step 2 locks in part of the profit as soon as momentum shows signs of turning.</p>
+      <p style="margin:0">Trade-off: you will sometimes be shaken out of a long trend. Backtest to learn whether it helps or hurts on NQ M1; do not guess.</p></div>
+  </div>
+  <div class="ex"><div class="t">Example: one short trade from start to finish</div>
+    <div class="vz" id="chMgmt"></div>
+    <p class="cap" id="mgmtCap">Chart markers are computed from the data: the first candle closing above EMA9 after entry, and the candle closing above EMA34.</p></div>
+  <div class="warn"><b>Do not use the ladder in S4 (range).</b> In a range candles keep closing back and forth across EMA9, so the ladder kicks you out of every trade. In a range, manage by structure: stop beyond the range edge, target the POC or the opposite edge.</div>
+</div>
+<div class="emas" id="ema-sai-lam">
+  <div class="chh"><span class="no">6.6</span><h2>Common mistakes</h2>
+  <p>Most EMA mistakes are not about the formula. They are about using the EMA for the right question.</p></div>
+  <div class="do-dont">
+    <div class="card"><h4 style="color:#A7F3D0">Do</h4><ul>
+      <li>Label the state S1–S5 <b>first</b> when thinking about entry</li>
+      <li>Only the close versus the EMA counts, ignore wicks</li>
+      <li>Treat the EMA as trade permission and the hold rule; the trigger is OF</li>
+      <li>Prioritise the PD array over the EMA when the two disagree</li>
+      <li>Pick the timeframe (30s/1m/2m) before the session and keep it</li>
+      <li>Lock the 9/34 period while backtesting, note it in the journal</li>
+    </ul></div>
+    <div class="card"><h4 style="color:#FFD5D9">Don’t</h4><ul>
+      <li>Entering just because 9 crossed 34</li>
+      <li>Chasing price when it is far from EMA9</li>
+      <li>Using the EMA as a signal when both lines are flat and braided (S4)</li>
+      <li>Switching to 30s mid-trade because 30s candles “close nicer”</li>
+      <li>Tweaking 9 → 8 → 10 after every loss. Still the strategy-hopping mistake, just at a smaller scale</li>
+      <li>Fading an S1 trend just because price “has gone up a lot”, with no sweep and no candle closing back across EMA9</li>
+    </ul></div>
+  </div>
+</div>
+<div class="emas" id="ema-setup">
+  <div class="chh"><span class="no">6.7</span><h2>Setup &amp; glossary</h2></div>
+  <div class="grid g2">
+    <div class="card"><h4>ATAS</h4><ul>
+      <li>Add indicator <b>EMA</b> twice to the chart <i>ETH M1 Entry Execution</i>, source Close, period <b>9</b> and <b>34</b></li>
+      <li>EMA9: <span class="mono">#FF4CC9F0</span> (cyan), width 2</li>
+      <li>EMA34: <span class="mono">#FFE7B04B</span> (amber), width 2</li>
+      <li>Duplicate the chart to 30s with the same template</li>
+      <li>Do not use green/red for the EMAs so they are not confused with buy/sell delta colors on the footprint</li>
+    </ul></div>
+    <div class="card"><h4>TradingView &amp; FxReplay</h4><ul>
+      <li>Indicator “Moving Average Exponential”, Length 9 and 34, Source close, Offset 0</li>
+      <li>Same colors as ATAS: <span class="mono">#4CC9F0</span> and <span class="mono">#E7B04B</span></li>
+      <li>On FxReplay, save it as an “EMA 9/34” template so every backtest session uses the same settings</li>
+      <li>Note: TradingView initialises the EMA slightly differently from ATAS, so the first few candles may differ a little. After ~3×N candles the two almost match</li>
+    </ul></div>
+  </div>
+  <h3>Glossary</h3>
+  <div class="tw"><table class="t">
+    <tr><th>Glossary</th><th>Meaning in this playbook</th></tr>
+    <tr><td>EMA / SMA</td><td>Exponential (weighted) moving average / simple moving average</td></tr>
+    <tr><td>α (alpha)</td><td>Smoothing factor = 2/(N+1); 0.2 for EMA9</td></tr>
+    <tr><td>Lag / Half-life</td><td>Lag ~(N−1)/2 candles / candles holding half the weight</td></tr>
+    <tr><td>Stack · Spread · Cross</td><td>Order of price/9/34 · 9–34 spread · the crossing point</td></tr>
+    <tr><td>Cloud 9–34</td><td>The zone between EMA9 and EMA34 where healthy pullbacks usually stop</td></tr>
+    <tr><td>SIBI / BISI</td><td>Sell-side Imbalance Buy-side Inefficiency (bearish FVG) / the reverse (bullish FVG)</td></tr>
+    <tr><td>BSL / SSL</td><td>Buy-side / Sell-side liquidity: stop clusters above highs / below lows</td></tr>
+    <tr><td>S1–S5 · E1–E4</td><td>5 market states · 4 entry models of the playbook</td></tr>
+  </table></div>
+</div>
+  </div>
+  <div class="qz-slot" data-qz="levels:ema" data-title="Quiz 06 · EMA 9/34"></div>
+</section>
+
 <!-- ============ 05 CVD ============ -->
 <section class="tab" id="ch-cvd" data-chapter="cvd">
   <div class="head">
-    <span class="eyebrow">06 · Add-in confluence #2</span>
+    <span class="eyebrow">07 · Add-in confluence #3</span>
     <h2>CVD divergence: who is aggressive, and can they still move price?</h2>
     <p class="lead">You said your main weakness right now is reading footprint/delta inaccurately. CVD is the simplification: instead of reading every bid × ask cell, just compare <b>two consecutive swings</b> of price with the two matching CVD swings, and <b>only at a TPO level</b>.</p>
   </div>
@@ -510,7 +752,7 @@ Reset      = 9:30 ET (same anchor as VWAP RTH and TPO RTH)</div>
 <!-- ============ 06 PLAN ============ -->
 <section class="tab" id="ch-plan" data-chapter="plan">
   <div class="head">
-    <span class="eyebrow">07 · Daily routine</span>
+    <span class="eyebrow">08 · Daily routine</span>
     <h2>Planning: from yesterday’s profile to 2 scenarios with invalidation</h2>
     <p class="lead">The goal of the plan is not predicting direction correctly. The goal is that before 9:25 ET you know: <b>where you trade, under which conditions, and what keeps you out</b>. From 01/11/2026 the US has left DST, so 9:30 ET = <b>21:30 Vietnam time</b>.</p>
   </div>
@@ -549,12 +791,14 @@ Reset      = 9:30 ET (same anchor as VWAP RTH and TPO RTH)</div>
 </div>
 <footer class="ui-foot">Study playbook for NQ intraday. Not investment advice. Traditional statistics (80% rule, day-type frequencies) must be verified with your own backtests before trading real money.</footer>
 </main>
-<script src="assets/js/en/levels-data.js?v=12"></script>
-<script src="assets/js/en/fp.js?v=12"></script>
-<script src="assets/js/en/bank-levels.js?v=12"></script>
-<script src="assets/js/en/bank-tools.js?v=12"></script>
-<script src="assets/js/en/quiz.js?v=12"></script>
-<script src="assets/js/en/core.js?v=12"></script>
-<script src="assets/js/en/levels-page.js?v=12"></script>
+<script src="assets/js/en/levels-data.js?v=13"></script>
+<script src="assets/js/en/fp.js?v=13"></script>
+<script src="assets/js/en/bank-levels.js?v=13"></script>
+<script src="assets/js/en/bank-ema.js?v=13"></script>
+<script src="assets/js/en/bank-tools.js?v=13"></script>
+<script src="assets/js/en/quiz.js?v=13"></script>
+<script src="assets/js/en/core.js?v=13"></script>
+<script src="assets/js/en/levels-page.js?v=13"></script>
+<script src="assets/js/en/ema-page.js?v=13"></script>
 </body>
 </html>

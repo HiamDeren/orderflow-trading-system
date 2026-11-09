@@ -352,3 +352,367 @@ Trình duyệt không hỗ trợ copy ảnh, hãy dùng Tải ảnh PNG.	This br
 Copy ảnh	Copy image
 8 chương · 86 câu trắc nghiệm	8 chapters · 86 quiz questions
 00 · Tổng quan	00 · Overview
+(amber), nét 2	(amber), width 2
+(cyan), nét 2	(cyan), width 2
+(nến đóng trên 9 và 34 nhưng vẫn dưới SIBI): không vào thêm, không thoát hoảng. Giảm còn một nửa, stop trên SIBI, đọc footprint ở SIBI. Seller absorption, delta âm ở đỉnh thì SIBI thắng. Stacked imbalance mua xuyên SIBI thì EMA thắng.	(candle closes above 9 and 34 but still below the SIBI): do not add, do not panic-exit. Cut to half, stop above the SIBI, read the footprint at the SIBI. Seller absorption and negative delta at the high mean the SIBI wins. Buy stacked imbalance through the SIBI means the EMA wins.
+(sau sweep, có displacement) mở ra một cơ hội: pullback đầu tiên về cloud 9–34 sau cross.	(after a sweep, with displacement) opens one opportunity: the first pullback into the 9–34 cloud after the cross.
+(short) + OF tại PD array	(short) + OF at the PD array
+, nguồn Close, period	, source Close, period
+. Cả lệnh ≈	. Whole trade ≈
+. Giá giảm tiếp, phần còn lại được giữ đến khi bậc 3 xảy ra ở	. Price keeps falling, the remainder is held until step 3 triggers at
+. Không fade.	. Do not fade.
+. Lúc đó PD array đã bị phá, bias đảo lại	. At that point the PD array is broken and the bias flips
+. Lẫn lộn thì đang chuyển tiếp.	. Mixed means transition.
+. Phần lợi nhuận trả lại thị trường ở cuối lệnh khá nhỏ.	. The profit given back at the end of the trade is fairly small.
+/5 lớp. Không đủ lý do. Đứng ngoài.	/5 layers. Not enough reasons. Stand aside.
+08 · Quy trình mỗi ngày	08 · Daily routine
+1 nến đóng trên EMA34.	1 candle closes above EMA34.
+1 − 0,8⁹ ≈ 86,6%. Phần còn lại đến từ các nến cũ hơn. Đó là lý do “EMA9 ≈ trung bình 9 nến” chỉ gần đúng.	1 − 0.8⁹ ≈ 86.6%. The rest comes from older candles. That is why “EMA9 ≈ 9-candle average” is only approximately right.
+11,8 nến	11.8 candles
+18 phút	18 min
+188 câu trắc nghiệm TPO Level và Orderflow Tools: luyện tập, thi thử 50/100 câu, ôn câu sai.	188 quiz questions for TPO Level and Orderflow Tools: practice, 50/100-question mock exams, review wrong answers.
+3,1 nến	3.1 candles
+3/5 lớp. Giảm size một nửa hoặc bỏ qua. Không dùng nếu thiếu L2 hoặc L4.	3/5 layers. Half size or skip. Not valid if L2 or L4 is missing.
+30 giây	30 seconds
+34 phút	34 min
+4,5 phút	4.5 min
+4/5 lớp. Trade được, size chuẩn. Ghi rõ lớp nào thiếu vào journal.	4/5 layers. Tradeable, standard size. Note the missing layer in the journal.
+5 = A++, 4 = A+, 3 = B. Nếu 3 điểm mà thiếu L2 (location) hoặc L4 (OF trigger) thì tự động thành NO.	5 = A++, 4 = A+, 3 = B. A score of 3 missing L2 (location) or L4 (OF trigger) is automatically NO.
+5 trạng thái thị trường (S1–S5)	5 market states (S1–S5)
+5 trạng thái thị trường · 4 model entry của playbook	5 market states · 4 entry models of the playbook
+50 câu rút ngẫu nhiên từ 101 câu của khoá Level, giữ tỉ lệ theo chương.	50 questions drawn at random from the 101 questions of the Level course, keeping the chapter ratio.
+68 phút	68 min
+8 khái niệm cốt lõi	8 core concepts
+9 bám nhịp động lượng ngắn, khoảng một swing nhỏ trên M1. 34 là số Fibonacci, đại diện “xương sống” xu hướng trong khoảng nửa giờ. Tỉ lệ ~1:4 đủ xa để khoảng cách giữa hai đường có ý nghĩa. Không có con số thần thánh. Điều quan trọng là	9 tracks short momentum, about one small swing on M1. 34 is a Fibonacci number and represents the trend “backbone” over roughly half an hour. The ~1:4 ratio is wide enough for the gap between the lines to mean something. There is no magic number. What matters is
+9 chương · 101 câu trắc nghiệm	9 chapters · 101 quiz questions
+9 nến gần nhất chiếm khoảng bao nhiêu % trọng số của EMA9?	Roughly what % of EMA9’s weight do the last 9 candles carry?
+9 nến × 30s = 4,5 phút. Đổi khung là đổi chân trời thời gian của EMA, dù period giữ nguyên.	9 candles × 30s = 4.5 minutes. Changing the timeframe changes the EMA’s time horizon even with the same period.
+9 phút	9 min
+9 và 34 chập nhau và phẳng: không còn tín hiệu. Chuyển sang trade biên TPO bằng orderflow.	9 and 34 merge and go flat: no signal left. Switch to trading TPO edges with orderflow.
+: absorption / delta flip / stacked imbalance / CVD xác nhận	: absorption / delta flip / stacked imbalance / CVD confirms
+: không ở S4; PD array chưa bị nến đóng xuyên; giá không giãn quá xa EMA9	: not in S4; no candle has closed through the PD array; price not overextended from EMA9
+: lệnh thuận ICT bias / DOL của ngày	: trade aligned with the ICT bias / DOL of the day
+: nến	: candle
+: nến thứ 2 liên tiếp đóng trên EMA9,	: a 2nd consecutive candle closes above EMA9,
+: nến đóng dưới EMA9. Rule bắt đầu từ nến	: candle closes below EMA9. The rule starts from the candle
+: stack đúng chiều (E1/E2/E4) hoặc nến đóng ngược EMA9 sau sweep (E3)	: stack in the right direction (E1/E2/E4) or a candle closing back across EMA9 after a sweep (E3)
+: tại TPO zone (VAH/VAL/POC) hoặc PD array (FVG/SIBI/BISI)	: at a TPO zone (VAH/VAL/POC) or PD array (FVG/SIBI/BISI)
+: đóng trên EMA9 nhưng còn dưới SIBI thì giữ phần còn lại, stop trên SIBI, đọc OF. Nến đóng trên SIBI thì thoát hết, không ngoại lệ.	: a close above EMA9 but still below the SIBI keeps the remainder, stop above the SIBI, read OF. A close above the SIBI exits everything, no exceptions.
+Absorption, delta flip, stacked imbalance tại location. Quyết định	Absorption, delta flip, stacked imbalance at the location. Decides
+Bear stack: giá dưới EMA9, EMA9 dưới EMA34. Phương án D có thứ tự giống bear nhưng EMA34 dốc lên, tức là đang chuyển tiếp, chưa phải trend giảm.	Bear stack: price below EMA9, EMA9 below EMA34. Option D has the bear order but EMA34 slopes up, so it is a transition, not yet a downtrend.
+Biết trước stop ở đâu, R:R ≥ 1:2 đến target 1	Stop known in advance, R:R ≥ 1:2 to target 1
+Buy-side / Sell-side liquidity: cụm stop trên đỉnh / dưới đáy	Buy-side / Sell-side liquidity: stop clusters above highs / below lows
+Bẫy:	Trap:
+Bậc 2: chốt 50%	Step 2: take 50%
+Bậc 3: thoát hết	Step 3: exit all
+Bỏ stop chờ giá về	Remove the stop and wait for price to return
+Bộ lọc S4:	S4 filter:
+Checklist chấm điểm trước mỗi lệnh	Pre-trade scoring checklist
+Checklist đạt 3/5 lớp, đủ cổng, có cả L2 và L4. Xếp hạng?	Checklist scores 3/5 layers, all gates pass, both L2 and L4 present. Grade?
+Chu kỳ N	Period N
+Chuyển S5 sang S1/S2	S5 turning into S1/S2
+Chương này.	This chapter.
+Chậm	Slow
+Chỉ trade thuận chiều	Trade with the trend only
+Chỉ tính	Only counts
+Chỉ tính giá đóng cửa so với EMA, bỏ qua wick	Only the close versus the EMA counts, ignore wicks
+Chỉnh 9 → 8 → 10 sau mỗi lệnh thua. Đây vẫn là lỗi đổi strategy liên tục, chỉ ở quy mô nhỏ hơn	Tweaking 9 → 8 → 10 after every loss. Still the strategy-hopping mistake, just at a smaller scale
+Chọn khung (30s/1m/2m) trước phiên và giữ nguyên	Pick the timeframe (30s/1m/2m) before the session and keep it
+Chờ giá vào vùng 9–34	Wait for price to enter the 9–34 zone
+Chờ giá về EMA9 hoặc về FVG gần EMA9 rồi mới xét E1	Wait for price to return to EMA9 or an FVG near EMA9, then consider E1
+Coi EMA là quyền được trade và rule giữ lệnh; trigger là OF	Treat the EMA as trade permission and the hold rule; the trigger is OF
+Confirm entry: 4 model + checklist 5 lớp	Confirm entry: 4 models + 5-layer checklist
+Confirmation bias: đổi khung giữa lệnh để tìm lý do giữ lệnh	Confirmation bias: switching timeframe mid-trade to find a reason to hold
+Cross sắp xảy ra hoặc vừa xảy ra	Cross about to happen or just happened
+Cross đến sau thì chỉ dùng để giữ lệnh tự tin hơn	A late cross only helps you hold with more confidence
+Các mốc trên chart được tính tự động từ dữ liệu: nến đầu tiên đóng trên EMA9 sau entry, và nến đóng trên EMA34.	Chart markers are computed from the data: the first candle closing above EMA9 after entry, and the candle closing above EMA34.
+Còn quota lệnh hôm nay (tối đa 2–3 lệnh)	Trade quota left today (max 2–3 trades)
+Có nến đóng qua EMA9, nhưng giá giữ được vùng giữa 9 và 34	Candles close through EMA9 but price holds the zone between 9 and 34
+Công thức	Formula
+Cảnh báo	Warning
+Cố định 5 điểm	Fixed 5 points
+Cổng bắt buộc (thiếu 1 cái là không trade)	Mandatory gates (miss one and you do not trade)
+Cột cyan là N nến gần nhất, cột xám là phần đuôi quá khứ. Kéo thử N = 9 rồi N = 34: phần N nến luôn chiếm khoảng 86,5%. Đó là lý do “EMA9 ≈ trung bình 9 nến” nghe đúng nhưng chưa chính xác.	Cyan bars are the latest N candles, grey bars are the older tail. Try N = 9, then N = 34: the N candles always carry about 86.5%. That is why “EMA9 ≈ 9-candle average” sounds right but is not exact.
+Daily premium/discount, DOL, V-Shape IFVG. Quyết định chiều ưu tiên của ngày.	Daily premium/discount, DOL, V-Shape IFVG. Decides the preferred direction of the day.
+Daily premium/discount, V-Shape IFVG, DOL rõ	Daily premium/discount, V-Shape IFVG, clear DOL
+Dùng 9/34 trên chart 30s thì EMA9 phủ khoảng bao nhiêu thời gian?	Using 9/34 on a 30s chart, how much time does EMA9 cover?
+Dùng EMA làm tín hiệu khi hai đường phẳng và xoắn (S4)	Using the EMA as a signal when both lines are flat and braided (S4)
+Dưới EMA34	Below EMA34
+Dưới đáy gần nhất	Below the nearest low
+Dấu hiệu (theo thứ tự)	Signs (in order)
+Dấu hiệu nào cho thấy đang ở S4 (range)?	Which sign shows you are in S4 (range)?
+Dữ liệu mới	New data
+E2 · Pullback vùng 9–34 tại key level	E2 · Pullback into 9–34 at a key level
+EMA 34 · chậm	EMA 34 · slow
+EMA 9/34: trạng thái, quyền trade chiều nào và rule giữ lệnh	EMA 9/34: market state, directional permission and the hold rule
+EMA không bóp cò. Mỗi model dưới đây đều cần location (zone/PD array) và trigger orderflow. EMA chỉ trả lời “được phép không” và “giữ đến đâu”.	The EMA never pulls the trigger. Every model below needs a location (zone/PD array) and an orderflow trigger. The EMA only answers “am I allowed” and “how long do I hold”.
+EMA không phải tín hiệu vào lệnh. Trong hệ thống của bạn nó làm ba việc: đọc	The EMA is not an entry signal. In your system it does three things: read the
+EMA34 dốc mạnh	EMA34 slopes steeply
+EMA34 phủ	EMA34 covers
+EMA34 vẫn dốc, không cross	EMA34 still sloping, no cross
+EMA9 cho nến mới trọng số lớn hơn, giảm dần về quá khứ	EMA9 gives newer candles more weight, decaying into the past
+EMA9 chỉ dùng giá high	EMA9 uses only the high
+EMA9 dốc rõ là có động lượng. EMA9 nằm ngang là thị trường đang cân bằng. EMA34 lật dốc là xu hướng nền đổi.	A clearly sloping EMA9 means momentum. A flat EMA9 means the market is balancing. EMA34 flipping slope means the underlying trend is changing.
+EMA9 luôn nằm trên SMA9	EMA9 is always above SMA9
+EMA9 lật dốc, spread thu hẹp nhanh	EMA9 flips slope, spread narrows fast
+EMA9 phủ	EMA9 covers
+EMA9 và 34 phẳng, xoắn nhau, từ 3 cross trở lên trong 30 nến	EMA9 and 34 flat and braided, 3 or more crosses in 30 candles
+EMA9 và 34 phẳng, xoắn vào nhau	EMA9 and 34 flat and braided together
+Entry ở bước ③, không chờ ④ (model E3)	Entry at step ③, do not wait for ④ (model E3)
+Entry ở nến đóng dưới EMA9 sau khi retest. Nhịp giảm đầu: mọi nến đóng dưới EMA9, cứ thế giữ. Khi giá hồi nhẹ, nến đầu tiên đóng trên EMA9 kích hoạt bậc 2: chốt 50% ở khoảng	Entry on the candle closing below EMA9 after the retest. First leg down: every candle closes below EMA9, so keep holding. When price bounces a little, the first candle closing above EMA9 triggers step 2: take 50% around
+Entry: retest EMA9 hoặc FVG nằm gần EMA9 (model E1)	Entry: retest of EMA9 or an FVG near EMA9 (model E1)
+Extreme của nhịp displacement, rồi DOL	Extreme of the displacement leg, then the DOL
+Fade trend S1 chỉ vì giá “đã lên nhiều”, khi chưa có sweep và chưa có nến đóng ngược EMA9	Fading an S1 trend just because price “has gone up a lot”, with no sweep and no candle closing back across EMA9
+Ghép với hệ thống:	Fit with the system:
+Giao cắt	Cross
+Giá &gt; 9 &gt; 34	Price &gt; 9 &gt; 34
+Giá &lt; 9 &lt; 34	Price &lt; 9 &lt; 34
+Giá bám EMA9 không đóng ngược	Price hugs EMA9 without closing back across
+Giá cách EMA9 quá xa so với bình thường thì không đuổi. Chờ giá về EMA hoặc về PD array.	When price is unusually far from EMA9, do not chase. Wait for price to come back to the EMA or a PD array.
+Giá giãn xa (extension) thì R:R xấu, stop phải đặt xa. Chờ retest theo E1. Short ngược S1 khi chưa có sweep và nến đóng ngược EMA9 là fade trend.	An extended price gives poor R:R and a wide stop. Wait for an E1 retest. Shorting against S1 without a sweep and a candle closing back across EMA9 is fading the trend.
+Giá kẹt giữa 9 và 34, đóng qua lại EMA9	Price stuck between 9 and 34, closing back and forth across EMA9
+Giá nhưng EMA34 dốc lên	Price but EMA34 slopes up
+Giá vào cloud + chạm zone, nến reject đóng lại qua EMA9 + delta flip / stacked imbalance thuận chiều	Price enters the cloud + touches the zone, a rejection candle closes back across EMA9 + delta flip / stacked imbalance in the trade direction
+Giãn quá xa	Overextended
+Giải phẫu một đoạn trend tăng	Anatomy of an uptrend leg
+Giảm size hoặc	Reduce size or
+Giữ	Hold
+Giữ lệnh, chỉ tính giá đóng cửa	Hold the trade, only the close counts
+Giữ một nửa, stop trên SIBI, đọc OF tại SIBI	Hold half, stop above the SIBI, read OF at the SIBI
+Gán nhãn trạng thái S1–S5	Label the state S1–S5
+Hai lý do: cross đến sau (lag) và trong range thì “cross tùm lum”. Cross dùng để xác nhận trạng thái, không dùng để bóp cò.	Two reasons: the cross comes late (lag) and in a range it “crosses all over the place”. The cross confirms the state; it is not a trigger.
+Half-life (nửa trọng số)	Half-life (half the weight)
+Hiểu cơ chế để biết EMA trễ bao nhiêu và phản ứng nhanh cỡ nào. Từ đó mới biết lúc nào nên tin nó.	Understand the mechanics to know how much the EMA lags and how fast it reacts. Only then do you know when to trust it.
+Hạng A+	Grade A+
+Hạng A++	Grade A++
+Hạng B: giảm size một nửa hoặc bỏ qua	Grade B: half size or skip
+Hầu như không nến nào đóng sai phía EMA9	Almost no candle closes on the wrong side of EMA9
+Hệ quả	Consequence
+Hệ số làm mượt = 2/(N+1); EMA9 là 0,2	Smoothing factor = 2/(N+1); 0.2 for EMA9
+Hệ thống học Orderflow + TPO cho NQ intraday: 2 khoá, 188 câu trắc nghiệm, thi thử 50/100 câu.	Orderflow + TPO study system for NQ intraday: 2 courses, 188 quiz questions, 50/100-question mock exams.
+Hỗ trợ / kháng cự động	Dynamic support / resistance
+Indicator “Moving Average Exponential”, Length 9 và 34, Source close, Offset 0	Indicator “Moving Average Exponential”, Length 9 and 34, Source close, Offset 0
+Key level kế tiếp: TPO VAL/POC, mức tròn, đáy nhịp tăng; runner về DOL	Next key level: TPO VAL/POC, round number, low of the up leg; runner to the DOL
+Khi EMA và SIBI mâu thuẫn	When the EMA and the SIBI disagree
+Khi nào dùng	When to use
+Khoá period 9/34 khi backtest, ghi rõ trong journal	Lock the 9/34 period while backtesting, note it in the journal
+Khoảng cách 9–34	9–34 spread
+Khung chuẩn để backtest và so sánh data.	Standard timeframe for backtesting and comparing data.
+Khung phải chọn trước phiên. Đổi khung giữa lệnh để có được câu trả lời mình muốn là phá rule, và rất dễ dẫn tới cháy trailing drawdown.	Pick the timeframe before the session. Switching mid-trade to get the answer you want breaks the rule and easily leads to blowing the trailing drawdown.
+Không dùng ladder trong S4 (range).	Do not use the ladder in S4 (range).
+Không dùng xanh/đỏ cho EMA để khỏi lẫn với màu delta mua/bán trên footprint	Do not use green/red for the EMAs so they are not confused with buy/sell delta colors on the footprint
+Không khác gì, chỉ khác tên	No difference, just a different name
+Không lỗi, càng nhiều khung càng tốt	Not a mistake, more timeframes is better
+Không đuổi khi giá đã giãn xa EMA9	Do not chase when price is far from EMA9
+Khởi tạo: EMA đầu tiên = SMA của N nến đầu. Mỗi nến mới, EMA dịch về phía giá đóng cửa một đoạn bằng α × khoảng cách.	Initialisation: the first EMA = SMA of the first N candles. On each new candle the EMA moves toward the close by α × the distance.
+Kiểu	Type
+L5 Không xung đột	L5 No conflict
+Lag ≈ (N−1)/2 = 16,5 nến. Trên M1 tức khoảng 16 phút. Vì vậy cross 9/34 luôn đến sau đỉnh/đáy.	Lag ≈ (N−1)/2 = 16.5 candles. On M1 that is about 16 minutes. So the 9/34 cross always comes after the top/bottom.
+Layer 3 · State. Context đến từ ICT, location từ TPO/PD array, trigger từ footprint/delta/CVD. EMA nối các lớp đó với việc quản lý lệnh.	Layer 3 · State. Context comes from ICT, location from TPO/PD arrays, the trigger from footprint/delta/CVD. The EMA links those layers to trade management.
+Luyện tập 188 câu	Practice 188 questions
+Luôn đến	Always comes
+Lưu ý: TradingView khởi tạo EMA hơi khác ATAS, nên vài nến đầu chart có thể lệch nhẹ. Sau ~3×N nến thì hai bên gần như trùng khớp	Note: TradingView initialises the EMA slightly differently from ATAS, so the first few candles may differ a little. After ~3×N candles the two almost match
+Lọc	Filter
+Lỗi setup indicator	Indicator setup error
+Lỗi tính α	α calculation error
+Market long ngay kẻo lỡ	Market long now before missing it
+Minh hoạ: một lệnh short từ đầu đến cuối	Example: one short trade from start to finish
+Màu giống ATAS:	Same colors as ATAS:
+Mặc định, phiên Asia	Default, Asia session
+Mọi quyết định với EMA đều quy về 8 câu hỏi này. Nhìn chart thì đọc theo đúng thứ tự từ 1 đến 8.	Every EMA decision comes down to these 8 questions. Read the chart in order from 1 to 8.
+Mở rộng là trend tăng tốc. Thu hẹp là động lượng yếu dần. Hai đường xoắn vào nhau là range.	Widening means the trend is accelerating. Narrowing means momentum is fading. Braided lines mean a range.
+N nến gần nhất chiếm	The latest N candles carry
+Nghĩa trong playbook này	Meaning in this playbook
+Ngoài EMA34	Beyond EMA34
+Ngoài swing gần nhất. Nếu EMA34 gần hơn thì đặt ngoài EMA34	Beyond the nearest swing. If EMA34 is closer, place it beyond EMA34
+Ngoài swing tạo ra cross	Beyond the swing that created the cross
+Ngoại lệ PD array	PD array exception
+Ngẫu nhiên	Random
+Nhân bản chart sang khung 30s, giữ nguyên template	Duplicate the chart to 30s with the same template
+Nén	Compressed
+Nến đóng	Candle closes
+Nến đóng dứt khoát ngoài EMA34 và ngoài zone; EMA34 phẳng hoặc lật dốc	A decisive close beyond EMA34 and beyond the zone; EMA34 flat or flipping
+Nến đóng qua EMA34, hoặc spread đang thu hẹp nhanh (S1 chuyển sang S3)	A close through EMA34, or the spread narrowing fast (S1 turning into S3)
+Nến đóng qua lại EMA9 liên tục	Candles keep closing back and forth across EMA9
+Nến đóng ở đâu?	Where does the candle close?
+Open, volume lớn, nến 1m quá dài	Open, heavy volume, 1m candles too long
+PD array gần nhất (SIBI/BISI) là thứ quyết định chiều đi	The nearest PD array (SIBI/BISI) decides the direction
+Phần lớn lỗi khi dùng EMA không nằm ở công thức. Nó nằm ở việc dùng EMA cho đúng câu hỏi hay không.	Most EMA mistakes are not about the formula. They are about using the EMA for the right question.
+Pullback có cấu trúc (lower high nhỏ trong uptrend)	Structured pullback (small lower high in an uptrend)
+Pullback đầu tiên sau cross chạm cloud 9–34 tại PD array + OF xác nhận	First pullback after the cross touches the 9–34 cloud at a PD array + OF confirms
+Quản lý lệnh bằng EMA9: ladder 4 bậc	Managing trades with EMA9: a 4-step ladder
+Rule chỉ tính body close. Wick xuyên rồi đóng lại là phản ứng, thậm chí có thể là dấu hiệu absorption tốt cho lệnh short.	The rule only counts the body close. A wick that pierces and closes back is a reaction, even possibly a sign of absorption that favours the short.
+Rule hold/cut theo EMA9 cũng không dùng.	The EMA9 hold/cut rule is off too.
+Rule “đóng dưới EMA9 thì giữ, đóng trên thì cắt”, viết thành 4 bậc cụ thể. Ví dụ dưới là lệnh short, lệnh long thì đảo ngược.	The rule “close below EMA9 means hold, close above means cut”, written as 4 concrete steps. The example below is a short; reverse it for a long.
+Rủi ro lớn nhất của account prop là trailing drawdown. Trailing tính trên lãi chưa chốt, nên việc để lệnh đang lãi quay về hoà vốn hoặc lỗ là thứ làm mất account. Bậc 2 khoá lại một phần lãi ngay khi động lượng có dấu hiệu đổi.	The biggest risk to a prop account is the trailing drawdown. It trails unrealised profit, so letting a winner fall back to breakeven or a loss is what loses the account. Step 2 locks in part of the profit as soon as momentum shows signs of turning.
+S1 Trend mạnh	S1 Strong trend
+S2 Trend khoẻ	S2 Healthy trend
+S3 Chuyển tiếp	S3 Transition
+S4: hai đường phẳng và xoắn, cross liên tục. Lúc này tắt EMA làm tín hiệu và trade biên TPO bằng OF.	S4: both lines flat and braided, crossing constantly. Turn the EMA off as a signal and trade TPO edges with OF.
+S5 Đảo chiều	S5 Reversal
+SMA9 chia đều 1/9 cho mỗi nến. EMA9 cho nến mới nhất 20%, nến thứ 9 chỉ ~3,4%, nên EMA phản ứng nhanh hơn.	SMA9 gives each candle an equal 1/9. EMA9 gives the newest candle 20% and the 9th only ~3.4%, so the EMA reacts faster.
+Sai lầm thường gặp	Common mistakes
+Sell-side Imbalance Buy-side Inefficiency (FVG giảm) / ngược lại (FVG tăng)	Sell-side Imbalance Buy-side Inefficiency (bearish FVG) / the reverse (bullish FVG)
+Setup &amp; thuật ngữ	Setup &amp; glossary
+Short vì giá đã lên nhiều	Short because price has risen a lot
+Simulator: nhìn EMA phản ứng với từng kiểu thị trường	Simulator: watch the EMA react to each market type
+Spread 9–34 mở rộng	9–34 spread widening
+Spread mở rộng, cả hai đường dốc	Spread widening, both lines sloping
+Stack nào là bear?	Which stack is bearish?
+Stack đúng: giá &gt; 9 &gt; 34 (hoặc ngược lại khi giảm)	Correct stack: price &gt; 9 &gt; 34 (or the reverse in a downtrend)
+Stop ban đầu	Initial stop
+Stop chặt hơn, nhiều nhiễu hơn. Chỉ nên dùng trong 15–30 phút đầu RTH.	Tighter stops, more noise. Only for the first 15–30 minutes of RTH.
+Stop ngoài EMA34 và ngoài zone	Stop beyond EMA34 and beyond the zone
+Stop trên đỉnh sweep hoặc trên PD array	Stop above the sweep high or above the PD array
+Swing high/low trước đó, DOL kế tiếp; runner theo ladder EMA9	Previous swing high/low, next DOL; runner follows the EMA9 ladder
+TPO zone (VAH/VAL/POC) hoặc FVG khung M5–M15.	TPO zone (VAH/VAL/POC) or an M5–M15 FVG.
+TPO zone hoặc FVG	TPO zone or FVG
+TPO, Day & Open types, Level map, VWAP RTH, EMA 9/34, CVD divergence và quy trình lên plan cho NQ.	TPO, Day & Open types, Level map, VWAP RTH, EMA 9/34, CVD divergence and the NQ planning routine.
+Target về POC/giữa range, không kỳ vọng trend	Target the POC/mid-range, do not expect a trend
+Thay thế TPO zone	Replaces the TPO zone
+Thiếu Location (L2) hoặc OF trigger (L4). EMA một mình không đủ để vào lệnh.	Missing Location (L2) or OF trigger (L4). The EMA alone is not enough to enter.
+Thiếu cổng bắt buộc. Không trade, dù điểm bao nhiêu.	A mandatory gate is missing. No trade, whatever the score.
+Thoát hết	Exit all
+Thoát hết ngay	Exit everything now
+Thoát ngay	Exit now
+Thêm indicator	Add indicator
+Thị trường chậm, nến 1m lắt nhắt	Slow market, choppy 1m candles
+Thứ tự	Order
+Thứ tự giá/9/34 · khoảng cách 9–34 · điểm hai đường cắt nhau	Order of price/9/34 · 9–34 spread · the crossing point
+Thử chọn “Range” rồi bấm “Dữ liệu mới” vài lần, đếm số cross. Sau đó chọn “Trend tăng”. Bạn sẽ thấy rõ vì sao trong range thì cross liên tục. Thử đổi Nhanh xuống 5: số lần nến đóng đổi phía tăng vọt, đó là cái giá của việc phản ứng nhanh.	Pick “Range” and press “New data” a few times, counting crosses. Then pick “Uptrend”. You will see why a range keeps crossing. Try setting Fast to 5: the number of side-switching closes jumps, which is the price of reacting quickly.
+Tick các lớp để chấm điểm.	Tick the layers to score.
+Trade biên range: VAH/VAL, biên ON range, bằng OF	Trade range edges: VAH/VAL, ON range edges, with OF
+Trend S1, giá đang cách EMA9 khoảng 40 điểm và bạn muốn long. Nên làm gì?	S1 trend, price is about 40 points from EMA9 and you want to go long. What should you do?
+Trend giảm	Downtrend
+Trend mạnh: giá retest EMA9. Trend bình thường: giá về vùng giữa 9 và 34. Đóng xuyên 34 là trend có vấn đề.	Strong trend: price retests EMA9. Normal trend: price returns to the zone between 9 and 34. A close through 34 means the trend is in trouble.
+Trend tăng	Uptrend
+Trigger bằng OF: absorption, delta flip (model E2)	Trigger with OF: absorption, delta flip (model E2)
+Trigger vào lệnh chính	Primary entry trigger
+Trong khung giờ của mình (NY AM, 2 tiếng)	Within my trading window (NY AM, 2 hours)
+Trong model E3 (short), stop hợp lý đặt ở đâu?	In model E3 (short), where is a sensible stop?
+Trong range, nến đóng qua lại EMA9 liên tục, ladder sẽ đá bạn ra ở mọi lệnh. Trong range, quản lý lệnh theo cấu trúc: stop ngoài biên range, target về POC hoặc biên đối diện.	In a range candles keep closing back and forth across EMA9, so the ladder kicks you out of every trade. In a range, manage by structure: stop beyond the range edge, target the POC or the opposite edge.
+Trong stack của bạn, vai trò đúng của EMA 9/34 là gì?	In your stack, what is the right role of EMA 9/34?
+Trung bình động hàm mũ (có trọng số) / trung bình cộng đơn giản	Exponential (weighted) moving average / simple moving average
+Trên FxReplay, lưu thành template “EMA 9/34” để mọi phiên backtest dùng cùng setting	On FxReplay, save it as an “EMA 9/34” template so every backtest session uses the same settings
+Trên đỉnh sweep (an toàn) hoặc trên SIBI (chặt)	Above the sweep high (safe) or above the SIBI (tight)
+Trên đỉnh sweep hoặc trên SIBI	Above the sweep high or above the SIBI
+Trước mỗi quyết định, gán nhãn trạng thái. Mỗi trạng thái có hành động mặc định riêng. Nếu không gán được nhãn thì coi là S3 hoặc S4 và đứng ngoài.	Before every decision, label the state. Each state has its own default action. If you cannot label it, treat it as S3 or S4 and stand aside.
+Trạng thái S1	State S1
+Trạng thái S1–S5, quyền trade chiều nào, rule giữ/cắt lệnh.	States S1–S5, directional permission, the hold/cut rule.
+Trạng thái S2	State S2
+Trạng thái S5	State S5
+Trọng số nến mới nhất	Newest candle weight
+Tắt EMA làm tín hiệu.	Turn the EMA off as a signal.
+Từ 3 cross trong 30 nến (S4); hoặc giá đóng ngược qua EMA34 trước khi chạm target 1	3 or more crosses in 30 candles (S4); or price closes back through EMA34 before target 1
+Từ 3 cross trở lên trong 30 nến	3 or more crosses in 30 candles
+VAH/VAL/POC của 4 profile, FVG/SIBI/BISI. Quyết định	VAH/VAL/POC of the 4 profiles, FVG/SIBI/BISI. Decides
+VWAP và band ±σ quyết định fade hay break, R:R tới TP1 có đủ ≥ 1.5 không. EMA 9/34 cho biết trạng thái S1–S5 và được phép trade chiều nào.	VWAP and its ±σ bands decide fade or break, and whether R:R to TP1 is ≥ 1.5. EMA 9/34 gives the S1–S5 state and which direction you may trade.
+Vai trò của EMA trong stack	Role of the EMA in the stack
+Vào lệnh chỉ vì 9 cắt 34	Entering just because 9 crossed 34
+Vào thêm lệnh	Add to the position
+Vào thêm vì SIBI còn giữ	Add because the SIBI still holds
+Vì ATAS không vẽ được cross	Because ATAS cannot draw the cross
+Vì cross chỉ dùng cho khung D1	Because the cross is only for D1
+Vì cross không bao giờ đúng	Because the cross is never right
+Vì cross trễ theo cấu trúc và cắt liên tục khi thị trường đi ngang	Because the cross lags by construction and crosses constantly in a sideways market
+Vì sao 9 và 34?	Why 9 and 34?
+Vì sao không dùng cross 9/34 làm trigger vào lệnh?	Why not use the 9/34 cross as an entry trigger?
+Vì sao ladder này hợp với prop	Why this ladder suits prop accounts
+Ví dụ EMA9 (α = 0,2): EMA cũ 27.250, nến đóng 27.270 → EMA mới = 27.250 + 0,2 × 20 =	EMA9 example (α = 0.2): old EMA 27,250, candle closes 27,270 → new EMA = 27,250 + 0.2 × 20 =
+Vùng giữa EMA9 và EMA34, nơi pullback lành mạnh thường dừng lại	The zone between EMA9 and EMA34 where healthy pullbacks usually stop
+Wick chạm/xuyên EMA9, nến	Wick touches/pierces EMA9, candle
+Widget: trọng số của từng nến trong EMA	Widget: the weight of each candle in the EMA
+Xác định DOL của ngày	Define the DOL of the day
+cross không phải trigger, nhưng cross	the cross is not a trigger, but a
+dưới EMA9	below EMA9
+dời stop về hoà vốn. Chọn 1 trong 2 từ lúc viết plan, không quyết lúc đang có lệnh.	move the stop to breakeven. Choose one when writing the plan, not while in the trade.
+giữ cố định	keep it fixed
+giữ hay cắt	hold or cut
+hai lần vào chart	twice to the chart
+half-life (nến)	half-life (candles)
+khi giá đã chạy. ② Spread mở rộng, giá bám EMA9: trend mạnh. ③ Giá kéo về vùng 9–34 và giữ được: pullback lành mạnh. ④ Spread thu hẹp, EMA9 phẳng dần: động lượng cạn.	after price has already run. ② Spread widens, price hugs EMA9: strong trend. ③ Price pulls back into 9–34 and holds: healthy pullback. ④ Spread narrows, EMA9 flattens: momentum is fading.
+khi nghĩ đến entry	when thinking about entry
+khi nào	when
+là trung bình động có trọng số: nến càng mới thì trọng số càng lớn, trọng số giảm dần theo cấp số nhân về quá khứ và không bao giờ về 0 hẳn.	is a weighted moving average: the newer the candle, the larger its weight; weights decay exponentially into the past and never quite reach 0.
+lần nến đóng đổi phía EMA	closes switching EMA side
+lần retest thứ 3–4 trong cùng một nhịp có xác suất thấp hơn hẳn lần đầu. Chỉ lấy retest đầu tiên sau mỗi lần giá tạo đỉnh/đáy mới.	the 3rd–4th retest in the same leg has much lower odds than the first. Only take the first retest after each new high/low.
+lệnh. Trigger vẫn là orderflow tại key level. Stack: ICT bias → TPO zone / PD array → trạng thái EMA → footprint, delta, CVD.	the trade. The trigger is still orderflow at a key level. Stack: ICT bias → TPO zone / PD array → EMA state → footprint, delta, CVD.
+model đảo chiều sau sweep. Sau khi quét thanh khoản, nến đóng ngược EMA9 là dấu hiệu động lượng đổi. SIBI/BISI giữ được là nơi đặt lệnh.	the reversal-after-sweep model. After liquidity is swept, a candle closing back across EMA9 signals a momentum shift. A SIBI/BISI that holds is where the order goes.
+mới nhất	newest
+ngoài zone, lấy mức xa hơn	beyond the zone, whichever is farther
+nến có stack đúng	candles with the right stack
+nến gần nhất	latest candles
+nến mới nhất:	newest candle:
+nến trigger. Đạt +1R thì dời stop lên trên high nến gần nhất.	the trigger candle. At +1R, move the stop above the most recent candle high.
+pullback sâu hơn E1. Giá đi vào “cloud” giữa hai EMA. Chỉ lấy khi cloud	a deeper pullback than E1. Price enters the “cloud” between the two EMAs. Only take it when the cloud
+quyền	permission
+sau cùng	last
+so với EMA9. Wick xuyên qua rồi đóng lại là phản ứng, chưa phải thay đổi.	versus EMA9. A wick that pierces and closes back is a reaction, not yet a change.
+spread TB (điểm)	avg spread (pts)
+sạch	clean
+số cross	crosses
+thị trường, cấp	of the market, grant
+trend mạnh thì EMA9 là “sàn” động. Giá chạm lại EMA9 lần đầu, đúng chỗ có FVG hoặc imbalance, là điểm vào rủi ro thấp nhất.	in a strong trend EMA9 is a dynamic “floor”. Price touching EMA9 for the first time, right where there is an FVG or imbalance, is the lowest-risk entry.
+trên SIBI	above the SIBI
+trùng	aligns
+trước	first
+trước khi xét E4, đếm cross trong 30 nến vừa qua. Từ 3 trở lên thì bỏ, quay về trade biên range.	before considering E4, count crosses in the last 30 candles. 3 or more means skip it and go back to trading range edges.
+trạng thái	state
+trọng số trong	of the weight in
+vào lệnh.	to enter.
+~1 phút	~1 min
+~16 phút	~16 min
+~16,5 nến	~16.5 candles
+~17 phút	~17 min
+~34 phút	~34 min
+~4 nến	~4 candles
+~4 phút	~4 min
+~4,5 phút	~4.5 min
+Ít cross giả hơn nhưng vào trễ hơn. R:R thường kém hơn.	Fewer false crosses but later entries. R:R is usually worse.
+Ý tưởng của E3 sai khi giá phá lại SIBI hoặc lấy lại đỉnh sweep. Stop đặt ngoài các mức đó.	The E3 idea is wrong once price breaks back through the SIBI or reclaims the sweep high. Put the stop beyond those levels.
+Ý tưởng:	Idea:
+Đang có lệnh trên 1m, bạn mở chart 30s và thấy nến 30s “đóng đẹp” nên quyết định giữ tiếp dù 1m đã đóng sai phía EMA9 hai lần. Đây là lỗi gì?	In a trade on 1m, you open a 30s chart, see the 30s candles “closing nicely” and keep holding although 1m has closed on the wrong side of EMA9 twice. What mistake is this?
+Đang short, nến 1m có wick vượt lên EMA9 nhưng đóng cửa dưới EMA9. Theo rule?	In a short, a 1m candle wicks above EMA9 but closes below it. What does the rule say?
+Đang short, nến đóng trên cả EMA9 và EMA34 nhưng vẫn dưới SIBI. Theo ladder?	In a short, a candle closes above both EMA9 and EMA34 but still below the SIBI. What does the ladder say?
+Điểm khác cốt lõi giữa EMA9 và SMA9?	Core difference between EMA9 and SMA9?
+Đuổi giá khi giá đã giãn xa EMA9	Chasing price when it is far from EMA9
+Đánh đổi: thỉnh thoảng sẽ bị rung ra khỏi một trend dài. Backtest để biết với NQ M1 nó lợi hay hại, đừng đoán.	Trade-off: you will sometimes be shaken out of a long trend. Backtest to learn whether it helps or hurts on NQ M1; do not guess.
+Đây là bậc 4: PD array có ưu tiên cao hơn EMA. Lớp quyết định tiếp theo là orderflow tại SIBI. Nến đóng trên SIBI thì thoát hết.	This is step 4: the PD array outranks the EMA. The next deciding layer is orderflow at the SIBI. A close above the SIBI exits everything.
+Đây là lúc cần thêm thông tin trước khi hành động	This is when you need more information before acting
+Đảo chiều V-top	V-top reversal
+Đỉnh/đáy cũ của trend; TP1 ở 1R hoặc ở mức trong cấu trúc	Prior high/low of the trend; TP1 at 1R or at a structural level
+Định nghĩa &amp; công thức	Definition &amp; formula
+Đọc nhanh hai đường	Quick read of the two lines
+Đọc trạng thái, cấp quyền trade chiều nào, và quản lý lệnh. Trigger là orderflow	Read the state, grant directional permission, and manage the trade. The trigger is orderflow
+Đổi khung thì EMA phủ bao nhiêu thời gian?	How much time does the EMA cover on each timeframe?
+Đổi sang 2m	Switch to 2m
+Đổi sang 30s giữa lệnh vì nến 30s “đóng đẹp hơn”	Switching to 30s mid-trade because 30s candles “close nicer”
+Đổi sang 30s để xem lại	Switch to 30s to double-check
+Độ dốc	Slope
+Độ trễ trung bình	Average lag
+Độ trễ trung bình của EMA34 trên M1 khoảng?	Average lag of EMA34 on M1 is roughly?
+Độ trễ ~(N−1)/2 nến / số nến chiếm một nửa trọng số	Lag ~(N−1)/2 candles / candles holding half the weight
+Đủ 5 lớp. Size đầy đủ theo plan.	All 5 layers. Full size per plan.
+điểm cross	cross points
+đây chính là cách đọc “VAH/VAL giữ được” trong TPO Playbook, có thêm EMA34 để xác nhận xu hướng nền còn sống.	this is exactly the “VAH/VAL holds” read from the TPO chapters, with EMA34 added to confirm the underlying trend is still alive.
+đóng lại	closes back
+đóng trên EMA9. Chốt 50%	closes above EMA9. Take 50%
+đúng phía + OF xác nhận (absorption ở đáy wick, delta flip)	on the right side + OF confirms (absorption at the wick low, delta flip)
+được trade chiều nào, và quyết định	to trade a direction, and decide whether to
+được trade.	to trade.
+đầu tiên	first
+để data backtest so sánh được.	so backtest data stays comparable.
+đỉnh/đáy. Dùng để xác nhận trạng thái đã đổi, không dùng làm điểm vào lệnh.	the top/bottom. Use it to confirm the state has changed, not as an entry point.
+độ trễ trung bình (nến)	average lag (candles)
+đứng ngoài	stand aside
+Ưu tiên PD array hơn EMA khi hai lớp mâu thuẫn	Prioritise the PD array over the EMA when the two disagree
+α = 2/(N+1) = 2/10 = 0,2. Mỗi nến mới kéo EMA9 về phía giá đóng cửa 20% khoảng cách.	α = 2/(N+1) = 2/10 = 0.2. Each new candle pulls EMA9 20% of the way toward the close.
+α của EMA9 bằng bao nhiêu?	What is EMA9’s α?
+ở đâu	where
+① Cross lên xác nhận trend	① Bullish cross confirms the trend
+① Quét thanh khoản (BSL/SSL, high/low phiên)	① Liquidity sweep (BSL/SSL, session high/low)
+① Sweep BSL/SSL → ② nến đóng ngược EMA9 có displacement → ③ giá retest SIBI/BISI/IFVG, nến đóng lại	① Sweep BSL/SSL → ② a displacement candle closes back across EMA9 → ③ price retests the SIBI/BISI/IFVG and closes back
+② Nến đóng ngược EMA9 có displacement	② Displacement candle closes back across EMA9
+③ Retest PD array (SIBI/IFVG) và giữ được	③ PD array retest (SIBI/IFVG) holds
+④ Cross 9/34 đến	④ The 9/34 cross arrives
+Nhanh	Fast

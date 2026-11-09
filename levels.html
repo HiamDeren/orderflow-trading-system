@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#080B10">
 <title>TPO Level · Orderflow System</title>
-<meta name="description" content="TPO, Day & Open types, Level map, VWAP RTH, CVD divergence và quy trình lên plan cho NQ.">
+<meta name="description" content="TPO, Day & Open types, Level map, VWAP RTH, EMA 9/34, CVD divergence và quy trình lên plan cho NQ.">
 <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=12">
-<link rel="stylesheet" href="assets/css/levels.css?v=12">
+<link rel="stylesheet" href="assets/css/app.css?v=13">
+<link rel="stylesheet" href="assets/css/levels.css?v=13"><link rel="stylesheet" href="assets/css/ema.css?v=13">
 </head>
 <body data-page="levels">
 <main class="ui-main">
@@ -28,7 +28,7 @@
     <span class="ui-eyebrow">Khoá 1 · NQ · RTH 9:30–16:00 ET</span>
     <h1 class="ui-h1">TPO Level</h1>
     <p class="ui-lede">Context bằng TPO · Confluence bằng VWAP RTH + CVD · Trigger bằng orderflow.</p>
-    <div class="facts"><span><b>8</b> chương</span><span><b>86</b> câu trắc nghiệm</span><span>Plan Builder</span></div>
+    <div class="facts"><span><b>9</b> chương</span><span><b>101</b> câu trắc nghiệm</span><span>Plan Builder</span></div>
     <div class="cta"><a class="ui-btn primary" href="#nen-tang">Bắt đầu học →</a><a class="ui-btn" href="plan.html">Mở Plan Builder</a><a class="ui-btn ghost" href="quiz.html#thi-thu">Thi thử 50 câu</a></div>
   </div>
 
@@ -447,10 +447,252 @@ Band    = VWAP ± k·σ,   k = 1, 2, 3</div>
   <div class="qz-slot" data-qz="levels:vwap" data-title="Quiz 05 · VWAP RTH"></div>
 </section>
 
+<!-- ============ 06 EMA ============ -->
+<section class="tab" id="ch-ema" data-chapter="ema">
+  <div class="head">
+    <span class="eyebrow">06 · Add-in confluence #2</span>
+    <h2>EMA 9/34: trạng thái, quyền trade chiều nào và rule giữ lệnh</h2>
+    <p class="lead">EMA không phải tín hiệu vào lệnh. Trong hệ thống của bạn nó làm ba việc: đọc <b>trạng thái</b> thị trường, cấp <b>quyền</b> được trade chiều nào, và quyết định <b>giữ hay cắt</b> lệnh. Trigger vẫn là orderflow tại key level. Stack: ICT bias → TPO zone / PD array → trạng thái EMA → footprint, delta, CVD.</p>
+  </div>
+  <div class="ema">
+  <div class="chips">
+    <span class="chip"><i style="background:#4CC9F0"></i>EMA 9 · nhanh</span>
+    <span class="chip"><i style="background:#E7B04B"></i>EMA 34 · chậm</span>
+    <span class="chip"><i style="background:none;border:1.5px solid #C4B5FD;width:10px;height:10px;border-radius:50%"></i>điểm cross</span>
+    <span class="chip">Khung: 30s (open) · 1m · 2m</span>
+  </div>
+  <div class="emas" id="ema-stack">
+  <h3>Vai trò của EMA trong stack</h3>
+  <div class="grid g4">
+    <div class="card"><span class="en">Layer 1 · Context</span><h5>ICT bias / DOL</h5><p>Daily premium/discount, DOL, V-Shape IFVG. Quyết định chiều ưu tiên của ngày.</p></div>
+    <div class="card"><span class="en">Layer 2 · Location</span><h5>TPO zone · PD array</h5><p>VAH/VAL/POC của 4 profile, FVG/SIBI/BISI. Quyết định <b>ở đâu</b> được trade.</p></div>
+    <div class="card" style="border-color:rgba(76,201,240,.5)"><span class="en" style="color:#BAE6FD">Layer 3 · State</span><h5>EMA 9/34</h5><p>Trạng thái S1–S5, quyền trade chiều nào, rule giữ/cắt lệnh. <b>Chương này.</b></p></div>
+    <div class="card"><span class="en">Layer 4 · Trigger</span><h5>Footprint · Delta · CVD</h5><p>Absorption, delta flip, stacked imbalance tại location. Quyết định <b>khi nào</b> vào lệnh.</p></div>
+  </div>
+</div>
+<div class="emas" id="ema-dinh-nghia">
+  <div class="chh"><span class="no">6.1</span><h2>Định nghĩa &amp; công thức</h2>
+  <p>Hiểu cơ chế để biết EMA trễ bao nhiêu và phản ứng nhanh cỡ nào. Từ đó mới biết lúc nào nên tin nó.</p></div>
+  <p class="def"><b>EMA (Exponential Moving Average)</b> là trung bình động có trọng số: nến càng mới thì trọng số càng lớn, trọng số giảm dần theo cấp số nhân về quá khứ và không bao giờ về 0 hẳn.</p>
+  <div class="grid g2">
+    <div class="card"><h4>Công thức</h4>
+      <p class="mono" style="font-size:15px;color:#F1F5FA">EMA<sub>t</sub> = α · Close<sub>t</sub> + (1 − α) · EMA<sub>t−1</sub><br>α = 2 / (N + 1)</p>
+      <p>Khởi tạo: EMA đầu tiên = SMA của N nến đầu. Mỗi nến mới, EMA dịch về phía giá đóng cửa một đoạn bằng α × khoảng cách.</p>
+      <p style="margin:0">Ví dụ EMA9 (α = 0,2): EMA cũ 27.250, nến đóng 27.270 → EMA mới = 27.250 + 0,2 × 20 = <b>27.254</b>.</p></div>
+    <div class="card"><h4>Đọc nhanh hai đường</h4>
+      <div class="tw" style="background:none;border:0;padding:0"><table class="t">
+        <tr><th></th><th>EMA 9</th><th>EMA 34</th></tr>
+        <tr><td>α</td><td class="n">0,200</td><td class="n">0,057</td></tr>
+        <tr><td>Trọng số nến mới nhất</td><td class="n">20%</td><td class="n">5,7%</td></tr>
+        <tr><td>N nến gần nhất chiếm</td><td class="n">86,6%</td><td class="n">86,5%</td></tr>
+        <tr><td>Half-life (nửa trọng số)</td><td class="n">3,1 nến</td><td class="n">11,8 nến</td></tr>
+        <tr><td>Độ trễ trung bình</td><td class="n">~4 nến</td><td class="n">~16,5 nến</td></tr>
+      </table></div></div>
+  </div>
+  <div class="ex"><div class="t">Widget: trọng số của từng nến trong EMA</div>
+    <div class="ctrl"><label>Chu kỳ N <input type="range" id="wN" min="3" max="60" value="9"><output id="wNo">9</output></label>
+      <button class="btn" data-wn="9">N = 9</button><button class="btn" data-wn="34">N = 34</button></div>
+    <div class="vz" id="wChart"></div>
+    <div class="stats" id="wStats"></div>
+    <p class="cap">Cột cyan là N nến gần nhất, cột xám là phần đuôi quá khứ. Kéo thử N = 9 rồi N = 34: phần N nến luôn chiếm khoảng 86,5%. Đó là lý do “EMA9 ≈ trung bình 9 nến” nghe đúng nhưng chưa chính xác.</p></div>
+  <h3>Đổi khung thì EMA phủ bao nhiêu thời gian?</h3>
+  <div class="tw"><table class="t">
+    <tr><th>Khung</th><th>Khi nào dùng</th><th>EMA9 phủ</th><th>EMA34 phủ</th><th>Hệ quả</th></tr>
+    <tr><td class="n">30s</td><td>Open, volume lớn, nến 1m quá dài</td><td class="n">~4,5 phút</td><td class="n">~17 phút</td><td>Stop chặt hơn, nhiều nhiễu hơn. Chỉ nên dùng trong 15–30 phút đầu RTH.</td></tr>
+    <tr><td class="n">1m</td><td>Mặc định, phiên Asia</td><td class="n">9 phút</td><td class="n">34 phút</td><td>Khung chuẩn để backtest và so sánh data.</td></tr>
+    <tr><td class="n">2m</td><td>Thị trường chậm, nến 1m lắt nhắt</td><td class="n">18 phút</td><td class="n">68 phút</td><td>Ít cross giả hơn nhưng vào trễ hơn. R:R thường kém hơn.</td></tr>
+  </table></div>
+  <div class="note"><b>Vì sao 9 và 34?</b> 9 bám nhịp động lượng ngắn, khoảng một swing nhỏ trên M1. 34 là số Fibonacci, đại diện “xương sống” xu hướng trong khoảng nửa giờ. Tỉ lệ ~1:4 đủ xa để khoảng cách giữa hai đường có ý nghĩa. Không có con số thần thánh. Điều quan trọng là <b>giữ cố định</b> để data backtest so sánh được.</div>
+</div>
+<div class="emas" id="ema-khai-niem">
+  <div class="chh"><span class="no">6.2</span><h2>8 khái niệm cốt lõi</h2>
+  <p>Mọi quyết định với EMA đều quy về 8 câu hỏi này. Nhìn chart thì đọc theo đúng thứ tự từ 1 đến 8.</p></div>
+  <div class="grid g4">
+    <div class="card"><span class="en">01 · Close location</span><h5>Nến đóng ở đâu?</h5><p>Chỉ tính <b>body close</b> so với EMA9. Wick xuyên qua rồi đóng lại là phản ứng, chưa phải thay đổi.</p></div>
+    <div class="card"><span class="en">02 · Slope</span><h5>Độ dốc</h5><p>EMA9 dốc rõ là có động lượng. EMA9 nằm ngang là thị trường đang cân bằng. EMA34 lật dốc là xu hướng nền đổi.</p></div>
+    <div class="card"><span class="en">03 · Stack</span><h5>Thứ tự</h5><p>Bull: <span class="mono">Giá &gt; 9 &gt; 34</span>. Bear: <span class="mono">Giá &lt; 9 &lt; 34</span>. Lẫn lộn thì đang chuyển tiếp.</p></div>
+    <div class="card"><span class="en">04 · Spread</span><h5>Khoảng cách 9–34</h5><p>Mở rộng là trend tăng tốc. Thu hẹp là động lượng yếu dần. Hai đường xoắn vào nhau là range.</p></div>
+    <div class="card"><span class="en">05 · Cross</span><h5>Giao cắt</h5><p>Luôn đến <b>sau</b> đỉnh/đáy. Dùng để xác nhận trạng thái đã đổi, không dùng làm điểm vào lệnh.</p></div>
+    <div class="card"><span class="en">06 · Dynamic S/R</span><h5>Hỗ trợ / kháng cự động</h5><p>Trend mạnh: giá retest EMA9. Trend bình thường: giá về vùng giữa 9 và 34. Đóng xuyên 34 là trend có vấn đề.</p></div>
+    <div class="card"><span class="en">07 · Extension</span><h5>Giãn quá xa</h5><p>Giá cách EMA9 quá xa so với bình thường thì không đuổi. Chờ giá về EMA hoặc về PD array.</p></div>
+    <div class="card"><span class="en">08 · Compression</span><h5>Nén</h5><p>9 và 34 chập nhau và phẳng: không còn tín hiệu. Chuyển sang trade biên TPO bằng orderflow.</p></div>
+  </div>
+  <div class="ex"><div class="t">Giải phẫu một đoạn trend tăng</div>
+    <div class="vz" id="chAnat"></div>
+    <div class="legend"><span><i class="sw" style="background:#4CC9F0"></i>EMA9</span><span><i class="sw" style="background:#E7B04B"></i>EMA34</span><span><i class="swb" style="border:1.5px solid #C4B5FD;border-radius:50%;width:10px;height:10px"></i>cross</span></div>
+    <p class="cap">① Cross lên xác nhận trend <b>sau</b> khi giá đã chạy. ② Spread mở rộng, giá bám EMA9: trend mạnh. ③ Giá kéo về vùng 9–34 và giữ được: pullback lành mạnh. ④ Spread thu hẹp, EMA9 phẳng dần: động lượng cạn.</p></div>
+</div>
+<div class="emas" id="ema-trang-thai">
+  <div class="chh"><span class="no">6.3</span><h2>5 trạng thái thị trường (S1–S5)</h2>
+  <p>Trước mỗi quyết định, gán nhãn trạng thái. Mỗi trạng thái có hành động mặc định riêng. Nếu không gán được nhãn thì coi là S3 hoặc S4 và đứng ngoài.</p></div>
+  <div class="tabs" role="tablist" data-tabs="reg">
+    <button role="tab" aria-selected="true" data-t="s1">S1 Trend mạnh</button>
+    <button role="tab" aria-selected="false" data-t="s2">S2 Trend khoẻ</button>
+    <button role="tab" aria-selected="false" data-t="s3">S3 Chuyển tiếp</button>
+    <button role="tab" aria-selected="false" data-t="s4">S4 Range</button>
+    <button role="tab" aria-selected="false" data-t="s5">S5 Đảo chiều</button>
+  </div>
+  <div class="tp on" data-p="s1"><div class="ex">
+    <div class="vz" data-chart="s1"></div>
+    <div class="grid g2"><div class="card"><h4>Dấu hiệu</h4><ul><li>Stack đúng: giá &gt; 9 &gt; 34 (hoặc ngược lại khi giảm)</li><li>Spread mở rộng, cả hai đường dốc</li><li>Hầu như không nến nào đóng sai phía EMA9</li></ul></div>
+    <div class="card"><h4>Hành động</h4><ul><li><b>Chỉ trade thuận chiều</b>. Không fade.</li><li>Entry: retest EMA9 hoặc FVG nằm gần EMA9 (model E1)</li><li>Không đuổi khi giá đã giãn xa EMA9</li></ul></div></div></div></div>
+  <div class="tp" data-p="s2"><div class="ex">
+    <div class="vz" data-chart="s2"></div>
+    <div class="grid g2"><div class="card"><h4>Dấu hiệu</h4><ul><li>Có nến đóng qua EMA9, nhưng giá giữ được vùng giữa 9 và 34</li><li>EMA34 vẫn dốc, không cross</li><li>Pullback có cấu trúc (lower high nhỏ trong uptrend)</li></ul></div>
+    <div class="card"><h4>Hành động</h4><ul><li>Chờ giá vào vùng 9–34 <b>trùng</b> TPO zone hoặc FVG</li><li>Trigger bằng OF: absorption, delta flip (model E2)</li><li>Stop ngoài EMA34 và ngoài zone</li></ul></div></div></div></div>
+  <div class="tp" data-p="s3"><div class="ex">
+    <div class="vz" data-chart="s3"></div>
+    <div class="grid g2"><div class="card"><h4>Dấu hiệu</h4><ul><li>Giá kẹt giữa 9 và 34, đóng qua lại EMA9</li><li>EMA9 lật dốc, spread thu hẹp nhanh</li><li>Cross sắp xảy ra hoặc vừa xảy ra</li></ul></div>
+    <div class="card"><h4>Hành động</h4><ul><li>Giảm size hoặc <b>đứng ngoài</b></li><li>PD array gần nhất (SIBI/BISI) là thứ quyết định chiều đi</li><li>Đây là lúc cần thêm thông tin trước khi hành động</li></ul></div></div></div></div>
+  <div class="tp" data-p="s4"><div class="ex">
+    <div class="vz" data-chart="s4"></div>
+    <div class="grid g2"><div class="card"><h4>Dấu hiệu</h4><ul><li>EMA9 và 34 phẳng, xoắn vào nhau</li><li>Từ 3 cross trở lên trong 30 nến</li><li>Nến đóng qua lại EMA9 liên tục</li></ul></div>
+    <div class="card"><h4>Hành động</h4><ul><li><b>Tắt EMA làm tín hiệu.</b> Rule hold/cut theo EMA9 cũng không dùng.</li><li>Trade biên range: VAH/VAL, biên ON range, bằng OF</li><li>Target về POC/giữa range, không kỳ vọng trend</li></ul></div></div></div></div>
+  <div class="tp" data-p="s5"><div class="ex">
+    <div class="vz" data-chart="s5"></div>
+    <div class="grid g2"><div class="card"><h4>Dấu hiệu (theo thứ tự)</h4><ul><li>① Quét thanh khoản (BSL/SSL, high/low phiên)</li><li>② Nến đóng ngược EMA9 có displacement</li><li>③ Retest PD array (SIBI/IFVG) và giữ được</li><li>④ Cross 9/34 đến <b>sau cùng</b></li></ul></div>
+    <div class="card"><h4>Hành động</h4><ul><li>Entry ở bước ③, không chờ ④ (model E3)</li><li>Stop trên đỉnh sweep hoặc trên PD array</li><li>Cross đến sau thì chỉ dùng để giữ lệnh tự tin hơn</li></ul></div></div></div></div>
+
+  <h3>Simulator: nhìn EMA phản ứng với từng kiểu thị trường</h3>
+  <div class="ex">
+    <div class="ctrl">
+      <label>Kiểu <select id="simReg"><option value="up">Trend tăng</option><option value="down">Trend giảm</option><option value="range">Range</option><option value="vtop">Đảo chiều V-top</option><option value="walk">Ngẫu nhiên</option></select></label>
+      <label>Nhanh <input type="range" id="simF" min="3" max="21" value="9"><output id="simFo">9</output></label>
+      <label>Chậm <input type="range" id="simS" min="13" max="89" value="34"><output id="simSo">34</output></label>
+      <button class="btn" id="simNew">Dữ liệu mới</button>
+    </div>
+    <div class="vz" id="simChart"></div>
+    <div class="stats" id="simStats"></div>
+    <p class="cap">Thử chọn “Range” rồi bấm “Dữ liệu mới” vài lần, đếm số cross. Sau đó chọn “Trend tăng”. Bạn sẽ thấy rõ vì sao trong range thì cross liên tục. Thử đổi Nhanh xuống 5: số lần nến đóng đổi phía tăng vọt, đó là cái giá của việc phản ứng nhanh.</p>
+  </div>
+</div>
+<div class="emas" id="ema-entry">
+  <div class="chh"><span class="no">6.4</span><h2>Confirm entry: 4 model + checklist 5 lớp</h2>
+  <p>EMA không bóp cò. Mỗi model dưới đây đều cần location (zone/PD array) và trigger orderflow. EMA chỉ trả lời “được phép không” và “giữ đến đâu”.</p></div>
+  <div class="tabs" role="tablist" data-tabs="mdl">
+    <button role="tab" aria-selected="true" data-t="e1">E1 Retest EMA9</button>
+    <button role="tab" aria-selected="false" data-t="e2">E2 Pullback 9–34</button>
+    <button role="tab" aria-selected="false" data-t="e3">E3 Sweep → Reclaim</button>
+    <button role="tab" aria-selected="false" data-t="e4">E4 First pullback sau cross</button>
+  </div>
+  <div class="tp on" data-p="e1"><div class="ex">
+    <div class="t">E1 · Retest EMA9 <span class="pill p-neu">Continuation</span> <span class="pill p-acc">Trạng thái S1</span></div>
+    <p class="cap"><b>Ý tưởng:</b> trend mạnh thì EMA9 là “sàn” động. Giá chạm lại EMA9 lần đầu, đúng chỗ có FVG hoặc imbalance, là điểm vào rủi ro thấp nhất.</p>
+    <div class="plan"><div class="tr"><b>Trigger</b>Wick chạm/xuyên EMA9, nến <b>đóng lại</b> đúng phía + OF xác nhận (absorption ở đáy wick, delta flip)</div><div class="st"><b>Stop</b>Ngoài swing gần nhất. Nếu EMA34 gần hơn thì đặt ngoài EMA34</div><div class="tg"><b>Target</b>Swing high/low trước đó, DOL kế tiếp; runner theo ladder EMA9</div><div class="iv"><b>Vô hiệu</b>Nến đóng qua EMA34, hoặc spread đang thu hẹp nhanh (S1 chuyển sang S3)</div></div>
+    <p class="cap" style="margin-top:6px"><b>Bẫy:</b> lần retest thứ 3–4 trong cùng một nhịp có xác suất thấp hơn hẳn lần đầu. Chỉ lấy retest đầu tiên sau mỗi lần giá tạo đỉnh/đáy mới.</p></div></div>
+  <div class="tp" data-p="e2"><div class="ex">
+    <div class="t">E2 · Pullback vùng 9–34 tại key level <span class="pill p-neu">Continuation</span> <span class="pill p-acc">Trạng thái S2</span></div>
+    <p class="cap"><b>Ý tưởng:</b> pullback sâu hơn E1. Giá đi vào “cloud” giữa hai EMA. Chỉ lấy khi cloud <b>trùng</b> TPO zone (VAH/VAL/POC) hoặc FVG khung M5–M15.</p>
+    <div class="plan"><div class="tr"><b>Trigger</b>Giá vào cloud + chạm zone, nến reject đóng lại qua EMA9 + delta flip / stacked imbalance thuận chiều</div><div class="st"><b>Stop</b>Ngoài EMA34 <b>và</b> ngoài zone, lấy mức xa hơn</div><div class="tg"><b>Target</b>Đỉnh/đáy cũ của trend; TP1 ở 1R hoặc ở mức trong cấu trúc</div><div class="iv"><b>Vô hiệu</b>Nến đóng dứt khoát ngoài EMA34 và ngoài zone; EMA34 phẳng hoặc lật dốc</div></div>
+    <p class="cap" style="margin-top:6px"><b>Ghép với hệ thống:</b> đây chính là cách đọc “VAH/VAL giữ được” trong TPO Playbook, có thêm EMA34 để xác nhận xu hướng nền còn sống.</p></div></div>
+  <div class="tp" data-p="e3"><div class="ex">
+    <div class="t">E3 · Sweep → Reclaim EMA9 → PD array <span class="pill p-short">Reversal</span> <span class="pill p-acc">Trạng thái S5</span></div>
+    <p class="cap"><b>Ý tưởng:</b> model đảo chiều sau sweep. Sau khi quét thanh khoản, nến đóng ngược EMA9 là dấu hiệu động lượng đổi. SIBI/BISI giữ được là nơi đặt lệnh.</p>
+    <div class="plan"><div class="tr"><b>Trigger</b>① Sweep BSL/SSL → ② nến đóng ngược EMA9 có displacement → ③ giá retest SIBI/BISI/IFVG, nến đóng lại <b>dưới EMA9</b> (short) + OF tại PD array</div><div class="st"><b>Stop</b>Trên đỉnh sweep (an toàn) hoặc trên SIBI (chặt)</div><div class="tg"><b>Target</b>Key level kế tiếp: TPO VAL/POC, mức tròn, đáy nhịp tăng; runner về DOL</div><div class="iv"><b>Vô hiệu</b>Nến đóng <b>trên SIBI</b>. Lúc đó PD array đã bị phá, bias đảo lại</div></div>
+    <div class="note"><b>Khi EMA và SIBI mâu thuẫn</b> (nến đóng trên 9 và 34 nhưng vẫn dưới SIBI): không vào thêm, không thoát hoảng. Giảm còn một nửa, stop trên SIBI, đọc footprint ở SIBI. Seller absorption, delta âm ở đỉnh thì SIBI thắng. Stacked imbalance mua xuyên SIBI thì EMA thắng.</div></div></div>
+  <div class="tp" data-p="e4"><div class="ex">
+    <div class="t">E4 · First pullback sau cross <span class="pill p-neu">Lọc</span> <span class="pill p-acc">Chuyển S5 sang S1/S2</span></div>
+    <p class="cap"><b>Ý tưởng:</b> cross không phải trigger, nhưng cross <b>sạch</b> (sau sweep, có displacement) mở ra một cơ hội: pullback đầu tiên về cloud 9–34 sau cross.</p>
+    <div class="plan"><div class="tr"><b>Trigger</b>Pullback đầu tiên sau cross chạm cloud 9–34 tại PD array + OF xác nhận</div><div class="st"><b>Stop</b>Ngoài swing tạo ra cross</div><div class="tg"><b>Target</b>Extreme của nhịp displacement, rồi DOL</div><div class="iv"><b>Vô hiệu</b>Từ 3 cross trong 30 nến (S4); hoặc giá đóng ngược qua EMA34 trước khi chạm target 1</div></div>
+    <p class="cap" style="margin-top:6px"><b>Bộ lọc S4:</b> trước khi xét E4, đếm cross trong 30 nến vừa qua. Từ 3 trở lên thì bỏ, quay về trade biên range.</p></div></div>
+
+  <h3>Checklist chấm điểm trước mỗi lệnh</h3>
+  <div class="card" id="score">
+    <ul class="ck">
+      <li><label><input type="checkbox" data-pt="1" data-g="L1"><span><b>L1 Context</b>: lệnh thuận ICT bias / DOL của ngày<small>Daily premium/discount, V-Shape IFVG, DOL rõ</small></span><span class="pt">+1</span></label></li>
+      <li><label><input type="checkbox" data-pt="1" data-g="L2"><span><b>L2 Location</b>: tại TPO zone (VAH/VAL/POC) hoặc PD array (FVG/SIBI/BISI)</span><span class="pt">+1</span></label></li>
+      <li><label><input type="checkbox" data-pt="1" data-g="L3"><span><b>L3 EMA state</b>: stack đúng chiều (E1/E2/E4) hoặc nến đóng ngược EMA9 sau sweep (E3)</span><span class="pt">+1</span></label></li>
+      <li><label><input type="checkbox" data-pt="1" data-g="L4"><span><b>L4 OF trigger</b>: absorption / delta flip / stacked imbalance / CVD xác nhận</span><span class="pt">+1</span></label></li>
+      <li><label><input type="checkbox" data-pt="1" data-g="L5"><span><b>L5 Không xung đột</b>: không ở S4; PD array chưa bị nến đóng xuyên; giá không giãn quá xa EMA9</span><span class="pt">+1</span></label></li>
+    </ul>
+    <h4 style="margin-top:14px">Cổng bắt buộc (thiếu 1 cái là không trade)</h4>
+    <ul class="ck">
+      <li><label><input type="checkbox" data-gate="1"><span>Trong khung giờ của mình (NY AM, 2 tiếng)</span></label></li>
+      <li><label><input type="checkbox" data-gate="1"><span>Còn quota lệnh hôm nay (tối đa 2–3 lệnh)</span></label></li>
+      <li><label><input type="checkbox" data-gate="1"><span>Biết trước stop ở đâu, R:R ≥ 1:2 đến target 1</span></label></li>
+    </ul>
+    <div class="grade" id="gradeBox"><span class="g" id="gradeG">–</span><span class="d" id="gradeD">Tick các lớp để chấm điểm.</span><button class="btn" id="scoreReset">Xoá</button></div>
+  </div>
+</div>
+<div class="emas" id="ema-quan-ly">
+  <div class="chh"><span class="no">6.5</span><h2>Quản lý lệnh bằng EMA9: ladder 4 bậc</h2>
+  <p>Rule “đóng dưới EMA9 thì giữ, đóng trên thì cắt”, viết thành 4 bậc cụ thể. Ví dụ dưới là lệnh short, lệnh long thì đảo ngược.</p></div>
+  <div class="grid g2">
+    <div class="card"><ol class="steps">
+      <li><div><b>Giữ</b>: nến đóng dưới EMA9. Rule bắt đầu từ nến <b>sau</b> nến trigger. Đạt +1R thì dời stop lên trên high nến gần nhất.</div></li>
+      <li><div><b>Cảnh báo</b>: nến <b>đầu tiên</b> đóng trên EMA9. Chốt 50% <i>hoặc</i> dời stop về hoà vốn. Chọn 1 trong 2 từ lúc viết plan, không quyết lúc đang có lệnh.</div></li>
+      <li><div><b>Thoát hết</b>: nến thứ 2 liên tiếp đóng trên EMA9, <i>hoặc</i> 1 nến đóng trên EMA34.</div></li>
+      <li><div><b>Ngoại lệ PD array</b>: đóng trên EMA9 nhưng còn dưới SIBI thì giữ phần còn lại, stop trên SIBI, đọc OF. Nến đóng trên SIBI thì thoát hết, không ngoại lệ.</div></li>
+    </ol></div>
+    <div class="card"><h4>Vì sao ladder này hợp với prop</h4>
+      <p>Rủi ro lớn nhất của account prop là trailing drawdown. Trailing tính trên lãi chưa chốt, nên việc để lệnh đang lãi quay về hoà vốn hoặc lỗ là thứ làm mất account. Bậc 2 khoá lại một phần lãi ngay khi động lượng có dấu hiệu đổi.</p>
+      <p style="margin:0">Đánh đổi: thỉnh thoảng sẽ bị rung ra khỏi một trend dài. Backtest để biết với NQ M1 nó lợi hay hại, đừng đoán.</p></div>
+  </div>
+  <div class="ex"><div class="t">Minh hoạ: một lệnh short từ đầu đến cuối</div>
+    <div class="vz" id="chMgmt"></div>
+    <p class="cap" id="mgmtCap">Các mốc trên chart được tính tự động từ dữ liệu: nến đầu tiên đóng trên EMA9 sau entry, và nến đóng trên EMA34.</p></div>
+  <div class="warn"><b>Không dùng ladder trong S4 (range).</b> Trong range, nến đóng qua lại EMA9 liên tục, ladder sẽ đá bạn ra ở mọi lệnh. Trong range, quản lý lệnh theo cấu trúc: stop ngoài biên range, target về POC hoặc biên đối diện.</div>
+</div>
+<div class="emas" id="ema-sai-lam">
+  <div class="chh"><span class="no">6.6</span><h2>Sai lầm thường gặp</h2>
+  <p>Phần lớn lỗi khi dùng EMA không nằm ở công thức. Nó nằm ở việc dùng EMA cho đúng câu hỏi hay không.</p></div>
+  <div class="do-dont">
+    <div class="card"><h4 style="color:#A7F3D0">Nên</h4><ul>
+      <li>Gán nhãn trạng thái S1–S5 <b>trước</b> khi nghĩ đến entry</li>
+      <li>Chỉ tính giá đóng cửa so với EMA, bỏ qua wick</li>
+      <li>Coi EMA là quyền được trade và rule giữ lệnh; trigger là OF</li>
+      <li>Ưu tiên PD array hơn EMA khi hai lớp mâu thuẫn</li>
+      <li>Chọn khung (30s/1m/2m) trước phiên và giữ nguyên</li>
+      <li>Khoá period 9/34 khi backtest, ghi rõ trong journal</li>
+    </ul></div>
+    <div class="card"><h4 style="color:#FFD5D9">Không nên</h4><ul>
+      <li>Vào lệnh chỉ vì 9 cắt 34</li>
+      <li>Đuổi giá khi giá đã giãn xa EMA9</li>
+      <li>Dùng EMA làm tín hiệu khi hai đường phẳng và xoắn (S4)</li>
+      <li>Đổi sang 30s giữa lệnh vì nến 30s “đóng đẹp hơn”</li>
+      <li>Chỉnh 9 → 8 → 10 sau mỗi lệnh thua. Đây vẫn là lỗi đổi strategy liên tục, chỉ ở quy mô nhỏ hơn</li>
+      <li>Fade trend S1 chỉ vì giá “đã lên nhiều”, khi chưa có sweep và chưa có nến đóng ngược EMA9</li>
+    </ul></div>
+  </div>
+</div>
+<div class="emas" id="ema-setup">
+  <div class="chh"><span class="no">6.7</span><h2>Setup &amp; thuật ngữ</h2></div>
+  <div class="grid g2">
+    <div class="card"><h4>ATAS</h4><ul>
+      <li>Thêm indicator <b>EMA</b> hai lần vào chart <i>ETH M1 Entry Execution</i>, nguồn Close, period <b>9</b> và <b>34</b></li>
+      <li>EMA9: <span class="mono">#FF4CC9F0</span> (cyan), nét 2</li>
+      <li>EMA34: <span class="mono">#FFE7B04B</span> (amber), nét 2</li>
+      <li>Nhân bản chart sang khung 30s, giữ nguyên template</li>
+      <li>Không dùng xanh/đỏ cho EMA để khỏi lẫn với màu delta mua/bán trên footprint</li>
+    </ul></div>
+    <div class="card"><h4>TradingView &amp; FxReplay</h4><ul>
+      <li>Indicator “Moving Average Exponential”, Length 9 và 34, Source close, Offset 0</li>
+      <li>Màu giống ATAS: <span class="mono">#4CC9F0</span> và <span class="mono">#E7B04B</span></li>
+      <li>Trên FxReplay, lưu thành template “EMA 9/34” để mọi phiên backtest dùng cùng setting</li>
+      <li>Lưu ý: TradingView khởi tạo EMA hơi khác ATAS, nên vài nến đầu chart có thể lệch nhẹ. Sau ~3×N nến thì hai bên gần như trùng khớp</li>
+    </ul></div>
+  </div>
+  <h3>Thuật ngữ</h3>
+  <div class="tw"><table class="t">
+    <tr><th>Thuật ngữ</th><th>Nghĩa trong playbook này</th></tr>
+    <tr><td>EMA / SMA</td><td>Trung bình động hàm mũ (có trọng số) / trung bình cộng đơn giản</td></tr>
+    <tr><td>α (alpha)</td><td>Hệ số làm mượt = 2/(N+1); EMA9 là 0,2</td></tr>
+    <tr><td>Lag / Half-life</td><td>Độ trễ ~(N−1)/2 nến / số nến chiếm một nửa trọng số</td></tr>
+    <tr><td>Stack · Spread · Cross</td><td>Thứ tự giá/9/34 · khoảng cách 9–34 · điểm hai đường cắt nhau</td></tr>
+    <tr><td>Cloud 9–34</td><td>Vùng giữa EMA9 và EMA34, nơi pullback lành mạnh thường dừng lại</td></tr>
+    <tr><td>SIBI / BISI</td><td>Sell-side Imbalance Buy-side Inefficiency (FVG giảm) / ngược lại (FVG tăng)</td></tr>
+    <tr><td>BSL / SSL</td><td>Buy-side / Sell-side liquidity: cụm stop trên đỉnh / dưới đáy</td></tr>
+    <tr><td>S1–S5 · E1–E4</td><td>5 trạng thái thị trường · 4 model entry của playbook</td></tr>
+  </table></div>
+</div>
+  </div>
+  <div class="qz-slot" data-qz="levels:ema" data-title="Quiz 06 · EMA 9/34"></div>
+</section>
+
 <!-- ============ 05 CVD ============ -->
 <section class="tab" id="ch-cvd" data-chapter="cvd">
   <div class="head">
-    <span class="eyebrow">06 · Add-in confluence #2</span>
+    <span class="eyebrow">07 · Add-in confluence #3</span>
     <h2>CVD divergence: ai đang chủ động, và họ có còn đẩy được giá không</h2>
     <p class="lead">Bạn tự nhận lỗi chính hiện tại là đọc footprint/delta chưa chuẩn. CVD là cách đơn giản hoá: thay vì đọc từng ô bid × ask, chỉ so <b>hai swing liên tiếp</b> của giá với hai swing tương ứng của CVD, và <b>chỉ tại level TPO</b>.</p>
   </div>
@@ -510,7 +752,7 @@ Reset      = 9:30 ET (cùng mốc VWAP RTH và TPO RTH)</div>
 <!-- ============ 06 PLAN ============ -->
 <section class="tab" id="ch-plan" data-chapter="plan">
   <div class="head">
-    <span class="eyebrow">07 · Quy trình mỗi ngày</span>
+    <span class="eyebrow">08 · Quy trình mỗi ngày</span>
     <h2>Lên plan: từ profile hôm qua đến 2 kịch bản có invalidation</h2>
     <p class="lead">Mục tiêu của plan không phải dự đoán đúng hướng. Mục tiêu là trước 9:25 ET bạn biết: <b>mình trade ở đâu, theo điều kiện gì, và điều gì làm mình đứng ngoài</b>. Từ 01/11/2026 Mỹ đã hết DST, nên 9:30 ET = <b>21:30 giờ VN</b>.</p>
   </div>
@@ -549,12 +791,14 @@ Reset      = 9:30 ET (cùng mốc VWAP RTH và TPO RTH)</div>
 </div>
 <footer class="ui-foot">Playbook học tập cho NQ intraday. Không phải lời khuyên đầu tư. Các con số thống kê truyền thống (80% rule, tỉ lệ day type) cần được bạn tự kiểm chứng bằng backtest trước khi dùng với tiền thật.</footer>
 </main>
-<script src="assets/js/levels-data.js?v=12"></script>
-<script src="assets/js/fp.js?v=12"></script>
-<script src="assets/js/bank-levels.js?v=12"></script>
-<script src="assets/js/bank-tools.js?v=12"></script>
-<script src="assets/js/quiz.js?v=12"></script>
-<script src="assets/js/core.js?v=12"></script>
-<script src="assets/js/levels-page.js?v=12"></script>
+<script src="assets/js/levels-data.js?v=13"></script>
+<script src="assets/js/fp.js?v=13"></script>
+<script src="assets/js/bank-levels.js?v=13"></script>
+<script src="assets/js/bank-ema.js?v=13"></script>
+<script src="assets/js/bank-tools.js?v=13"></script>
+<script src="assets/js/quiz.js?v=13"></script>
+<script src="assets/js/core.js?v=13"></script>
+<script src="assets/js/levels-page.js?v=13"></script>
+<script src="assets/js/ema-page.js?v=13"></script>
 </body>
 </html>

@@ -9,10 +9,10 @@ const store={
 
 const NAV=[
   {k:'home',href:'index.en.html',label:'Overview',sub:'Dashboard',c:'var(--brand)',icon:'home'},
-  {k:'levels',href:'levels.en.html',label:'TPO Level',short:'Level',sub:'TPO · VWAP · CVD · Plan',c:'var(--c-levels)',icon:'tpo',chapters:[
+  {k:'levels',href:'levels.en.html',label:'TPO Level',short:'Level',sub:'TPO · VWAP · EMA · CVD',c:'var(--c-levels)',icon:'tpo',chapters:[
     ['tong-quan','00','Overview'],['nen-tang','01','TPO foundations'],['cau-truc','02','Day & Open types'],
     ['initial-balance','03','Initial Balance'],['levels','04','Level map'],['vwap','05','VWAP RTH'],
-    ['cvd','06','CVD divergence'],['plan','07','Daily planning']]},
+    ['ema','06','EMA 9/34'],['cvd','07','CVD divergence'],['plan','08','Daily planning']]},
   {k:'tools',href:'tools.en.html',label:'Orderflow Tools',short:'Tools',sub:'DOM · Tape · Footprint · Delta',c:'var(--c-tools)',icon:'fp',chapters:[
     ['tong-quan','00','Overview'],['nen-tang','01','Foundations'],['thuat-ngu','02','Glossary'],['footprint','03','Footprint'],
     ['delta','04','Delta & CVD'],['dom','05','DOM'],['tape','06','Tape'],['kich-ban','07','13 scenarios'],
