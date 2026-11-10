@@ -716,3 +716,87 @@ vào lệnh.	to enter.
 ③ Retest PD array (SIBI/IFVG) và giữ được	③ PD array retest (SIBI/IFVG) holds
 ④ Cross 9/34 đến	④ The 9/34 cross arrives
 Nhanh	Fast
+10 dòng gần nhất, màu nào chiếm đa số? Đó là phe đang đánh lệnh market. Có màu sweep không?	In the last 10 rows, which color dominates? That is the side hitting market orders. Any sweep color?
+2 cột như ATAS	2 columns like ATAS
+7 pattern cần nhận ra trong vài giây	7 patterns to recognise in seconds
+Ask size tại 29511.25 sau mỗi print	Ask size at 29511.25 after each print
+Ask size tại 29580.50 sau mỗi print	Ask size at 29580.50 after each print
+Ba lần quét khi giá tới level	Three scans when price reaches a level
+Bid size tại 29508.75 sau mỗi print	Bid size at 29508.75 after each print
+Bên giữ level đã hết hàng hoặc rút lệnh. Người kẹt ở phía sai phải thoát, đẩy giá đi nhanh.	The side holding the level ran out of size or pulled its orders. Traders stuck on the wrong side must exit, pushing price fast.
+BẪY	TRAP
+Bối cảnh: 29476.50 · Đỉnh ngày hôm qua (PDH)	Context: 29476.50 · Previous day high (PDH)
+Bối cảnh: 29487.50 · Đỉnh Initial Balance	Context: 29487.50 · Initial Balance high
+Bối cảnh: 29501.25 · Đỉnh ngày hôm qua (PDH)	Context: 29501.25 · Previous day high (PDH)
+Bối cảnh: 29508.75 · VAL phiên trước	Context: 29508.75 · Prior session VAL
+Bối cảnh: 29511.25 · Đỉnh overnight (ONH)	Context: 29511.25 · Overnight high (ONH)
+Bối cảnh: 29580.50 · Đỉnh overnight (ONH)	Context: 29580.50 · Overnight high (ONH)
+Bối cảnh: Giữa range, không có level gần	Context: Mid-range, no level nearby
+Chỉ dùng tại level đã đánh dấu. Vào khi phe đối diện bắt đầu chủ động, stop ngoài level.	Only use it at a marked level. Enter when the opposite side turns aggressive, stop beyond the level.
+Chờ phe ngược chiều chủ động và giá quay về trong level, rồi vào ngược hướng sweep. Stop ngoài điểm cực vừa tạo.	Wait for the opposite side to turn aggressive and price to return inside the level, then trade against the sweep. Stop beyond the new extreme.
+Có giá trị khi xảy ra đúng lúc phá range. Vào theo hướng sweep khi giá retest và giữ được.	Meaningful when it happens right at a range break. Trade in the sweep direction when price retests and holds.
+Có limit lớn đứng chặn. Phe chủ động tiêu khối lượng mà không có kết quả.	A large limit order is blocking. The aggressive side spends volume with no result.
+Có lệnh limit ẩn tự nạp lại. Người đặt muốn giấu kích thước thật.	A hidden limit order keeps reloading. Its owner wants to hide the real size.
+Cạn kiệt	Exhaustion
+Dò cột Price từ dưới lên. Giá có đi theo phe chủ động không, hay đứng yên ở một mức?	Scan the Price column bottom-up. Does price follow the aggressive side, or sit at one price?
+Dòng lớn nhất nằm ở đâu và màu gì? Volume đang lớn dần hay teo dần?	Where is the largest row and what color is it? Is volume growing or shrinking?
+Ghép kết quả quét 2 (volume) và quét 3 (giá) để biết ai đang kiểm soát tại level.	Combine scan 2 (volume) and scan 3 (price) to see who controls the level.
+Giá quét qua đỉnh hoặc đáy cũ bằng vài print lớn, rồi lập tức chỉ còn lot nhỏ và giá không đi tiếp.	Price sweeps an old high or low with a few large prints, then immediately only small lots remain and price stalls.
+Giá vẫn tạo đỉnh mới nhưng chỉ bằng lot 1–4, print thưa dần, rồi một print lớn ngược chiều.	Price still makes new highs but only with 1–4 lots, prints thin out, then one large print goes the other way.
+Giá đi được vì thị trường mỏng, không phải vì lực mạnh.	Price moves because the book is thin, not because of real force.
+Hay gặp khi quét PDH/PDL hoặc đỉnh đáy overnight. Vào khi có print lớn ngược chiều, stop trên đỉnh vừa tạo.	Common when sweeping PDH/PDL or the overnight high/low. Enter on a large opposite print, stop beyond the new extreme.
+Hấp thụ	Absorption
+Hấp thụ có thể bị phá. Level vỡ bằng một sweep lớn thì thoát ngay.	Absorption can fail. If the level breaks with a big sweep, exit immediately.
+Hấp thụ hoặc iceberg. Liếc DOM để biết bên giữ còn hàng không.	Absorption or iceberg. Glance at the DOM to see whether the holder still has size.
+Iceberg bị ăn hết thì giá thường chạy mạnh qua mức đó.	Once the iceberg is eaten, price usually runs hard through that price.
+Initiative. Bên limit không chặn nổi.	Initiative. The limit side cannot hold it.
+Không ai có ý định rõ ràng. Print lớn đơn lẻ có thể là hedge, spread hoặc roll.	Nobody has clear intent. A lone large print may be a hedge, spread or roll.
+Không ai kiểm soát	Nobody in control
+Không trade ngược iceberg. Cần bật Show Previous Level 1 Data để thấy.	Do not trade against an iceberg. Turn on Show Previous Level 1 Data to see it.
+Khối lượng khớp ở một giá vượt xa size đang hiển thị, nhưng size đó vẫn đứng yên.	Volume traded at one price far exceeds the displayed size, yet the displayed size does not change.
+Khối lượng lớn ở đây là stop của người khác và lệnh breakout bị kích hoạt, không phải người mua mới. Thanh khoản đã bị lấy xong.	The big volume here is other traders’ stops and triggered breakout orders, not new buyers. The liquidity has been taken.
+Khớp	Side
+Layout 2 cột chỉ giữ Price và Volume. Mất cột Bid/Ask thì nhìn màu để biết bên khớp, mất cột Sizes thì phải liếc DOM tại level.	The 2-column layout keeps only Price and Volume. Without Bid/Ask, read the color for the aggressor; without Sizes, glance at the DOM at the level.
+Level bị phá	Level breaks
+Lot lớn đánh liên tục vào một mức giá mà giá không đi qua được. Size bên bị đánh được nạp lại sau mỗi print.	Large lots keep hitting one price but price cannot get through. The size being hit reloads after every print.
+LÀM	DO
+Lệnh market đủ lớn để ăn nhiều level. Người đặt cần khớp ngay, không quan tâm giá.	A market order large enough to eat several levels. Its owner needs a fill now, whatever the price.
+Ma trận kiểm soát	Control matrix
+Màu	Color
+Mỗi tape mẫu chỉ hiện phần lõi của pattern, dòng mới nhất nằm trên cùng giống ATAS. Câu hỏi luôn giống nhau: phe chủ động có làm giá dịch chuyển không.	Each sample tape shows only the core of the pattern, newest row on top like ATAS. The question is always the same: does the aggressive side move price?
+Một dòng trên băng. Màu xanh: mua chủ động khớp tại ask. Màu đỏ: bán chủ động khớp tại bid. Màu vàng: lệnh đủ lớn để quét qua best price.	One row on the tape. Green: aggressive buy filled at the ask. Red: aggressive sell filled at the bid. Yellow: an order big enough to sweep through the best price.
+Một mức giá đang được giữ bằng hấp thụ hoặc iceberg, rồi size nạp lại nhỏ dần và giá bị quét qua.	A price is held by absorption or an iceberg, then the reloaded size shrinks and price gets swept through.
+NGHĨA	MEANS
+Nhiễu, hoặc giờ trưa.	Noise, or lunchtime.
+Phe limit đối diện kiểm soát	Opposing limit side in control
+Phe đánh market kiểm soát	Market-order side in control
+Phe đẩy giá hết lực. Không còn người mua mới ở giá cao.	The side pushing price is out of force. No new buyers at higher prices.
+Phe đẩy sắp cạn	Pushing side nearly exhausted
+Phá vỡ chỉ bằng lot nhỏ và tape chậm thường quay lại. Cần có sweep thật.	A break on small lots and a slow tape usually comes back. It needs a real sweep.
+Print khớp vượt Ask (màu sweep), dấu +++ liên tục, các print cách nhau vài chục ms.	Prints fill above the Ask (sweep color), +++ upticks in a row, prints a few dozen ms apart.
+Print nhỏ hai chiều, thỉnh thoảng một print lớn đơn lẻ, giá không có hướng và không ở gần level.	Small two-way prints, the odd lone large print, price directionless and not near a level.
+Quét 1	Scan 1
+Quét 2	Scan 2
+Quét 3	Scan 3
+Sweep vào đỉnh hoặc đáy cũ thường là stop run và bị đảo chiều ngay sau đó.	A sweep into an old high or low is often a stop run that reverses right after.
+THẤY	SEE
+Tape chậm vào giờ trưa là bình thường, không phải cạn kiệt.	A slow tape at lunchtime is normal, not exhaustion.
+Thấy một print 30 lot rồi vào lệnh ngay mà không có level.	Seeing a 30-lot print and entering right away with no level.
+VOLUME LỚN · GIÁ ĐI THEO	BIG VOLUME · PRICE FOLLOWS
+VOLUME LỚN · GIÁ ĐỨNG YÊN	BIG VOLUME · PRICE STALLS
+VOLUME NHỎ · GIÁ ĐI THEO	SMALL VOLUME · PRICE FOLLOWS
+VOLUME NHỎ · GIÁ ĐỨNG YÊN	SMALL VOLUME · PRICE STALLS
+Vào ngược quá sớm. Nếu sau sweep vẫn còn print lớn cùng chiều thì đó là phá vỡ thật.	Fading too early. If large prints keep coming in the sweep direction, it is a real break.
+Vào theo hướng phá khi giá giữ được bên kia level. Đây là lý do không bao giờ trade hấp thụ mà không có stop.	Trade the break direction once price holds on the other side of the level. This is why you never trade absorption without a stop.
+bán ở Bid	sell at Bid
+giữa spread	inside spread
+mua ở Ask	buy at Ask
+quét qua Ask / Bid	sweep through Ask / Bid
+ví dụ: long	example: long
+ví dụ: short	example: short
+Đầy đủ	Full
+Đứng ngoài. Đây là trạng thái của tape trong phần lớn thời gian.	Stand aside. This is how the tape looks most of the time.
+→ Chờ màu đổi, vào ngược	→ Wait for the color to flip, then fade
+→ Chờ print lớn ngược màu	→ Wait for a large opposite-color print
+→ Theo hướng màu áp đảo	→ Go with the dominant color
+→ Đứng ngoài	→ Stand aside
