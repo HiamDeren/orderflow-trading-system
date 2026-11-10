@@ -135,7 +135,7 @@ const Q=[
 "q": "S1 trend, price is about 40 points from EMA9 and you want to go long. What should you do?",
 "o": [
 "Market long now before missing it",
-"Wait for price to return to EMA9 or an FVG near EMA9, then consider E1",
+"Wait for price to return to EMA9 or a TPO zone near EMA9, then consider E1",
 "Short because price has risen a lot",
 "Switch to 2m"
 ],
@@ -149,12 +149,12 @@ const Q=[
 "q": "In model E3 (short), where is a sensible stop?",
 "o": [
 "Below EMA34",
-"Above the sweep high or above the SIBI",
+"Above the sweep high or beyond the swept zone",
 "Fixed 5 points",
 "Below the nearest low"
 ],
 "a": 1,
-"e": "The E3 idea is wrong once price breaks back through the SIBI or reclaims the sweep high. Put the stop beyond those levels."
+"e": "The E3 idea is wrong once price is accepted back beyond the zone or reclaims the sweep high. Put the stop beyond those levels."
 },
 {
 "id": "L105",
@@ -174,15 +174,15 @@ const Q=[
 "id": "L106",
 "course": "levels",
 "mod": "ema",
-"q": "In a short, a candle closes above both EMA9 and EMA34 but still below the SIBI. What does the ladder say?",
+"q": "Short from VAH, a candle closes above both EMA9 and EMA34 but still below VAH. What does the ladder say?",
 "o": [
 "Exit everything now",
-"Add because the SIBI still holds",
-"Hold half, stop above the SIBI, read OF at the SIBI",
+"Add because VAH still holds",
+"Hold half, stop above VAH, read OF at VAH",
 "Remove the stop and wait for price to return"
 ],
 "a": 2,
-"e": "This is step 4: the PD array outranks the EMA. The next deciding layer is orderflow at the SIBI. A close above the SIBI exits everything."
+"e": "This is step 4: the TPO zone outranks the EMA. The next deciding layer is orderflow at VAH. A close above VAH exits everything."
 },
 {
 "id": "L107",
@@ -207,10 +207,10 @@ const Q=[
 "Primary entry trigger",
 "Read the state, grant directional permission, and manage the trade. The trigger is orderflow",
 "Replaces the TPO zone",
-"Define the DOL of the day"
+"Define the bias of the day"
 ],
 "a": 1,
-"e": "Layer 3 · State. Context comes from ICT, location from TPO/PD arrays, the trigger from footprint/delta/CVD. The EMA links those layers to trade management."
+"e": "Layer 3 · State. Context comes from the TPO bias, location from TPO zones/VWAP, the trigger from footprint/delta/CVD. The EMA links those layers to trade management."
 }
 ];
 window.QBANK=(window.QBANK||[]).concat(Q.map(q=>Object.assign({vis:null},q)));

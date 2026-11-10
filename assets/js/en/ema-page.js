@@ -96,7 +96,7 @@ var REG={
 };
 $$('[data-chart]').forEach(function(el){var r=REG[el.getAttribute('data-chart')];var bars=genBars(sh(r.k,27000),r.seed,r.n,r.w);
   var ann=[];
-  if(el.getAttribute('data-chart')==='s5'){ann=[{t:'num',i:58,at:'high',n:1,dy:-14},{t:'num',i:61,at:'low',n:2,dy:16},{t:'box',i0:61,i1:100,p0:27133,p1:27140,label:'SIBI'}];
+  if(el.getAttribute('data-chart')==='s5'){ann=[{t:'num',i:58,at:'high',n:1,dy:-14},{t:'num',i:61,at:'low',n:2,dy:16},{t:'box',i0:61,i1:100,p0:27133,p1:27140,label:'VAH'}];
     var A=analyze(bars,9,34),cx=A.cross.filter(function(c){return c.i>58;})[0];if(cx)ann.push({t:'num',i:cx.i,p:A.es[cx.i],n:4,dy:-16});ann.push({t:'num',i:68,at:'high',n:3,dy:-14});}
   el.innerHTML=chartSVG(bars,{from:34,W:900,H:300,ann:ann});});
 

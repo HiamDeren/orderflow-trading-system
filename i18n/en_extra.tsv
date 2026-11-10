@@ -800,3 +800,50 @@ ví dụ: short	example: short
 → Chờ print lớn ngược màu	→ Wait for a large opposite-color print
 → Theo hướng màu áp đảo	→ Go with the dominant color
 → Đứng ngoài	→ Stand aside
+(acceptance). Lúc đó zone đã bị phá, bias đảo lại	(acceptance). The zone is broken and the bias flips
+(nến đóng trên 9 và 34 nhưng vẫn dưới zone): không vào thêm, không thoát hoảng. Giảm còn một nửa, stop trên zone, đọc footprint ở zone. Seller absorption, delta âm ở đỉnh thì zone thắng. Stacked imbalance mua xuyên zone thì EMA thắng.	(candle closes above 9 and 34 but still below the zone): do not add, do not panic-exit. Cut to half, stop above the zone, read the footprint at the zone. Seller absorption and negative delta at the high mean the zone wins. Buy stacked imbalance through the zone means the EMA wins.
+(sau sweep, nến thân lớn) mở ra một cơ hội: pullback đầu tiên về cloud 9–34 sau cross.	(after a sweep, with a large-body candle) opens one opportunity: the first pullback into the 9–34 cloud after the cross.
+(short) + OF tại zone	(short) + OF at the zone
+: không ở S4; zone chưa bị nến đóng xuyên (chưa acceptance); giá không giãn quá xa EMA9	: not in S4; no candle has closed through the zone (no acceptance); price not overextended from EMA9
+: lệnh thuận bias TPO của ngày	: trade aligned with the TPO bias of the day
+: tại TPO zone (VAH/VAL/POC, IB) hoặc band VWAP	: at a TPO zone (VAH/VAL/POC, IB) or a VWAP band
+: đóng trên EMA9 nhưng còn dưới zone đã vào lệnh thì giữ phần còn lại, stop trên zone, đọc OF. Nến đóng trên zone thì thoát hết, không ngoại lệ.	: a close above EMA9 but still below the zone you traded from keeps the remainder, stop above the zone, read OF. A close above the zone exits everything, no exceptions.
+Chờ giá về EMA9 hoặc về TPO zone gần EMA9 rồi mới xét E1	Wait for price to return to EMA9 or a TPO zone near EMA9, then consider E1
+EMA không bóp cò. Mỗi model dưới đây đều cần location (TPO zone/VWAP band) và trigger orderflow. EMA chỉ trả lời “được phép không” và “giữ đến đâu”.	The EMA never pulls the trigger. Every model below needs a location (TPO zone/VWAP band) and an orderflow trigger. The EMA only answers “am I allowed” and “how long do I hold”.
+Entry: retest EMA9, ưu tiên chỗ trùng imbalance hoặc VWAP (model E1)	Entry: retest of EMA9, preferably where it meets an imbalance or VWAP (model E1)
+Extreme của nhịp vừa chạy, rồi level TPO kế tiếp	Extreme of the leg just made, then the next TPO level
+Giá cách EMA9 quá xa so với bình thường thì không đuổi. Chờ giá về EMA hoặc về TPO zone.	When price is unusually far from EMA9, do not chase. Wait for price to come back to the EMA or a TPO zone.
+Giá quét qua high/low hoặc biên zone để lấy stop rồi quay lại	Price runs through a high/low or zone edge to take stops, then comes back
+Giá đóng và giữ được bên kia zone / bị đẩy ngược lại vào trong	Price closes and holds beyond the zone / gets pushed back inside
+Giữ một nửa, stop trên VAH, đọc OF tại VAH	Hold half, stop above VAH, read OF at VAH
+Key level kế tiếp: TPO POC/VAL, VWAP, đáy nhịp tăng; runner về biên đối diện của value	Next key level: TPO POC/VAL, VWAP, low of the up leg; runner to the opposite edge of value
+Khi EMA và zone mâu thuẫn	When the EMA and the zone disagree
+Layer 3 · State. Context đến từ bias TPO, location từ TPO zone/VWAP, trigger từ footprint/delta/CVD. EMA nối các lớp đó với việc quản lý lệnh.	Layer 3 · State. Context comes from the TPO bias, location from TPO zones/VWAP, the trigger from footprint/delta/CVD. The EMA links those layers to trade management.
+Mức TPO gần nhất (VAH/VAL/POC) là thứ quyết định chiều đi	The nearest TPO level (VAH/VAL/POC) decides the direction
+Ngoại lệ TPO zone	TPO zone exception
+Nến đóng và giữ	Candle closes and holds
+Open type, open trong hay ngoài value hôm trước, vị trí so với VWAP RTH. Quyết định chiều ưu tiên của ngày.	Open type, open inside or outside prior value, position versus VWAP RTH. Decides the preferred direction of the day.
+Open type, open trong/ngoài value hôm trước, vị trí so với VWAP RTH	Open type, open inside/outside prior value, position versus VWAP RTH
+Pullback đầu tiên sau cross chạm cloud 9–34 tại TPO zone hoặc VWAP + OF xác nhận	First pullback after the cross touches the 9–34 cloud at a TPO zone or VWAP + OF confirms
+Stop trên đỉnh sweep hoặc ngoài zone	Stop above the sweep high or beyond the zone
+Swing high/low trước đó, level TPO kế tiếp; runner theo ladder EMA9	Previous swing high/low, next TPO level; runner follows the EMA9 ladder
+TPO zone (VAH/VAL/POC) hoặc VWAP band ±1σ.	TPO zone (VAH/VAL/POC) or VWAP ±1σ band.
+TPO zone hoặc VWAP band	TPO zone or VWAP band
+Trên đỉnh sweep (an toàn) hoặc trên zone (chặt)	Above the sweep high (safe) or above the zone (tight)
+Trên đỉnh sweep hoặc ngoài zone vừa bị quét	Above the sweep high or beyond the swept zone
+VAH/VAL/POC của 4 profile, IB high/low, band VWAP ±σ. Quyết định	VAH/VAL/POC of the 4 profiles, IB high/low, VWAP ±σ bands. Decides
+Vào thêm vì VAH còn giữ	Add because VAH still holds
+Xác định bias của ngày	Define the bias of the day
+lệnh. Trigger vẫn là orderflow tại key level. Stack: bias TPO → TPO zone / VWAP band → trạng thái EMA → footprint, delta, CVD.	the trade. The trigger is still orderflow at a key level. Stack: TPO bias → TPO zone / VWAP band → EMA state → footprint, delta, CVD.
+model đảo chiều sau sweep. Sau khi quét high/low, nến đóng ngược EMA9 là dấu hiệu động lượng đổi. Zone vừa bị quét giữ được khi retest là nơi đặt lệnh.	the reversal-after-sweep model. After a high/low is swept, a candle closing back across EMA9 signals a momentum shift. The swept zone holding on the retest is where the order goes.
+trend mạnh thì EMA9 là “sàn” động. Giá chạm lại EMA9 lần đầu, đúng chỗ có imbalance hoặc VWAP, là điểm vào rủi ro thấp nhất.	in a strong trend EMA9 is a dynamic “floor”. Price touching EMA9 for the first time, right where there is an imbalance or VWAP, is the lowest-risk entry.
+trên zone	above the zone
+Ý tưởng của E3 sai khi giá được chấp nhận lại bên kia zone hoặc lấy lại đỉnh sweep. Stop đặt ngoài các mức đó.	The E3 idea is wrong once price is accepted back beyond the zone or reclaims the sweep high. Put the stop beyond those levels.
+Đang short từ VAH, nến đóng trên cả EMA9 và EMA34 nhưng vẫn dưới VAH. Theo ladder?	Short from VAH, a candle closes above both EMA9 and EMA34 but still below VAH. What does the ladder say?
+Đây là bậc 4: TPO zone có ưu tiên cao hơn EMA. Lớp quyết định tiếp theo là orderflow tại VAH. Nến đóng trên VAH thì thoát hết.	This is step 4: the TPO zone outranks the EMA. The next deciding layer is orderflow at VAH. A close above VAH exits everything.
+Ưu tiên TPO zone hơn EMA khi hai lớp mâu thuẫn	Prioritise the TPO zone over the EMA when the two disagree
+① Quét high/low: biên ON range, IB hoặc VAH/VAL	① High/low sweep: ON range edge, IB or VAH/VAL
+① Sweep high/low (ONH/ONL, IBH/IBL, VAH/VAL) → ② nến thân lớn đóng ngược EMA9 → ③ giá retest lại zone, nến đóng lại	① Sweep a high/low (ONH/ONL, IBH/IBL, VAH/VAL) → ② a large-body candle closes back across EMA9 → ③ price retests the zone and closes back
+② Nến thân lớn đóng ngược EMA9, delta mạnh	② Large-body candle closes back across EMA9, strong delta
+③ Retest lại zone vừa bị quét và giữ được (look above / below and fail)	③ Retest of the swept zone holds (look above / below and fail)
+Bias TPO / Open type	TPO bias / Open type

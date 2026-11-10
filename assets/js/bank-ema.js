@@ -135,7 +135,7 @@ const Q=[
 "q": "Trend S1, giá đang cách EMA9 khoảng 40 điểm và bạn muốn long. Nên làm gì?",
 "o": [
 "Market long ngay kẻo lỡ",
-"Chờ giá về EMA9 hoặc về FVG gần EMA9 rồi mới xét E1",
+"Chờ giá về EMA9 hoặc về TPO zone gần EMA9 rồi mới xét E1",
 "Short vì giá đã lên nhiều",
 "Đổi sang 2m"
 ],
@@ -149,12 +149,12 @@ const Q=[
 "q": "Trong model E3 (short), stop hợp lý đặt ở đâu?",
 "o": [
 "Dưới EMA34",
-"Trên đỉnh sweep hoặc trên SIBI",
+"Trên đỉnh sweep hoặc ngoài zone vừa bị quét",
 "Cố định 5 điểm",
 "Dưới đáy gần nhất"
 ],
 "a": 1,
-"e": "Ý tưởng của E3 sai khi giá phá lại SIBI hoặc lấy lại đỉnh sweep. Stop đặt ngoài các mức đó."
+"e": "Ý tưởng của E3 sai khi giá được chấp nhận lại bên kia zone hoặc lấy lại đỉnh sweep. Stop đặt ngoài các mức đó."
 },
 {
 "id": "L105",
@@ -174,15 +174,15 @@ const Q=[
 "id": "L106",
 "course": "levels",
 "mod": "ema",
-"q": "Đang short, nến đóng trên cả EMA9 và EMA34 nhưng vẫn dưới SIBI. Theo ladder?",
+"q": "Đang short từ VAH, nến đóng trên cả EMA9 và EMA34 nhưng vẫn dưới VAH. Theo ladder?",
 "o": [
 "Thoát hết ngay",
-"Vào thêm vì SIBI còn giữ",
-"Giữ một nửa, stop trên SIBI, đọc OF tại SIBI",
+"Vào thêm vì VAH còn giữ",
+"Giữ một nửa, stop trên VAH, đọc OF tại VAH",
 "Bỏ stop chờ giá về"
 ],
 "a": 2,
-"e": "Đây là bậc 4: PD array có ưu tiên cao hơn EMA. Lớp quyết định tiếp theo là orderflow tại SIBI. Nến đóng trên SIBI thì thoát hết."
+"e": "Đây là bậc 4: TPO zone có ưu tiên cao hơn EMA. Lớp quyết định tiếp theo là orderflow tại VAH. Nến đóng trên VAH thì thoát hết."
 },
 {
 "id": "L107",
@@ -207,10 +207,10 @@ const Q=[
 "Trigger vào lệnh chính",
 "Đọc trạng thái, cấp quyền trade chiều nào, và quản lý lệnh. Trigger là orderflow",
 "Thay thế TPO zone",
-"Xác định DOL của ngày"
+"Xác định bias của ngày"
 ],
 "a": 1,
-"e": "Layer 3 · State. Context đến từ ICT, location từ TPO/PD array, trigger từ footprint/delta/CVD. EMA nối các lớp đó với việc quản lý lệnh."
+"e": "Layer 3 · State. Context đến từ bias TPO, location từ TPO zone/VWAP, trigger từ footprint/delta/CVD. EMA nối các lớp đó với việc quản lý lệnh."
 }
 ];
 window.QBANK=(window.QBANK||[]).concat(Q.map(q=>Object.assign({vis:null},q)));
