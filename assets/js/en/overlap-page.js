@@ -159,6 +159,111 @@ function renderMatrix(){
   show(2,"otd1");
 }
 
+
+
+const DT = [
+ {k:"normal",n:"Normal",dir:0,flip:false,p:[[12,30],[13,29],[16,26],[15,24],[17,25],[18,24],[16,23],[17,25],[19,24],[18,23],[17,23],[19,25],[20,23]],o:20,c:21,
+  sig:"Very wide IB, almost the whole range; no range extension.", mean:"The large timeframe sets the edges early; the rest is rotation.", key:"Prior IB ≈ range: PDH/PDL are strong edges."},
+ {k:"nvar",n:"Normal Variation",dir:1,flip:true,p:[[16,26],[15,24],[18,25],[22,31],[25,33],[26,32],[24,30],[25,31],[26,30],[25,31],[24,29],[25,30],[26,29]],o:19,c:28,
+  sig:"Medium IB, one-sided range extension of about 1.2–2x IB.", mean:"Initiative activity shows up after the IB and moves value in the RE direction.", key:"Range-extension high/low and the prior IB edges."},
+ {k:"trend",n:"Trend",dir:1,flip:true,p:[[2,7],[5,10],[8,13],[11,16],[14,19],[17,22],[19,24],[22,27],[24,29],[26,31],[29,34],[31,36],[33,38]],o:3,c:37,
+  sig:"Narrow IB, thin elongated profile, close at the extreme.", mean:"One side is fully in control. The VA means little because value was not built.", key:"Close at the extreme and the thin TPO stretches in the profile body."},
+ {k:"dd",n:"Double Distribution",dir:1,flip:true,p:[[4,10],[5,11],[6,10],[5,9],[7,11],[10,23],[20,27],[21,28],[22,27],[20,26],[21,27],[22,28],[23,27]],o:6,c:25,
+  sig:"Two value areas separated by a single-print band.", mean:"Morning balance, then new information pushes price into a second balance area.", key:"The single-print band between the two distributions is the key level."},
+ {k:"neutral",n:"Neutral",dir:0,flip:false,p:[[14,24],[15,25],[17,29],[18,26],[15,23],[9,17],[11,19],[13,20],[15,21],[16,22],[17,23],[16,22],[17,21]],o:19,c:19,
+  sig:"Range extension on both sides of the IB, close mid-range (neutral center).", mean:"Both sides balanced, nobody won. If the close is at an extreme (neutral extreme), prefer the close direction.", key:"Prior IB edges and both ends of the range extension."},
+ {k:"nontrend",n:"Non-Trend",dir:0,flip:false,p:[[17,22],[18,22],[17,21],[18,22],[17,21],[18,21],[17,22],[18,21],[17,21],[18,22],[17,21],[18,21],[18,21]],o:19,c:20,
+  sig:"Narrow IB, price barely leaves it all day.", mean:"Lack of information, energy is building.", key:"Yesterday’s narrow range edges = breakout levels."},
+ {k:"pshape",n:"P-shape",dir:1,weak:true,flip:false,p:[[2,9],[7,15],[13,22],[18,26],[21,27],[20,26],[21,27],[22,26],[21,26],[22,27],[21,26],[22,26],[22,25]],o:3,c:24,
+  sig:"Thin body below, value bulging above.", mean:"Usually short covering, not necessarily new buying.", key:"The thin body of the P: price moves fast if it returns there."},
+ {k:"bshape",n:"b-shape",dir:-1,weak:true,flip:false,p:null,o:26,c:5,
+  sig:"Thin body above, value bulging below.", mean:"Usually long liquidation, not necessarily new selling.", key:"The thin body of the b: price moves fast if it returns there."}
+];
+DT.find(d=>d.k==="bshape").p = DT.find(d=>d.k==="pshape").p.map(([a,b])=>[29-b,29-a]);
+const DT_BASE = 28600, DT_STEP = 5;
+function dtPeriods(k, down){
+  const d = DT.find(x=>x.k===k);
+  const flip = down && d.flip;
+  const ps = flip ? d.p.map(([a,b])=>[40-b,40-a]) : d.p;
+  return { ps, o: flip?40-d.o:d.o, c: flip?40-d.c:d.c, dir: flip ? -d.dir : d.dir, name: d.n + (d.flip ? (flip?" ↓":" ↑") : "") };
+}
+function tpoVA(ps){
+  let lo=1e9, hi=-1e9; ps.forEach(([a,b])=>{ lo=Math.min(lo,a); hi=Math.max(hi,b); });
+  const cnt = {}; for(let p=lo;p<=hi;p++) cnt[p] = ps.filter(([a,b])=>p>=a&&p<=b).length;
+  const mid=(lo+hi)/2; let poc=lo; for(let p=lo;p<=hi;p++){ if(cnt[p]>cnt[poc] || (cnt[p]===cnt[poc] && Math.abs(p-mid)<Math.abs(poc-mid))) poc=p; }
+  const tot = Object.values(cnt).reduce((s,v)=>s+v,0); let acc=cnt[poc], vah=poc, val=poc, up=poc+1, dn=poc-1;
+  while(acc < Math.ceil(tot*0.7) && (up<=hi||dn>=lo)){ const cu = up<=hi?cnt[up]:-1, cd = dn>=lo?cnt[dn]:-1; if(cu>=cd){acc+=cu;vah=up++;} else {acc+=cd;val=dn--;} }
+  // longest thin zone (≤ 1 TPO) inside the range
+  let best=null, run=null;
+  for(let p=lo;p<=hi;p++){ if(cnt[p]<=1){ run = run ? [run[0],p] : [p,p]; if(!best || run[1]-run[0] > best[1]-best[0]) best = run.slice(); } else run = null; }
+  return { lo, hi, poc, vah, val, thin: best && best[1]-best[0]>=2 ? best : null };
+}
+const SC_REL = {
+  1:w=>({oVal:.25*w, oVah:-.25*w, ref:"in"}),
+  2:w=>({oVal:.6*w, oVah:.5*w, ref:"up"}),
+  3:w=>({oVal:-.5*w, oVah:-.6*w, ref:"dn"}),
+  4:w=>({gap:.35*w, h:.8*w, ref:"above"}),
+  5:w=>({gap:.35*w, h:.8*w, ref:"below"}),
+  6:w=>({oVal:-.5*w, oVah:.5*w, ref:"wrap"})
+};
+const r5 = x => Math.round(x/DT_STEP)*DT_STEP;
+function buildCombo(dtk, down, id){
+  const t = dtPeriods(dtk, down), V = tpoVA(t.ps), P = r => DT_BASE + r*DT_STEP;
+  const rVah = P(V.vah), rVal = P(V.val), rPoc = P(V.poc), pdh = P(V.hi), pdl = P(V.lo), w = Math.max(20, rVah - rVal);
+  let oVal, oVah;
+  const rel = SC_REL[id](w);
+  if(rel.ref==="in"||rel.ref==="wrap"){ oVal = r5(rVal + rel.oVal); oVah = r5(rVah + rel.oVah); }
+  else if(rel.ref==="up"){ oVal = r5(rVal + rel.oVal); oVah = r5(rVah + rel.oVah); }
+  else if(rel.ref==="dn"){ oVal = r5(rVal + rel.oVal); oVah = r5(rVah + rel.oVah); }
+  else if(rel.ref==="above"){ oVal = r5(rVah + rel.gap); oVah = r5(oVal + rel.h); }
+  else { oVah = r5(rVal - rel.gap); oVal = r5(oVah - rel.h); }
+  if(id===1){ if(oVah - oVal < 5) oVah = oVal + 5; } else if(oVah - oVal < 15) oVah = oVal + 15;
+  const ow = oVah - oVal;
+  const oPoc = r5(oVal + ow*(id===2||id===4?0.6:id===3||id===5?0.4:0.5));
+  const onh = r5(oVah + Math.max(10, ow*0.3)), onl = r5(oVal - Math.max(10, ow*0.3));
+  const L = { rVah, rVal, rPoc, pdh, pdl, oVah, oVal, oPoc, onh, onl };
+  const D = derive(L);
+  D.rPeriods = t.ps.map(([a,b])=>[P(a),P(b)]); D.rStep = DT_STEP; D.rDtName = t.name;
+  D.rClose = P(t.c); D.rIB = [P(Math.min(t.ps[0][0],t.ps[1][0])), P(Math.max(t.ps[0][1],t.ps[1][1]))];
+  D.thin = V.thin ? [P(V.thin[0]), P(V.thin[1])] : null;
+  D.dt = { k:dtk, dir:t.dir, name:t.name };
+  return D;
+}
+
+function combo(dtk, dir, id){
+  const d = DT.find(x=>x.k===dtk), b = BIAS[id], wk = !!d.weak;
+  const W = b>0?"up":"down";
+  if(dir!==0 && b!==0){
+    const same = dir===b;
+    if(wk) return same
+      ? {tone:"A needs confirmation", cls:"ov", t:`${d.n} yesterday was ${dir>0?"short covering":"long liquidation"}, and overnight continued ${W}. You need to see real new ${dir>0?"buying":"selling"} (OD/OTD, holding outside the overlap) before trusting A. If RTH returns into the thin body of ${d.n}, price moves very fast toward B.`}
+      : {tone:"Reinforces A", cls:"good", t:`The ${dir>0?"rally":"drop"} of ${d.n} yesterday was mostly ${dir>0?"short covering":"long liquidation"} and is exhausted; overnight turning ${W} confirms a real aggressive side. A is reinforced, and the target can extend to the thin body of ${d.n}.`};
+    if(dtk==="trend") return same
+      ? {tone:"Reinforces A", cls:"good", t:`Yesterday’s Trend and overnight in the same direction: ${W}: multi-session imbalance. Do not fade; only follow pullbacks. Careful: the day after a trend usually has a smaller range.`}
+      : {tone:"A needs confirmation", cls:"ov", t:`Overnight reversed right after a Trend day. A trend day is more often followed by balance than a real reversal, so A (against the trend) needs OD/OTD confirmation. If RTH returns to the trend direction → strong B.`};
+    if(dtk==="dd") return same
+      ? {tone:"Reinforces A", cls:"good", t:`Yesterday’s Double Distribution and overnight point the same way: the second distribution is accepted. Yesterday’s single-print band is far support/resistance for B.`}
+      : {tone:"A needs confirmation", cls:"ov", t:`Overnight turned back toward the first distribution. Yesterday’s single-print band is where the market tends to move fast: if it is pierced, A runs fast; if it holds, B.`};
+    return same
+      ? {tone:"Reinforces A", cls:"good", t:`${d.n} yesterday (range extension ${W}) and overnight in the same direction: value is migrating across sessions. Prefer go-with.`}
+      : {tone:"A needs confirmation", cls:"ov", t:`Overnight went against yesterday’s range extension. A needs open-type confirmation; if RTH returns to yesterday’s RE side → B.`};
+  }
+  if(dir!==0 && b===0){
+    const dw = dir>0?"up":"down";
+    if(wk) return {tone:"Balance", cls:"", t:`Sau ${d.n} (${dir>0?"short covering":"long liquidation"}), overnight balanced inside yesterday’s value: the push ${dw} has no follow-through. Fade the overlap edges; on a breakout prefer the direction opposite to ${d.n}.`};
+    return {tone:"Balance · leaning with yesterday", cls:"", t:`After a ${d.n} ${dw}, overnight digested it inside yesterday’s value. Expect balance in A–C; on a breakout with acceptance prefer the ${dw} direction from yesterday.`};
+  }
+  if(dir===0 && b!==0){
+    if(dtk==="nontrend") return {tone:"Reinforces A", cls:"good", t:`Yesterday’s Non-Trend is stored energy; overnight leaving the range ${W} is a breakout of the compression. A is strong if RTH does not return to yesterday’s narrow range.`};
+    if(dtk==="neutral") return {tone:"A needs confirmation", cls:"ov", t:`Neutral center yesterday: both sides balanced. Overnight picking ${W} is new information that needs RTH confirmation by OD/OTD. If yesterday was a neutral extreme in the same direction ${W} then upgrade to "Reinforces A".`};
+    return {tone:"A needs confirmation", cls:"ov", t:`Yesterday ${d.n} (balance), and overnight picked a direction: ${W}. This is new information; A has good odds when RTH confirms with OD/OTD and holds outside the overlap.`};
+  }
+  if(dtk==="nontrend") return {tone:"Balance · breakout pending", cls:"ov", t:`Non-Trend followed by overnight balance: energy compressed across sessions. Do not fade deep; get ready to follow a breakout with acceptance.`};
+  return {tone:"Balance", cls:"", t:`${d.n} yesterday + overnight balance inside value: rotation is the default. If several days in a row look like this, build a composite.`};
+}
+const DT_OPTS = [["normal",false],["nvar",false],["nvar",true],["trend",false],["trend",true],["dd",false],["dd",true],["neutral",false],["nontrend",false],["pshape",false],["bshape",false]];
+const dtLabel = (k,down) => { const d = DT.find(x=>x.k===k); return d.n + (d.flip ? (down?" ↓":" ↑") : ""); };
+
 /* ---------- chart ---------- */
 
 const FA=[.6,.9,.4,1,.7,.8,.5,.3,.9,.6,.2], FB=[.8,.5,1,.6,.9,.4,.7,1,.5,.3,.6];
@@ -181,8 +286,9 @@ function tpoRows(ps){
   return rows;
 }
 function drawPlan(D, sc, open){
-  const W = 760, H = 480, top = 36, bot = 26, x0 = 74;
   const lo0 = Math.min(D.pdl, D.onl, D.rVal, D.oVal), hi0 = Math.max(D.pdh, D.onh, D.rVah, D.oVah);
+  const W = 760, top = 36, bot = 26, x0 = 74;
+  const H = D.rPeriods ? Math.round(Math.min(860, Math.max(480, (hi0-lo0)*1.16/D.rStep*10.5 + top + bot))) : 480;
   const pad = (hi0-lo0)*0.08, pmin = lo0-pad, pmax = hi0+pad;
   const Y = p => top + (pmax-p)/(pmax-pmin)*(H-top-bot);
     const xEnd = 548, xLab = 556;
@@ -196,7 +302,7 @@ function drawPlan(D, sc, open){
   for(let p = Math.ceil(pmin/tick)*tick; p <= pmax; p += tick){
     s += `<line x1="${x0-6}" x2="${xEnd}" y1="${Y(p)}" y2="${Y(p)}" stroke="#202328"/><text x="${x0-10}" y="${Y(p)+4}" font-size="11" text-anchor="end" fill="#9aa0a8">${fmt(p)}</text>`;
   }
-  s += `<text x="${x0+70}" y="20" font-size="12" text-anchor="middle" fill="#cfd3d8">Prior RTH TPO (A–N)</text><text x="${x0+250}" y="20" font-size="12" text-anchor="middle" fill="#cfd3d8">TPO OVN (31 period)</text><text x="${x0+400}" y="20" font-size="12" text-anchor="middle" fill="#cfd3d8">9:30 → 11:30</text>`;
+  s += `<text x="${x0+70}" y="20" font-size="12" text-anchor="middle" fill="#cfd3d8">Prior RTH TPO${D.rPeriods?" · "+D.rDtName:" (A–N)"}</text><text x="${x0+250}" y="20" font-size="12" text-anchor="middle" fill="#cfd3d8">TPO OVN (31 period)</text><text x="${x0+400}" y="20" font-size="12" text-anchor="middle" fill="#cfd3d8">9:30 → 11:30</text>`;
   // overlap / gap band
   if(D.has) s += `<rect x="${x0-4}" y="${Y(D.ovHi)}" width="${xEnd-x0+4}" height="${Y(D.ovLo)-Y(D.ovHi)}" fill="#EF9F27" fill-opacity="0.16" stroke="#BA7517" stroke-dasharray="5 4"/>`;
   else s += `<rect x="${x0-4}" y="${Y(D.gapHi)}" width="${xEnd-x0+4}" height="${Y(D.gapLo)-Y(D.gapHi)}" fill="#888780" fill-opacity="0.14" stroke="#888780" stroke-dasharray="5 4"/>`;
@@ -207,10 +313,10 @@ function drawPlan(D, sc, open){
   s += hl(D.rPoc,COL.poc,"",1.8) + hl(D.oPoc,COL.poc,"2 3",1.8);
   // profiles (TPO)
   const LET = "ABCDEFGHIJKLMN";
-  const tstep = Math.max(0.25, Math.round(((hi0-lo0)/30)*4)/4);
+  const tstep = D.rPeriods ? D.rStep : Math.max(0.25, Math.round(((hi0-lo0)/30)*4)/4);
   const rowH = Math.max(4, (Y(lo0)-Y(lo0+tstep)));
-  const drawTPO = (lo,hi,val,vah,poc,n,x,isR,maxW) => {
-    const rows = tpoRows(synthPeriods(lo,hi,val,vah,poc,n,tstep));
+  const drawTPO = (lo,hi,val,vah,poc,n,x,isR,maxW,explicit) => {
+    const rows = tpoRows(explicit ? explicit.map(([a,b])=>[Math.round(a/tstep),Math.round(b/tstep)]) : synthPeriods(lo,hi,val,vah,poc,n,tstep));
     const maxC = Math.max(...rows.map(r=>r.idx.length));
     const cw = Math.min(isR?11:9, maxW/maxC);
     const pocR = Math.round(poc/tstep);
@@ -228,7 +334,9 @@ function drawPlan(D, sc, open){
     });
     return o;
   };
-  s += drawTPO(D.pdl, D.pdh, D.rVal, D.rVah, D.rPoc, 14, x0+4, true, 150);
+  s += drawTPO(D.pdl, D.pdh, D.rVal, D.rVah, D.rPoc, 14, x0+4, true, 150, D.rPeriods);
+  if(D.rPeriods && D.rClose!=null){ const yc = Y(D.rClose); s += `<path d="M${x0+160},${yc-4} L${x0+153},${yc} L${x0+160},${yc+4} Z" fill="#ff6b9a"/><text x="${x0+163}" y="${yc+4}" font-size="10" fill="#ffb3cb">C</text>`; }
+  if(D.rPeriods && D.rIB){ s += `<rect x="${x0-3}" y="${Y(D.rIB[1])-rowH/2}" width="3" height="${Y(D.rIB[0])-Y(D.rIB[1])+rowH}" fill="#C9A96E"/>`; }
   s += drawTPO(D.onl, D.onh, D.oVal, D.oVah, D.oPoc, 31, x0+174, false, 156);
   // arrows A / B
   const o = open!=null && !isNaN(open) ? open : sc.open(D);
@@ -291,8 +399,15 @@ function scenarioHtml(D, sc, open){
       <div class="card"><span class="k">Context read</span><p>${sc.read(D)}</p></div>
       <div class="card"><span class="k">Expectations</span><ul class="clean small">${sc.expect.map(e=>`<li>${e}</li>`).join("")}</ul></div>
     </div>
+    ${D.dt ? (()=>{ const d = DT.find(x=>x.k===D.dt.k), cb = combo(D.dt.k, D.dt.dir, sc.id), pos = Math.round((D.rClose-D.pdl)/(D.pdh-D.pdl)*100);
+      return `<div class="grid g2">
+        <div class="card"><span class="k">Prior RTH · ${D.dt.name}</span><p class="small">${d.sig} ${d.mean}</p><p class="small muted">Close at ${pos}% range · ${d.key}</p></div>
+        <div class="card"><span class="k">Combined with scenario ${sc.id}</span><p><span class="chip ${cb.cls}">${cb.tone}</span></p><p class="small">${cb.t}</p></div></div>`; })() : ""}
     <div class="tablewrap"><table><thead><tr><th>Key level</th><th class="num">Price</th><th>Role</th><th>Action</th></tr></thead><tbody>
       ${keys.map(k=>`<tr><td><b>${k[0]}</b></td><td class="num mono">${k[1]==null?"—":fmt(k[1])}</td><td><span class="chip ${R[k[2]][1]}">${R[k[2]][0]}</span></td><td class="small">${k[3]}</td></tr>`).join("")}
+      ${D.dt ? `<tr><td><b>Prior close</b></td><td class="num mono">${fmt(D.rClose)}</td><td><span class="chip ov">Pivot</span></td><td class="small">The close location decides how to read ${D.dt.name}: near an extreme = strong, middle = balance</td></tr>
+      <tr><td><b>Prior IB</b></td><td class="num mono">${fmt(D.rIB[0])}–${fmt(D.rIB[1])}</td><td><span class="chip">Context</span></td><td class="small">Prior IB wide/narrow; IB edges are secondary levels</td></tr>
+      ${D.thin ? `<tr><td><b>Prior thin TPO zone</b></td><td class="num mono">${fmt(D.thin[0])}–${fmt(D.thin[1])}</td><td><span class="chip rth">Location</span></td><td class="small">Single prints / thin body: price moves fast inside, the first test often reacts</td></tr>` : ""}` : ""}
     </tbody></table></div>
     <div class="ab">
       <div class="card a"><span class="k">Plan A · primary</span><p class="small">${A.t}</p></div>
@@ -309,16 +424,42 @@ function scenarioHtml(D, sc, open){
     </div>`;
 }
 function renderScenarios(){
-  const box = $("#sc-buttons");
+  const dbox = $("#dt-buttons"), box = $("#sc-buttons");
+  dbox.innerHTML = DT_OPTS.map(([k,dn],i)=>`<button data-i="${i}">${dtLabel(k,dn)}</button>`).join("");
   box.innerHTML = SC.map(s=>`<button data-id="${s.id}">${s.id} · ${s.n}</button>`).join("");
-  const show = id => {
-    const sc = SC_BY(id), D = derive(sc.ex);
-    $$("button",box).forEach(b=>b.classList.toggle("on", +b.dataset.id===id));
-    $("#sc-panel").innerHTML = scenarioHtml(D, sc);
-    store.set("ofs.ov.sc", id);
+  let di = store.get("ofs.ov.dt", 0), si = store.get("ofs.ov.sc", 1);
+  if(!(di>=0 && di<DT_OPTS.length)) di = 0;
+  const show = () => {
+    const [k,dn] = DT_OPTS[di], sc = SC_BY(si), D = buildCombo(k, dn, si);
+    $$("button",dbox).forEach(b=>b.classList.toggle("on", +b.dataset.i===di));
+    $$("button",box).forEach(b=>b.classList.toggle("on", +b.dataset.id===si));
+    let html = scenarioHtml(D, sc);
+    if(D.id !== si) html = `<p class="small muted">With this day type the illustrative numbers fall into scenario ${D.id}; showing the rules of scenario ${si}.</p>` + html;
+    $("#sc-panel").innerHTML = html;
+    store.set("ofs.ov.dt", di); store.set("ofs.ov.sc", si);
   };
-  box.addEventListener("click", e=>{ const b = e.target.closest("button"); if(b) show(+b.dataset.id); });
-  show(store.get("ofs.ov.sc",1));
+  dbox.addEventListener("click", e=>{ const b = e.target.closest("button"); if(b){ di = +b.dataset.i; show(); } });
+  box.addEventListener("click", e=>{ const b = e.target.closest("button"); if(b){ si = +b.dataset.id; show(); } });
+  show();
+  scApi.set = (d,s) => { di = d; si = s; show(); };
+}
+const scApi = { set(){} };
+function renderComboMatrix(){
+  const head = `<table><thead><tr><th>Prior RTH</th>${SC.map(s=>`<th>${s.id} · ${s.n}</th>`).join("")}</tr></thead><tbody>`;
+  const body = DT_OPTS.map(([k,dn],i) => { const t = dtPeriods(k,dn);
+    return `<tr><td><b>${dtLabel(k,dn)}</b></td>${SC.map(s=>{ const c = combo(k, t.dir, s.id); return `<td><button class="mx" data-i="${i}" data-s="${s.id}" aria-label="${dtLabel(k,dn)} with scenario ${s.id}"><span class="chip ${c.cls}">${c.tone}</span></button></td>`; }).join("")}</tr>`; }).join("");
+  $("#cx-table").innerHTML = head + body + "</tbody></table>";
+  const show = (i,s) => {
+    const [k,dn] = DT_OPTS[i], t = dtPeriods(k,dn), c = combo(k, t.dir, +s), d = DT.find(x=>x.k===k), sc = SC_BY(+s);
+    $$("#cx-table button.mx").forEach(b=>b.classList.toggle("on", b.dataset.i===String(i) && b.dataset.s===String(s)));
+    $("#cx-detail").innerHTML = `<div class="grid g3" style="margin-top:6px">
+      <div class="card"><span class="k">Prior RTH · ${dtLabel(k,dn)}</span><p class="small">${d.sig}</p><p class="small muted">${d.mean}</p></div>
+      <div class="card"><span class="k">OVN · scenario ${sc.id}</span><p class="small">${sc.n}: ${sc.short}</p></div>
+      <div class="card"><span class="k">Combining</span><p><span class="chip ${c.cls}">${c.tone}</span></p><p class="small">${c.t}</p><p class="small"><a href="#kich-ban" data-go="${i},${s}">See the plan chart for this case</a></p></div></div>`;
+    const go = $("#cx-detail a[data-go]"); if(go) go.addEventListener("click", ()=>{ scApi.set(+i, +s); });
+  };
+  $("#cx-table").addEventListener("click", e=>{ const b = e.target.closest("button.mx"); if(b) show(b.dataset.i, b.dataset.s); });
+  show(9, 5);
 }
 
 /* ---------- 02 builder ---------- */
@@ -332,6 +473,9 @@ function initBuilder(){
   $("#b-open").value = saved && saved.open!=null ? saved.open : 28740;
   $("#b-news").value = saved && saved.news ? saved.news : "";
   $("#b-ot").innerHTML = `<option value="">Not set</option>` + OPENS.map(o=>`<option value="${o.k}">${o.n}</option>`).join("");
+  $("#b-dt").innerHTML = `<option value="">Not selected</option>` + DT_OPTS.map(([k,dn],i)=>`<option value="${i}">${dtLabel(k,dn)}</option>`).join("");
+  if(saved && saved.dt!=null && saved.dt!=="") $("#b-dt").value = saved.dt;
+  $("#b-dt").addEventListener("change", build);
   if(saved && saved.ot) $("#b-ot").value = saved.ot;
   if(saved && saved.ib!=null) $("#b-ib").value = saved.ib;
   if(saved && saved.ibpos) $("#b-ibpos").value = saved.ibpos;
@@ -343,6 +487,7 @@ function initBuilder(){
     $("#l-date").value = $("#b-date").value; $("#l-sc").value = String(lastD.id); $("#l-pct").value = lastD.pct;
     const loc = openLoc(lastD, lastOpen), lo = [...$("#l-open").options].find(o=>o.text===loc); if(lo) $("#l-open").value = lo.value;
     if($("#b-ot").value) $("#l-ot").value = $("#b-ot").value;
+    if($("#b-dt").value!=="") $("#l-dt").value = $("#b-dt").value;
     const ibv = parseFloat($("#b-ib").value); if(!isNaN(ibv)) $("#l-ibw").value = ibv<70?"narrow":ibv>130?"wide":"normal";
     location.hash = "log";
   });
@@ -353,7 +498,7 @@ function build(){
   const L = {}; let bad = [];
   Object.entries(BF).forEach(([k,id]) => { const v = parseFloat($("#"+id).value); if(isNaN(v)) bad.push(k); L[k] = v; });
   const open = parseFloat($("#b-open").value);
-  store.set("ofs.ov.builder", Object.assign({}, L, { date:$("#b-date").value, open: isNaN(open)?null:open, news:$("#b-news").value, ot:$("#b-ot").value, ib:$("#b-ib").value===""?null:$("#b-ib").value, ibpos:$("#b-ibpos").value }));
+  store.set("ofs.ov.builder", Object.assign({}, L, { date:$("#b-date").value, open: isNaN(open)?null:open, news:$("#b-news").value, ot:$("#b-ot").value, dt:$("#b-dt").value, ib:$("#b-ib").value===""?null:$("#b-ib").value, ibpos:$("#b-ibpos").value }));
   if(bad.length){ $("#b-out").textContent = "Missing numbers: " + bad.join(", "); return; }
   const errs = [];
   if(!(L.rVah > L.rPoc && L.rPoc > L.rVal)) errs.push("RTH needs VAH > POC > VAL");
@@ -373,7 +518,9 @@ function build(){
     : ibCls==="Wide" ? "Normal / Neutral → IB-3 fade the IB edges to TPOC, no breakout"
     : ibpos==="cut" ? "Normal Variation → the overlap edge is the referee: accepted outside → IB-1, back inside → IB-2"
     : `IB ${ibCls.toLowerCase()}${ibpos?", "+ibposT.toLowerCase():""} → wait for one-sided range extension + sloping VWAP`;
+  const dti = $("#b-dt").value, dtSel = dti!=="" ? DT_OPTS[+dti] : null, dtT = dtSel ? dtPeriods(dtSel[0], dtSel[1]) : null, cb = dtSel ? combo(dtSel[0], dtT.dir, D.id) : null;
   $("#b-class").innerHTML = `<div class="callout ${D.id>=4&&D.id<=5?"red":D.id===1||D.id===6?"purple":""}"><h4>Scenario ${sc.id} · ${sc.n}</h4><p class="small">${sc.read(D)}</p></div>`
+    + (cb ? `<div class="callout purple"><h4>Yesterday ${dtT.name} × scenario ${sc.id} → <span class="chip ${cb.cls}">${cb.tone}</span></h4><p class="small">${cb.t}</p></div>` : `<p class="small muted">Pick the prior RTH day type to add the structure layer.</p>`)
     + (jj ? `<div class="callout"><h4>10:00 · ${OPEN_BY(ot).n} → <span class="chip ${VCLS[jj.v]}">${jj.v}</span></h4><p class="small">${jj.read} ${jj.act}</p><p class="small muted">Day type leans toward: ${jj.days.join(" · ")}</p></div>` : `<p class="small muted">At 10:00 pick the open type to update the plan.</p>`)
     + (ibCls ? `<div class="callout purple"><h4>10:30 · IB ${ibCls} (${ibw}%)</h4><p class="small">${ibRead}</p></div>` : "");
   $("#b-tiles").innerHTML = [
@@ -417,6 +564,11 @@ IB: ${sc.ib}
 DO NOT: ${sc.no}
 COMMON DAY TYPES: ${DAYS[sc.id].join(" · ")}
 
+PRIOR RTH
+${cb ? `  ${dtT.name} → ${cb.tone}
+  ${cb.t}
+  ${DT.find(x=>x.k===dtSel[0]).key}` : "  (no day type selected)"}
+
 10:00 UPDATE · OPEN TYPE
 ${jj ? `  ${OPEN_BY(ot).n} → ${jj.v}. ${jj.read}
   ${jj.act}
@@ -433,6 +585,7 @@ RULES: orderflow trigger (CVD / delta flip / footprint) + EMA 9/34 not against t
 function initLog(){
   $("#l-sc").innerHTML = SC.map(s=>`<option value="${s.id}">${s.id} · ${s.n}</option>`).join("");
   $("#l-ot").innerHTML = OPENS.map(o=>`<option value="${o.k}">${o.n}</option>`).join("");
+  $("#l-dt").innerHTML = DT_OPTS.map(([k,dn],i)=>`<option value="${i}">${dtLabel(k,dn)}</option>`).join("");
   $("#l-date").value = new Date().toLocaleDateString("en-GB");
   let rows = store.get("ofs.ov.log", []);
   const lmsg = t => { $("#l-msg").textContent = t; setTimeout(()=>{ $("#l-msg").textContent=""; }, 3000); };
@@ -450,16 +603,16 @@ function initLog(){
        <div class="tile"><div class="k">Plan A / B right</div><div class="v">${pct(aOk,n)} / ${pct(bOk,n)}</div></div>
        <div class="tile"><div class="k">Matrix called it</div><div class="v">${(()=>{ const ev = rows.filter(r=>r.ot); const hit = ev.filter(r=>{ try{ const j = judge(+r.sc, r.ot, derive(SC_BY(+r.sc).ex)); return j.v===r.ab || (j.v==="Wait for IB" && r.ab!=="none"); }catch(e){ return false; } }); return pct(hit.length, ev.length); })()}</div><div class="small muted">matrix verdict matched the correct plan</div></div>` +
       byS.map(([id,c,ok])=>`<div class="tile"><div class="k">Scenario ${id}</div><div class="v">${c}</div><div class="small muted">plan right ${pct(ok,c)}</div></div>`).join("");
-    $("#l-rows").innerHTML = rows.map((r,i)=>`<tr><td class="mono">${r.date}</td><td>${r.sc}</td><td class="num mono">${r.pct}</td><td class="small">${lab("l-open",r.open)}</td><td>${r.ot?(OPEN_BY(r.ot)||{n:r.ot}).n:"—"}</td><td class="small">${r.ibw?lab("l-ibw",r.ibw):"—"}</td><td>${lab("l-touch",r.touch)}</td><td class="small">${lab("l-react",r.react)}</td><td class="small">${lab("l-day",r.day)}</td><td>${lab("l-ab",r.ab)}</td><td class="small">${r.note||""}</td><td><button data-del="${i}" aria-label="Delete session ${r.date}">Delete</button></td></tr>`).join("") || `<tr><td colspan="12" class="muted small">No sessions yet. Use the "Send to Log" button in Plan Builder or enter one by hand.</td></tr>`;
+    $("#l-rows").innerHTML = rows.map((r,i)=>`<tr><td class="mono">${r.date}</td><td class="small">${r.dt!=null&&r.dt!==""&&DT_OPTS[+r.dt]?dtLabel(...DT_OPTS[+r.dt]):"—"}</td><td>${r.sc}</td><td class="num mono">${r.pct}</td><td class="small">${lab("l-open",r.open)}</td><td>${r.ot?(OPEN_BY(r.ot)||{n:r.ot}).n:"—"}</td><td class="small">${r.ibw?lab("l-ibw",r.ibw):"—"}</td><td>${lab("l-touch",r.touch)}</td><td class="small">${lab("l-react",r.react)}</td><td class="small">${lab("l-day",r.day)}</td><td>${lab("l-ab",r.ab)}</td><td class="small">${r.note||""}</td><td><button data-del="${i}" aria-label="Delete session ${r.date}">Delete</button></td></tr>`).join("") || `<tr><td colspan="13" class="muted small">No sessions yet. Use the "Send to Log" button in Plan Builder or enter one by hand.</td></tr>`;
   };
   $("#l-rows").addEventListener("click", e=>{ const b = e.target.closest("button[data-del]"); if(!b) return; rows.splice(+b.dataset.del,1); draw(); });
   $("#l-add").addEventListener("click", ()=>{
-    const r = { date:$("#l-date").value.trim(), sc:$("#l-sc").value, pct:$("#l-pct").value||"", open:$("#l-open").value, ot:$("#l-ot").value, ibw:$("#l-ibw").value, touch:$("#l-touch").value, react:$("#l-react").value, day:$("#l-day").value, ab:$("#l-ab").value, note:$("#l-note").value.trim() };
+    const r = { date:$("#l-date").value.trim(), sc:$("#l-sc").value, pct:$("#l-pct").value||"", open:$("#l-open").value, dt:$("#l-dt").value, ot:$("#l-ot").value, ibw:$("#l-ibw").value, touch:$("#l-touch").value, react:$("#l-react").value, day:$("#l-day").value, ab:$("#l-ab").value, note:$("#l-note").value.trim() };
     if(!r.date){ lmsg("Enter the date first."); return; }
     rows.push(r); draw(); $("#l-note").value = ""; lmsg("Session added.");
   });
   $("#l-csv").addEventListener("click", async ()=>{
-    const csv = "date,scenario,overlap_pct,open,open_type,ib,touch_60m,reaction,day_type,plan,note\n" + rows.map(r=>[r.date,r.sc,r.pct,lab("l-open",r.open),r.ot?(OPEN_BY(r.ot)||{n:r.ot}).n:"",r.ibw?lab("l-ibw",r.ibw):"",lab("l-touch",r.touch),lab("l-react",r.react),lab("l-day",r.day),lab("l-ab",r.ab),(r.note||"").replace(/,/g,";")].join(",")).join("\n");
+    const csv = "date,prev_day_type,scenario,overlap_pct,open,open_type,ib,touch_60m,reaction,day_type,plan,note\n" + rows.map(r=>[r.date,(r.dt!=null&&r.dt!==""&&DT_OPTS[+r.dt])?dtLabel(...DT_OPTS[+r.dt]):"",r.sc,r.pct,lab("l-open",r.open),r.ot?(OPEN_BY(r.ot)||{n:r.ot}).n:"",r.ibw?lab("l-ibw",r.ibw):"",lab("l-touch",r.touch),lab("l-react",r.react),lab("l-day",r.day),lab("l-ab",r.ab),(r.note||"").replace(/,/g,";")].join(",")).join("\n");
     try{ await navigator.clipboard.writeText(csv); lmsg("CSV copied."); }catch(e){ lmsg("The browser blocked copying."); }
   });
   let armed = false;
@@ -485,6 +638,9 @@ const QZ = [
  {q:"Scenario 4 (OVN above RTH), RTH Open Drive ↓ through VAL OVN. Verdict?",o:["Keep A, buy the pullback","Switch to B: overnight buyers are trapped, follow the drive down to RTH value","Wait for IB","Fade ONH"],a:1,e:"OD against the overnight direction = B, usually strong."},
  {q:"Scenario 1 (balance), 10:00 is an Open Auction, wide IB at 10:30. Which day type is likely?",o:["Trend","Normal / Non-Trend: fade the overlap edges to TPOC","Double Distribution","Neutral extreme"],a:1,e:"Two-session balance + OA + wide IB = rotation."},
  {q:"Scenario 6 (OVN engulfs), 10:00 is an ORR ↓ after a failed break of VAH RTH. Action?",o:["Long breakout","Fade to TPOC once price crosses the open (B of scenario 6)","Short to ONL right away","Meaningless"],a:1,e:"A failed break of the RTH VA → the wide balance still holds."},
+ {q:"Yesterday was a P-shape (short covering), overnight value migrating down (scenario 3). How do you read it?",o:["A needs confirmation","Reinforces A: yesterday’s rally was mostly short covering and is exhausted","Balance","Ignore the day type"],a:1,e:"Weak P + overnight going against it = real aggressive sellers."},
+ {q:"Yesterday Trend ↑, overnight OVN below RTH (scenario 5). How to handle it?",o:["Short ngay open","A needs confirmation: a trend day is usually followed by balance, wait for OD/OTD down","Long breakout","Meaningless"],a:1,e:"A reversal right after a trend needs strong confirmation."},
+ {q:"Yesterday Non-Trend, overnight value migrating up (scenario 2). Read?",o:["Balance","Reinforces A: a breakout of stored energy","Prefer B","Wait all day"],a:1,e:"Yesterday’s compression + overnight leaving the range = breakout."},
  {q:"The overlap zone looks great but there is no CVD divergence or delta flip yet. Do you enter?",o:["Yes, the zone is strong enough","No; the zone is location, it needs an orderflow trigger","Yes if EMA 9 > 34","Yes if it is Monday"],a:1,e:"The playbook’s general rule."}
 ];
 function shuffle(a){ const b = a.slice(); for(let i=b.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; }
@@ -506,6 +662,7 @@ function renderQuiz(){
 renderOverview();
 renderScenarios();
 renderMatrix();
+renderComboMatrix();
 initBuilder();
 initLog();
 renderQuiz();

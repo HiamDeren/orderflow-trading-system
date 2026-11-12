@@ -1302,3 +1302,111 @@ OVN trong VA RTH	OVN inside RTH VA
 1 · OVN trong VA RTH	1 · OVN inside RTH VA
 Trend ↑ (khi OD/OTD ↑)	Trend ↑ (on OD/OTD ↑)
 Trend ↓ (khi OD/OTD ↓)	Trend ↓ (on OD/OTD ↓)
+(balance), qua đêm chọn hướng	(balance), and overnight picked a direction:
+(chưa chọn day type)	(no day type selected)
+) và qua đêm cùng hướng: value đang migrate nhiều phiên. Ưu tiên go-with.	) and overnight in the same direction: value is migrating across sessions. Prefer go-with.
+), qua đêm balance trong value hôm qua: lực	), overnight balanced inside yesterday’s value: the push
+, giá đi rất nhanh theo hướng B.	, price moves very fast toward B.
+, qua đêm tiêu hoá trong value hôm qua. Kỳ vọng balance trong A–C; nếu breakout có acceptance thì ưu tiên hướng	, overnight digested it inside yesterday’s value. Expect balance in A–C; on a breakout with acceptance prefer the
+, qua đêm tiếp tục	, and overnight continued
+. Cần thấy new	. You need to see real new
+. Đây là thông tin mới; A có xác suất tốt khi RTH xác nhận bằng OD/OTD và giữ ngoài overlap.	. This is new information; A has good odds when RTH confirms with OD/OTD and holds outside the overlap.
+// vùng mỏng dài nhất (≤ 1 TPO) bên trong range	// longest thin zone (≤ 1 TPO) inside the range
+: gần cực trị = mạnh, giữa = balance	: near an extreme = strong, middle = balance
+: imbalance nhiều phiên. Không fade; chỉ đi theo pullback. Cẩn thận ngày sau trend thường biên độ nhỏ hơn.	: multi-session imbalance. Do not fade; only follow pullbacks. Careful: the day after a trend usually has a smaller range.
+; đang hiển thị theo quy tắc của kịch bản	; showing the rules of scenario
+A cần xác nhận	A needs confirmation
+A cần xác nhận: sau trend day thường là balance, chờ OD/OTD xuống	A needs confirmation: a trend day is usually followed by balance, wait for OD/OTD down
+Balance sáng, thông tin mới đẩy giá sang vùng balance thứ hai.	Morning balance, then new information pushes price into a second balance area.
+Balance · nghiêng theo hôm qua	Balance · leaning with yesterday
+Balance · sắp breakout	Balance · breakout pending
+Biên range hẹp hôm qua = level breakout.	Yesterday’s narrow range edges = breakout levels.
+Bước 1 · Day type của RTH hôm qua	Step 1 · Day type of the prior RTH
+Bước 2 · Quan hệ value OVN với RTH hôm qua	Step 2 · OVN value vs the prior RTH
+Bỏ qua day type	Ignore the day type
+Chưa chọn	Not selected
+Chọn day type RTH hôm qua để thêm lớp đọc cấu trúc.	Pick the prior RTH day type to add the structure layer.
+Chọn day type của RTH hôm qua (Normal, Normal Variation, Trend, Double Distribution, Neutral, Non-Trend, P, b) rồi chọn quan hệ OVN: có 11 × 6 = 66 trường hợp. Profile RTH vẽ đúng hình dạng TPO của day type đó (chữ A–M, thanh vàng = IB hôm qua, C = close); khối nhỏ là 31 period của OVN. Số trên chart là minh hoạ. Đường xanh = kịch bản A (chính), đường đỏ đứt = kịch bản B (thay thế), tam giác hồng = open giả định. Plan Builder overlap (chương 03) dùng đúng các quy tắc này với số thật của bạn.	Pick the prior RTH day type (Normal, Normal Variation, Trend, Double Distribution, Neutral, Non-Trend, P, b), then the OVN relationship: 11 × 6 = 66 cases. The RTH profile is drawn in that day type’s TPO shape (letters A–M, gold bar = prior IB, C = close); the small blocks are the 31 OVN periods. Chart numbers are illustrative. Green line = plan A (primary), red dashed line = plan B (alternative), pink triangle = assumed open. Plan Builder overlap (chapter 03) applies these same rules to your real numbers.
+Chờ cả ngày	Wait all day
+Close hôm qua	Prior close
+Close ở	Close at
+Close ở cực trị và các đoạn TPO mỏng trong thân profile.	Close at the extreme and the thin TPO stretches in the profile body.
+Compression hôm qua + qua đêm rời range = breakout.	Yesterday’s compression + overnight leaving the range = breakout.
+Cú	The
+Cạnh IB hôm qua và hai đầu range extension.	Prior IB edges and both ends of the range extension.
+Củng cố A	Reinforces A
+Củng cố A: breakout của năng lượng tích luỹ	Reinforces A: a breakout of stored energy
+Củng cố A: cú tăng hôm qua chủ yếu là short covering đã hết lực	Reinforces A: yesterday’s rally was mostly short covering and is exhausted
+Day type RTH hôm qua	Prior RTH day type
+Day type RTH hôm qua × Kịch bản OVN	Prior RTH day type × OVN scenario
+Day type hôm qua	Prior day type
+Day type hôm qua × quan hệ OVN: chart plan, key level và kỳ vọng	Prior day type × OVN relationship: plan chart, key levels and expectations
+Double Distribution hôm qua cùng hướng qua đêm: distribution thứ hai được chấp nhận. Dải single prints hôm qua là support/resistance xa cho B.	Yesterday’s Double Distribution and overnight point the same way: the second distribution is accepted. Yesterday’s single-print band is far support/resistance for B.
+Dải single prints giữa hai distribution là level quan trọng nhất.	The single-print band between the two distributions is the key level.
+Hai phe cân bằng, chưa ai thắng. Nếu close ở cực trị (neutral extreme) thì ưu tiên hướng close.	Both sides balanced, nobody won. If the close is at an extreme (neutral extreme), prefer the close direction.
+Hai vùng value tách bởi dải single prints.	Two value areas separated by a single-print band.
+Hôm qua Non-Trend, qua đêm value trôi lên (kịch bản 2). Đọc?	Yesterday Non-Trend, overnight value migrating up (scenario 2). Read?
+Hôm qua Trend ↑, qua đêm OVN dưới RTH (kịch bản 5). Cách xử lý?	Yesterday Trend ↑, overnight OVN below RTH (scenario 5). How to handle it?
+Hôm qua là P-shape (short covering), qua đêm value trôi xuống (kịch bản 3). Đọc thế nào?	Yesterday was a P-shape (short covering), overnight value migrating down (scenario 3). How do you read it?
+IB hôm qua	Prior IB
+IB hôm qua ≈ range: PDH/PDL là biên mạnh.	Prior IB ≈ range: PDH/PDL are strong edges.
+IB hẹp, cả ngày gần như không rời IB.	Narrow IB, price barely leaves it all day.
+IB hẹp, profile mỏng và dài, close ở cực trị.	Narrow IB, thin elongated profile, close at the extreme.
+IB rất rộng, gần như cả range; không có range extension.	Very wide IB, almost the whole range; no range extension.
+IB rộng/hẹp hôm qua; cạnh IB là level phụ	Prior IB wide/narrow; IB edges are secondary levels
+IB trung bình, range extension một phía khoảng 1.2–2x IB.	Medium IB, one-sided range extension of about 1.2–2x IB.
+Initiative activity xuất hiện sau IB và dời value theo hướng RE.	Initiative activity shows up after the IB and moves value in the RE direction.
+Kết hợp với kịch bản	Combined with scenario
+Large timeframe đặt biên ngay từ sớm, phần còn lại là rotation.	The large timeframe sets the edges early; the rest is rotation.
+Một phe kiểm soát hoàn toàn. VA ít ý nghĩa vì value không được xây đủ.	One side is fully in control. The VA means little because value was not built.
+Neutral center hôm qua: hai phe cân bằng. Qua đêm chọn hướng	Neutral center yesterday: both sides balanced. Overnight picking
+Non-Trend hôm qua là năng lượng tích luỹ; qua đêm rời range đi	Yesterday’s Non-Trend is stored energy; overnight leaving the range
+Non-Trend nối tiếp balance qua đêm: năng lượng nén nhiều phiên. Không fade sâu; chuẩn bị đi theo breakout có acceptance.	Non-Trend followed by overnight balance: energy compressed across sessions. Do not fade deep; get ready to follow a breakout with acceptance.
+OVN · kịch bản	OVN · scenario
+P yếu + qua đêm đi ngược nó = phe bán chủ động thật.	Weak P + overnight going against it = real aggressive sellers.
+Phần thân mỏng của P: vùng giá đi nhanh nếu quay lại.	The thin body of the P: price moves fast if it returns there.
+Phần thân mỏng của b: vùng giá đi nhanh nếu quay lại.	The thin body of the b: price moves fast if it returns there.
+Qua đêm quay ngược về phía distribution đầu tiên. Dải single prints hôm qua là chỗ thị trường hay đi nhanh qua: nếu bị xuyên thì A chạy nhanh; nếu giữ thì B.	Overnight turned back toward the first distribution. Yesterday’s single-print band is where the market tends to move fast: if it is pierced, A runs fast; if it holds, B.
+Qua đêm đi ngược hướng range extension hôm qua. A cần open type xác nhận; nếu RTH quay lại phía RE hôm qua → B.	Overnight went against yesterday’s range extension. A needs open-type confirmation; if RTH returns to yesterday’s RE side → B.
+Qua đêm đảo ngược ngay sau ngày Trend. Trend day hay được theo sau bởi balance hơn là đảo chiều thật, nên A (ngược trend) cần OD/OTD xác nhận. Nếu RTH quay lại hướng trend → B mạnh.	Overnight reversed right after a Trend day. A trend day is more often followed by balance than a real reversal, so A (against the trend) needs OD/OTD confirmation. If RTH returns to the trend direction → strong B.
+RTH HÔM QUA	PRIOR RTH
+RTH hôm qua	Prior RTH
+RTH hôm qua ·	Prior RTH ·
+Range extension cả hai phía IB, close giữa range (neutral center).	Range extension on both sides of the IB, close mid-range (neutral center).
+Sau ngày	After a
+Single prints / thân mỏng: giá đi nhanh nếu vào, test lần đầu hay phản ứng	Single prints / thin body: price moves fast inside, the first test often reacts
+TPO RTH hôm qua	Prior RTH TPO
+Thiếu thông tin, năng lượng đang tích luỹ.	Lack of information, energy is building.
+Thân mỏng phía dưới, value phình ở trên.	Thin body below, value bulging above.
+Thân mỏng phía trên, value phình ở dưới.	Thin body above, value bulging below.
+Thường là long liquidation, không hẳn là new selling.	Usually long liquidation, not necessarily new selling.
+Thường là short covering, không hẳn là new buying.	Usually short covering, not necessarily new buying.
+Trend hôm qua và qua đêm cùng hướng	Yesterday’s Trend and overnight in the same direction:
+Vùng TPO mỏng hôm qua	Prior thin TPO zone
+Vị trí close quyết định đọc	The close location decides how to read
+Với day type này, số minh hoạ rơi vào kịch bản	With this day type the illustrative numbers fall into scenario
+Xem chart plan của trường hợp này	See the plan chart for this case
+chưa có người theo. Fade mép overlap; nếu breakout thì ưu tiên hướng ngược	has no follow-through. Fade the overlap edges; on a breakout prefer the direction opposite to
+chờ OD/OTD	wait for OD/OTD
+của	of
+của hôm qua.	direction from yesterday.
+giảm	drop
+hôm qua (range extension	yesterday (range extension
+hôm qua + qua đêm balance trong value: rotation là mặc định. Nếu nhiều ngày liên tiếp như vậy, dựng composite.	yesterday + overnight balance inside value: rotation is the default. If several days in a row look like this, build a composite.
+hôm qua chủ yếu là	yesterday was mostly
+hôm qua là	yesterday was
+hôm qua và qua đêm cùng chiều, hoặc cú đi hôm qua yếu và qua đêm đi ngược nó	yesterday and overnight agree, or yesterday’s move was weak and overnight went against it
+là breakout của compression. A mạnh nếu RTH không quay lại range hẹp hôm qua.	is a breakout of the compression. A is strong if RTH does not return to yesterday’s narrow range.
+là thông tin mới, cần RTH xác nhận bằng OD/OTD. Nếu hôm qua là neutral extreme cùng hướng	is new information that needs RTH confirmation by OD/OTD. If yesterday was a neutral extreme in the same direction
+rotation là mặc định	rotation is the default
+thì nâng lên	then upgrade to
+thật (OD/OTD, giữ ngoài overlap) mới tin A. Nếu RTH quay về phần thân mỏng của	(OD/OTD, holding outside the overlap) before trusting A. If RTH returns into the thin body of
+tăng	rally
+và đã hết lực; qua đêm quay	and is exhausted; overnight turning
+với kịch bản	with scenario
+xác nhận phe chủ động thật. A được củng cố, target có thể kéo về thân mỏng của	confirms a real aggressive side. A is reinforced, and the target can extend to the thin body of
+× kịch bản	× scenario
+Đảo chiều ngay sau trend cần xác nhận mạnh.	A reversal right after a trend needs strong confirmation.
+Đỉnh/đáy range extension và cạnh IB hôm qua.	Range-extension high/low and the prior IB edges.
+Đọc trước khi chọn open type: cấu trúc hôm qua làm A mạnh lên hay cần thêm xác nhận.	Read this before picking the open type: does yesterday’s structure strengthen A or need more confirmation.
+Ưu tiên B	Prefer B

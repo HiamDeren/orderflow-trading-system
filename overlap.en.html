@@ -95,10 +95,15 @@
 <section class="ov-ch" id="ch-kich-ban" data-chapter="kich-ban">
   <div class="head">
     <span class="eyebrow">01 · 6 scenarios</span>
-    <h2>Plan chart, key levels and expectations for each RTH × OVN state</h2>
-    <p class="lead">Profiles drawn as TPO: letters A–N are the 30-minute RTH periods (N = 16:00–16:14), the small blocks are the 31 OVN periods. Chart numbers are illustrative. Green line = plan A (primary), red dashed line = plan B (alternative), pink triangle = assumed open. Plan Builder overlap (chapter 03) applies these same rules to your real numbers.</p>
+    <h2>Prior day type × OVN relationship: plan chart, key levels and expectations</h2>
+    <p class="lead">Pick the prior RTH day type (Normal, Normal Variation, Trend, Double Distribution, Neutral, Non-Trend, P, b), then the OVN relationship: 11 × 6 = 66 cases. The RTH profile is drawn in that day type’s TPO shape (letters A–M, gold bar = prior IB, C = close); the small blocks are the 31 OVN periods. Chart numbers are illustrative. Green line = plan A (primary), red dashed line = plan B (alternative), pink triangle = assumed open. Plan Builder overlap (chapter 03) applies these same rules to your real numbers.</p>
   </div>
-  <div class="seg" id="sc-buttons"></div>
+  <div class="panel" style="gap:8px">
+    <div class="k">Step 1 · Day type of the prior RTH</div>
+    <div class="seg" id="dt-buttons"></div>
+    <div class="k" style="margin-top:6px">Step 2 · OVN value vs the prior RTH</div>
+    <div class="seg" id="sc-buttons"></div>
+  </div>
   <div class="panel" id="sc-panel"></div>
 </section>
 
@@ -113,6 +118,14 @@
     <div class="tablewrap" id="mx-table"></div>
     <div id="mx-detail"></div>
   </div>
+  <div class="panel">
+    <h3>Prior RTH day type × OVN scenario</h3>
+    <p class="small muted">Read this before picking the open type: does yesterday’s structure strengthen A or need more confirmation.</p>
+    <div class="row small"><span class="chip good">Reinforces A</span> yesterday and overnight agree, or yesterday’s move was weak and overnight went against it <span class="chip ov">A needs confirmation</span> wait for OD/OTD <span class="chip">Balance</span> rotation is the default</div>
+    <div class="tablewrap" id="cx-table"></div>
+    <div id="cx-detail"></div>
+  </div>
+
   <div class="grid g2">
     <div class="panel">
       <h3>Recap of the 4 open types (classified by 10:00 ET)</h3>
@@ -178,6 +191,7 @@
           <div class="field"><label for="b-date">Date</label><input type="text" id="b-date"></div>
           <div class="field"><label for="b-open">Price at 9:25 / open</label><input type="number" step="0.25" id="b-open"></div>
           <div class="field"><label for="b-news">News today</label><input type="text" id="b-news"></div>
+          <div class="field"><label for="b-dt">Prior RTH day type</label><select id="b-dt"></select></div>
           <div class="field"><label for="b-ot">Open type (10:00)</label><select id="b-ot"></select></div>
           <div class="field"><label for="b-ib">IB width % avg (10:30)</label><input type="number" id="b-ib" step="1" placeholder="vd 65"></div>
           <div class="field"><label for="b-ibpos">IB vs overlap</label><select id="b-ibpos"><option value="">Not yet</option><option value="in">Trong overlap</option><option value="out">Outside, in the drive direction</option><option value="cut">Cuts through an edge</option><option value="wrap">Engulfs the overlap</option></select></div>
@@ -208,6 +222,7 @@
       <div class="field"><label for="l-open">Open location</label><select id="l-open"><option value="in-ov">Trong overlap</option><option value="in-rth">Trong VA RTH</option><option value="in-ovn">Trong VA OVN</option><option value="above">Above both</option><option value="below">Below both</option><option value="gap">Value gap</option></select></div>
       <div class="field"><label for="l-touch">60' edge touched?</label><select id="l-touch"><option value="y">Yes</option><option value="n">No</option></select></div>
       <div class="field"><label for="l-react">Reaction at the edge</label><select id="l-react"><option value="b1r">Bounce ≥ 1R</option><option value="thru">Broke through</option><option value="unk">Unclear</option></select></div>
+      <div class="field"><label for="l-dt">Prior day type</label><select id="l-dt"></select></div>
       <div class="field"><label for="l-ot">Open type</label><select id="l-ot"></select></div>
       <div class="field"><label for="l-ibw">IB</label><select id="l-ibw"><option value="narrow">Narrow</option><option value="normal">Normal</option><option value="wide">Wide</option></select></div>
       <div class="field"><label for="l-day">Day type</label><select id="l-day"><option value="n">Normal</option><option value="nv-up">Normal Variation ↑</option><option value="nv-dn">Normal Variation ↓</option><option value="t-up">Trend ↑</option><option value="t-dn">Trend ↓</option><option value="dd">Double Distribution</option><option value="neu">Neutral</option><option value="nt">Non-Trend</option></select></div>
@@ -216,7 +231,7 @@
     </div>
     <div class="row"><button class="primary" id="l-add">Add session</button><button id="l-csv">Copy CSV</button><button id="l-clear">Clear the whole log</button><span class="small muted" id="l-msg" role="status"></span></div>
     <div class="tiles" id="l-stats"></div>
-    <div class="tablewrap"><table><thead><tr><th>Date</th><th>Scenario</th><th class="num">%</th><th>Open</th><th>Open type</th><th>IB</th><th>Touch</th><th>Reaction</th><th>Day type</th><th>Plan</th><th>Note</th><th></th></tr></thead><tbody id="l-rows"></tbody></table></div>
+    <div class="tablewrap"><table><thead><tr><th>Date</th><th>Yesterday</th><th>Scenario</th><th class="num">%</th><th>Open</th><th>Open type</th><th>IB</th><th>Touch</th><th>Reaction</th><th>Day type</th><th>Plan</th><th>Note</th><th></th></tr></thead><tbody id="l-rows"></tbody></table></div>
   </div>
 </section>
 

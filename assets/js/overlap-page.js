@@ -159,6 +159,111 @@ function renderMatrix(){
   show(2,"otd1");
 }
 
+
+/* ---------- Day type của RTH hôm qua ---------- */
+const DT = [
+ {k:"normal",n:"Normal",dir:0,flip:false,p:[[12,30],[13,29],[16,26],[15,24],[17,25],[18,24],[16,23],[17,25],[19,24],[18,23],[17,23],[19,25],[20,23]],o:20,c:21,
+  sig:"IB rất rộng, gần như cả range; không có range extension.", mean:"Large timeframe đặt biên ngay từ sớm, phần còn lại là rotation.", key:"IB hôm qua ≈ range: PDH/PDL là biên mạnh."},
+ {k:"nvar",n:"Normal Variation",dir:1,flip:true,p:[[16,26],[15,24],[18,25],[22,31],[25,33],[26,32],[24,30],[25,31],[26,30],[25,31],[24,29],[25,30],[26,29]],o:19,c:28,
+  sig:"IB trung bình, range extension một phía khoảng 1.2–2x IB.", mean:"Initiative activity xuất hiện sau IB và dời value theo hướng RE.", key:"Đỉnh/đáy range extension và cạnh IB hôm qua."},
+ {k:"trend",n:"Trend",dir:1,flip:true,p:[[2,7],[5,10],[8,13],[11,16],[14,19],[17,22],[19,24],[22,27],[24,29],[26,31],[29,34],[31,36],[33,38]],o:3,c:37,
+  sig:"IB hẹp, profile mỏng và dài, close ở cực trị.", mean:"Một phe kiểm soát hoàn toàn. VA ít ý nghĩa vì value không được xây đủ.", key:"Close ở cực trị và các đoạn TPO mỏng trong thân profile."},
+ {k:"dd",n:"Double Distribution",dir:1,flip:true,p:[[4,10],[5,11],[6,10],[5,9],[7,11],[10,23],[20,27],[21,28],[22,27],[20,26],[21,27],[22,28],[23,27]],o:6,c:25,
+  sig:"Hai vùng value tách bởi dải single prints.", mean:"Balance sáng, thông tin mới đẩy giá sang vùng balance thứ hai.", key:"Dải single prints giữa hai distribution là level quan trọng nhất."},
+ {k:"neutral",n:"Neutral",dir:0,flip:false,p:[[14,24],[15,25],[17,29],[18,26],[15,23],[9,17],[11,19],[13,20],[15,21],[16,22],[17,23],[16,22],[17,21]],o:19,c:19,
+  sig:"Range extension cả hai phía IB, close giữa range (neutral center).", mean:"Hai phe cân bằng, chưa ai thắng. Nếu close ở cực trị (neutral extreme) thì ưu tiên hướng close.", key:"Cạnh IB hôm qua và hai đầu range extension."},
+ {k:"nontrend",n:"Non-Trend",dir:0,flip:false,p:[[17,22],[18,22],[17,21],[18,22],[17,21],[18,21],[17,22],[18,21],[17,21],[18,22],[17,21],[18,21],[18,21]],o:19,c:20,
+  sig:"IB hẹp, cả ngày gần như không rời IB.", mean:"Thiếu thông tin, năng lượng đang tích luỹ.", key:"Biên range hẹp hôm qua = level breakout."},
+ {k:"pshape",n:"P-shape",dir:1,weak:true,flip:false,p:[[2,9],[7,15],[13,22],[18,26],[21,27],[20,26],[21,27],[22,26],[21,26],[22,27],[21,26],[22,26],[22,25]],o:3,c:24,
+  sig:"Thân mỏng phía dưới, value phình ở trên.", mean:"Thường là short covering, không hẳn là new buying.", key:"Phần thân mỏng của P: vùng giá đi nhanh nếu quay lại."},
+ {k:"bshape",n:"b-shape",dir:-1,weak:true,flip:false,p:null,o:26,c:5,
+  sig:"Thân mỏng phía trên, value phình ở dưới.", mean:"Thường là long liquidation, không hẳn là new selling.", key:"Phần thân mỏng của b: vùng giá đi nhanh nếu quay lại."}
+];
+DT.find(d=>d.k==="bshape").p = DT.find(d=>d.k==="pshape").p.map(([a,b])=>[29-b,29-a]);
+const DT_BASE = 28600, DT_STEP = 5;
+function dtPeriods(k, down){
+  const d = DT.find(x=>x.k===k);
+  const flip = down && d.flip;
+  const ps = flip ? d.p.map(([a,b])=>[40-b,40-a]) : d.p;
+  return { ps, o: flip?40-d.o:d.o, c: flip?40-d.c:d.c, dir: flip ? -d.dir : d.dir, name: d.n + (d.flip ? (flip?" ↓":" ↑") : "") };
+}
+function tpoVA(ps){
+  let lo=1e9, hi=-1e9; ps.forEach(([a,b])=>{ lo=Math.min(lo,a); hi=Math.max(hi,b); });
+  const cnt = {}; for(let p=lo;p<=hi;p++) cnt[p] = ps.filter(([a,b])=>p>=a&&p<=b).length;
+  const mid=(lo+hi)/2; let poc=lo; for(let p=lo;p<=hi;p++){ if(cnt[p]>cnt[poc] || (cnt[p]===cnt[poc] && Math.abs(p-mid)<Math.abs(poc-mid))) poc=p; }
+  const tot = Object.values(cnt).reduce((s,v)=>s+v,0); let acc=cnt[poc], vah=poc, val=poc, up=poc+1, dn=poc-1;
+  while(acc < Math.ceil(tot*0.7) && (up<=hi||dn>=lo)){ const cu = up<=hi?cnt[up]:-1, cd = dn>=lo?cnt[dn]:-1; if(cu>=cd){acc+=cu;vah=up++;} else {acc+=cd;val=dn--;} }
+  // vùng mỏng dài nhất (≤ 1 TPO) bên trong range
+  let best=null, run=null;
+  for(let p=lo;p<=hi;p++){ if(cnt[p]<=1){ run = run ? [run[0],p] : [p,p]; if(!best || run[1]-run[0] > best[1]-best[0]) best = run.slice(); } else run = null; }
+  return { lo, hi, poc, vah, val, thin: best && best[1]-best[0]>=2 ? best : null };
+}
+const SC_REL = {
+  1:w=>({oVal:.25*w, oVah:-.25*w, ref:"in"}),
+  2:w=>({oVal:.6*w, oVah:.5*w, ref:"up"}),
+  3:w=>({oVal:-.5*w, oVah:-.6*w, ref:"dn"}),
+  4:w=>({gap:.35*w, h:.8*w, ref:"above"}),
+  5:w=>({gap:.35*w, h:.8*w, ref:"below"}),
+  6:w=>({oVal:-.5*w, oVah:.5*w, ref:"wrap"})
+};
+const r5 = x => Math.round(x/DT_STEP)*DT_STEP;
+function buildCombo(dtk, down, id){
+  const t = dtPeriods(dtk, down), V = tpoVA(t.ps), P = r => DT_BASE + r*DT_STEP;
+  const rVah = P(V.vah), rVal = P(V.val), rPoc = P(V.poc), pdh = P(V.hi), pdl = P(V.lo), w = Math.max(20, rVah - rVal);
+  let oVal, oVah;
+  const rel = SC_REL[id](w);
+  if(rel.ref==="in"||rel.ref==="wrap"){ oVal = r5(rVal + rel.oVal); oVah = r5(rVah + rel.oVah); }
+  else if(rel.ref==="up"){ oVal = r5(rVal + rel.oVal); oVah = r5(rVah + rel.oVah); }
+  else if(rel.ref==="dn"){ oVal = r5(rVal + rel.oVal); oVah = r5(rVah + rel.oVah); }
+  else if(rel.ref==="above"){ oVal = r5(rVah + rel.gap); oVah = r5(oVal + rel.h); }
+  else { oVah = r5(rVal - rel.gap); oVal = r5(oVah - rel.h); }
+  if(id===1){ if(oVah - oVal < 5) oVah = oVal + 5; } else if(oVah - oVal < 15) oVah = oVal + 15;
+  const ow = oVah - oVal;
+  const oPoc = r5(oVal + ow*(id===2||id===4?0.6:id===3||id===5?0.4:0.5));
+  const onh = r5(oVah + Math.max(10, ow*0.3)), onl = r5(oVal - Math.max(10, ow*0.3));
+  const L = { rVah, rVal, rPoc, pdh, pdl, oVah, oVal, oPoc, onh, onl };
+  const D = derive(L);
+  D.rPeriods = t.ps.map(([a,b])=>[P(a),P(b)]); D.rStep = DT_STEP; D.rDtName = t.name;
+  D.rClose = P(t.c); D.rIB = [P(Math.min(t.ps[0][0],t.ps[1][0])), P(Math.max(t.ps[0][1],t.ps[1][1]))];
+  D.thin = V.thin ? [P(V.thin[0]), P(V.thin[1])] : null;
+  D.dt = { k:dtk, dir:t.dir, name:t.name };
+  return D;
+}
+/* Kết hợp day type hôm qua × kịch bản OVN */
+function combo(dtk, dir, id){
+  const d = DT.find(x=>x.k===dtk), b = BIAS[id], wk = !!d.weak;
+  const W = b>0?"lên":"xuống";
+  if(dir!==0 && b!==0){
+    const same = dir===b;
+    if(wk) return same
+      ? {tone:"A cần xác nhận", cls:"ov", t:`${d.n} hôm qua là ${dir>0?"short covering":"long liquidation"}, qua đêm tiếp tục ${W}. Cần thấy new ${dir>0?"buying":"selling"} thật (OD/OTD, giữ ngoài overlap) mới tin A. Nếu RTH quay về phần thân mỏng của ${d.n}, giá đi rất nhanh theo hướng B.`}
+      : {tone:"Củng cố A", cls:"good", t:`Cú ${dir>0?"tăng":"giảm"} của ${d.n} hôm qua chủ yếu là ${dir>0?"short covering":"long liquidation"} và đã hết lực; qua đêm quay ${W} xác nhận phe chủ động thật. A được củng cố, target có thể kéo về thân mỏng của ${d.n}.`};
+    if(dtk==="trend") return same
+      ? {tone:"Củng cố A", cls:"good", t:`Trend hôm qua và qua đêm cùng hướng ${W}: imbalance nhiều phiên. Không fade; chỉ đi theo pullback. Cẩn thận ngày sau trend thường biên độ nhỏ hơn.`}
+      : {tone:"A cần xác nhận", cls:"ov", t:`Qua đêm đảo ngược ngay sau ngày Trend. Trend day hay được theo sau bởi balance hơn là đảo chiều thật, nên A (ngược trend) cần OD/OTD xác nhận. Nếu RTH quay lại hướng trend → B mạnh.`};
+    if(dtk==="dd") return same
+      ? {tone:"Củng cố A", cls:"good", t:`Double Distribution hôm qua cùng hướng qua đêm: distribution thứ hai được chấp nhận. Dải single prints hôm qua là support/resistance xa cho B.`}
+      : {tone:"A cần xác nhận", cls:"ov", t:`Qua đêm quay ngược về phía distribution đầu tiên. Dải single prints hôm qua là chỗ thị trường hay đi nhanh qua: nếu bị xuyên thì A chạy nhanh; nếu giữ thì B.`};
+    return same
+      ? {tone:"Củng cố A", cls:"good", t:`${d.n} hôm qua (range extension ${W}) và qua đêm cùng hướng: value đang migrate nhiều phiên. Ưu tiên go-with.`}
+      : {tone:"A cần xác nhận", cls:"ov", t:`Qua đêm đi ngược hướng range extension hôm qua. A cần open type xác nhận; nếu RTH quay lại phía RE hôm qua → B.`};
+  }
+  if(dir!==0 && b===0){
+    const dw = dir>0?"lên":"xuống";
+    if(wk) return {tone:"Balance", cls:"", t:`Sau ${d.n} (${dir>0?"short covering":"long liquidation"}), qua đêm balance trong value hôm qua: lực ${dw} chưa có người theo. Fade mép overlap; nếu breakout thì ưu tiên hướng ngược ${d.n}.`};
+    return {tone:"Balance · nghiêng theo hôm qua", cls:"", t:`Sau ngày ${d.n} ${dw}, qua đêm tiêu hoá trong value hôm qua. Kỳ vọng balance trong A–C; nếu breakout có acceptance thì ưu tiên hướng ${dw} của hôm qua.`};
+  }
+  if(dir===0 && b!==0){
+    if(dtk==="nontrend") return {tone:"Củng cố A", cls:"good", t:`Non-Trend hôm qua là năng lượng tích luỹ; qua đêm rời range đi ${W} là breakout của compression. A mạnh nếu RTH không quay lại range hẹp hôm qua.`};
+    if(dtk==="neutral") return {tone:"A cần xác nhận", cls:"ov", t:`Neutral center hôm qua: hai phe cân bằng. Qua đêm chọn hướng ${W} là thông tin mới, cần RTH xác nhận bằng OD/OTD. Nếu hôm qua là neutral extreme cùng hướng ${W} thì nâng lên "Củng cố A".`};
+    return {tone:"A cần xác nhận", cls:"ov", t:`Hôm qua ${d.n} (balance), qua đêm chọn hướng ${W}. Đây là thông tin mới; A có xác suất tốt khi RTH xác nhận bằng OD/OTD và giữ ngoài overlap.`};
+  }
+  if(dtk==="nontrend") return {tone:"Balance · sắp breakout", cls:"ov", t:`Non-Trend nối tiếp balance qua đêm: năng lượng nén nhiều phiên. Không fade sâu; chuẩn bị đi theo breakout có acceptance.`};
+  return {tone:"Balance", cls:"", t:`${d.n} hôm qua + qua đêm balance trong value: rotation là mặc định. Nếu nhiều ngày liên tiếp như vậy, dựng composite.`};
+}
+const DT_OPTS = [["normal",false],["nvar",false],["nvar",true],["trend",false],["trend",true],["dd",false],["dd",true],["neutral",false],["nontrend",false],["pshape",false],["bshape",false]];
+const dtLabel = (k,down) => { const d = DT.find(x=>x.k===k); return d.n + (d.flip ? (down?" ↓":" ↑") : ""); };
+
 /* ---------- chart ---------- */
 /* Dựng các period TPO minh hoạ quanh đúng VA / TPOC đã nhập (hình dạng là minh hoạ, mức giá là của bạn) */
 const FA=[.6,.9,.4,1,.7,.8,.5,.3,.9,.6,.2], FB=[.8,.5,1,.6,.9,.4,.7,1,.5,.3,.6];
@@ -181,8 +286,9 @@ function tpoRows(ps){
   return rows;
 }
 function drawPlan(D, sc, open){
-  const W = 760, H = 480, top = 36, bot = 26, x0 = 74;
   const lo0 = Math.min(D.pdl, D.onl, D.rVal, D.oVal), hi0 = Math.max(D.pdh, D.onh, D.rVah, D.oVah);
+  const W = 760, top = 36, bot = 26, x0 = 74;
+  const H = D.rPeriods ? Math.round(Math.min(860, Math.max(480, (hi0-lo0)*1.16/D.rStep*10.5 + top + bot))) : 480;
   const pad = (hi0-lo0)*0.08, pmin = lo0-pad, pmax = hi0+pad;
   const Y = p => top + (pmax-p)/(pmax-pmin)*(H-top-bot);
     const xEnd = 548, xLab = 556;
@@ -196,7 +302,7 @@ function drawPlan(D, sc, open){
   for(let p = Math.ceil(pmin/tick)*tick; p <= pmax; p += tick){
     s += `<line x1="${x0-6}" x2="${xEnd}" y1="${Y(p)}" y2="${Y(p)}" stroke="#202328"/><text x="${x0-10}" y="${Y(p)+4}" font-size="11" text-anchor="end" fill="#9aa0a8">${fmt(p)}</text>`;
   }
-  s += `<text x="${x0+70}" y="20" font-size="12" text-anchor="middle" fill="#cfd3d8">TPO RTH hôm qua (A–N)</text><text x="${x0+250}" y="20" font-size="12" text-anchor="middle" fill="#cfd3d8">TPO OVN (31 period)</text><text x="${x0+400}" y="20" font-size="12" text-anchor="middle" fill="#cfd3d8">9:30 → 11:30</text>`;
+  s += `<text x="${x0+70}" y="20" font-size="12" text-anchor="middle" fill="#cfd3d8">TPO RTH hôm qua${D.rPeriods?" · "+D.rDtName:" (A–N)"}</text><text x="${x0+250}" y="20" font-size="12" text-anchor="middle" fill="#cfd3d8">TPO OVN (31 period)</text><text x="${x0+400}" y="20" font-size="12" text-anchor="middle" fill="#cfd3d8">9:30 → 11:30</text>`;
   // overlap / gap band
   if(D.has) s += `<rect x="${x0-4}" y="${Y(D.ovHi)}" width="${xEnd-x0+4}" height="${Y(D.ovLo)-Y(D.ovHi)}" fill="#EF9F27" fill-opacity="0.16" stroke="#BA7517" stroke-dasharray="5 4"/>`;
   else s += `<rect x="${x0-4}" y="${Y(D.gapHi)}" width="${xEnd-x0+4}" height="${Y(D.gapLo)-Y(D.gapHi)}" fill="#888780" fill-opacity="0.14" stroke="#888780" stroke-dasharray="5 4"/>`;
@@ -207,10 +313,10 @@ function drawPlan(D, sc, open){
   s += hl(D.rPoc,COL.poc,"",1.8) + hl(D.oPoc,COL.poc,"2 3",1.8);
   // profiles (TPO)
   const LET = "ABCDEFGHIJKLMN";
-  const tstep = Math.max(0.25, Math.round(((hi0-lo0)/30)*4)/4);
+  const tstep = D.rPeriods ? D.rStep : Math.max(0.25, Math.round(((hi0-lo0)/30)*4)/4);
   const rowH = Math.max(4, (Y(lo0)-Y(lo0+tstep)));
-  const drawTPO = (lo,hi,val,vah,poc,n,x,isR,maxW) => {
-    const rows = tpoRows(synthPeriods(lo,hi,val,vah,poc,n,tstep));
+  const drawTPO = (lo,hi,val,vah,poc,n,x,isR,maxW,explicit) => {
+    const rows = tpoRows(explicit ? explicit.map(([a,b])=>[Math.round(a/tstep),Math.round(b/tstep)]) : synthPeriods(lo,hi,val,vah,poc,n,tstep));
     const maxC = Math.max(...rows.map(r=>r.idx.length));
     const cw = Math.min(isR?11:9, maxW/maxC);
     const pocR = Math.round(poc/tstep);
@@ -228,7 +334,9 @@ function drawPlan(D, sc, open){
     });
     return o;
   };
-  s += drawTPO(D.pdl, D.pdh, D.rVal, D.rVah, D.rPoc, 14, x0+4, true, 150);
+  s += drawTPO(D.pdl, D.pdh, D.rVal, D.rVah, D.rPoc, 14, x0+4, true, 150, D.rPeriods);
+  if(D.rPeriods && D.rClose!=null){ const yc = Y(D.rClose); s += `<path d="M${x0+160},${yc-4} L${x0+153},${yc} L${x0+160},${yc+4} Z" fill="#ff6b9a"/><text x="${x0+163}" y="${yc+4}" font-size="10" fill="#ffb3cb">C</text>`; }
+  if(D.rPeriods && D.rIB){ s += `<rect x="${x0-3}" y="${Y(D.rIB[1])-rowH/2}" width="3" height="${Y(D.rIB[0])-Y(D.rIB[1])+rowH}" fill="#C9A96E"/>`; }
   s += drawTPO(D.onl, D.onh, D.oVal, D.oVah, D.oPoc, 31, x0+174, false, 156);
   // arrows A / B
   const o = open!=null && !isNaN(open) ? open : sc.open(D);
@@ -291,8 +399,15 @@ function scenarioHtml(D, sc, open){
       <div class="card"><span class="k">Đọc context</span><p>${sc.read(D)}</p></div>
       <div class="card"><span class="k">Kỳ vọng</span><ul class="clean small">${sc.expect.map(e=>`<li>${e}</li>`).join("")}</ul></div>
     </div>
+    ${D.dt ? (()=>{ const d = DT.find(x=>x.k===D.dt.k), cb = combo(D.dt.k, D.dt.dir, sc.id), pos = Math.round((D.rClose-D.pdl)/(D.pdh-D.pdl)*100);
+      return `<div class="grid g2">
+        <div class="card"><span class="k">RTH hôm qua · ${D.dt.name}</span><p class="small">${d.sig} ${d.mean}</p><p class="small muted">Close ở ${pos}% range · ${d.key}</p></div>
+        <div class="card"><span class="k">Kết hợp với kịch bản ${sc.id}</span><p><span class="chip ${cb.cls}">${cb.tone}</span></p><p class="small">${cb.t}</p></div></div>`; })() : ""}
     <div class="tablewrap"><table><thead><tr><th>Key level</th><th class="num">Giá</th><th>Vai trò</th><th>Hành động</th></tr></thead><tbody>
       ${keys.map(k=>`<tr><td><b>${k[0]}</b></td><td class="num mono">${k[1]==null?"—":fmt(k[1])}</td><td><span class="chip ${R[k[2]][1]}">${R[k[2]][0]}</span></td><td class="small">${k[3]}</td></tr>`).join("")}
+      ${D.dt ? `<tr><td><b>Close hôm qua</b></td><td class="num mono">${fmt(D.rClose)}</td><td><span class="chip ov">Pivot</span></td><td class="small">Vị trí close quyết định đọc ${D.dt.name}: gần cực trị = mạnh, giữa = balance</td></tr>
+      <tr><td><b>IB hôm qua</b></td><td class="num mono">${fmt(D.rIB[0])}–${fmt(D.rIB[1])}</td><td><span class="chip">Context</span></td><td class="small">IB rộng/hẹp hôm qua; cạnh IB là level phụ</td></tr>
+      ${D.thin ? `<tr><td><b>Vùng TPO mỏng hôm qua</b></td><td class="num mono">${fmt(D.thin[0])}–${fmt(D.thin[1])}</td><td><span class="chip rth">Location</span></td><td class="small">Single prints / thân mỏng: giá đi nhanh nếu vào, test lần đầu hay phản ứng</td></tr>` : ""}` : ""}
     </tbody></table></div>
     <div class="ab">
       <div class="card a"><span class="k">Kịch bản A · chính</span><p class="small">${A.t}</p></div>
@@ -309,16 +424,42 @@ function scenarioHtml(D, sc, open){
     </div>`;
 }
 function renderScenarios(){
-  const box = $("#sc-buttons");
+  const dbox = $("#dt-buttons"), box = $("#sc-buttons");
+  dbox.innerHTML = DT_OPTS.map(([k,dn],i)=>`<button data-i="${i}">${dtLabel(k,dn)}</button>`).join("");
   box.innerHTML = SC.map(s=>`<button data-id="${s.id}">${s.id} · ${s.n}</button>`).join("");
-  const show = id => {
-    const sc = SC_BY(id), D = derive(sc.ex);
-    $$("button",box).forEach(b=>b.classList.toggle("on", +b.dataset.id===id));
-    $("#sc-panel").innerHTML = scenarioHtml(D, sc);
-    store.set("ofs.ov.sc", id);
+  let di = store.get("ofs.ov.dt", 0), si = store.get("ofs.ov.sc", 1);
+  if(!(di>=0 && di<DT_OPTS.length)) di = 0;
+  const show = () => {
+    const [k,dn] = DT_OPTS[di], sc = SC_BY(si), D = buildCombo(k, dn, si);
+    $$("button",dbox).forEach(b=>b.classList.toggle("on", +b.dataset.i===di));
+    $$("button",box).forEach(b=>b.classList.toggle("on", +b.dataset.id===si));
+    let html = scenarioHtml(D, sc);
+    if(D.id !== si) html = `<p class="small muted">Với day type này, số minh hoạ rơi vào kịch bản ${D.id}; đang hiển thị theo quy tắc của kịch bản ${si}.</p>` + html;
+    $("#sc-panel").innerHTML = html;
+    store.set("ofs.ov.dt", di); store.set("ofs.ov.sc", si);
   };
-  box.addEventListener("click", e=>{ const b = e.target.closest("button"); if(b) show(+b.dataset.id); });
-  show(store.get("ofs.ov.sc",1));
+  dbox.addEventListener("click", e=>{ const b = e.target.closest("button"); if(b){ di = +b.dataset.i; show(); } });
+  box.addEventListener("click", e=>{ const b = e.target.closest("button"); if(b){ si = +b.dataset.id; show(); } });
+  show();
+  scApi.set = (d,s) => { di = d; si = s; show(); };
+}
+const scApi = { set(){} };
+function renderComboMatrix(){
+  const head = `<table><thead><tr><th>RTH hôm qua</th>${SC.map(s=>`<th>${s.id} · ${s.n}</th>`).join("")}</tr></thead><tbody>`;
+  const body = DT_OPTS.map(([k,dn],i) => { const t = dtPeriods(k,dn);
+    return `<tr><td><b>${dtLabel(k,dn)}</b></td>${SC.map(s=>{ const c = combo(k, t.dir, s.id); return `<td><button class="mx" data-i="${i}" data-s="${s.id}" aria-label="${dtLabel(k,dn)} với kịch bản ${s.id}"><span class="chip ${c.cls}">${c.tone}</span></button></td>`; }).join("")}</tr>`; }).join("");
+  $("#cx-table").innerHTML = head + body + "</tbody></table>";
+  const show = (i,s) => {
+    const [k,dn] = DT_OPTS[i], t = dtPeriods(k,dn), c = combo(k, t.dir, +s), d = DT.find(x=>x.k===k), sc = SC_BY(+s);
+    $$("#cx-table button.mx").forEach(b=>b.classList.toggle("on", b.dataset.i===String(i) && b.dataset.s===String(s)));
+    $("#cx-detail").innerHTML = `<div class="grid g3" style="margin-top:6px">
+      <div class="card"><span class="k">RTH hôm qua · ${dtLabel(k,dn)}</span><p class="small">${d.sig}</p><p class="small muted">${d.mean}</p></div>
+      <div class="card"><span class="k">OVN · kịch bản ${sc.id}</span><p class="small">${sc.n}: ${sc.short}</p></div>
+      <div class="card"><span class="k">Kết hợp</span><p><span class="chip ${c.cls}">${c.tone}</span></p><p class="small">${c.t}</p><p class="small"><a href="#kich-ban" data-go="${i},${s}">Xem chart plan của trường hợp này</a></p></div></div>`;
+    const go = $("#cx-detail a[data-go]"); if(go) go.addEventListener("click", ()=>{ scApi.set(+i, +s); });
+  };
+  $("#cx-table").addEventListener("click", e=>{ const b = e.target.closest("button.mx"); if(b) show(b.dataset.i, b.dataset.s); });
+  show(9, 5);
 }
 
 /* ---------- 02 builder ---------- */
@@ -332,6 +473,9 @@ function initBuilder(){
   $("#b-open").value = saved && saved.open!=null ? saved.open : 28740;
   $("#b-news").value = saved && saved.news ? saved.news : "";
   $("#b-ot").innerHTML = `<option value="">Chưa xác định</option>` + OPENS.map(o=>`<option value="${o.k}">${o.n}</option>`).join("");
+  $("#b-dt").innerHTML = `<option value="">Chưa chọn</option>` + DT_OPTS.map(([k,dn],i)=>`<option value="${i}">${dtLabel(k,dn)}</option>`).join("");
+  if(saved && saved.dt!=null && saved.dt!=="") $("#b-dt").value = saved.dt;
+  $("#b-dt").addEventListener("change", build);
   if(saved && saved.ot) $("#b-ot").value = saved.ot;
   if(saved && saved.ib!=null) $("#b-ib").value = saved.ib;
   if(saved && saved.ibpos) $("#b-ibpos").value = saved.ibpos;
@@ -343,6 +487,7 @@ function initBuilder(){
     $("#l-date").value = $("#b-date").value; $("#l-sc").value = String(lastD.id); $("#l-pct").value = lastD.pct;
     const loc = openLoc(lastD, lastOpen), lo = [...$("#l-open").options].find(o=>o.text===loc); if(lo) $("#l-open").value = lo.value;
     if($("#b-ot").value) $("#l-ot").value = $("#b-ot").value;
+    if($("#b-dt").value!=="") $("#l-dt").value = $("#b-dt").value;
     const ibv = parseFloat($("#b-ib").value); if(!isNaN(ibv)) $("#l-ibw").value = ibv<70?"narrow":ibv>130?"wide":"normal";
     location.hash = "log";
   });
@@ -353,7 +498,7 @@ function build(){
   const L = {}; let bad = [];
   Object.entries(BF).forEach(([k,id]) => { const v = parseFloat($("#"+id).value); if(isNaN(v)) bad.push(k); L[k] = v; });
   const open = parseFloat($("#b-open").value);
-  store.set("ofs.ov.builder", Object.assign({}, L, { date:$("#b-date").value, open: isNaN(open)?null:open, news:$("#b-news").value, ot:$("#b-ot").value, ib:$("#b-ib").value===""?null:$("#b-ib").value, ibpos:$("#b-ibpos").value }));
+  store.set("ofs.ov.builder", Object.assign({}, L, { date:$("#b-date").value, open: isNaN(open)?null:open, news:$("#b-news").value, ot:$("#b-ot").value, dt:$("#b-dt").value, ib:$("#b-ib").value===""?null:$("#b-ib").value, ibpos:$("#b-ibpos").value }));
   if(bad.length){ $("#b-out").textContent = "Thiếu số: " + bad.join(", "); return; }
   const errs = [];
   if(!(L.rVah > L.rPoc && L.rPoc > L.rVal)) errs.push("RTH cần VAH > POC > VAL");
@@ -373,7 +518,9 @@ function build(){
     : ibCls==="Rộng" ? "Normal / Neutral → IB-3 fade cạnh IB về TPOC, không breakout"
     : ibpos==="cut" ? "Normal Variation → mép overlap là trọng tài: accept ngoài → IB-1, quay vào → IB-2"
     : `IB ${ibCls.toLowerCase()}${ibpos?", "+ibposT.toLowerCase():""} → chờ range extension một phía + VWAP dốc`;
+  const dti = $("#b-dt").value, dtSel = dti!=="" ? DT_OPTS[+dti] : null, dtT = dtSel ? dtPeriods(dtSel[0], dtSel[1]) : null, cb = dtSel ? combo(dtSel[0], dtT.dir, D.id) : null;
   $("#b-class").innerHTML = `<div class="callout ${D.id>=4&&D.id<=5?"red":D.id===1||D.id===6?"purple":""}"><h4>Kịch bản ${sc.id} · ${sc.n}</h4><p class="small">${sc.read(D)}</p></div>`
+    + (cb ? `<div class="callout purple"><h4>Hôm qua ${dtT.name} × kịch bản ${sc.id} → <span class="chip ${cb.cls}">${cb.tone}</span></h4><p class="small">${cb.t}</p></div>` : `<p class="small muted">Chọn day type RTH hôm qua để thêm lớp đọc cấu trúc.</p>`)
     + (jj ? `<div class="callout"><h4>10:00 · ${OPEN_BY(ot).n} → <span class="chip ${VCLS[jj.v]}">${jj.v}</span></h4><p class="small">${jj.read} ${jj.act}</p><p class="small muted">Day type nghiêng về: ${jj.days.join(" · ")}</p></div>` : `<p class="small muted">Lúc 10:00 chọn open type để cập nhật plan.</p>`)
     + (ibCls ? `<div class="callout purple"><h4>10:30 · IB ${ibCls} (${ibw}%)</h4><p class="small">${ibRead}</p></div>` : "");
   $("#b-tiles").innerHTML = [
@@ -417,6 +564,11 @@ IB: ${sc.ib}
 KHÔNG LÀM: ${sc.no}
 DAY TYPE HAY GẶP: ${DAYS[sc.id].join(" · ")}
 
+RTH HÔM QUA
+${cb ? `  ${dtT.name} → ${cb.tone}
+  ${cb.t}
+  ${DT.find(x=>x.k===dtSel[0]).key}` : "  (chưa chọn day type)"}
+
 CẬP NHẬT 10:00 · OPEN TYPE
 ${jj ? `  ${OPEN_BY(ot).n} → ${jj.v}. ${jj.read}
   ${jj.act}
@@ -433,6 +585,7 @@ QUY TẮC: trigger orderflow (CVD / delta flip / footprint) + EMA 9/34 không ng
 function initLog(){
   $("#l-sc").innerHTML = SC.map(s=>`<option value="${s.id}">${s.id} · ${s.n}</option>`).join("");
   $("#l-ot").innerHTML = OPENS.map(o=>`<option value="${o.k}">${o.n}</option>`).join("");
+  $("#l-dt").innerHTML = DT_OPTS.map(([k,dn],i)=>`<option value="${i}">${dtLabel(k,dn)}</option>`).join("");
   $("#l-date").value = new Date().toLocaleDateString("vi-VN");
   let rows = store.get("ofs.ov.log", []);
   const lmsg = t => { $("#l-msg").textContent = t; setTimeout(()=>{ $("#l-msg").textContent=""; }, 3000); };
@@ -450,16 +603,16 @@ function initLog(){
        <div class="tile"><div class="k">Plan A / B đúng</div><div class="v">${pct(aOk,n)} / ${pct(bOk,n)}</div></div>
        <div class="tile"><div class="k">Ma trận đoán đúng</div><div class="v">${(()=>{ const ev = rows.filter(r=>r.ot); const hit = ev.filter(r=>{ try{ const j = judge(+r.sc, r.ot, derive(SC_BY(+r.sc).ex)); return j.v===r.ab || (j.v==="Chờ IB" && r.ab!=="none"); }catch(e){ return false; } }); return pct(hit.length, ev.length); })()}</div><div class="small muted">kết luận ma trận khớp plan đúng</div></div>` +
       byS.map(([id,c,ok])=>`<div class="tile"><div class="k">Kịch bản ${id}</div><div class="v">${c}</div><div class="small muted">plan đúng ${pct(ok,c)}</div></div>`).join("");
-    $("#l-rows").innerHTML = rows.map((r,i)=>`<tr><td class="mono">${r.date}</td><td>${r.sc}</td><td class="num mono">${r.pct}</td><td class="small">${lab("l-open",r.open)}</td><td>${r.ot?(OPEN_BY(r.ot)||{n:r.ot}).n:"—"}</td><td class="small">${r.ibw?lab("l-ibw",r.ibw):"—"}</td><td>${lab("l-touch",r.touch)}</td><td class="small">${lab("l-react",r.react)}</td><td class="small">${lab("l-day",r.day)}</td><td>${lab("l-ab",r.ab)}</td><td class="small">${r.note||""}</td><td><button data-del="${i}" aria-label="Xoá phiên ${r.date}">Xoá</button></td></tr>`).join("") || `<tr><td colspan="12" class="muted small">Chưa có phiên nào. Dùng nút "Đưa vào Log" ở Plan Builder hoặc nhập tay.</td></tr>`;
+    $("#l-rows").innerHTML = rows.map((r,i)=>`<tr><td class="mono">${r.date}</td><td class="small">${r.dt!=null&&r.dt!==""&&DT_OPTS[+r.dt]?dtLabel(...DT_OPTS[+r.dt]):"—"}</td><td>${r.sc}</td><td class="num mono">${r.pct}</td><td class="small">${lab("l-open",r.open)}</td><td>${r.ot?(OPEN_BY(r.ot)||{n:r.ot}).n:"—"}</td><td class="small">${r.ibw?lab("l-ibw",r.ibw):"—"}</td><td>${lab("l-touch",r.touch)}</td><td class="small">${lab("l-react",r.react)}</td><td class="small">${lab("l-day",r.day)}</td><td>${lab("l-ab",r.ab)}</td><td class="small">${r.note||""}</td><td><button data-del="${i}" aria-label="Xoá phiên ${r.date}">Xoá</button></td></tr>`).join("") || `<tr><td colspan="13" class="muted small">Chưa có phiên nào. Dùng nút "Đưa vào Log" ở Plan Builder hoặc nhập tay.</td></tr>`;
   };
   $("#l-rows").addEventListener("click", e=>{ const b = e.target.closest("button[data-del]"); if(!b) return; rows.splice(+b.dataset.del,1); draw(); });
   $("#l-add").addEventListener("click", ()=>{
-    const r = { date:$("#l-date").value.trim(), sc:$("#l-sc").value, pct:$("#l-pct").value||"", open:$("#l-open").value, ot:$("#l-ot").value, ibw:$("#l-ibw").value, touch:$("#l-touch").value, react:$("#l-react").value, day:$("#l-day").value, ab:$("#l-ab").value, note:$("#l-note").value.trim() };
+    const r = { date:$("#l-date").value.trim(), sc:$("#l-sc").value, pct:$("#l-pct").value||"", open:$("#l-open").value, dt:$("#l-dt").value, ot:$("#l-ot").value, ibw:$("#l-ibw").value, touch:$("#l-touch").value, react:$("#l-react").value, day:$("#l-day").value, ab:$("#l-ab").value, note:$("#l-note").value.trim() };
     if(!r.date){ lmsg("Nhập ngày trước."); return; }
     rows.push(r); draw(); $("#l-note").value = ""; lmsg("Đã thêm phiên.");
   });
   $("#l-csv").addEventListener("click", async ()=>{
-    const csv = "date,scenario,overlap_pct,open,open_type,ib,touch_60m,reaction,day_type,plan,note\n" + rows.map(r=>[r.date,r.sc,r.pct,lab("l-open",r.open),r.ot?(OPEN_BY(r.ot)||{n:r.ot}).n:"",r.ibw?lab("l-ibw",r.ibw):"",lab("l-touch",r.touch),lab("l-react",r.react),lab("l-day",r.day),lab("l-ab",r.ab),(r.note||"").replace(/,/g,";")].join(",")).join("\n");
+    const csv = "date,prev_day_type,scenario,overlap_pct,open,open_type,ib,touch_60m,reaction,day_type,plan,note\n" + rows.map(r=>[r.date,(r.dt!=null&&r.dt!==""&&DT_OPTS[+r.dt])?dtLabel(...DT_OPTS[+r.dt]):"",r.sc,r.pct,lab("l-open",r.open),r.ot?(OPEN_BY(r.ot)||{n:r.ot}).n:"",r.ibw?lab("l-ibw",r.ibw):"",lab("l-touch",r.touch),lab("l-react",r.react),lab("l-day",r.day),lab("l-ab",r.ab),(r.note||"").replace(/,/g,";")].join(",")).join("\n");
     try{ await navigator.clipboard.writeText(csv); lmsg("Đã copy CSV."); }catch(e){ lmsg("Trình duyệt chặn copy."); }
   });
   let armed = false;
@@ -485,6 +638,9 @@ const QZ = [
  {q:"Kịch bản 4 (OVN trên RTH), RTH Open Drive ↓ xuyên VAL OVN. Kết luận?",o:["Giữ A, mua pullback","Chuyển sang B: phe mua qua đêm bị kẹt, đi theo drive xuống về value RTH","Chờ IB","Fade ONH"],a:1,e:"OD ngược hướng qua đêm = B, thường mạnh."},
  {q:"Kịch bản 1 (balance), 10:00 là Open Auction, IB rộng lúc 10:30. Day type nghiêng về?",o:["Trend","Normal / Non-Trend: fade mép overlap về TPOC","Double Distribution","Neutral extreme"],a:1,e:"Balance hai phiên + OA + IB rộng = rotation."},
  {q:"Kịch bản 6 (OVN bao trùm), 10:00 là ORR ↓ sau khi thử phá VAH RTH. Hành động?",o:["Long breakout","Fade về TPOC sau khi giá xuyên open (B của kịch bản 6)","Short đến ONL ngay","Không có ý nghĩa"],a:1,e:"Thử phá VA RTH bị từ chối → balance rộng vẫn giữ."},
+ {q:"Hôm qua là P-shape (short covering), qua đêm value trôi xuống (kịch bản 3). Đọc thế nào?",o:["A cần xác nhận","Củng cố A: cú tăng hôm qua chủ yếu là short covering đã hết lực","Balance","Bỏ qua day type"],a:1,e:"P yếu + qua đêm đi ngược nó = phe bán chủ động thật."},
+ {q:"Hôm qua Trend ↑, qua đêm OVN dưới RTH (kịch bản 5). Cách xử lý?",o:["Short ngay open","A cần xác nhận: sau trend day thường là balance, chờ OD/OTD xuống","Long breakout","Không có ý nghĩa"],a:1,e:"Đảo chiều ngay sau trend cần xác nhận mạnh."},
+ {q:"Hôm qua Non-Trend, qua đêm value trôi lên (kịch bản 2). Đọc?",o:["Balance","Củng cố A: breakout của năng lượng tích luỹ","Ưu tiên B","Chờ cả ngày"],a:1,e:"Compression hôm qua + qua đêm rời range = breakout."},
  {q:"Zone overlap đã đẹp nhưng chưa có CVD divergence hay delta flip. Có vào lệnh không?",o:["Có, zone đủ mạnh","Không; zone là location, cần trigger orderflow","Có nếu EMA 9 > 34","Có nếu là thứ Hai"],a:1,e:"Quy tắc chung của playbook."}
 ];
 function shuffle(a){ const b = a.slice(); for(let i=b.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; }
@@ -506,6 +662,7 @@ function renderQuiz(){
 renderOverview();
 renderScenarios();
 renderMatrix();
+renderComboMatrix();
 initBuilder();
 initLog();
 renderQuiz();
