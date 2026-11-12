@@ -847,3 +847,458 @@ trên zone	above the zone
 ② Nến thân lớn đóng ngược EMA9, delta mạnh	② Large-body candle closes back across EMA9, strong delta
 ③ Retest lại zone vừa bị quét và giữ được (look above / below and fail)	③ Retest of the swept zone holds (look above / below and fail)
 Bias TPO / Open type	TPO bias / Open type
+(70% thời gian). Playbook này đánh balance–imbalance, mà acceptance được đo bằng thời gian giá ở lại một vùng, nên không dùng VA volume. Settlement chính thức của NQ là 16:00 ET; dùng 16:14 vẫn được nếu giữ cố định. Thứ Hai: OVN bắt đầu từ Chủ nhật 18:00, so với RTH thứ Sáu.	(70% of time). This playbook trades balance–imbalance, and acceptance is measured by how long price stays in an area, so volume VA is not used. NQ’s official settlement is 16:00 ET; 16:14 also works if kept fixed. Monday: OVN starts Sunday 18:00 and is compared with Friday’s RTH.
+(chưa có)	(not yet)
+(chưa xác định)	(not set)
+(hoặc VAL	(or VAL
+(hoặc VAL OVN	(or VAL OVN
+) là vùng mà hai phiên độc lập cùng xem là công bằng. Lúc 9:25 ET, hình dạng của overlap cho bạn biết hôm nay nhiều khả năng là balance, value đang trôi, hay imbalance. Playbook này chỉ dùng TPO, VWAP, EMA, CVD và orderflow.	) is the area two independent sessions both consider fair. At 9:25 ET, the shape of the overlap tells you whether today is likely balance, migrating value, or imbalance. This playbook uses only TPO, VWAP, EMA, CVD and orderflow.
+) nằm gọn trong VA OVN, overlap = toàn bộ VA RTH.	) sits entirely inside the OVN VA, overlap = the whole RTH VA.
+) nằm gọn trong VA RTH. Overlap = toàn bộ VA OVN, chiếm	) sits entirely inside the RTH VA. Overlap = the whole OVN VA, covering
+) rồi drive theo hướng qua đêm. Đây là setup đẹp nhất của A, cùng logic OSR.	) then drives in the overnight direction. This is the best setup for A, same logic as OSR.
+) và C, D giữ ngoài → đi theo. Target VAH OVN	) and C, D hold outside → go with it. Target VAH OVN
+) và TPOC.	) and TPOC.
+) và xây value cao hơn tới	) and builds value higher up to
+) và xây value thấp hơn tới	) and builds value lower down to
+, giá đi vào khoảng trống và được chấp nhận dưới VAH RTH	, price enters the gap and is accepted below VAH RTH
+. B sai khi giá mất lại	. B is wrong when price loses
+. B sai khi giá reclaim lại	. B is wrong when price reclaims
+. Không bắt đỉnh/đáy ngược drive.	. Do not pick tops/bottoms against the drive.
+. Lên: VAH RTH	. Up: VAH RTH
+00 · Giả thuyết	00 · Hypothesis
+01 · 6 kịch bản	01 · 6 scenarios
+04 · Kiểm chứng	04 · Validation
+2 · Overlap lệch lên	2 · Overlap skewed up
+25% = hẹp.	25% = narrow.
+25% hẹp (gần như từ chối).	25% narrow (near rejection).
+28,680–28,830 · kịch bản 6	28,680–28,830 · scenario 6
+28,750–28,780 · kịch bản 2	28,750–28,780 · scenario 2
+28,780–28,830 · kịch bản 4	28,780–28,830 · scenario 4
+34) → long. Stop dưới	34) → long. Stop below
+34) → short. Stop trên	34) → short. Stop above
+4 · OVN trên RTH	4 · OVN above RTH
+6 kịch bản	6 scenarios
+6 · OVN bao trùm RTH	6 · OVN engulfs RTH
+: OTD ↑ = test xuống rồi drive lên; ORR ↑ = đi xuống bị từ chối rồi đảo lên.	: OTD ↑ = tests down then drives up; ORR ↑ = goes down, is rejected, then reverses up.
+: giá đi nhanh nếu vào	: price moves fast if it gets in
+= giá rời vùng đó và không quay lại đủ lâu. Trên TPO đó là single prints, tail, profile mỏng.	= price leaves that area and does not come back for long. On TPO that means single prints, tails, a thin profile.
+= thị trường dành thời gian ở một vùng giá, hai phe đồng thuận. Trên TPO đó là vùng có nhiều period chồng lên nhau (VA, TPOC).	= the market spends time in one price area and both sides agree. On TPO that is the area where many periods stack (VA, TPOC).
+= độ dày overlap / độ dày VA RTH. ≥ 60% rộng, 25–60% vừa,	= overlap height / RTH VA height. ≥ 60% wide, 25–60% medium,
+A sai khi 1 period đóng dưới	A is wrong when 1 period closes below
+A sai khi 1 period đóng trên	A is wrong when 1 period closes above
+A sai khi period đóng dưới	A is wrong when a period closes below
+A sai khi period đóng trên	A is wrong when a period closes above
+A sau khi giá xuyên open. Stop ngoài cực trị bị từ chối. Target	A once price crosses the open. Stop beyond the rejected extreme. Target
+ATAS không có	ATAS does not have it
+Absorption / stacked imbalance ngay tại level: trigger và chỗ đặt stop	Absorption / stacked imbalance right at the level: trigger and stop placement
+Acceptance / rejection cũng đo bằng thời gian: giá ở ngoài level bao nhiêu period, không phải bao nhiêu contract.	Acceptance / rejection is also measured in time: how many periods price stays beyond the level, not how many contracts.
+Acceptance = giá ở ngoài level ≥ 1 period 30 phút (bản nhanh) hoặc 2 period (bản chuẩn), tức là TPO được xây ở đó chứ không chỉ một cú chạm.	Acceptance = price stays beyond the level for ≥ 1 30-minute period (fast version) or 2 periods (standard), meaning TPO gets built there, not just a touch.
+B sau khi giá xuyên open. Stop ngoài cực trị bị từ chối. Target	B once price crosses the open. Stop beyond the rejected extreme. Target
+Balance hai phiên + OA + IB rộng = rotation.	Two-session balance + OA + wide IB = rotation.
+Balance mạnh	Strong balance
+Balance · fade 2 mép	Balance · fade both edges
+Balance. Hai phiên đồng thuận, ít động lực đi xa.	Balance. Both sessions agree, little drive to travel far.
+Bao trùm overlap	Engulfs the overlap
+Biên OSR (	OSR edges (
+Biên OVN cho setup OSR (sweep → reclaim → retest)	OVN edges for the OSR setup (sweep → reclaim → retest)
+Biên OVN rộng là target xa, không phải zone vào sớm.	The wide OVN edges are far targets, not early entry zones.
+Biên range hôm qua, nơi stop tập trung: xếp loại open, điểm sweep	Yesterday’s range edges where stops cluster: open classification, sweep points
+Box ngắn · #66FF5252 / #6669F0AE	Short box · #66FF5252 / #6669F0AE
+Box nhỏ · #66E3A33A	Small box · #66E3A33A
+Box overlap (hoặc khoảng trống)	Overlap box (or gap)
+Box · fill #29EF9F27, viền #FFBA7517	Box · fill #29EF9F27, border #FFBA7517
+Breakout sai khi period kế tiếp quay lại vào VA RTH. Fade sai khi IB phá và được chấp nhận.	The breakout is wrong when the next period returns into the RTH VA. The fade is wrong when the IB breaks and is accepted.
+Bấm lần nữa để xoá hết	Click again to clear all
+Bật khi chạm	Bounce on touch
+Bật ≥ 1R	Bounce ≥ 1R
+Bắt đáy ở ONL khi chưa có reclaim.	Buying the low at ONL before any reclaim.
+Bị từ chối ở mép trên → Normal Variation xuống, IB-1 hướng xuống.	Rejected at the upper edge → Normal Variation down, IB-1 to the downside.
+Chart plan kịch bản	Plan chart, scenario
+Chart plan, key level và kỳ vọng cho từng trạng thái RTH × OVN	Plan chart, key levels and expectations for each RTH × OVN state
+Chuyển sang B	Switch to B
+Chuyển sang B: phe mua qua đêm bị kẹt, đi theo drive xuống về value RTH	Switch to B: overnight buyers are trapped, follow the drive down to RTH value
+Chưa có	Not yet
+Chưa có phiên nào. Dùng nút	No sessions yet. Use the
+Chưa xác định	Not set
+Chạm	Touch
+Chỉ fade ONH	Only fade ONH
+Chỉ để xem context, không vẽ box. TPO của ETH bị lệch về overnight vì OVN chiếm 31 period	Context only, no box. ETH TPO is skewed toward overnight because OVN takes 31 periods
+Chốt profile RTH: kẻ #1–#6	Lock the RTH profile: draw #1–#6
+Chờ IB	Wait for IB
+Chờ IB. IB-1 theo phía phá; IB-3 nếu IB nằm trong VA RTH.	Wait for IB. IB-1 with the break side; IB-3 if the IB sits inside the RTH VA.
+Chờ range extension có acceptance	Wait for range extension with acceptance
+Chức năng	Purpose
+Có nếu EMA 9	Yes if EMA 9
+Có nếu là thứ Hai	Yes if it is Monday
+Có overlap nhưng lệch?	Overlap but skewed?
+Có → Kịch bản 1 (balance).	Yes → Scenario 1 (balance).
+Có → Kịch bản 6 (chờ IB).	Yes → Scenario 6 (wait for IB).
+Có, zone đủ mạnh	Yes, the zone is strong enough
+Cạnh dưới value hôm qua, đối xứng VAH	Lower edge of yesterday’s value, mirror of VAH
+Cạnh dưới value qua đêm	Lower edge of overnight value
+Cạnh trên value hôm qua: fade khi bị từ chối, retest khi đã được chấp nhận	Upper edge of yesterday’s value: fade on rejection, retest once accepted
+Cạnh trên value qua đêm; so với VA RTH để biết value trôi hướng nào	Upper edge of overnight value; compare with the RTH VA to see which way value migrates
+Cả hai phiên đều dùng	Both sessions use
+Cần kẻ gì, để làm gì	What to draw, and why
+CẬP NHẬT 10:00 · OPEN TYPE	10:00 UPDATE · OPEN TYPE
+CẬP NHẬT 10:30 · IB	10:30 UPDATE · IB
+Cập nhật lúc 10:30 bằng IB	10:30 update with the IB
+Cắt qua mép	Cuts through an edge
+Cắt qua một mép overlap	Cuts through one overlap edge
+Cửa sổ đẹp nhất là sau 10:30 khi IB đã chọn phía.	The best window is after 10:30 once the IB has picked a side.
+DAY TYPE HAY GẶP:	COMMON DAY TYPES:
+Day type hay gặp với kịch bản này	Common day types for this scenario
+Day type hay gặp: Normal / Normal Variation biên độ nhỏ.	Common day types: Normal / small-range Normal Variation.
+Day type nghiêng về	Day type leans toward
+Day type nghiêng về:	Day type leans toward:
+Dùng song song với plan TPO hằng ngày, ghi đủ 30 phiên ở chương 04 rồi mới quyết định có đưa vào khoá TPO Level hay không. Playbook học tập. Số trên chart là minh hoạ. Các ngưỡng (25% / 60% overlap, acceptance 1–2 period) là điểm xuất phát, cần chỉnh theo log của chính bạn.	Use it alongside the daily TPO plan, log 30 sessions in chapter 04, then decide whether it joins the TPO Level course. Study playbook. Chart numbers are illustrative. The thresholds (25% / 60% overlap, 1–2 period acceptance) are starting points to tune from your own log.
+Dùng để	Used for
+Dưới cả hai	Below both
+Dải cam = overlap	Orange band = overlap
+Dải xám = khoảng trống value	Grey band = value gap
+Dấu hiệu sớm (IB)	Early signs (IB)
+Dễ ra Neutral hoặc balance rộng.	Prone to Neutral or a wide balance.
+Fade ONH trong 30 phút đầu khi đang Open Drive.	Fading ONH in the first 30 minutes during an Open Drive.
+Fade hai mép overlap	Fade both overlap edges
+Fade long khi có absorption	Fade long on absorption
+Fade mép overlap. Short	Fade the overlap edges. Short
+Fade sai khi 1 period đóng ngoài mép đang fade và VWAP RTH dốc theo hướng phá.	The fade is wrong when 1 period closes beyond the edge being faded and VWAP RTH slopes in the break direction.
+Fade short khi có CVD divergence	Fade short on CVD divergence
+Fade theo hướng ORR, target mép overlap đối diện (	Fade in the ORR direction, target the opposite overlap edge (
+Fade về TPOC	Fade to TPOC
+Fade về TPOC sau khi giá xuyên open (B của kịch bản 6)	Fade to TPOC once price crosses the open (B of scenario 6)
+Fade đã sai; thoát và xét kịch bản B (đi theo hướng phá)	The fade is wrong; exit and consider plan B (go with the break)
+Ghi 1 dòng vào Log 30 phiên	Write 1 row in the 30-session log
+Giá 9:25 / open	Price at 9:25 / open
+Giá cân bằng qua đêm	Overnight balance price
+Giá qua đêm dành nhiều thời gian nhất; target gần nhất sau open	Where overnight spent the most time; nearest target after the open
+Giá thị trường dành nhiều thời gian nhất hôm qua: target của fade, pivot bias	Where the market spent the most time yesterday: fade target, bias pivot
+Giá thử ngược hướng qua đêm, bị từ chối, quay lại xuyên open theo hướng qua đêm.	Price probes against the overnight direction, is rejected, and crosses back through the open with the overnight direction.
+Giá xoay giữa hai mép overlap trong A–C; range extension nếu có thường yếu.	Price rotates between the two overlap edges in A–C; any range extension is usually weak.
+Giá đi theo hướng qua đêm, bị từ chối (thường ở ONH/ONL hoặc cạnh VA OVN), quay xuyên open.	Price goes with the overnight direction, is rejected (usually at ONH/ONL or an OVN VA edge), and crosses back through the open.
+Giả thuyết đang kiểm chứng, chưa thuộc system chính.	A hypothesis under test, not yet part of the main system.
+Giờ ET	ET time
+Giờ VN (mùa đông)	VN time (winter)
+Giữ A, mua pullback	Keep A, buy the pullback
+Giữ A, vào ở retest mép dưới overlap; đây là setup đẹp nhất	Keep A, enter on the retest of the lower overlap edge; this is the best setup
+Giữ dưới VAH OVN	Holds below VAH OVN
+Giữ dưới VAH OVN → trend xuống, không fade.	Holds below VAH OVN → downtrend, do not fade.
+Giữ lệnh, chờ quay lại	Hold the trade, wait for it to come back
+Giữ trên VAL OVN	Holds above VAL OVN
+Giữ trên VAL OVN → Open Drive / trend lên, không fade.	Holds above VAL OVN → Open Drive / uptrend, do not fade.
+Giữ được mép dưới → Normal Variation lên, IB-1 theo hướng lên.	Lower edge holds → Normal Variation up, IB-1 to the upside.
+Giữa VA OVN cao hơn giữa VA RTH → Kịch bản 2 (trôi lên). Thấp hơn → Kịch bản 3 (trôi xuống).	OVN VA midpoint above the RTH VA midpoint → Scenario 2 (migrating up). Below → Scenario 3 (migrating down).
+Huỷ fade. Đi theo	Cancel the fade. Follow
+Hành động (số minh hoạ)	Action (illustrative numbers)
+Hồi lên mép trên overlap	Bounce up to the upper overlap edge
+Hồi nông	Shallow bounce
+IB hình thành trong hay ngoài overlap	Does the IB form inside or outside the overlap
+IB hẹp và cả ngày không rời IB	Narrow IB and price never leaves it all day
+IB hẹp, OD/OTD, mỗi period tạo high/low mới, VWAP dốc	Narrow IB, OD/OTD, every period makes a new high/low, VWAP sloping
+IB hẹp, balance sáng rồi một cú đi nhanh để lại single prints	Narrow IB, morning balance then a fast move that leaves single prints
+IB nằm dưới overlap và hẹp → IB-1 xuống.	IB below the overlap and narrow → IB-1 down.
+IB nằm trong VA RTH, VWAP phẳng → fade	IB inside the RTH VA, VWAP flat → fade
+IB nằm trên overlap và hẹp → IB-1 lên.	IB above the overlap and narrow → IB-1 up.
+IB rất rộng, gần như cả range ngày; ít range extension	Very wide IB, almost the whole day’s range; little range extension
+IB so với overlap	IB vs overlap
+IB thường rộng và nằm trong VA RTH.	The IB is usually wide and inside the RTH VA.
+IB trung bình; range extension một phía khoảng 1.2–2x IB	Medium IB; one-sided range extension of about 1.2–2x IB
+IB-1 lên là mặc định; IB-2 chỉ khi IB phá xuống dưới VAL OVN.	IB-1 up is the default; IB-2 only if the IB breaks below VAL OVN.
+IB-1 xuống là mặc định; OSR long chỉ sau sweep + reclaim rõ.	IB-1 down is the default; OSR long only after a clear sweep + reclaim.
+IB-1 đi theo, target 1.5x–2x	IB-1 go-with, target 1.5x–2x
+IB-3 fade cạnh IB về TPOC, không breakout	IB-3 fade the IB edges to TPOC, no breakout
+Imbalance lên · RTH phải xác nhận	Imbalance up · RTH must confirm
+Imbalance lên, RTH phải xác nhận trong A–B.	Imbalance up, RTH must confirm in A–B.
+Imbalance thất bại; giá dễ đi nhanh về VA RTH, short theo kịch bản B	Failed imbalance; price can run fast back to the RTH VA, short per plan B
+Imbalance xuống · RTH phải xác nhận	Imbalance down · RTH must confirm
+Imbalance xuống, RTH phải xác nhận trong A–B.	Imbalance down, RTH must confirm in A–B.
+KHÔNG LÀM:	DO NOT:
+Khi nào	When
+Khoảng trống	Value gap
+Khoảng trống thường được đi qua nhanh nếu bị xuyên.	A gap is usually crossed fast once it is entered.
+Khoảng trống:	Value gap   :
+Không cái nào	Neither
+Không có lý do	No reason
+Không có overlap · kịch bản 4	No overlap · scenario 4
+Không có overlap?	No overlap?
+Không fade. Vào pullback đầu tiên về	Do not fade. Enter the first pullback to
+Không làm	Do not
+Không rõ	Unclear
+Không trade A period, chờ IB chọn phía	Do not trade A period, wait for the IB to pick a side
+Không trade A period. Chỉ phản ứng ở zone	Do not trade A period. Only react at zone
+Không trade A period. Sau 10:30, IB phá ra ngoài VAH RTH	Do not trade A period. After 10:30, the IB breaks out above VAH RTH
+Không trade đến 10:30. IB phá ra ngoài VA RTH và được chấp nhận → A; IB nằm trong VA RTH → B.	No trading until 10:30. IB breaks out of the RTH VA and is accepted → A; IB inside the RTH VA → B.
+Không; zone là location, cần trigger orderflow	No; the zone is location, it needs an orderflow trigger
+Khớp nhất với kịch bản 1: hai phiên đồng thuận, RTH cũng chưa chọn hướng.	Best fit for scenario 1: both sessions agree and RTH has not picked a direction either.
+Kiểm tra lại:	Check again:
+Kiểu · ARGB	Style · ARGB
+Kẻ #7–#11, xếp loại kịch bản, nhập Plan Builder	Draw #7–#11, classify the scenario, fill in Plan Builder
+KỊCH BẢN	SCENARIO
+Kịch bản	Scenario
+Kịch bản (9:25)	Scenario (9:25)
+Kịch bản 1 (balance), 10:00 là Open Auction, IB rộng lúc 10:30. Day type nghiêng về?	Scenario 1 (balance), 10:00 is an Open Auction, wide IB at 10:30. Which day type is likely?
+Kịch bản 1: bạn fade mép trên overlap, nhưng period đóng trên mép và VWAP RTH bắt đầu dốc lên. Làm gì?	Scenario 1: you fade the upper overlap edge, but a period closes above it and VWAP RTH starts sloping up. What now?
+Kịch bản 2 (lệch lên). Zone long chính ở đâu?	Scenario 2 (skewed up). Where is the main long zone?
+Kịch bản 2 (value trôi lên), lúc 10:00 bạn thấy Open Test Drive ↑: giá xuống test mép dưới overlap rồi drive lên qua open. Kết luận?	Scenario 2 (value migrating up), at 10:00 you see an Open Test Drive ↑: price tests the lower overlap edge then drives up through the open. Verdict?
+Kịch bản 4 (OVN trên RTH), RTH Open Drive ↓ xuyên VAL OVN. Kết luận?	Scenario 4 (OVN above RTH), RTH Open Drive ↓ through VAL OVN. Verdict?
+Kịch bản 4, RTH mở cửa rồi đóng period dưới VAL OVN và đi vào khoảng trống. Kỳ vọng?	Scenario 4, RTH opens then a period closes below VAL OVN and enters the gap. Expectation?
+Kịch bản 4: không có overlap, OVN nằm trên.	Scenario 4: no overlap, OVN sits above.
+Kịch bản 6 (OVN bao trùm), 10:00 là ORR ↓ sau khi thử phá VAH RTH. Hành động?	Scenario 6 (OVN engulfs), 10:00 is an ORR ↓ after a failed break of VAH RTH. Action?
+Kịch bản 6 (OVN bao trùm). Cách xử lý A period?	Scenario 6 (OVN engulfs). How to handle A period?
+Kịch bản A · chính	Plan A · primary
+Kịch bản B · thay thế	Plan B · alternative
+Kịch bản B, vào ở retest open hoặc level vừa reclaim. Target	Plan B, enter on the retest of the open or the level just reclaimed. Target
+Kịch bản B, đi theo drive. Target	Plan B, go with the drive. Target
+Kịch bản lúc 9:25 là giả thuyết. Open type lúc 10:00 và IB lúc 10:30 xác nhận hoặc lật nó	The 9:25 scenario is a hypothesis. The 10:00 open type and the 10:30 IB confirm or flip it
+KỲ VỌNG	EXPECTATIONS
+Kỳ vọng	Expectations
+Level gần nhất: trên	Nearest level: above
+Line chấm · #FFEF9F27	Dotted line · #FFEF9F27
+Line liền 2px · #FFEF9F27	Solid 2px line · #FFEF9F27
+Line mảnh · #FFB39DDB	Thin line · #FFB39DDB
+Line mảnh · #FFE6E8EB	Thin line · #FFE6E8EB
+Line đứt · #FF7F77DD	Dashed line · #FF7F77DD
+Line đứt · #FFD4537E	Dashed line · #FFD4537E
+Lo = max(VAL RTH, VAL OVN), Hi = min(VAH RTH, VAH OVN), đều là VA của TPO. Hi	Lo = max(VAL RTH, VAL OVN), Hi = min(VAH RTH, VAH OVN), both TPO VAs. Hi
+Lo → có overlap.	Lo → overlap exists.
+Log 30 phiên	30-session log
+Log 30 phiên trước khi tin giả thuyết	Log 30 sessions before trusting the hypothesis
+Long ngay trên ONL khi giá còn giữ dưới overlap.	Going long right above ONL while price still holds below the overlap.
+Lúc 10:00 chọn open type để cập nhật plan.	At 10:00 pick the open type to update the plan.
+Lúc 9:25, kịch bản overlap cho bạn hướng ưu tiên. Lúc 10:00, open type (OD, OTD, ORR, OA) cho biết RTH có đồng ý với phiên qua đêm không. Lúc 10:30, IB cho biết ngày đang nghiêng về day type nào. Bấm vào một ô của ma trận để xem chi tiết.	At 9:25 the overlap scenario gives the preferred direction. At 10:00 the open type (OD, OTD, ORR, OA) tells whether RTH agrees with overnight. At 10:30 the IB tells which day type the session leans toward. Click a matrix cell for details.
+Lấy VAH/VAL/TPOC của profile	Take VAH/VAL/TPOC from the
+Lần test đầu sau open thường là mép dưới overlap (VAL OVN).	The first test after the open is usually the lower overlap edge (VAL OVN).
+Lần test đầu sau open thường là mép dưới overlap; giữ được thì value trôi lên tiếp.	The first test after the open is usually the lower overlap edge; if it holds, value keeps migrating up.
+Lần test đầu sau open thường là mép trên overlap (VAH OVN).	The first test after the open is usually the upper overlap edge (VAH OVN).
+Lịch làm việc mỗi ngày	Daily schedule
+Ma trận đoán đúng	Matrix called it
+Mua thêm	Buy more
+Mép dưới overlap (VAL OVN)	Lower overlap edge (VAL OVN)
+Mép dưới overlap (VAL RTH)	Lower overlap edge (VAL RTH)
+Mép overlap là trọng tài: accept ngoài → IB-1, quay vào → IB-2	The overlap edge is the referee: accepted outside → IB-1, back inside → IB-2
+Mép trên overlap (VAH OVN)	Upper overlap edge (VAH OVN)
+Mép trên overlap (VAH RTH)	Upper overlap edge (VAH RTH)
+Mũi tên chỉ hướng	Arrows show the
+Mất	Lose
+Mất mép dưới → value trôi thất bại, giá về lại value hôm qua.	Lower edge lost → failed migration, price returns to yesterday’s value.
+Mỗi phiên một dòng. Sau 30 phiên, so tỉ lệ phản ứng ở mép overlap với cạnh VA RTH đơn thuần, và xem kịch bản nào cho kết quả ổn định nhất. Dữ liệu chỉ lưu trên trình duyệt này; dùng Copy CSV để chuyển sang Notion / thiết bị khác.	One row per session. After 30 sessions, compare the reaction rate at overlap edges with plain RTH VA edges, and see which scenario is most consistent. Data is stored only in this browser; use Copy CSV to move it to Notion / another device.
+Mức tự tin	Confidence
+Ngoài overlap, cùng hướng open type	Outside the overlap, same direction as the open type
+Ngoài, cùng hướng drive	Outside, in the drive direction
+Nhập ngày trước.	Enter the date first.
+Nhập số lúc 9:25 ET → tự xếp loại, vẽ chart và viết plan	Enter numbers at 9:25 ET → auto classify, draw the chart and write the plan
+Nhắc lại 4 open type (phân loại xong lúc 10:00 ET)	Recap of the 4 open types (classified by 10:00 ET)
+Nhắc lại 6 day type và dấu hiệu lúc 10:30	Recap of the 6 day types and their 10:30 signs
+Normal / Neutral → IB-3 fade cạnh IB về TPOC, không breakout	Normal / Neutral → IB-3 fade the IB edges to TPOC, no breakout
+Normal / Non-Trend: fade mép overlap về TPOC	Normal / Non-Trend: fade the overlap edges to TPOC
+Normal Variation (biên độ nhỏ)	Normal Variation (small range)
+Normal Variation (nhỏ)	Normal Variation (small)
+Normal Variation hoặc Non-Trend	Normal Variation or Non-Trend
+Normal Variation hoặc Non-Trend → chờ range extension có acceptance	Normal Variation or Non-Trend → wait for range extension with acceptance
+Normal Variation → mép overlap là trọng tài: accept ngoài → IB-1, quay vào → IB-2	Normal Variation → the overlap edge is the referee: accepted outside → IB-1, back inside → IB-2
+OD ngược hướng qua đêm = B, thường mạnh.	OD against the overnight direction = B, usually strong.
+ONH ≥ VAH OVN và ONL ≤ VAL OVN	ONH ≥ VAH OVN and ONL ≤ VAL OVN
+OTD cùng hướng value trôi = A, cùng logic OSR.	OTD in the migration direction = A, same logic as OSR.
+OVN bao trùm RTH	OVN engulfs RTH
+OVN cần VAH	OVN needs VAH
+OVN dưới RTH	OVN below RTH
+OVN rộng · chờ IB	Wide OVN · wait for IB
+OVN trên RTH	OVN above RTH
+Open type lúc 10:00	Open type at 10:00
+Open type; lần chạm đầu vào mép overlap / biên OVN	Open type; first touch of an overlap edge / OVN edge
+Open ở đâu	Open location
+Overlap = [max VAL, min VAH] = [28,750, 28,780]; giữa VA OVN cao hơn → trôi lên.	Overlap = [max VAL, min VAH] = [28,750, 28,780]; OVN VA midpoint higher → migrating up.
+Overlap TPO = vùng mà	TPO overlap = the area where
+Overlap chiếm 18% VA RTH. Nghĩa là?	The overlap covers 18% of the RTH VA. Meaning?
+Overlap hẹp: qua đêm gần như từ chối value cũ, thiên imbalance	Narrow overlap: overnight nearly rejected old value, leaning imbalance
+Overlap lệch lên	Overlap skewed up
+Overlap lệch xuống	Overlap skewed down
+Overlap so RTH hôm qua với OVN, cùng thước đo.	Overlap compares yesterday’s RTH with OVN on the same yardstick.
+PDH ≥ VAH RTH và PDL ≤ VAL RTH	PDH ≥ VAH RTH and PDL ≤ VAL RTH
+Period đóng dưới	A period closes below
+Phe mua qua đêm bị kẹt, khoảng trống được đi qua nhanh.	Overnight buyers are trapped, the gap gets crossed fast.
+Phiên	Session
+Phiên overnight là phần đấu giá nối tiếp ngay sau RTH hôm qua. Đặt hai profile cạnh nhau trên cùng một chart, phần giao giữa hai value area (	The overnight session is the auction that continues right after yesterday’s RTH. Put the two profiles side by side on one chart; the intersection of the two value areas (
+Phá + accept → long	Break + accept → long
+Phá + accept → short	Break + accept → short
+Phá một mép, C và D giữ ngoài overlap, VWAP dốc theo hướng phá → đi theo. Xuống: target VAL RTH	One edge breaks, C and D hold outside the overlap, VWAP slopes with the break → go with it. Down: target VAL RTH
+Phân loại open type	Classify the open type
+Phải fade hai mép	Must fade both edges
+Phản ứng	Reaction
+Phản ứng ở mép	Reaction at the edge
+Pivot: dưới = yếu	Pivot: below = weak
+Pivot: giữ trên = mạnh	Pivot: holding above = strong
+Plan A / B đúng	Plan A / B right
+Plan đúng	Correct plan
+Profile vẽ bằng TPO: chữ A–N là các period 30 phút của RTH (N = 16:00–16:14), khối nhỏ là 31 period của OVN. Số trên chart là minh hoạ. Đường xanh = kịch bản A (chính), đường đỏ đứt = kịch bản B (thay thế), tam giác hồng = open giả định. Plan Builder overlap (chương 03) dùng đúng các quy tắc này với số thật của bạn.	Profiles drawn as TPO: letters A–N are the 30-minute RTH periods (N = 16:00–16:14), the small blocks are the 31 OVN periods. Chart numbers are illustrative. Green line = plan A (primary), red dashed line = plan B (alternative), pink triangle = assumed open. Plan Builder overlap (chapter 03) applies these same rules to your real numbers.
+Pullback nông	Shallow pullback
+Pullback về mép dưới overlap	Pullback to the lower overlap edge
+QUY TẮC: trigger orderflow (CVD / delta flip / footprint) + EMA 9/34 không ngược hướng · VWAP RTH dốc thì không fade · tối đa 2–3 lệnh · dừng 11:30 ET.	RULES: orderflow trigger (CVD / delta flip / footprint) + EMA 9/34 not against the trade · no fading a sloping VWAP RTH · max 2–3 trades · stop at 11:30 ET.
+Qua đêm biến động hai chiều, quét cả hai phía value hôm qua. VA RTH (	Overnight was two-sided and swept both sides of yesterday’s value. The RTH VA (
+Qua đêm chấp nhận value hôm qua: VA OVN (	Overnight accepted yesterday’s value: the OVN VA (
+Qua đêm có hướng nhưng RTH chưa phe nào chủ động: value trôi chưa có người theo.	Overnight had a direction but no side is aggressive in RTH yet: the migration has no follow-through.
+Qua đêm hai chiều, RTH cũng chưa ai chủ động.	Overnight was two-sided and nobody is aggressive in RTH either.
+Qua đêm từ chối value cũ, imbalance lên; khoảng trống 28,720–28,760	Overnight rejected old value, imbalance up; gap 28,720–28,760
+Qua đêm từ chối value hôm qua và xây value hoàn toàn phía dưới. Khoảng	Overnight rejected yesterday’s value and built value entirely below. The zone
+Qua đêm từ chối value hôm qua và xây value hoàn toàn phía trên. Khoảng	Overnight rejected yesterday’s value and built value entirely above. The zone
+Quy tắc chung cho mọi kịch bản	Rules for every scenario
+Quy tắc chung của playbook.	The playbook’s general rule.
+RTH chọn phía sớm, không cần chờ hết IB.	RTH picks a side early, no need to wait for the full IB.
+RTH cần VAH	RTH needs VAH
+RTH hôm qua (9:30–16:14)	Prior RTH (9:30–16:14)
+RTH hôm qua : VAH	Prior RTH   : VAH
+RTH hôm qua và OVN trên ATAS (không dùng VA volume). Chart vẽ lại hình dạng TPO minh hoạ quanh đúng các mức bạn nhập. Số mặc định là ví dụ của kịch bản 3. Dữ liệu lưu trên trình duyệt này.	prior RTH and OVN profiles on ATAS (not volume VA). The chart redraws an illustrative TPO shape around exactly the levels you enter. Default numbers are the scenario 3 example. Data is stored in this browser.
+RTH mở ngược hẳn hướng qua đêm: phe qua đêm bị kẹt, cú đi thường mạnh.	RTH opens hard against the overnight direction: overnight traders are trapped and the move is usually strong.
+RTH đồng ý ngay với hướng qua đêm (	RTH immediately agrees with the overnight direction (
+Range extension cả hai phía IB (thường hoàn thành sau 11:30)	Range extension on both sides of the IB (usually completed after 11:30)
+Range extension hay rotation; dừng 11:30	Range extension or rotation; stop at 11:30
+Reclaim mép trên → value trôi thất bại, giá về lại value hôm qua.	Upper edge reclaimed → failed migration, price returns to yesterday’s value.
+Resistance chính, zone short	Main resistance, short zone
+Rơi vào khoảng trống và về VA RTH → đảo chiều mạnh vì phe mua qua đêm bị kẹt.	Falls into the gap and back to the RTH VA → strong reversal as overnight buyers are trapped.
+Sau phiên	After the session
+Setup IB-1 / IB-2 / IB-3; IB mid để dời stop	IB-1 / IB-2 / IB-3 setups; IB mid to trail the stop
+Short ngay dưới ONH khi giá còn giữ trên overlap.	Shorting right below ONH while price still holds above the overlap.
+Short đến ONL ngay	Short to ONL right away
+So value RTH hôm qua với value qua đêm, 6 kịch bản, Plan Builder overlap và log 30 phiên để kiểm chứng.	Compare yesterday’s RTH value with overnight value, 6 scenarios, Plan Builder overlap and a 30-session validation log.
+So value của RTH hôm qua với value qua đêm để biết thị trường đang chấp nhận gì	Compare yesterday’s RTH value with overnight value to see what the market is accepting
+Support chính, zone long	Main support, long zone
+Sweep ONL rồi reclaim, giá vào lại VA RTH → đảo chiều mạnh (phe bán qua đêm bị kẹt).	Sweep ONL then reclaim, price re-enters the RTH VA → strong reversal (overnight sellers trapped).
+TPO ETH bị lệch về overnight (31 period OVN so với ~14 period RTH)	ETH TPO is skewed toward overnight (31 OVN periods vs ~14 RTH periods)
+TPO RTH hôm qua (A–N)	Prior RTH TPO (A–N)
+Tail = cạnh mạnh; poor = target; single prints = vùng giá đi nhanh	Tail = strong edge; poor = target; single prints = fast-move area
+Target A và điểm sweep cho OSR	Target A and the sweep point for OSR
+Target A, sau đó IB extension	Target A, then IB extension
+Target của fade (	Fade target (
+Target của fade trong VA (	Fade target inside the VA (
+Target nếu phá overlap (	Target if the overlap breaks (
+Test một level phía ngược (mép overlap, VAL/VAH OVN, ONH/ONL), rồi đảo và drive qua open	Tests a level on the opposite side (overlap edge, VAL/VAH OVN, ONH/ONL), then reverses and drives through the open
+Test ngược hướng (thường vào zone	Tests the opposite way (usually into zone
+Test theo hướng qua đêm (thường ONH/ONL) thất bại rồi drive ngược lại.	A test in the overnight direction (usually ONH/ONL) fails, then drives the other way.
+Testing plan · log 30 phiên	Testing plan · 30-session log
+Testing plan: so value RTH hôm qua với value qua đêm, 6 kịch bản, Plan Builder overlap và log 30 phiên.	Testing plan: compare yesterday’s RTH value with overnight value, 6 scenarios, Plan Builder overlap and a 30-session log.
+Thiên lên.	Leaning up.
+Thiên xuống.	Leaning down.
+Thị trường chưa chọn hướng.	The market has not picked a direction.
+Thị trường chưa chọn hướng; cửa sổ đẹp nhất là sau 10:30.	The market has not picked a direction; the best window is after 10:30.
+Thử phá VA RTH bị từ chối → balance rộng vẫn giữ.	A failed break of the RTH VA → the wide balance still holds.
+Thử phá VA RTH rồi bị từ chối: balance rộng vẫn giữ.	Tried to break the RTH VA and was rejected: the wide balance still holds.
+Tin trong ngày	News today
+Trend / Double Distribution → IB-1 đi theo, target 1.5x–2x	Trend / Double Distribution → IB-1 go-with, target 1.5x–2x
+Trong phiên	In session
+Trên cả hai	Above both
+Trình duyệt chặn copy, bôi đen khung plan để copy.	The browser blocked copying; select the plan box to copy.
+Tính overlap (VA TPO)	Compute the overlap (TPO VA)
+Tối đa 2–3 lệnh. Dừng 11:30 ET (23:30 VN) hoặc khi chạm daily loss limit.	Max 2–3 trades. Stop at 11:30 ET (23:30 VN) or at the daily loss limit.
+Tổng quan & cách kẻ	Overview & drawing
+VA OVN bao trùm VA RTH?	OVN VA engulfs the RTH VA?
+VA OVN nằm gọn trong VA RTH → balance.	OVN VA entirely inside the RTH VA → balance.
+VA OVN nằm gọn trong VA RTH?	OVN VA entirely inside the RTH VA?
+VA RTH 28,640–28,720, VA OVN 28,760–28,830. Đọc thế nào?	RTH VA 28,640–28,720, OVN VA 28,760–28,830. How do you read it?
+VA RTH 28,680–28,780, VA OVN 28,750–28,830. Overlap là bao nhiêu và kịch bản nào?	RTH VA 28,680–28,780, OVN VA 28,750–28,830. What is the overlap and which scenario?
+VA RTH 28,700–28,800, VA OVN 28,725–28,775. Kịch bản nào?	RTH VA 28,700–28,800, OVN VA 28,725–28,775. Which scenario?
+VA của TPO	TPO VA
+VAH RTH (mép trên overlap)	VAH RTH (upper overlap edge)
+VAL OVN ≥ VAH RTH → Kịch bản 4 (OVN trên). Ngược lại → Kịch bản 5 (OVN dưới).	VAL OVN ≥ VAH RTH → Scenario 4 (OVN above). Otherwise → Scenario 5 (OVN below).
+VAL RTH (mép dưới overlap)	VAL RTH (lower overlap edge)
+VWAP RTH là bộ lọc: phẳng = được fade; dốc và giá chạy dọc band = không fade, chỉ đi theo.	VWAP RTH is the filter: flat = fading allowed; sloping with price riding a band = no fading, only go-with.
+Value hôm qua: VAH, VAL, POC, PDH/PDL, tail, poor H/L	Yesterday’s value: VAH, VAL, POC, PDH/PDL, tail, poor H/L
+Value qua đêm: VAH, VAL, POC, ONH/ONL	Overnight value: VAH, VAL, POC, ONH/ONL
+Value trôi lên · mua mép dưới	Value migrating up · buy the lower edge
+Value trôi xuống	Value migrating down
+Value trôi xuống · bán mép trên	Value migrating down · sell the upper edge
+Value đang trôi lên. Qua đêm chỉ chấp nhận phần trên của VA hôm qua (	Value is migrating up. Overnight only accepted the upper part of yesterday’s VA (
+Value đang trôi xuống. Qua đêm chỉ chấp nhận phần dưới của VA hôm qua (	Value is migrating down. Overnight only accepted the lower part of yesterday’s VA (
+Việc	Task
+Vào lệnh giữa hai POC khi chưa có open type rõ.	Entering between the two POCs before the open type is clear.
+Vào ở retest level vừa test sau khi giá reclaim open. Stop sau điểm test. Target	Enter on the retest of the tested level once price reclaims the open. Stop beyond the test point. Target
+Vì ETH không có POC	Because ETH has no POC
+Vì sao TPO: đây là playbook balance – imbalance	Why TPO: this is a balance – imbalance playbook
+Vì sao không dùng VA TPO của ETH full session để tính overlap?	Why not use the full-session ETH TPO VA to compute the overlap?
+Vẽ plan	Draw plan
+Vị trí IB so với overlap	IB position vs the overlap
+Xoay quanh open hai chiều, không phe nào chủ động	Two-way rotation around the open, no side is aggressive
+Xoá toàn bộ log	Clear the whole log
+Xuyên qua	Broke through
+Xác nhận lại bằng IB lúc 10:30.	Re-confirm with the IB at 10:30.
+Xếp loại kịch bản lúc 9:25 ET	Classify the scenario at 9:25 ET
+Xếp loại đúng trước khi trade	Classify correctly before trading
+Zone chính của plan. Chốt lúc 9:29	The plan’s main zone. Locked at 9:29
+Zone chính; hình dạng của nó quyết định kịch bản 1–6	Main zone; its shape decides scenarios 1–6
+Zone chỉ là location. Vào lệnh khi có trigger orderflow: CVD divergence / absorption, delta flip, footprint. EMA 9/34 M1 không ngược hướng lệnh.	The zone is only location. Enter on an orderflow trigger: CVD divergence / absorption, delta flip, footprint. EMA 9/34 on M1 not against the trade.
+Zone long chính	Main long zone
+Zone overlap đã đẹp nhưng chưa có CVD divergence hay delta flip. Có vào lệnh không?	The overlap zone looks great but there is no CVD divergence or delta flip yet. Do you enter?
+Zone short chính	Main short zone
+bị từ chối (CVD divergence, delta flip âm, EMA 9	is rejected (CVD divergence, negative delta flip, EMA 9
+chuyển sang kịch bản B	switch to plan B
+cuối cùng	final direction
+cả RTH hôm qua lẫn qua đêm	both yesterday’s RTH and overnight
+giữ kịch bản A	keep plan A
+giữ được (absorption, CVD không tạo đáy mới, EMA 9	holds (absorption, CVD makes no new low, EMA 9
+hoặc POC OVN	or POC OVN
+hoặc long	or long
+hẹp	narrow
+khi CVD divergence + delta flip và VWAP RTH phẳng. Stop ngoài mép vài tick (ngoài ONH/ONL nếu sát). Target POC	on CVD divergence + delta flip with a flat VWAP RTH. Stop a few ticks beyond the edge (beyond ONH/ONL if close). Target POC
+khi có CVD divergence.	on CVD divergence.
+khi có trigger; quyết định lại lúc 10:30 bằng IB.	on a trigger; decide again at 10:30 with the IB.
+không có overlap	no overlap
+không trade A period, quyết định lúc 10:30	no A-period trades, decide at 10:30
+kết luận ma trận khớp plan đúng	matrix verdict matched the correct plan
+là vùng chưa có value của cả hai phiên.	has no value from either session.
+một khoảng nhỏ. Target VAH OVN	by a small margin. Target VAH OVN
+một khoảng nhỏ. Target VAL OVN	by a small margin. Target VAL OVN
+overlap hẹp, gần như từ chối value cũ	narrow overlap, near rejection of old value
+overlap rộng	wide overlap
+overlap vừa	medium overlap
+phá balance mà hai phiên vừa đồng thuận.	breaks the balance both sessions just agreed on.
+plan đúng	plan right
+pullback đầu tiên	the first pullback
+rồi IB 1.5x.	then IB 1.5x.
+rồi IB extension.	then IB extension.
+rồi ONH	then ONH
+rồi ONL	then ONL
+rồi PDH	then PDH
+rồi PDL	then PDL
+rồi VAH RTH	then VAH RTH
+rồi VAL RTH	then VAL RTH
+rồi reclaim, period đóng trên	then reclaim, a period closes above
+rộng	wide
+sau khi giá reclaim open, vào ở retest mép overlap	once price reclaims the open, enter on the overlap-edge retest
+sau khi giá xuyên open; stop ngoài cực trị bị từ chối.	once price crosses the open; stop beyond the rejected extreme.
+tin 8:30, thứ Hai…	8:30 news, Monday…
+trong A–B (Open Drive / Open Test Drive) → mua pullback về	in A–B (Open Drive / Open Test Drive) → buy the pullback to
+và VWAP RTH lật lên. B sai khi giá mất lại	and VWAP RTH turns up. B is wrong when price loses
+và VWAP RTH lật xuống. B sai khi giá quay lại trên	and VWAP RTH turns down. B is wrong when price gets back above
+và vào lại VA RTH → long, target POC RTH	and re-enters the RTH VA → long, target POC RTH
+và được chấp nhận bên dưới (1 period + VWAP lật xuống) → value trôi lên thất bại → short về POC RTH	and is accepted below (1 period + VWAP turns down) → failed upward migration → short to POC RTH
+và được chấp nhận bên trên (1 period + VWAP lật lên) → value trôi xuống thất bại → long về POC RTH	and is accepted above (1 period + VWAP turns up) → failed downward migration → long to POC RTH
+về POC	to POC
+về TPOC khi có trigger.	to TPOC on a trigger.
+với	with
+vừa	medium
+· Chưa đạt	· Not passed
+· Đạt	· Passed
+Đi mạnh một chiều ngay từ 9:30, không quay lại test open	Drives hard one way from 9:30, never comes back to test the open
+Đi một hướng, bị từ chối ở level, quay ngược xuyên qua open	Goes one way, is rejected at a level, reverses through the open
+Đi ra một mép overlap rồi bị từ chối, quay xuyên open: đúng tinh thần balance.	Goes out to one overlap edge, is rejected, crosses back through the open: exactly the balance idea.
+Đi theo khi giá được chấp nhận ngoài	Go with it once price is accepted beyond
+Đuổi theo cú phá đầu tiên	Chase the first break
+Đuổi theo cú phá đầu tiên trong A period.	Chasing the first break in A period.
+Đã xoá log.	Log cleared.
+Đúng định nghĩa invalidation của kịch bản 1.	Exactly the invalidation rule of scenario 1.
+Đưa vào Log	Send to Log
+Đảo chiều mạnh nếu imbalance thất bại	Strong reversal if the imbalance fails
+Định nghĩa phiên (cùng một chart)	Session definitions (on one chart)
+Đọc context	Context read
+Độ dày overlap	Overlap height
+Đứng yên	Do nothing
+đầu chạm mép	edge touched
+đầu chạm mép?	edge touched?
+đều dành nhiều thời gian. Kịch bản 1 và 6 là balance, kịch bản 2 và 3 là balance đang dịch chuyển, kịch bản 4 và 5 là imbalance chờ RTH xác nhận.	spent a lot of time. Scenarios 1 and 6 are balance, scenarios 2 and 3 are balance in migration, scenarios 4 and 5 are imbalance waiting for RTH to confirm.
+Ưu tiên IB-3 (rotation). IB-1 chỉ khi IB hẹp bất thường.	Prefer IB-3 (rotation). IB-1 only with an unusually narrow IB.
+ở Plan Builder hoặc nhập tay.	button in Plan Builder or enter one by hand.
+→ bán pullback về	→ sell the pullback to
+→ chờ range extension một phía + VWAP dốc	→ wait for one-sided range extension + sloping VWAP
+OVN trong VA RTH	OVN inside RTH VA
+1 · OVN trong VA RTH	1 · OVN inside RTH VA
+Trend ↑ (khi OD/OTD ↑)	Trend ↑ (on OD/OTD ↑)
+Trend ↓ (khi OD/OTD ↓)	Trend ↓ (on OD/OTD ↓)

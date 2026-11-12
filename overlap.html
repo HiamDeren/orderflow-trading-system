@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080B10">
+<title>RTH × OVN Overlap · Orderflow System</title>
+<meta name="description" content="Testing plan: so value RTH hôm qua với value qua đêm, 6 kịch bản, Plan Builder overlap và log 30 phiên.">
+<link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/css/app.css?v=15">
+<link rel="stylesheet" href="assets/css/overlap.css?v=15">
+</head>
+<body data-page="overlap">
+<main class="ui-main">
+<div class="ui-content pg-overlap">
+<section class="ov-ch" id="ch-tong-quan" data-chapter="tong-quan">
+  <div class="head">
+    <span class="eyebrow">00 · Giả thuyết</span>
+    <h2>So value của RTH hôm qua với value qua đêm để biết thị trường đang chấp nhận gì</h2>
+    <p class="lead">Phiên overnight là phần đấu giá nối tiếp ngay sau RTH hôm qua. Đặt hai profile cạnh nhau trên cùng một chart, phần giao giữa hai value area (<b>overlap</b>) là vùng mà hai phiên độc lập cùng xem là công bằng. Lúc 9:25 ET, hình dạng của overlap cho bạn biết hôm nay nhiều khả năng là balance, value đang trôi, hay imbalance. Playbook này chỉ dùng TPO, VWAP, EMA, CVD và orderflow.</p>
+  </div>
+  <div class="ov-test" role="note"><span class="badge">TESTING PLAN</span><p><b>Giả thuyết đang kiểm chứng, chưa thuộc system chính.</b> Dùng song song với plan TPO hằng ngày, ghi đủ 30 phiên ở chương 04 rồi mới quyết định có đưa vào khoá TPO Level hay không. Playbook học tập. Số trên chart là minh hoạ. Các ngưỡng (25% / 60% overlap, acceptance 1–2 period) là điểm xuất phát, cần chỉnh theo log của chính bạn.</p></div>
+
+  <div class="panel">
+    <h3>Định nghĩa phiên (cùng một chart)</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Phiên</th><th>Giờ ET</th><th>Giờ VN (mùa đông)</th><th>Dùng để</th></tr></thead>
+      <tbody>
+        <tr><td><span class="chip rth">RTH</span></td><td class="mono">9:30 – 16:14</td><td class="mono">21:30 – 04:14</td><td>Value hôm qua: VAH, VAL, POC, PDH/PDL, tail, poor H/L</td></tr>
+        <tr><td><span class="chip ovn">OVN</span></td><td class="mono">18:00 – 9:29</td><td class="mono">06:00 – 21:29</td><td>Value qua đêm: VAH, VAL, POC, ONH/ONL</td></tr>
+        <tr><td><span class="chip">ETH</span></td><td class="mono">18:00 – 17:00</td><td class="mono">06:00 – 05:00</td><td>Chỉ để xem context, không vẽ box. TPO của ETH bị lệch về overnight vì OVN chiếm 31 period</td></tr>
+        <tr><td><span class="chip ov">Overlap</span></td><td colspan="2" class="mono">[max(VAL RTH, VAL OVN) , min(VAH RTH, VAH OVN)]</td><td>Zone chính của plan. Chốt lúc 9:29</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">Cả hai phiên đều dùng <b>VA của TPO</b> (70% thời gian). Playbook này đánh balance–imbalance, mà acceptance được đo bằng thời gian giá ở lại một vùng, nên không dùng VA volume. Settlement chính thức của NQ là 16:00 ET; dùng 16:14 vẫn được nếu giữ cố định. Thứ Hai: OVN bắt đầu từ Chủ nhật 18:00, so với RTH thứ Sáu.</p>
+  </div>
+
+  <div class="callout purple">
+    <h4>Vì sao TPO: đây là playbook balance – imbalance</h4>
+    <ul class="clean small">
+      <li><b>Balance</b> = thị trường dành thời gian ở một vùng giá, hai phe đồng thuận. Trên TPO đó là vùng có nhiều period chồng lên nhau (VA, TPOC).</li>
+      <li><b>Imbalance</b> = giá rời vùng đó và không quay lại đủ lâu. Trên TPO đó là single prints, tail, profile mỏng.</li>
+      <li>Overlap TPO = vùng mà <i>cả RTH hôm qua lẫn qua đêm</i> đều dành nhiều thời gian. Kịch bản 1 và 6 là balance, kịch bản 2 và 3 là balance đang dịch chuyển, kịch bản 4 và 5 là imbalance chờ RTH xác nhận.</li>
+      <li>Acceptance / rejection cũng đo bằng thời gian: giá ở ngoài level bao nhiêu period, không phải bao nhiêu contract.</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Cần kẻ gì, để làm gì</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>#</th><th>Level</th><th>Khi nào</th><th>Chức năng</th><th>Kiểu · ARGB</th></tr></thead>
+      <tbody id="draw-list"></tbody>
+    </table></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Xếp loại kịch bản lúc 9:25 ET</h3>
+      <div class="flow" id="classify-flow"></div>
+    </div>
+    <div class="panel">
+      <h3>Lịch làm việc mỗi ngày</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>ET</th><th>VN</th><th>Việc</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">16:14</td><td class="mono">04:14</td><td>Chốt profile RTH: kẻ #1–#6</td></tr>
+          <tr><td class="mono">9:15–9:29</td><td class="mono">21:15–21:29</td><td>Kẻ #7–#11, xếp loại kịch bản, nhập Plan Builder</td></tr>
+          <tr><td class="mono">9:30–10:00</td><td class="mono">21:30–22:00</td><td>Open type; lần chạm đầu vào mép overlap / biên OVN</td></tr>
+          <tr><td class="mono">10:00–10:30</td><td class="mono">22:00–22:30</td><td>IB hình thành trong hay ngoài overlap</td></tr>
+          <tr><td class="mono">10:30–11:30</td><td class="mono">22:30–23:30</td><td>Range extension hay rotation; dừng 11:30</td></tr>
+          <tr><td class="mono">Sau phiên</td><td class="mono">—</td><td>Ghi 1 dòng vào Log 30 phiên</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <h4>Quy tắc chung cho mọi kịch bản</h4>
+    <ul class="clean small">
+      <li>Zone chỉ là location. Vào lệnh khi có trigger orderflow: CVD divergence / absorption, delta flip, footprint. EMA 9/34 M1 không ngược hướng lệnh.</li>
+      <li>VWAP RTH là bộ lọc: phẳng = được fade; dốc và giá chạy dọc band = không fade, chỉ đi theo.</li>
+      <li>Acceptance = giá ở ngoài level ≥ 1 period 30 phút (bản nhanh) hoặc 2 period (bản chuẩn), tức là TPO được xây ở đó chứ không chỉ một cú chạm.</li>
+      <li>Tối đa 2–3 lệnh. Dừng 11:30 ET (23:30 VN) hoặc khi chạm daily loss limit.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="ov-ch" id="ch-kich-ban" data-chapter="kich-ban">
+  <div class="head">
+    <span class="eyebrow">01 · 6 kịch bản</span>
+    <h2>Chart plan, key level và kỳ vọng cho từng trạng thái RTH × OVN</h2>
+    <p class="lead">Profile vẽ bằng TPO: chữ A–N là các period 30 phút của RTH (N = 16:00–16:14), khối nhỏ là 31 period của OVN. Số trên chart là minh hoạ. Đường xanh = kịch bản A (chính), đường đỏ đứt = kịch bản B (thay thế), tam giác hồng = open giả định. Plan Builder overlap (chương 03) dùng đúng các quy tắc này với số thật của bạn.</p>
+  </div>
+  <div class="seg" id="sc-buttons"></div>
+  <div class="panel" id="sc-panel"></div>
+</section>
+
+<section class="ov-ch" id="ch-ma-tran" data-chapter="ma-tran">
+  <div class="head">
+    <span class="eyebrow">02 · Open type × Day type</span>
+    <h2>Kịch bản lúc 9:25 là giả thuyết. Open type lúc 10:00 và IB lúc 10:30 xác nhận hoặc lật nó</h2>
+    <p class="lead">Lúc 9:25, kịch bản overlap cho bạn hướng ưu tiên. Lúc 10:00, open type (OD, OTD, ORR, OA) cho biết RTH có đồng ý với phiên qua đêm không. Lúc 10:30, IB cho biết ngày đang nghiêng về day type nào. Bấm vào một ô của ma trận để xem chi tiết.</p>
+  </div>
+  <div class="panel">
+    <div class="row small"><span class="chip good">A</span> giữ kịch bản A <span class="chip bad">B</span> chuyển sang kịch bản B <span class="chip ov">Chờ IB</span> không trade A period, quyết định lúc 10:30</div>
+    <div class="tablewrap" id="mx-table"></div>
+    <div id="mx-detail"></div>
+  </div>
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Nhắc lại 4 open type (phân loại xong lúc 10:00 ET)</h3>
+      <div class="tablewrap"><table><thead><tr><th>Open type</th><th>Nhận diện</th><th>Mức tự tin</th></tr></thead><tbody>
+        <tr><td><b>Open Drive (OD)</b></td><td class="small">Đi mạnh một chiều ngay từ 9:30, không quay lại test open</td><td><span class="chip good">Cao nhất</span></td></tr>
+        <tr><td><b>Open Test Drive (OTD)</b></td><td class="small">Test một level phía ngược (mép overlap, VAL/VAH OVN, ONH/ONL), rồi đảo và drive qua open</td><td><span class="chip good">Cao</span></td></tr>
+        <tr><td><b>Open Rejection Reverse (ORR)</b></td><td class="small">Đi một hướng, bị từ chối ở level, quay ngược xuyên qua open</td><td><span class="chip ov">Trung bình</span></td></tr>
+        <tr><td><b>Open Auction (OA)</b></td><td class="small">Xoay quanh open hai chiều, không phe nào chủ động</td><td><span class="chip">Thấp</span></td></tr>
+      </tbody></table></div>
+      <p class="small muted">Mũi tên chỉ hướng <i>cuối cùng</i>: OTD ↑ = test xuống rồi drive lên; ORR ↑ = đi xuống bị từ chối rồi đảo lên.</p>
+    </div>
+    <div class="panel">
+      <h3>Nhắc lại 6 day type và dấu hiệu lúc 10:30</h3>
+      <div class="tablewrap"><table><thead><tr><th>Day type</th><th>Dấu hiệu sớm (IB)</th></tr></thead><tbody>
+        <tr><td><b>Normal</b></td><td class="small">IB rất rộng, gần như cả range ngày; ít range extension</td></tr>
+        <tr><td><b>Normal Variation</b></td><td class="small">IB trung bình; range extension một phía khoảng 1.2–2x IB</td></tr>
+        <tr><td><b>Trend</b></td><td class="small">IB hẹp, OD/OTD, mỗi period tạo high/low mới, VWAP dốc</td></tr>
+        <tr><td><b>Double Distribution</b></td><td class="small">IB hẹp, balance sáng rồi một cú đi nhanh để lại single prints</td></tr>
+        <tr><td><b>Neutral</b></td><td class="small">Range extension cả hai phía IB (thường hoàn thành sau 11:30)</td></tr>
+        <tr><td><b>Non-Trend</b></td><td class="small">IB hẹp và cả ngày không rời IB</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Cập nhật lúc 10:30 bằng IB</h3>
+    <div class="tablewrap"><table><thead><tr><th>IB</th><th>Vị trí IB so với overlap</th><th>Day type nghiêng về</th><th>Setup</th></tr></thead><tbody>
+      <tr><td><span class="chip good">Hẹp</span></td><td>Ngoài overlap, cùng hướng open type</td><td>Trend / Double Distribution</td><td>IB-1 đi theo, target 1.5x–2x</td></tr>
+      <tr><td><span class="chip good">Hẹp</span></td><td>Trong overlap</td><td>Normal Variation hoặc Non-Trend</td><td>Chờ range extension có acceptance</td></tr>
+      <tr><td><span class="chip">Bình thường</span></td><td>Cắt qua một mép overlap</td><td>Normal Variation</td><td>Mép overlap là trọng tài: accept ngoài → IB-1, quay vào → IB-2</td></tr>
+      <tr><td><span class="chip ov">Rộng</span></td><td>Bao trùm overlap</td><td>Normal / Neutral</td><td>IB-3 fade cạnh IB về TPOC, không breakout</td></tr>
+    </tbody></table></div>
+  </div>
+</section>
+
+<section class="ov-ch" id="ch-builder" data-chapter="builder">
+  <div class="head">
+    <span class="eyebrow">03 · Plan Builder overlap</span>
+    <h2>Nhập số lúc 9:25 ET → tự xếp loại, vẽ chart và viết plan</h2>
+    <p class="lead">Lấy VAH/VAL/TPOC của profile <b>TPO</b> RTH hôm qua và OVN trên ATAS (không dùng VA volume). Chart vẽ lại hình dạng TPO minh hoạ quanh đúng các mức bạn nhập. Số mặc định là ví dụ của kịch bản 3. Dữ liệu lưu trên trình duyệt này.</p>
+  </div>
+  <div class="grid g2">
+    <div class="panel">
+      <fieldset><legend>RTH hôm qua (9:30–16:14)</legend>
+        <div class="form">
+          <div class="field"><label for="b-rvah">VAH</label><input type="number" step="0.25" id="b-rvah"></div>
+          <div class="field"><label for="b-rpoc">POC</label><input type="number" step="0.25" id="b-rpoc"></div>
+          <div class="field"><label for="b-rval">VAL</label><input type="number" step="0.25" id="b-rval"></div>
+          <div class="field"><label for="b-pdh">PDH</label><input type="number" step="0.25" id="b-pdh"></div>
+          <div class="field"><label for="b-pdl">PDL</label><input type="number" step="0.25" id="b-pdl"></div>
+        </div>
+      </fieldset>
+      <fieldset><legend>OVN (18:00–9:29)</legend>
+        <div class="form">
+          <div class="field"><label for="b-ovah">VAH</label><input type="number" step="0.25" id="b-ovah"></div>
+          <div class="field"><label for="b-opoc">POC</label><input type="number" step="0.25" id="b-opoc"></div>
+          <div class="field"><label for="b-oval">VAL</label><input type="number" step="0.25" id="b-oval"></div>
+          <div class="field"><label for="b-onh">ONH</label><input type="number" step="0.25" id="b-onh"></div>
+          <div class="field"><label for="b-onl">ONL</label><input type="number" step="0.25" id="b-onl"></div>
+        </div>
+      </fieldset>
+      <fieldset><legend>Hôm nay</legend>
+        <div class="form">
+          <div class="field"><label for="b-date">Ngày</label><input type="text" id="b-date"></div>
+          <div class="field"><label for="b-open">Giá 9:25 / open</label><input type="number" step="0.25" id="b-open"></div>
+          <div class="field"><label for="b-news">Tin trong ngày</label><input type="text" id="b-news"></div>
+          <div class="field"><label for="b-ot">Open type (10:00)</label><select id="b-ot"></select></div>
+          <div class="field"><label for="b-ib">IB width % TB (10:30)</label><input type="number" id="b-ib" step="1" placeholder="vd 65"></div>
+          <div class="field"><label for="b-ibpos">IB so với overlap</label><select id="b-ibpos"><option value="">Chưa có</option><option value="in">Trong overlap</option><option value="out">Ngoài, cùng hướng drive</option><option value="cut">Cắt qua mép</option><option value="wrap">Bao trùm overlap</option></select></div>
+        </div>
+      </fieldset>
+      <div class="row"><button class="primary" id="b-build">Vẽ plan</button><button id="b-copy">Copy plan</button><button id="b-tolog">Đưa vào Log</button><span class="small muted" id="b-msg" role="status"></span></div>
+    </div>
+    <div class="panel">
+      <div id="b-class"></div>
+      <div class="tiles" id="b-tiles"></div>
+    </div>
+  </div>
+  <div class="panel"><div class="svgwrap" id="b-svg"></div></div>
+  <div class="panel"><div class="out" id="b-out"></div></div>
+</section>
+
+<section class="ov-ch" id="ch-log" data-chapter="log">
+  <div class="head">
+    <span class="eyebrow">04 · Kiểm chứng</span>
+    <h2>Log 30 phiên trước khi tin giả thuyết</h2>
+    <p class="lead">Mỗi phiên một dòng. Sau 30 phiên, so tỉ lệ phản ứng ở mép overlap với cạnh VA RTH đơn thuần, và xem kịch bản nào cho kết quả ổn định nhất. Dữ liệu chỉ lưu trên trình duyệt này; dùng Copy CSV để chuyển sang Notion / thiết bị khác.</p>
+  </div>
+  <div class="panel">
+    <div class="form">
+      <div class="field"><label for="l-date">Ngày</label><input type="text" id="l-date"></div>
+      <div class="field"><label for="l-sc">Kịch bản</label><select id="l-sc"></select></div>
+      <div class="field"><label for="l-pct">% overlap</label><input type="number" id="l-pct" step="1"></div>
+      <div class="field"><label for="l-open">Open ở đâu</label><select id="l-open"><option value="in-ov">Trong overlap</option><option value="in-rth">Trong VA RTH</option><option value="in-ovn">Trong VA OVN</option><option value="above">Trên cả hai</option><option value="below">Dưới cả hai</option><option value="gap">Khoảng trống</option></select></div>
+      <div class="field"><label for="l-touch">60' đầu chạm mép?</label><select id="l-touch"><option value="y">Có</option><option value="n">Không</option></select></div>
+      <div class="field"><label for="l-react">Phản ứng ở mép</label><select id="l-react"><option value="b1r">Bật ≥ 1R</option><option value="thru">Xuyên qua</option><option value="unk">Không rõ</option></select></div>
+      <div class="field"><label for="l-ot">Open type</label><select id="l-ot"></select></div>
+      <div class="field"><label for="l-ibw">IB</label><select id="l-ibw"><option value="narrow">Hẹp</option><option value="normal">Bình thường</option><option value="wide">Rộng</option></select></div>
+      <div class="field"><label for="l-day">Day type</label><select id="l-day"><option value="n">Normal</option><option value="nv-up">Normal Variation ↑</option><option value="nv-dn">Normal Variation ↓</option><option value="t-up">Trend ↑</option><option value="t-dn">Trend ↓</option><option value="dd">Double Distribution</option><option value="neu">Neutral</option><option value="nt">Non-Trend</option></select></div>
+      <div class="field"><label for="l-ab">Plan đúng</label><select id="l-ab"><option value="A">A</option><option value="B">B</option><option value="none">Không cái nào</option></select></div>
+      <div class="field"><label for="l-note">Ghi chú</label><input type="text" id="l-note" placeholder="tin 8:30, thứ Hai…"></div>
+    </div>
+    <div class="row"><button class="primary" id="l-add">Thêm phiên</button><button id="l-csv">Copy CSV</button><button id="l-clear">Xoá toàn bộ log</button><span class="small muted" id="l-msg" role="status"></span></div>
+    <div class="tiles" id="l-stats"></div>
+    <div class="tablewrap"><table><thead><tr><th>Ngày</th><th>Kịch bản</th><th class="num">%</th><th>Open</th><th>Open type</th><th>IB</th><th>Chạm</th><th>Phản ứng</th><th>Day type</th><th>Plan</th><th>Ghi chú</th><th></th></tr></thead><tbody id="l-rows"></tbody></table></div>
+  </div>
+</section>
+
+<section class="ov-ch" id="ch-quiz" data-chapter="quiz">
+  <div class="head">
+    <span class="eyebrow">05 · Quiz</span>
+    <h2>Xếp loại đúng trước khi trade</h2>
+  </div>
+  <div class="panel" id="quiz"></div>
+</section>
+</div>
+</main>
+<script src="assets/js/fp.js?v=15"></script>
+<script src="assets/js/bank-levels.js?v=15"></script>
+<script src="assets/js/bank-ema.js?v=15"></script>
+<script src="assets/js/bank-tools.js?v=15"></script>
+<script src="assets/js/quiz.js?v=15"></script>
+<script src="assets/js/core.js?v=15"></script>
+<script src="assets/js/overlap-page.js?v=15"></script>
+</body>
+</html>

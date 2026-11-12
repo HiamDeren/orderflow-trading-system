@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080B10">
+<title>RTH × OVN Overlap · Orderflow System</title>
+<meta name="description" content="Testing plan: compare yesterday’s RTH value with overnight value, 6 scenarios, Plan Builder overlap and a 30-session log.">
+<link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/css/app.css?v=15">
+<link rel="stylesheet" href="assets/css/overlap.css?v=15">
+</head>
+<body data-page="overlap">
+<main class="ui-main">
+<div class="ui-content pg-overlap">
+<section class="ov-ch" id="ch-tong-quan" data-chapter="tong-quan">
+  <div class="head">
+    <span class="eyebrow">00 · Hypothesis</span>
+    <h2>Compare yesterday’s RTH value with overnight value to see what the market is accepting</h2>
+    <p class="lead">The overnight session is the auction that continues right after yesterday’s RTH. Put the two profiles side by side on one chart; the intersection of the two value areas (<b>overlap</b>) is the area two independent sessions both consider fair. At 9:25 ET, the shape of the overlap tells you whether today is likely balance, migrating value, or imbalance. This playbook uses only TPO, VWAP, EMA, CVD and orderflow.</p>
+  </div>
+  <div class="ov-test" role="note"><span class="badge">TESTING PLAN</span><p><b>A hypothesis under test, not yet part of the main system.</b> Use it alongside the daily TPO plan, log 30 sessions in chapter 04, then decide whether it joins the TPO Level course. Study playbook. Chart numbers are illustrative. The thresholds (25% / 60% overlap, 1–2 period acceptance) are starting points to tune from your own log.</p></div>
+
+  <div class="panel">
+    <h3>Session definitions (on one chart)</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Session</th><th>ET time</th><th>VN time (winter)</th><th>Used for</th></tr></thead>
+      <tbody>
+        <tr><td><span class="chip rth">RTH</span></td><td class="mono">9:30 – 16:14</td><td class="mono">21:30 – 04:14</td><td>Yesterday’s value: VAH, VAL, POC, PDH/PDL, tail, poor H/L</td></tr>
+        <tr><td><span class="chip ovn">OVN</span></td><td class="mono">18:00 – 9:29</td><td class="mono">06:00 – 21:29</td><td>Overnight value: VAH, VAL, POC, ONH/ONL</td></tr>
+        <tr><td><span class="chip">ETH</span></td><td class="mono">18:00 – 17:00</td><td class="mono">06:00 – 05:00</td><td>Context only, no box. ETH TPO is skewed toward overnight because OVN takes 31 periods</td></tr>
+        <tr><td><span class="chip ov">Overlap</span></td><td colspan="2" class="mono">[max(VAL RTH, VAL OVN) , min(VAH RTH, VAH OVN)]</td><td>The plan’s main zone. Locked at 9:29</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">Both sessions use <b>TPO VA</b> (70% of time). This playbook trades balance–imbalance, and acceptance is measured by how long price stays in an area, so volume VA is not used. NQ’s official settlement is 16:00 ET; 16:14 also works if kept fixed. Monday: OVN starts Sunday 18:00 and is compared with Friday’s RTH.</p>
+  </div>
+
+  <div class="callout purple">
+    <h4>Why TPO: this is a balance – imbalance playbook</h4>
+    <ul class="clean small">
+      <li><b>Balance</b> = the market spends time in one price area and both sides agree. On TPO that is the area where many periods stack (VA, TPOC).</li>
+      <li><b>Imbalance</b> = price leaves that area and does not come back for long. On TPO that means single prints, tails, a thin profile.</li>
+      <li>TPO overlap = the area where <i>both yesterday’s RTH and overnight</i> spent a lot of time. Scenarios 1 and 6 are balance, scenarios 2 and 3 are balance in migration, scenarios 4 and 5 are imbalance waiting for RTH to confirm.</li>
+      <li>Acceptance / rejection is also measured in time: how many periods price stays beyond the level, not how many contracts.</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>What to draw, and why</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>#</th><th>Level</th><th>When</th><th>Purpose</th><th>Style · ARGB</th></tr></thead>
+      <tbody id="draw-list"></tbody>
+    </table></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Classify the scenario at 9:25 ET</h3>
+      <div class="flow" id="classify-flow"></div>
+    </div>
+    <div class="panel">
+      <h3>Daily schedule</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>ET</th><th>VN</th><th>Task</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">16:14</td><td class="mono">04:14</td><td>Lock the RTH profile: draw #1–#6</td></tr>
+          <tr><td class="mono">9:15–9:29</td><td class="mono">21:15–21:29</td><td>Draw #7–#11, classify the scenario, fill in Plan Builder</td></tr>
+          <tr><td class="mono">9:30–10:00</td><td class="mono">21:30–22:00</td><td>Open type; first touch of an overlap edge / OVN edge</td></tr>
+          <tr><td class="mono">10:00–10:30</td><td class="mono">22:00–22:30</td><td>Does the IB form inside or outside the overlap</td></tr>
+          <tr><td class="mono">10:30–11:30</td><td class="mono">22:30–23:30</td><td>Range extension or rotation; stop at 11:30</td></tr>
+          <tr><td class="mono">After the session</td><td class="mono">—</td><td>Write 1 row in the 30-session log</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <h4>Rules for every scenario</h4>
+    <ul class="clean small">
+      <li>The zone is only location. Enter on an orderflow trigger: CVD divergence / absorption, delta flip, footprint. EMA 9/34 on M1 not against the trade.</li>
+      <li>VWAP RTH is the filter: flat = fading allowed; sloping with price riding a band = no fading, only go-with.</li>
+      <li>Acceptance = price stays beyond the level for ≥ 1 30-minute period (fast version) or 2 periods (standard), meaning TPO gets built there, not just a touch.</li>
+      <li>Max 2–3 trades. Stop at 11:30 ET (23:30 VN) or at the daily loss limit.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="ov-ch" id="ch-kich-ban" data-chapter="kich-ban">
+  <div class="head">
+    <span class="eyebrow">01 · 6 scenarios</span>
+    <h2>Plan chart, key levels and expectations for each RTH × OVN state</h2>
+    <p class="lead">Profiles drawn as TPO: letters A–N are the 30-minute RTH periods (N = 16:00–16:14), the small blocks are the 31 OVN periods. Chart numbers are illustrative. Green line = plan A (primary), red dashed line = plan B (alternative), pink triangle = assumed open. Plan Builder overlap (chapter 03) applies these same rules to your real numbers.</p>
+  </div>
+  <div class="seg" id="sc-buttons"></div>
+  <div class="panel" id="sc-panel"></div>
+</section>
+
+<section class="ov-ch" id="ch-ma-tran" data-chapter="ma-tran">
+  <div class="head">
+    <span class="eyebrow">02 · Open type × Day type</span>
+    <h2>The 9:25 scenario is a hypothesis. The 10:00 open type and the 10:30 IB confirm or flip it</h2>
+    <p class="lead">At 9:25 the overlap scenario gives the preferred direction. At 10:00 the open type (OD, OTD, ORR, OA) tells whether RTH agrees with overnight. At 10:30 the IB tells which day type the session leans toward. Click a matrix cell for details.</p>
+  </div>
+  <div class="panel">
+    <div class="row small"><span class="chip good">A</span> keep plan A <span class="chip bad">B</span> switch to plan B <span class="chip ov">Wait for IB</span> no A-period trades, decide at 10:30</div>
+    <div class="tablewrap" id="mx-table"></div>
+    <div id="mx-detail"></div>
+  </div>
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Recap of the 4 open types (classified by 10:00 ET)</h3>
+      <div class="tablewrap"><table><thead><tr><th>Open type</th><th>Recognition</th><th>Confidence</th></tr></thead><tbody>
+        <tr><td><b>Open Drive (OD)</b></td><td class="small">Drives hard one way from 9:30, never comes back to test the open</td><td><span class="chip good">Highest</span></td></tr>
+        <tr><td><b>Open Test Drive (OTD)</b></td><td class="small">Tests a level on the opposite side (overlap edge, VAL/VAH OVN, ONH/ONL), then reverses and drives through the open</td><td><span class="chip good">Cao</span></td></tr>
+        <tr><td><b>Open Rejection Reverse (ORR)</b></td><td class="small">Goes one way, is rejected at a level, reverses through the open</td><td><span class="chip ov">Medium</span></td></tr>
+        <tr><td><b>Open Auction (OA)</b></td><td class="small">Two-way rotation around the open, no side is aggressive</td><td><span class="chip">Low</span></td></tr>
+      </tbody></table></div>
+      <p class="small muted">Arrows show the <i>final direction</i>: OTD ↑ = tests down then drives up; ORR ↑ = goes down, is rejected, then reverses up.</p>
+    </div>
+    <div class="panel">
+      <h3>Recap of the 6 day types and their 10:30 signs</h3>
+      <div class="tablewrap"><table><thead><tr><th>Day type</th><th>Early signs (IB)</th></tr></thead><tbody>
+        <tr><td><b>Normal</b></td><td class="small">Very wide IB, almost the whole day’s range; little range extension</td></tr>
+        <tr><td><b>Normal Variation</b></td><td class="small">Medium IB; one-sided range extension of about 1.2–2x IB</td></tr>
+        <tr><td><b>Trend</b></td><td class="small">Narrow IB, OD/OTD, every period makes a new high/low, VWAP sloping</td></tr>
+        <tr><td><b>Double Distribution</b></td><td class="small">Narrow IB, morning balance then a fast move that leaves single prints</td></tr>
+        <tr><td><b>Neutral</b></td><td class="small">Range extension on both sides of the IB (usually completed after 11:30)</td></tr>
+        <tr><td><b>Non-Trend</b></td><td class="small">Narrow IB and price never leaves it all day</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>10:30 update with the IB</h3>
+    <div class="tablewrap"><table><thead><tr><th>IB</th><th>IB position vs the overlap</th><th>Day type leans toward</th><th>Setup</th></tr></thead><tbody>
+      <tr><td><span class="chip good">Narrow</span></td><td>Outside the overlap, same direction as the open type</td><td>Trend / Double Distribution</td><td>IB-1 go-with, target 1.5x–2x</td></tr>
+      <tr><td><span class="chip good">Narrow</span></td><td>Trong overlap</td><td>Normal Variation or Non-Trend</td><td>Wait for range extension with acceptance</td></tr>
+      <tr><td><span class="chip">Normal</span></td><td>Cuts through one overlap edge</td><td>Normal Variation</td><td>The overlap edge is the referee: accepted outside → IB-1, back inside → IB-2</td></tr>
+      <tr><td><span class="chip ov">Wide</span></td><td>Engulfs the overlap</td><td>Normal / Neutral</td><td>IB-3 fade the IB edges to TPOC, no breakout</td></tr>
+    </tbody></table></div>
+  </div>
+</section>
+
+<section class="ov-ch" id="ch-builder" data-chapter="builder">
+  <div class="head">
+    <span class="eyebrow">03 · Plan Builder overlap</span>
+    <h2>Enter numbers at 9:25 ET → auto classify, draw the chart and write the plan</h2>
+    <p class="lead">Take VAH/VAL/TPOC from the <b>TPO</b> prior RTH and OVN profiles on ATAS (not volume VA). The chart redraws an illustrative TPO shape around exactly the levels you enter. Default numbers are the scenario 3 example. Data is stored in this browser.</p>
+  </div>
+  <div class="grid g2">
+    <div class="panel">
+      <fieldset><legend>Prior RTH (9:30–16:14)</legend>
+        <div class="form">
+          <div class="field"><label for="b-rvah">VAH</label><input type="number" step="0.25" id="b-rvah"></div>
+          <div class="field"><label for="b-rpoc">POC</label><input type="number" step="0.25" id="b-rpoc"></div>
+          <div class="field"><label for="b-rval">VAL</label><input type="number" step="0.25" id="b-rval"></div>
+          <div class="field"><label for="b-pdh">PDH</label><input type="number" step="0.25" id="b-pdh"></div>
+          <div class="field"><label for="b-pdl">PDL</label><input type="number" step="0.25" id="b-pdl"></div>
+        </div>
+      </fieldset>
+      <fieldset><legend>OVN (18:00–9:29)</legend>
+        <div class="form">
+          <div class="field"><label for="b-ovah">VAH</label><input type="number" step="0.25" id="b-ovah"></div>
+          <div class="field"><label for="b-opoc">POC</label><input type="number" step="0.25" id="b-opoc"></div>
+          <div class="field"><label for="b-oval">VAL</label><input type="number" step="0.25" id="b-oval"></div>
+          <div class="field"><label for="b-onh">ONH</label><input type="number" step="0.25" id="b-onh"></div>
+          <div class="field"><label for="b-onl">ONL</label><input type="number" step="0.25" id="b-onl"></div>
+        </div>
+      </fieldset>
+      <fieldset><legend>Today</legend>
+        <div class="form">
+          <div class="field"><label for="b-date">Date</label><input type="text" id="b-date"></div>
+          <div class="field"><label for="b-open">Price at 9:25 / open</label><input type="number" step="0.25" id="b-open"></div>
+          <div class="field"><label for="b-news">News today</label><input type="text" id="b-news"></div>
+          <div class="field"><label for="b-ot">Open type (10:00)</label><select id="b-ot"></select></div>
+          <div class="field"><label for="b-ib">IB width % avg (10:30)</label><input type="number" id="b-ib" step="1" placeholder="vd 65"></div>
+          <div class="field"><label for="b-ibpos">IB vs overlap</label><select id="b-ibpos"><option value="">Not yet</option><option value="in">Trong overlap</option><option value="out">Outside, in the drive direction</option><option value="cut">Cuts through an edge</option><option value="wrap">Engulfs the overlap</option></select></div>
+        </div>
+      </fieldset>
+      <div class="row"><button class="primary" id="b-build">Draw plan</button><button id="b-copy">Copy plan</button><button id="b-tolog">Send to Log</button><span class="small muted" id="b-msg" role="status"></span></div>
+    </div>
+    <div class="panel">
+      <div id="b-class"></div>
+      <div class="tiles" id="b-tiles"></div>
+    </div>
+  </div>
+  <div class="panel"><div class="svgwrap" id="b-svg"></div></div>
+  <div class="panel"><div class="out" id="b-out"></div></div>
+</section>
+
+<section class="ov-ch" id="ch-log" data-chapter="log">
+  <div class="head">
+    <span class="eyebrow">04 · Validation</span>
+    <h2>Log 30 sessions before trusting the hypothesis</h2>
+    <p class="lead">One row per session. After 30 sessions, compare the reaction rate at overlap edges with plain RTH VA edges, and see which scenario is most consistent. Data is stored only in this browser; use Copy CSV to move it to Notion / another device.</p>
+  </div>
+  <div class="panel">
+    <div class="form">
+      <div class="field"><label for="l-date">Date</label><input type="text" id="l-date"></div>
+      <div class="field"><label for="l-sc">Scenario</label><select id="l-sc"></select></div>
+      <div class="field"><label for="l-pct">% overlap</label><input type="number" id="l-pct" step="1"></div>
+      <div class="field"><label for="l-open">Open location</label><select id="l-open"><option value="in-ov">Trong overlap</option><option value="in-rth">Trong VA RTH</option><option value="in-ovn">Trong VA OVN</option><option value="above">Above both</option><option value="below">Below both</option><option value="gap">Value gap</option></select></div>
+      <div class="field"><label for="l-touch">60' edge touched?</label><select id="l-touch"><option value="y">Yes</option><option value="n">No</option></select></div>
+      <div class="field"><label for="l-react">Reaction at the edge</label><select id="l-react"><option value="b1r">Bounce ≥ 1R</option><option value="thru">Broke through</option><option value="unk">Unclear</option></select></div>
+      <div class="field"><label for="l-ot">Open type</label><select id="l-ot"></select></div>
+      <div class="field"><label for="l-ibw">IB</label><select id="l-ibw"><option value="narrow">Narrow</option><option value="normal">Normal</option><option value="wide">Wide</option></select></div>
+      <div class="field"><label for="l-day">Day type</label><select id="l-day"><option value="n">Normal</option><option value="nv-up">Normal Variation ↑</option><option value="nv-dn">Normal Variation ↓</option><option value="t-up">Trend ↑</option><option value="t-dn">Trend ↓</option><option value="dd">Double Distribution</option><option value="neu">Neutral</option><option value="nt">Non-Trend</option></select></div>
+      <div class="field"><label for="l-ab">Correct plan</label><select id="l-ab"><option value="A">A</option><option value="B">B</option><option value="none">Neither</option></select></div>
+      <div class="field"><label for="l-note">Note</label><input type="text" id="l-note" placeholder="8:30 news, Monday…"></div>
+    </div>
+    <div class="row"><button class="primary" id="l-add">Add session</button><button id="l-csv">Copy CSV</button><button id="l-clear">Clear the whole log</button><span class="small muted" id="l-msg" role="status"></span></div>
+    <div class="tiles" id="l-stats"></div>
+    <div class="tablewrap"><table><thead><tr><th>Date</th><th>Scenario</th><th class="num">%</th><th>Open</th><th>Open type</th><th>IB</th><th>Touch</th><th>Reaction</th><th>Day type</th><th>Plan</th><th>Note</th><th></th></tr></thead><tbody id="l-rows"></tbody></table></div>
+  </div>
+</section>
+
+<section class="ov-ch" id="ch-quiz" data-chapter="quiz">
+  <div class="head">
+    <span class="eyebrow">05 · Quiz</span>
+    <h2>Classify correctly before trading</h2>
+  </div>
+  <div class="panel" id="quiz"></div>
+</section>
+</div>
+</main>
+<script src="assets/js/en/fp.js?v=15"></script>
+<script src="assets/js/en/bank-levels.js?v=15"></script>
+<script src="assets/js/en/bank-ema.js?v=15"></script>
+<script src="assets/js/en/bank-tools.js?v=15"></script>
+<script src="assets/js/en/quiz.js?v=15"></script>
+<script src="assets/js/en/core.js?v=15"></script>
+<script src="assets/js/en/overlap-page.js?v=15"></script>
+</body>
+</html>

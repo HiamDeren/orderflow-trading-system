@@ -16,16 +16,17 @@ if os.path.exists(EXTRA_FILE):
     for l in open(EXTRA_FILE):
         if l.strip(): k,t=l.rstrip('\n').split('\t',1); M[k]=t
 pat=re.compile('|'.join(re.escape(k) for k in sorted(M,key=len,reverse=True)))
-JSN=['core.js','quiz.js','home.js','fp.js','tools-page.js','levels-page.js','plan-chart.js','ema-page.js','levels-data.js','bank-tools.js','bank-levels.js','bank-ema.js']
+JSN=['core.js','quiz.js','home.js','fp.js','tools-page.js','levels-page.js','plan-chart.js','ema-page.js','overlap-page.js','levels-data.js','bank-tools.js','bank-levels.js','bank-ema.js']
 CODE=[  # (regex, repl) applied after translation
  (r'<html lang="vi">','<html lang="en">'),
- (r'\b(index|tools|levels|plan|quiz)\.html',r'\1.en.html'),
+ (r'\b(index|tools|levels|plan|overlap|quiz)\.html',r'\1.en.html'),
  (r'assets/js/('+'|'.join(re.escape(j) for j in JSN)+r')',r'assets/js/en/\1'),
  (r"'vi-VN'","'en-GB'"),
  (r'"vi-VN"','"en-GB"'),
  (r"h<12\?'SA':'CH'","h<12?'AM':'PM'"),
  (r"'Mua'","'Buy'"),
  (r'• Tin: ','• News: '),
+ (r'`Tin: ','`News: '),
 ]
 missing=set()
 os.makedirs(f'{ROOT}/assets/js/en',exist_ok=True)

@@ -21,6 +21,9 @@ const NAV=[
     ['delta','04','Delta & CVD'],['dom','05','DOM'],['tape','06','Tape'],['kich-ban','07','13 kịch bản'],
     ['ket-hop','08','Kết hợp tại level']]},
   {k:'plan',href:'plan.html',label:'Plan Builder',short:'Plan',sub:'Plan + bản đồ level',c:'var(--warn)',icon:'map'},
+  {k:'overlap',href:'overlap.html',label:'RTH × OVN Overlap',short:'Overlap',sub:'Testing plan · log 30 phiên',c:'#9A93E8',icon:'overlap',chapters:[
+    ['tong-quan','00','Tổng quan & cách kẻ'],['kich-ban','01','6 kịch bản'],['ma-tran','02','Open × Day type'],
+    ['builder','03','Plan Builder overlap'],['log','04','Log 30 phiên'],['quiz','05','Quiz']]},
   {k:'quiz',href:'quiz.html',label:'Trắc nghiệm',short:'Quiz',sub:'Luyện tập · Thi thử',c:'var(--c-quiz)',icon:'quiz',chapters:[
     ['luyen-tap','A','Luyện tập'],['thi-thu','B','Thi thử'],['cau-sai','C','Ôn câu sai']]}
 ];
@@ -31,7 +34,8 @@ const ICON={
   quiz:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12.2 2.4 2.4 4.7-5"/>',
   menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
   map:'<path d="M4 6h16M4 12h16M4 18h16" stroke-dasharray="3 2"/><rect x="6" y="9" width="12" height="6" rx="1"/>',
-  close:'<path d="M6 6l12 12M18 6 6 18"/>'
+  close:'<path d="M6 6l12 12M18 6 6 18"/>',
+  overlap:'<rect x="3" y="6" width="12" height="9" rx="1.5"/><rect x="9" y="10" width="12" height="9" rx="1.5" stroke-dasharray="3 2"/>'
 };
 const svg=(k,s=18)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
 const LOGO=`<svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#141B26" stroke="#2A3547"/>
@@ -44,7 +48,7 @@ const cur=NAV.find(n=>n.k===page)||NAV[0];
 document.body.style.setProperty('--c',cur.c);
 /* ---------- ngôn ngữ: trang VI = x.html, trang EN = x.en.html ---------- */
 const LANG=document.documentElement.lang==='en'?'en':'vi';
-const FILE={home:'index',tools:'tools',levels:'levels',plan:'plan',quiz:'quiz'}[page]||'index';
+const FILE={home:'index',tools:'tools',levels:'levels',plan:'plan',overlap:'overlap',quiz:'quiz'}[page]||'index';
 const langHref=to=>FILE+(to==='en'?'.en':'')+'.html'+location.hash;
 (function(){const pref=store.get('ofs.lang',null);if(pref&&pref!==LANG&&!/[?&]stay/.test(location.search))location.replace(langHref(pref));})();
 
@@ -57,6 +61,7 @@ function buildShell(){
   NAV.forEach((n,i)=>{
     if(i===1) h+=`<div class="ui-sec-label">Khoá học</div>`;
     if(n.k==='plan') h+=`<div class="ui-sec-label">Công cụ</div>`;
+    if(n.k==='overlap') h+=`<div class="ui-sec-label">Testing plan</div>`;
     if(n.k==='quiz') h+=`<div class="ui-sec-label">Ôn luyện</div>`;
     const on=n.k===page;
     h+=`<a class="ui-item${on?' on':''}" href="${n.href}" style="--c:${n.c}"${on?' aria-current="page"':''}><span class="ico">${svg(n.icon)}</span><span class="lbl">${n.label}<small>${n.sub}</small></span></a>`;
@@ -105,7 +110,7 @@ function chapterRouter(){
     let h='';
     if(prev) h+=`<a class="prev" href="#${prev[0]}"><small>← Chương trước</small><b>${prev[1]} · ${prev[2]}</b></a>`;
     if(next) h+=`<a class="next" href="#${next[0]}"><small>Chương tiếp →</small><b>${next[1]} · ${next[2]}</b></a>`;
-    else if(page!=='quiz') h+=`<a class="next cta" href="quiz.html#thi-thu"><small>Hoàn thành khoá →</small><b>Thi thử 50 câu</b></a>`;
+    else if(page==='levels'||page==='tools') h+=`<a class="next cta" href="quiz.html#thi-thu"><small>Hoàn thành khoá →</small><b>Thi thử 50 câu</b></a>`;
     pg.innerHTML=h; sec.appendChild(pg);
   });
   function resolve(){

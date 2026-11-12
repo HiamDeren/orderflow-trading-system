@@ -152,7 +152,7 @@ table.t th:first-child,table.t td:first-child{text-align:left}
   .ui-top-in{padding:0 14px}
   .ui-content{padding:20px 16px calc(var(--bottom-h) + var(--sab) + 40px)}
   .ui-foot{padding:0 16px calc(var(--bottom-h) + var(--sab) + 24px)}
-  .ui-bottom{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;z-index:30;left:0;right:0;bottom:0;
+  .ui-bottom{display:grid;grid-template-columns:repeat(6,1fr);position:fixed;z-index:30;left:0;right:0;bottom:0;
     height:calc(var(--bottom-h) + var(--sab));padding-bottom:var(--sab);background:rgba(8,11,16,.94);
     backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
   .ui-bottom a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-decoration:none;color:var(--muted);font-size:11px;font-weight:600}

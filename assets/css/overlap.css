@@ -1,0 +1,78 @@
+/* Trang RTH × OVN Overlap (testing plan), CSS gốc của artifact được scope dưới .pg-overlap */
+.pg-overlap{--rth:#D4537E;--ovn:#7F77DD;--poc:#EF9F27;--ov:#EF9F27;font-size:15.5px;line-height:1.6}
+.pg-overlap p{margin:0}
+.pg-overlap .ov-ch{display:flex;flex-direction:column;gap:20px}
+.pg-overlap .ov-test{display:flex;gap:12px;align-items:flex-start;border:1px dashed #7a5618;background:#1d1a14;border-radius:10px;padding:12px 14px;font-size:14px}
+.pg-overlap .ov-test .badge{flex:none;font:700 11px var(--font-mono);letter-spacing:.08em;color:#fac775;background:#3d2d10;border:1px solid #7a5618;border-radius:999px;padding:3px 9px}
+.pg-overlap .ov-test b{color:var(--text)}
+.pg-overlap h2, .pg-overlap h3, .pg-overlap h4{margin:0;line-height:1.25;text-wrap:balance}
+.pg-overlap h2{font-size:1.5rem;font-weight:800}
+.pg-overlap h3{font-size:1.1rem;font-weight:700}
+.pg-overlap h4{font-size:.98rem;font-weight:700}
+.pg-overlap .mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.pg-overlap button:focus-visible, .pg-overlap input:focus-visible, .pg-overlap select:focus-visible, .pg-overlap textarea:focus-visible{outline:2px solid var(--vwap);outline-offset:2px}
+.pg-overlap .head{display:flex;flex-direction:column;gap:8px}
+.pg-overlap .eyebrow{font-family:var(--font-mono);font-size:.74rem;color:var(--poc);letter-spacing:.08em;text-transform:uppercase}
+.pg-overlap .lead{color:#c9cdd3;max-width:74ch}
+.pg-overlap .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.pg-overlap .grid{display:grid;gap:12px}
+.pg-overlap .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.pg-overlap .g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.pg-overlap .card{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.pg-overlap .k{font-family:var(--font-mono);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.pg-overlap .small{font-size:.88rem}
+.pg-overlap .muted{color:var(--muted)}
+.pg-overlap .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pg-overlap ul.clean, .pg-overlap ol.clean{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:5px}
+.pg-overlap .chip{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:.72rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:#25282d;color:#d9dce0;white-space:nowrap}
+.pg-overlap .chip.rth{background:#4a1a2c;border-color:#7e2a4a;color:#f4c0d1}
+.pg-overlap .chip.ovn{background:#262150;border-color:#4b3fa0;color:#cecbf6}
+.pg-overlap .chip.ov{background:#3d2d10;border-color:#7a5618;color:#fac775}
+.pg-overlap .chip.good{background:#123a27;border-color:#24704a;color:#c8f2da}
+.pg-overlap .chip.bad{background:#401617;border-color:#7d2a2c;color:#ffd0cf}
+.pg-overlap .chip.liq{background:#2a2a2a;border-color:#555;color:#e6e8eb}
+.pg-overlap table{border-collapse:collapse;width:100%;font-size:.9rem}
+.pg-overlap th, .pg-overlap td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+.pg-overlap th{font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:#1c1e22;font-weight:600}
+.pg-overlap td.num, .pg-overlap th.num{text-align:right}
+.pg-overlap .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+.pg-overlap .svgwrap{overflow-x:auto;background:#141518;border:1px solid var(--line);border-radius:8px;padding:6px}
+.pg-overlap .svgwrap svg{display:block;margin:0 auto;width:100%;max-width:820px;height:auto}
+.pg-overlap button{font-family:var(--font-body);font-size:.86rem;font-weight:600;color:var(--text);background:#262a30;border:1px solid #3a3f47;border-radius:7px;padding:7px 12px;cursor:pointer}
+.pg-overlap button:hover{background:#2e333a}
+.pg-overlap button.on{background:#4a1a2c;border-color:#9b2a58;color:#ffe1ec}
+.pg-overlap button.mx{background:transparent;border:1px solid transparent;padding:2px 4px}
+.pg-overlap button.mx.on{border-color:#9b2a58;background:#2a1520}
+.pg-overlap button.primary{background:#5a1430;border-color:#9b2a58}
+.pg-overlap .seg{display:flex;gap:6px;flex-wrap:wrap}
+.pg-overlap .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;align-content:start}
+.pg-overlap .field{display:flex;flex-direction:column;gap:4px}
+.pg-overlap .field label{font-size:.74rem;color:var(--muted);font-family:var(--font-mono)}
+.pg-overlap input, .pg-overlap select, .pg-overlap textarea{background:#121316;color:var(--text);border:1px solid #363a41;border-radius:6px;padding:7px 9px;font-family:var(--font-mono);font-size:.88rem;width:100%}
+.pg-overlap fieldset{border:1px solid var(--line);border-radius:8px;padding:12px 14px 14px;margin:0}
+.pg-overlap legend{font-size:.8rem;font-weight:700;color:var(--poc);padding:0 6px}
+.pg-overlap .out{background:#0f1012;border:1px solid var(--line);border-radius:8px;padding:14px;white-space:pre-wrap;font-family:var(--font-mono);font-size:.84rem;line-height:1.6}
+.pg-overlap .callout{border-left:3px solid var(--poc);background:#1d1a14;padding:12px 14px;border-radius:0 8px 8px 0;display:flex;flex-direction:column;gap:6px}
+.pg-overlap .callout.red{border-left-color:var(--rth);background:#1f1418}
+.pg-overlap .callout.purple{border-left-color:var(--ovn);background:#18162a}
+.pg-overlap .ab{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.pg-overlap .ab .card.a{border-left:3px solid var(--good)}
+.pg-overlap .ab .card.b{border-left:3px solid var(--bad)}
+.pg-overlap .dl{display:grid;grid-template-columns:96px 1fr;gap:4px 10px;font-size:.9rem}
+.pg-overlap .dl dt{color:var(--muted);font-family:var(--font-mono);font-size:.76rem;padding-top:2px}
+.pg-overlap .dl dd{margin:0}
+.pg-overlap .flow{display:flex;flex-direction:column;gap:8px}
+.pg-overlap .step{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}
+.pg-overlap .step .dot{width:26px;height:26px;border-radius:50%;background:#3b2d12;border:1px solid #6b5220;color:#ffe2ad;display:grid;place-items:center;font-family:var(--font-mono);font-size:.78rem;font-weight:700}
+.pg-overlap .q{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.pg-overlap .opts{display:flex;flex-direction:column;gap:6px}
+.pg-overlap .opts button{text-align:left;font-weight:500;background:#1a1c20}
+.pg-overlap .opts button.right{background:#123a27;border-color:#2c8a5a;color:#d7f7e5}
+.pg-overlap .opts button.wrong{background:#401617;border-color:#8c2f31;color:#ffd7d6}
+.pg-overlap .expl{font-size:.88rem;color:#cfd3d8;border-top:1px dashed var(--line);padding-top:6px}
+.pg-overlap .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.pg-overlap .tile{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.pg-overlap .tile .v{font-family:var(--font-mono);font-size:1.3rem;font-weight:700}
+@media (max-width:620px){
+.pg-overlap .dl{grid-template-columns:1fr}
+}

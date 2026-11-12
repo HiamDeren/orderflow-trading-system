@@ -1,7 +1,7 @@
 import re,json,os,sys
 import pathlib
 ROOT=str(pathlib.Path(__file__).resolve().parent.parent)
-FILES=['index.html','quiz.html','tools.html','levels.html','plan.html']+['assets/js/'+f for f in ['core.js','quiz.js','home.js','fp.js','tools-page.js','levels-page.js','plan-chart.js','ema-page.js','levels-data.js','bank-tools.js','bank-levels.js','bank-ema.js']]
+FILES=['index.html','quiz.html','tools.html','levels.html','plan.html','overlap.html']+['assets/js/'+f for f in ['core.js','quiz.js','home.js','fp.js','tools-page.js','levels-page.js','plan-chart.js','ema-page.js','overlap-page.js','levels-data.js','bank-tools.js','bank-levels.js','bank-ema.js']]
 VN=re.compile(r'[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]')
 DELIM=re.compile(r'[<>\'"`{}$\n]')
 def strip_comments(src,js):
