@@ -30,7 +30,7 @@ Thư mục `docs/` không được deploy lên site (khai báo trong `.vercelign
 3. Mỗi sáng phiên Mỹ, lúc 9:29 ET (21:29 VN mùa đông), trong indicator bật **"Bấm để gửi plan"**.
    - JSON được copy vào clipboard và lưu `Documents\ATAS_Export\plans\latest_plan.json`.
 4. Mở site → **Testing plan → 04 · Plan Builder** → ô "Nhập từ ATAS" → bấm **"Dán từ clipboard"** (hoặc Ctrl+V vào ô rồi "Nhập và lập plan", hoặc chọn file).
-5. Builder tự điền pRTH / OVN / giá, tìm HVN từ VA các phiên (theo tham số ở chương 01), vẽ plan dạng **TPO**, viết plan chữ. Bấm **"Tải ảnh PNG"** để lưu journal.
+5. Builder tự điền pRTH / OVN / giá, tìm HVN từ VA các phiên (theo tham số ở chương 01), vẽ plan dạng **TPO** kèm plan chữ bên phải trong cùng một ảnh. Bấm **"Copy ảnh plan"** rồi dán vào journal, Discord hoặc Notion.
 
 Kiểm tra nhanh không cần ATAS: nút **"Nạp ví dụ 12/11 (data thật, có TPO)"**.
 
