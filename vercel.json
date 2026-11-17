@@ -47,6 +47,9 @@
       "permanent": false
     }
   ],
+  "regions": [
+    "sin1"
+  ],
   "functions": {
     "api/plan.js": {
       "includeFiles": "api/_fonts/**",

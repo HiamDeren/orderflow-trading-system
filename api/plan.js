@@ -1,7 +1,7 @@
 // api/plan.js — Vercel Function (Node.js runtime)
 //
 // POST /api/plan   Header: Authorization: Bearer <PLAN_TOKEN>   Body: JSON v1 từ indicator "Deren · Plan Sender"
-//   1. Lưu (upsert theo ngày + symbol) vào bảng public.trade_plans trên Supabase
+//   1. Lưu (upsert theo ngày + symbol) vào bảng trading.trade_plans trên Supabase (schema riêng, không dùng public)
 //   2. Lập plan bằng assets/js/plan-core.js (cùng code với trang Trade Plan), vẽ ảnh tiếng Việt, đổi sang PNG
 //   3. Lưu PNG vào Supabase Storage (bucket private "trade-plans"), ghi đường dẫn + plan chữ vào bảng
 //   4. Gửi ảnh + tóm tắt plan lên Discord (nếu có DISCORD_WEBHOOK_TRADE_PLAN và payload không có "notify": false)
@@ -13,11 +13,13 @@
 // Biến môi trường trên Vercel:
 //   SUPABASE_URL, SUPABASE_SERVICE_KEY (hoặc SUPABASE_SECRET_KEY / SUPABASE_SERVICE_ROLE_KEY), PLAN_TOKEN,
 //   DISCORD_WEBHOOK_TRADE_PLAN (tuỳ chọn; tên cũ DISCORD_WEBHOOK_URL vẫn nhận), PLAN_BUCKET (tuỳ chọn, mặc định "trade-plans")
+//   Schema "trading" phải nằm trong Exposed schemas (Supabase → Project Settings → Data API).
 
 import path from "path";
 import { Resvg } from "@resvg/resvg-js";
 import core from "../assets/js/plan-core.js";
 
+const SCHEMA = "trading";
 const TABLE = "trade_plans";
 const FONT_DIR = path.join(process.cwd(), "api", "_fonts");
 const FONT_FILES = ["BeVietnamPro-Regular.ttf", "BeVietnamPro-Bold.ttf", "JetBrainsMono-Regular.ttf", "JetBrainsMono-Bold.ttf"]
@@ -99,6 +101,9 @@ export default async function handler(req, res) {
   const storage = SUPABASE_URL + "/storage/v1";
   const h = supaHeaders(SUPABASE_SERVICE_KEY);
   const hj = { ...h, "Content-Type": "application/json" };
+  // PostgREST chọn schema qua header: Accept-Profile (đọc), Content-Profile (ghi). Storage không cần.
+  const hr = { ...h, "Accept-Profile": SCHEMA };
+  const hw = { ...hj, "Content-Profile": SCHEMA };
 
   try {
     if (req.method === "POST") {
@@ -110,7 +115,7 @@ export default async function handler(req, res) {
       const row = { trade_date: p.date, symbol, payload: p };
       const r = await fetch(rest + "?on_conflict=trade_date,symbol", {
         method: "POST",
-        headers: { ...hj, Prefer: "resolution=merge-duplicates,return=minimal" },
+        headers: { ...hw, Prefer: "resolution=merge-duplicates,return=minimal" },
         body: JSON.stringify(row),
       });
       if (!r.ok) return res.status(502).json({ error: "supabase", status: r.status, detail: (await r.text()).slice(0, 300) });
@@ -132,7 +137,7 @@ export default async function handler(req, res) {
         if (!up.ok) throw new Error(`storage ${up.status}: ${(await up.text()).slice(0, 200)}`);
         const upd = await fetch(`${rest}?trade_date=eq.${p.date}&symbol=eq.${encodeURIComponent(symbol)}`, {
           method: "PATCH",
-          headers: { ...hj, Prefer: "return=minimal" },
+          headers: { ...hw, Prefer: "return=minimal" },
           body: JSON.stringify({ image_path: objPath, plan_text: plan.text, summary: plan.summary }),
         });
         if (!upd.ok) throw new Error(`update ${upd.status}: ${(await upd.text()).slice(0, 200)}`);
@@ -158,7 +163,7 @@ export default async function handler(req, res) {
       const date = String((req.query && req.query.date) || "");
       if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) return res.status(400).json({ error: "date phải dạng yyyy-MM-dd" });
       const filter = date ? `&trade_date=eq.${date}` : "";
-      const r = await fetch(`${rest}?select=trade_date,symbol,created_at,updated_at,summary,plan_text,image_path,payload${filter}&order=trade_date.desc,updated_at.desc&limit=1`, { headers: h });
+      const r = await fetch(`${rest}?select=trade_date,symbol,created_at,updated_at,summary,plan_text,image_path,payload${filter}&order=trade_date.desc,updated_at.desc&limit=1`, { headers: hr });
       if (!r.ok) return res.status(502).json({ error: "supabase", status: r.status, detail: (await r.text()).slice(0, 300) });
       const rows = await r.json();
       if (!rows.length) return res.status(404).json({ error: "Chưa có plan" });

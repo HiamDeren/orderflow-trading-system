@@ -17,7 +17,7 @@
 flowchart LR
   A[ATAS · Plan Sender<br/>chart NQ M30, 30 ngày] -- "POST /api/plan<br/>Bearer PLAN_TOKEN" --> B[Vercel Function<br/>api/plan.js]
   A -. "clipboard JSON" .-> W
-  B -- upsert --> C[(Supabase<br/>trade_plans)]
+  B -- upsert --> C[(Supabase<br/>trading.trade_plans)]
   B -- "plan-core.js → SVG → PNG (resvg)" --> D[(Storage<br/>trade-plans/YYYY/MM)]
   B -- "embed + ảnh" --> E[Discord #trade-plan]
   W[Trang Trade Plan · Plan Builder] -- "GET /api/plan<br/>Bearer token" --> B

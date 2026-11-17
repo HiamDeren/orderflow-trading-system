@@ -8,7 +8,7 @@ ATAS X (chart M30, 30 ngày)
   └─ Deren · Plan Sender, bấm lúc 9:29 ET
        ├─ Bước 1: copy JSON vào clipboard + lưu latest_plan.json
        │          → dán vào trang Trade Plan · chương 04 Plan Builder
-       └─ Bước 2: POST /api/plan (token) → Vercel → Supabase (bảng trade_plans)
+       └─ Bước 2: POST /api/plan (token) → Vercel → Supabase (bảng trading.trade_plans)
                   → trang plan đọc GET /api/plan
 ```
 
@@ -59,7 +59,8 @@ Kiểm tra nhanh không cần ATAS: nút **"Nạp ví dụ 12/11 (data thật, c
 
 ### A. Supabase
 1. supabase.com → **New project**, region **Southeast Asia (Singapore)**, đặt Database password và lưu lại.
-2. **SQL Editor → New query** → dán nội dung `supabase.sql` → **Run**. Kiểm tra **Table Editor** có bảng `trade_plans`, RLS bật.
+2. **SQL Editor → New query** → dán nội dung `supabase.sql` → **Run**. Kiểm tra **Table Editor** (chọn schema `trading`) có bảng `trade_plans`, RLS bật.
+   - **Project Settings → Data API → Exposed schemas**: thêm `trading`, bấm Save (không thêm `util`).
 3. **Project Settings → API Keys** (tên mục có thể khác nhẹ):
    - Copy **Project URL** (`https://xxxx.supabase.co`).
    - Copy **secret key** (`sb_secret_...`); project kiểu cũ thì dùng **service_role**.

@@ -1,18 +1,20 @@
 # 04 · Dữ liệu, API và tích hợp
 
 ## Supabase
-- Project: **HiamDeren's Project**, ref `njbeaswlwqweblvgvrlx`, region `ap-southeast-2`.
-- Truy cập chỉ từ server (Vercel Function) bằng **secret key** (tên key trên Supabase: `vercel_server`, dùng chung cho mọi tính năng backend sau này). Không có client nào dùng publishable / anon key.
-- SQL chuẩn: `docs/plan-sender/supabase.sql`. Migration đã áp: `trade_plans_image_and_storage` (cột ảnh, bucket, sửa `search_path`), `trade_plans_recreate_ordered_no_price` (tạo lại bảng, bỏ `price`, thu quyền anon/authenticated).
+- Project: **Personal Trading Dashboard**, ref `gpbypxuglcfmvarmferr`, region `ap-southeast-1` (Singapore), tạo 2026-11-18. Project cũ `njbeaswlwqweblvgvrlx` (Sydney) chỉ giữ tạm tới khi xác nhận xoá.
+- Truy cập chỉ từ server (Vercel Function, region `sin1`) bằng **secret key**. Không có client nào dùng publishable / anon key.
+- **Mỗi nghiệp vụ một schema, không dùng `public`:** `trading` (trade plan; sau này journal, recap), `util` (hàm dùng chung, không expose). Nghiệp vụ mới (calendar, options, news...) tạo schema riêng theo cùng mẫu quyền.
+- Schema mới phải thêm vào **Project Settings → Data API → Exposed schemas** thì PostgREST mới thấy. Gọi REST: header `Accept-Profile: <schema>` khi đọc, `Content-Profile: <schema>` khi ghi.
+- SQL chuẩn: `docs/plan-sender/supabase.sql`. Migration đã áp trên project Singapore: `trading_schema_trade_plans`, `revoke_rls_auto_enable_execute` (thu quyền gọi `public.rls_auto_enable()` của anon / authenticated).
 
-### Bảng `public.trade_plans`
-Tạo lại 2026-11-17 (migration `trade_plans_recreate_ordered_no_price`): bỏ cột `price`, sắp cột theo nhóm. Mỗi cột có `comment` trong database. SQL chuẩn: `docs/plan-sender/supabase.sql`.
+### Bảng `trading.trade_plans`
+Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp md5). Mỗi cột có `comment` trong database.
 
 | # | Cột | Kiểu | Ghi chú |
 |---|---|---|---|
-| 1 | `id` | bigint identity PK | khoá tự tăng |
+| 1 | `id` | uuid PK, mặc định `gen_random_uuid()` | |
 | 2 | `created_at` | timestamptz, mặc định `now()` | lần gửi đầu tiên của ngày |
-| 3 | `updated_at` | timestamptz, mặc định `now()` | lần gửi gần nhất; trigger `trade_plans_touch` → `public.touch_updated_at()` (`search_path=''`) |
+| 3 | `updated_at` | timestamptz, mặc định `now()` | lần gửi gần nhất; trigger `trade_plans_touch` → `util.touch_updated_at()` (`search_path=''`) |
 | 4 | `trade_date` | date not null | ngày phiên trade (ET) |
 | 5 | `symbol` | text not null, mặc định `'NQ'` | ví dụ `NQZ6` |
 | 6 | `summary` | jsonb | server tính: `{date, location, prth, ovn, bias, conf, setup, target, distance, flip, price, zone}` để lọc / thống kê |
@@ -22,16 +24,13 @@ Tạo lại 2026-11-17 (migration `trade_plans_recreate_ordered_no_price`): bỏ
 
 - Giá lúc 9:29 ET không có cột riêng: lấy ở `payload->>'price'` hoặc `summary->>'price'`.
 - Ràng buộc `trade_plans_trade_date_symbol_key unique (trade_date, symbol)`: gửi lại cùng ngày thì ghi đè (upsert).
-- RLS bật, **không có policy**; `anon` / `authenticated` đã bị thu hết quyền trên bảng; chỉ `service_role` (secret key) có `select, insert, update, delete`.
+- RLS bật, **không có policy**; `anon` / `authenticated` không có quyền trên schema `trading` lẫn bảng; chỉ `service_role` (secret key) có `usage` + `select, insert, update, delete`. Default privileges của schema `trading` đã đặt sẵn để bảng mới tự theo mẫu này.
 - Thêm cột mới: Postgres luôn thêm vào cuối. Muốn giữ thứ tự nhóm thì tạo lại bảng khi bảng còn trống, hoặc chấp nhận cột mới ở cuối.
 
 ### Storage
 - Bucket `trade-plans`: private, tối đa 5 MB / file, chỉ `image/png`, không có storage policy.
 - Đường dẫn: `YYYY/MM/plan_<date>_<symbol>.png` (ký tự lạ trong symbol đổi thành `_`). Ảnh khoảng 340 KB (PNG zoom ×2).
 - Xoá file: phải qua Storage API hoặc Dashboard (SQL `delete from storage.objects` bị chặn bởi `storage.protect_delete()`).
-
-### Cảnh báo advisor còn mở
-- Hàm `public.rls_auto_enable()` là SECURITY DEFINER, `anon` / `authenticated` gọi được → nên thu `EXECUTE`.
 
 ## Biến môi trường Vercel (Production, kiểu Secret)
 | Biến | Bắt buộc | Ý nghĩa |

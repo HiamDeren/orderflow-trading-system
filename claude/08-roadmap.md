@@ -8,7 +8,7 @@ Cập nhật: 2026-11-17.
 ## Đã xong
 - [x] Trade Plan · Composite × pRTH × OVN là system chính (2026-11-17): gộp Plan Builder cổ điển + Testing plan thành trang `plan.html`, Plan Builder vẽ ảnh TPO kèm plan chữ, copy ảnh.
 - [x] Plan Builder nhập JSON từ ATAS (dán / clipboard / file) và **"Lấy plan mới nhất từ web"**.
-- [x] Supabase: bảng `trade_plans`, bucket private `trade-plans`, RLS bật, chỉ server đọc ghi.
+- [x] Supabase: bảng `trading.trade_plans`, bucket private `trade-plans`, RLS bật, chỉ server đọc ghi.
 - [x] Vercel: `api/plan.js` (token); biến `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `PLAN_TOKEN`, `DISCORD_WEBHOOK_TRADE_PLAN` đã đặt.
 - [x] Server tự vẽ ảnh plan tiếng Việt (PNG), lưu Storage, gửi Discord qua webhook. Test đầu-cuối bằng JSON mẫu thành công 2026-11-17.
 - [x] `plan-core.js`: một nguồn code cho tính plan + vẽ ảnh, dùng chung web và server.
@@ -23,7 +23,8 @@ Cập nhật: 2026-11-17.
 4. [ ] Xoá ảnh test `2026/11/plan_2026-11-12_NQZ6.png` trong Storage (Dashboard → Storage → `trade-plans`). Dòng dữ liệu đã xoá.
 
 ## Việc còn lại · dọn dẹp và an toàn
-- [ ] Supabase: thu quyền `EXECUTE` của `anon` / `authenticated` trên `public.rls_auto_enable()` (advisor cảnh báo).
+- [x] Supabase: chuyển sang project Singapore, tách schema `trading` / `util`, `id` uuid (2026-11-18).
+- [ ] Supabase: xoá project Sydney (`njbeaswlwqweblvgvrlx`) sau khi API chạy ổn trên Singapore.
 - [x] Supabase: thu quyền `anon` / `authenticated` trên `trade_plans` (làm khi tạo lại bảng 2026-11-17).
 - [ ] Khi có nhiều API: đổi `PLAN_TOKEN` thành token chung (ví dụ `API_TOKEN`) hoặc chuyển sang đăng nhập.
 - [x] Artifact đổi tên "NQ Trade Plan · Composite × pRTH × OVN", dùng chung `plan-core.js`, nguồn trong `artifact/`.

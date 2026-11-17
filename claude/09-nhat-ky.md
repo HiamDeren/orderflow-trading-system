@@ -2,6 +2,12 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-18 · Chuyển Supabase sang Singapore, tách schema
+- Project mới **Personal Trading Dashboard** (`gpbypxuglcfmvarmferr`, `ap-southeast-1`); project Sydney giữ tạm.
+- Bỏ `public`: bảng chuyển thành `trading.trade_plans`, hàm trigger thành `util.touch_updated_at()`; `id` đổi từ bigint identity sang `uuid`. Chép dòng plan 2026-11-17 sang (khớp md5).
+- `api/plan.js` gửi `Accept-Profile` / `Content-Profile: trading`; `vercel.json` đặt function ở region `sin1` (Singapore) cho gần database.
+- Vercel: cập nhật `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` sang project mới.
+
 ## 2026-11-17 · Plan tự động và chuẩn bị chuyển web app
 - Tạo lại bảng `trade_plans` (đang trống): bỏ cột `price`, thứ tự cột `id, created_at, updated_at, trade_date, symbol, summary, plan_text, image_path, payload`, comment từng cột, thu quyền anon/authenticated; `api/plan.js` không ghi / đọc `price` nữa.
 - **Composite × pRTH × OVN thành system trade plan chính.** Gộp Plan Builder cổ điển và Testing plan thành trang **Trade Plan** (`plan.html`, chương 00–06); bỏ builder cổ điển (`plan-chart.js`, code builder trong `levels-page.js`); `testing.*` → `plan.*` (`plan-page.js`, `plan.css`, scope `.pg-plan`); `/testing`, `/overlap` redirect về `/plan`; sidebar nhóm "Trade plan"; trang chủ một thẻ Trade Plan; chương 08 khoá Level có callout trỏ sang Trade Plan.
