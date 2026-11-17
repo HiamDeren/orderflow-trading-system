@@ -405,8 +405,6 @@ AT 10:00: open type + EMA 9/34 (5') + VWAP RTH set the direction; if the open ty
 }
 const B_IDS=["b-tol","b-rvah","b-rval","b-rpoc","b-rhi","b-rlo","b-rcl","b-ovah","b-oval","b-opoc","b-onh","b-onl","b-px","b-date"];
 function collectB(){ const o={}; B_IDS.forEach(id=>o[id]=$("#"+id).value); for(let i=0;i<ZN;i++){ o["z"+i+"lo"]=$("#b-z"+i+"lo").value; o["z"+i+"hi"]=$("#b-z"+i+"hi").value; } o.b=$("#b-b").value; o.touched=bTouched; o.manual=!importedPer; return o; }
-const EX = {"b-tol":30,"b-rvah":28010,"b-rval":27770,"b-rpoc":27965,"b-rhi":28420,"b-rlo":27700,"b-rcl":27760,"b-ovah":27880,"b-oval":27660,"b-opoc":27790,"b-onh":28290,"b-onl":27570,"b-px":27600,"b-date":"2026-11-16", zones:[[26840,27370],[27620,28040],[28200,28440]]};
-function loadEx(){ importedComp=null; importedPer=null; B_IDS.forEach(id=>$("#"+id).value = EX[id]!=null?EX[id]:""); setZones(EX.zones); bTouched=false; build(); }
 function initB(){
   $("#b-zones").innerHTML = Array.from({length:ZN},(_,i)=>`<div class="field"><label for="b-z${i}lo">HVN ${i+1} · from</label><input id="b-z${i}lo" type="number" step="0.25"></div><div class="field"><label for="b-z${i}hi">HVN ${i+1} · to</label><input id="b-z${i}hi" type="number" step="0.25"></div>`).join("");
   fillSel($("#b-b"),B_OPTS);
@@ -473,13 +471,6 @@ function importAtas(text){
 
 
 
-function initVD(){
-  const zs=EX.zones.map(z=>({lo:z[0],hi:z[1],mid:(z[0]+z[1])/2}));
-  const z=zs[1], G=geomOf("edgeD",-1,{z,dn:zs[0],up:zs[2]});
-  $("#v-svg").innerHTML = drawPlan({zones:zs,px:EX["b-px"],rvah:EX["b-rvah"],rval:EX["b-rval"],rpoc:EX["b-rpoc"],rhi:EX["b-rhi"],rlo:EX["b-rlo"],ovah:EX["b-ovah"],oval:EX["b-oval"],opoc:EX["b-opoc"],onh:EX["b-onh"],onl:EX["b-onl"],target:27370},
-    {date:"2026-11-16", loc:"At the lower edge of HVN 27,620–28,040 · pRTH accepted lower · OVN shifted down", dir:-1, word:"Down ", conf:"A reinforced", setup:"Continuation down", edge:G.edge, entries:G.entries});
-}
-
 /* ---------- 06 · Quiz ---------- */
 const QZ = [
  {q:"In this frame, what does a composite HVN represent?",o:["A fast-move area","A balance area: price stayed there across many sessions","An area with many stops","A price with big volume in 1 minute"],a:1,e:"HVN = where both sides agreed on price across many sessions, i.e. a balance area."},
@@ -506,5 +497,5 @@ function initQuiz(){
 }
 
 /* ---------- boot ---------- */
-initHVN(); initX(); initB(); initVD(); initQuiz();
+initHVN(); initX(); initB(); initQuiz();
 })();
