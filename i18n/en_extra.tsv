@@ -1923,3 +1923,47 @@ và giá giữ phía đó. Pullback về VWAP / ±1σ là điểm vào; giá c�
 Đặt trên chart	Put it on the
 Định nghĩa và cách cài	Definition and setup
 đóng ngoài mép HVN theo hướng bias (bias đổi sang continuation), VWAP RTH dốc theo hướng phá.	period closes beyond the HVN edge in the bias direction (the bias switches to continuation), with VWAP RTH sloping in the break direction.
+(khi có dữ liệu từ indicator)	(when the indicator sends data)
+// LVN giữa các HVN	// LVN between HVNs
+// Profile TPO dựng lại từ high/low từng period 30	// TPO profile rebuilt from each 30
+// giá + target	// price + target
+// level đổi bias	// bias-change level
+// mở rộng tới mép của HVN chứa / kề giá để thấy được vùng	// extend to the edges of the HVN containing / next to price so the zone is visible
+// nhãn bên phải, không chồng nhau	// right-side labels, no overlap
+// nhãn vùng (bên trái, trong khung)	// zone labels (left, inside the plot)
+// single print ở hai đầu profile = tail	// single prints at both ends of the profile = tail
+// vùng vào lệnh	// entry zone
+: HVN, LVN, VA pRTH, VA OVN, giá, vùng vào lệnh và target	: HVN, LVN, pRTH VA, OVN VA, price, entry zone and target
+Bản đồ plan	Plan map
+Cảnh báo:	Warnings:
+Giá 9:29	Price 9:29
+HVN gần giá nhất (từ	HVNs nearest to price (from
+JSON không hợp lệ. Kiểm tra lại nội dung đã dán.	Invalid JSON. Check what you pasted.
+JSON thiếu prth, ovn hoặc price.	JSON is missing prth, ovn or price.
+Không có danh sách phiên: giữ vùng HVN đang nhập.	No session list: keeping the HVN zones already entered.
+Không tạo được PNG, dùng Tải SVG.	Could not create the PNG, use Download SVG.
+Sát mép dưới HVN 27,620–28,040 · pRTH chấp nhận xuống · OVN lệch xuống	At the lower edge of HVN 27,620–28,040 · pRTH accepted lower · OVN shifted down
+Trình duyệt không cho đọc clipboard. Bấm vào ô JSON và dán bằng Ctrl+V.	The browser blocked clipboard access. Click the JSON box and paste with Ctrl+V.
+VA phiên).	session VAs).
+Vùng vào lệnh	Entry zone
+không có giờ	no time
+· giá đi nhanh	· price moves fast
+· giữa	· between
+Đổi bias	Bias flip
+Đổi bias (TPO 30	Bias flip (TPO 30
+↑ HVN kế trên	↑ Next HVN above
+↓ HVN kế dưới	↓ Next HVN below
+. Dán vào ô dưới (hoặc chọn file) rồi bấm Nhập. Vùng HVN được tính từ VA các phiên trong JSON, theo tham số đang đặt ở chương 01.	. Paste it into the box below (or choose the file) and press Import. HVN zones are computed from the session VAs in the JSON, using the parameters set in chapter 01.
+Dán từ clipboard	Paste from clipboard
+Gửi plan	Send plan
+JSON từ ATAS	JSON from ATAS
+Kiểu vẽ pRTH / OVN	pRTH / OVN drawing style
+Lúc 9:29 ET bấm	At 9:29 ET press
+Nhập từ ATAS (indicator Plan Sender)	Import from ATAS (Plan Sender indicator)
+Nhập và lập plan	Import and build plan
+Nạp ví dụ 12/11 (data thật, có TPO)	Load 12/11 example (real data, with TPO)
+TPO (khi có dữ liệu từ indicator)	TPO (when the indicator sends data)
+Tải SVG	Download SVG
+hoặc chọn file:	or choose a file:
+trong indicator: JSON được copy vào clipboard và lưu file	in the indicator: the JSON is copied to the clipboard and saved to
+Ảnh 1800×1200, dùng để lưu vào journal hoặc gửi nhóm.	1800×1200 image, for your journal or to share with the group.

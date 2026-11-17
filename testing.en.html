@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="assets/css/app.css?v=18">
-<link rel="stylesheet" href="assets/css/testing.css?v=18">
+<link rel="stylesheet" href="assets/css/testing.css?v=19">
 </head>
 <body data-page="testing">
 <main class="ui-main">
@@ -318,7 +318,14 @@
     <h2>Enter numbers before 21:29 VN, get the plan and the map</h2>
     <p class="lead">Enter the composite HVN zones, the pRTH VA and the OVN VA. The builder classifies the location and OVN direction, suggests the pRTH build, then draws the map with the next HVN edge as target.</p>
   </div>
-  <div class="row"><button id="b-example">Load the 16/11 example</button><button id="b-clear">Clear all</button><span class="small muted" id="b-msg"></span></div>
+  <div class="panel">
+    <h3>Import from ATAS (Plan Sender indicator)</h3>
+    <p class="small muted">At 9:29 ET press "Send plan" in the indicator: the JSON is copied to the clipboard and saved to <span class="mono">latest_plan.json</span>. Paste it into the box below (or choose the file) and press Import. HVN zones are computed from the session VAs in the JSON, using the parameters set in chapter 01.</p>
+    <div class="field"><label for="b-json">JSON from ATAS</label><textarea id="b-json" spellcheck="false" style="min-height:90px" placeholder='{"v":1,"date":"2026-11-17","price":...,"prth":{...},"ovn":{...},"sessions":[...]}'></textarea></div>
+    <div class="row"><button class="primary" id="b-import">Import and build plan</button><button id="b-paste">Paste from clipboard</button><label class="small muted" for="b-file">or choose a file:</label><input id="b-file" type="file" accept=".json,application/json" style="width:auto"></div>
+    <p class="small" id="b-imsg"></p>
+  </div>
+  <div class="row"><button id="b-example2">Load 12/11 example (real data, with TPO)</button><button id="b-example">Load the 16/11 example</button><button id="b-clear">Clear all</button><span class="small muted" id="b-msg"></span></div>
   <div class="grid g2">
     <fieldset><legend>Composite · HVN (low to high)</legend>
       <div class="form" id="b-zones"></div>
@@ -353,6 +360,7 @@
       </div>
     </fieldset>
   </div>
+  <div class="row"><div class="field" style="width:auto"><label for="b-view">pRTH / OVN drawing style</label><select id="b-view" style="width:auto"><option value="tpo">TPO (when the indicator sends data)</option><option value="box">Box VA</option></select></div><button id="b-png">Download PNG</button><button id="b-svgdl">Download SVG</button><span class="small muted">1800×1200 image, for your journal or to share with the group.</span></div>
   <div class="svgwrap" id="b-svg"></div>
   <div class="out" id="b-out">Enter numbers then press "Build plan".</div>
 </section>
@@ -466,6 +474,6 @@
 <script src="assets/js/en/bank-tools.js?v=18"></script>
 <script src="assets/js/en/quiz.js?v=18"></script>
 <script src="assets/js/en/core.js?v=18"></script>
-<script src="assets/js/en/testing-page.js?v=18"></script>
+<script src="assets/js/en/testing-page.js?v=19"></script>
 </body>
 </html>

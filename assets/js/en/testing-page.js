@@ -35,15 +35,6 @@ const O_OPTS = [
 const byK = (arr,k) => arr.find(x=>x.k===k);
 const fillSel = (sel, arr) => { sel.innerHTML = arr.map(o=>`<option value="${o.k}">${esc(o.n)}</option>`).join(""); };
 
-
-function vwapGate(type, dir){
-  const w = dir>0?"up":dir<0?"down":"";
-  if(/^Fade/.test(type)) return "Only fade when VWAP RTH is flat. Drop it if VWAP slopes out toward the edge being faded. An edge on the ±2σ band is the best fade.";
-  if(/^Continuation|^Go with it/.test(type)) return `Needs VWAP RTH sloping ${w||"in the break direction"} and price holding that side. A pullback to VWAP / ±1σ is the entry; price crossing back through VWAP cancels it.`;
-  if(type==="With the bias inside the HVN") return `Price must hold its side of VWAP RTH with the bias ${w}; enter on the first VWAP touch with a trigger.`;
-  if(type==="Wait for the edge reaction") return "Flat VWAP → lean to the fade. VWAP sloping out past the edge → wait for continuation.";
-  return "Wait for VWAP RTH to pick a slope after the IB, then trade that side.";
-}
 function biasOf(bk, ok){
   const dB = byK(B_OPTS,bk).dir, dO = byK(O_OPTS,ok).dir;
   let dir=0, conf, cls, need;
@@ -97,7 +88,18 @@ function setupOf(pk, dir, ctx){
 }
 
 
+function vwapGate(type, dir){
+  const w = dir>0?"up":dir<0?"down":"";
+  if(/^Fade/.test(type)) return "Only fade when VWAP RTH is flat. Drop it if VWAP slopes out toward the edge being faded. An edge on the ±2σ band is the best fade.";
+  if(/^Continuation|^Go with it/.test(type)) return `Needs VWAP RTH sloping ${w||"in the break direction"} and price holding that side. A pullback to VWAP / ±1σ is the entry; price crossing back through VWAP cancels it.`;
+  if(type==="With the bias inside the HVN") return `Price must hold its side of VWAP RTH with the bias ${w}; enter on the first VWAP touch with a trigger.`;
+  if(type==="Wait for the edge reaction") return "Flat VWAP → lean to the fade. VWAP sloping out past the edge → wait for continuation.";
+  return "Wait for VWAP RTH to pick a slope after the IB, then trade that side.";
+}
+
+
 const SAMPLE = "2026-10-21 RTH 29916 30111\n2026-10-22 OVN 29418 29751\n2026-10-22 RTH 29093 29366\n2026-10-23 OVN 29088 29197\n2026-10-23 RTH 29128 29273\n2026-10-26 OVN 29062 29215\n2026-10-26 RTH 29361 29572\n2026-10-27 OVN 29378 29565\n2026-10-27 RTH 29659 29882\n2026-10-28 OVN 29871 29976\n2026-10-28 RTH 29801 29940\n2026-10-29 OVN 29605 29734\n2026-10-29 RTH 29448 29617\n2026-10-30 OVN 28835 29044\n2026-10-30 RTH 28462 28859\n2026-11-02 OVN 28712 28805\n2026-11-02 RTH 28332 28891\n2026-11-03 OVN 28120 28263\n2026-11-03 RTH 28284 28391\n2026-11-04 OVN 27951 28602\n2026-11-04 RTH 28564 28785\n2026-11-05 OVN 28253 28444\n2026-11-05 RTH 26815 27358\n2026-11-06 OVN 26898 27191\n2026-11-06 RTH 27082 27269\n2026-11-09 OVN 26925 27238\n2026-11-09 RTH 27796 28129\n2026-11-10 OVN 27897 28044\n2026-11-10 RTH 27647 27916\n2026-11-11 OVN 28118 28407\n2026-11-11 RTH 28416 28697\n2026-11-12 OVN 28176 28307";
+const SAMPLE_PLAN = {"v":1,"source":"mo phong tu data M1 (Deren.PlanSender v1)","symbol":"NQZ6","date":"2026-11-12","ts_et":"2026-11-12T09:29:00-05:00","price":28064.25,"prth":{"date":"2026-11-11","vah":28697.0,"val":28416.0,"poc":28548.5,"high":28697.0,"low":28199.0,"close":28457.25,"periods_hl":[[28426.0,28199.0],[28388.5,28256.5],[28550.25,28336.5],[28573.0,28462.0],[28619.25,28520.5],[28660.0,28575.0],[28666.25,28622.0],[28690.5,28601.25],[28697.0,28660.5],[28666.0,28535.0],[28588.25,28548.75],[28572.25,28499.5],[28534.25,28443.5],[28510.5,28452.25]]},"ovn":{"vah":28307.0,"val":28176.0,"poc":28204.5,"onh":28368.75,"onl":28013.75,"periods_hl":[[28319.75,28131.75],[28296.75,28193.75],[28270.0,28166.0],[28249.0,28194.0],[28274.0,28187.75],[28311.25,28248.5],[28368.75,28278.0],[28358.5,28280.5],[28334.25,28233.5],[28277.25,28204.5],[28275.25,28234.25],[28238.5,28201.5],[28223.25,28142.5],[28176.25,28134.25],[28231.0,28141.75],[28212.25,28162.25],[28236.5,28182.5],[28237.0,28168.0],[28249.75,28191.0],[28252.5,28195.25],[28267.75,28198.25],[28312.75,28265.0],[28307.25,28268.75],[28301.5,28239.0],[28270.75,28223.75],[28255.5,28214.25],[28308.75,28195.0],[28219.25,28173.0],[28242.5,28013.75],[28169.0,28055.0],[28145.0,28050.25]]},"sessions":[{"date":"2026-10-02","type":"OVN","val":30798.0,"vah":30989.0,"poc":30884.5},{"date":"2026-10-02","type":"RTH","val":31001.0,"vah":31148.0,"poc":31057.5},{"date":"2026-10-05","type":"OVN","val":30976.0,"vah":31119.0,"poc":31042.5},{"date":"2026-10-05","type":"RTH","val":31191.0,"vah":31348.0,"poc":31235.5},{"date":"2026-10-06","type":"OVN","val":31328.0,"vah":31419.0,"poc":31358.5},{"date":"2026-10-06","type":"RTH","val":31484.0,"vah":31557.0,"poc":31526.5},{"date":"2026-10-07","type":"OVN","val":31326.0,"vah":31521.0,"poc":31480.5},{"date":"2026-10-07","type":"RTH","val":31258.0,"vah":31423.0,"poc":31344.5},{"date":"2026-10-08","type":"OVN","val":31131.0,"vah":31392.0,"poc":31219.5},{"date":"2026-10-08","type":"RTH","val":30955.0,"vah":31370.0,"poc":31243.5},{"date":"2026-10-09","type":"OVN","val":31054.0,"vah":31267.0,"poc":31216.5},{"date":"2026-10-09","type":"RTH","val":31037.0,"vah":31122.0,"poc":31087.5},{"date":"2026-10-12","type":"OVN","val":31104.0,"vah":31289.0,"poc":31232.5},{"date":"2026-10-12","type":"RTH","val":30870.0,"vah":30953.0,"poc":30886.5},{"date":"2026-10-13","type":"OVN","val":30636.0,"vah":30749.0,"poc":30666.5},{"date":"2026-10-13","type":"RTH","val":30701.0,"vah":30794.0,"poc":30763.5},{"date":"2026-10-14","type":"OVN","val":30745.0,"vah":30848.0,"poc":30789.5},{"date":"2026-10-14","type":"RTH","val":30103.0,"vah":30434.0,"poc":30199.5},{"date":"2026-10-15","type":"OVN","val":29787.0,"vah":29952.0,"poc":29843.5},{"date":"2026-10-15","type":"RTH","val":29862.0,"vah":30197.0,"poc":29958.5},{"date":"2026-10-16","type":"OVN","val":30043.0,"vah":30174.0,"poc":30091.5},{"date":"2026-10-16","type":"RTH","val":29302.0,"vah":29807.0,"poc":29390.5},{"date":"2026-10-19","type":"OVN","val":29638.0,"vah":29813.0,"poc":29766.5},{"date":"2026-10-19","type":"RTH","val":29709.0,"vah":29852.0,"poc":29785.5},{"date":"2026-10-20","type":"OVN","val":29576.0,"vah":29741.0,"poc":29646.5},{"date":"2026-10-20","type":"RTH","val":29656.0,"vah":29833.0,"poc":29700.5},{"date":"2026-10-21","type":"OVN","val":29824.0,"vah":29965.0,"poc":29868.5},{"date":"2026-10-21","type":"RTH","val":29916.0,"vah":30111.0,"poc":29990.5},{"date":"2026-10-22","type":"OVN","val":29418.0,"vah":29751.0,"poc":29508.5},{"date":"2026-10-22","type":"RTH","val":29093.0,"vah":29366.0,"poc":29155.5},{"date":"2026-10-23","type":"OVN","val":29088.0,"vah":29197.0,"poc":29128.5},{"date":"2026-10-23","type":"RTH","val":29128.0,"vah":29273.0,"poc":29150.5},{"date":"2026-10-26","type":"OVN","val":29062.0,"vah":29215.0,"poc":29138.5},{"date":"2026-10-26","type":"RTH","val":29361.0,"vah":29572.0,"poc":29483.5},{"date":"2026-10-27","type":"OVN","val":29378.0,"vah":29565.0,"poc":29432.5},{"date":"2026-10-27","type":"RTH","val":29659.0,"vah":29882.0,"poc":29805.5},{"date":"2026-10-28","type":"OVN","val":29871.0,"vah":29976.0,"poc":29913.5},{"date":"2026-10-28","type":"RTH","val":29797.0,"vah":29934.0,"poc":29861.5},{"date":"2026-10-29","type":"OVN","val":29605.0,"vah":29734.0,"poc":29653.5},{"date":"2026-10-29","type":"RTH","val":29448.0,"vah":29617.0,"poc":29538.5},{"date":"2026-10-30","type":"OVN","val":28835.0,"vah":29044.0,"poc":28923.5},{"date":"2026-10-30","type":"RTH","val":28462.0,"vah":28859.0,"poc":28668.5},{"date":"2026-11-02","type":"OVN","val":28712.0,"vah":28805.0,"poc":28764.5},{"date":"2026-11-02","type":"RTH","val":28330.0,"vah":28891.0,"poc":28664.5},{"date":"2026-11-03","type":"OVN","val":28120.0,"vah":28263.0,"poc":28232.5},{"date":"2026-11-03","type":"RTH","val":28288.0,"vah":28395.0,"poc":28330.5},{"date":"2026-11-04","type":"OVN","val":27951.0,"vah":28602.0,"poc":28409.5},{"date":"2026-11-04","type":"RTH","val":28564.0,"vah":28783.0,"poc":28646.5},{"date":"2026-11-05","type":"OVN","val":28253.0,"vah":28444.0,"poc":28375.5},{"date":"2026-11-05","type":"RTH","val":26797.0,"vah":27358.0,"poc":26955.5},{"date":"2026-11-06","type":"OVN","val":26898.0,"vah":27191.0,"poc":26978.5},{"date":"2026-11-06","type":"RTH","val":27082.0,"vah":27269.0,"poc":27206.5},{"date":"2026-11-09","type":"OVN","val":26925.0,"vah":27238.0,"poc":27113.5},{"date":"2026-11-09","type":"RTH","val":27796.0,"vah":28129.0,"poc":27928.5},{"date":"2026-11-10","type":"OVN","val":27897.0,"vah":28044.0,"poc":27989.5},{"date":"2026-11-10","type":"RTH","val":27647.0,"vah":27916.0,"poc":27789.5},{"date":"2026-11-11","type":"OVN","val":28118.0,"vah":28407.0,"poc":28226.5},{"date":"2026-11-11","type":"RTH","val":28416.0,"vah":28697.0,"poc":28548.5},{"date":"2026-11-12","type":"OVN","val":28176.0,"vah":28307.0,"poc":28204.5}],"composite":{"days":30,"row":10,"vah":30310.0,"val":27160.0,"poc":29845.0},"warnings":[]};
 function parseVA(text){
   const out=[];
   text.split(/\r?\n/).forEach(line=>{
@@ -232,29 +234,110 @@ function suggestB(){
   if(lo!=null && val-lo > 0.5*w && cl>p) return "rejD";
   return "bal";
 }
-let bTouched=false, lastPlan="", lastB=null;
-function drawMap(D){
-  const vals=[D.px,D.rvah,D.rval,D.rhi,D.rlo,D.ovah,D.oval,D.onh,D.onl].filter(v=>v!=null);
-  D.zones.forEach(z=>{ vals.push(z.lo,z.hi); });
-  if(D.target!=null) vals.push(D.target);
-  let lo=Math.min(...vals), hi=Math.max(...vals); const pad=(hi-lo)*0.06||50; lo-=pad; hi+=pad;
-  const W=820,H=520,x0=96,x1=800,top=14,bot=H-14; const y=v=>top+(hi-v)/(hi-lo)*(bot-top);
-  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Plan map: HVN, pRTH VA, OVN VA, price and target"><g font-family="${MONO}">`;
-  const span=hi-lo, ts= span>2500?500:span>1200?200:span>500?100:50;
-  for(let t=Math.ceil(lo/ts)*ts;t<=hi;t+=ts) s+=`<line x1="${x0}" x2="${x1}" y1="${y(t)}" y2="${y(t)}" stroke="${COL.grid}"/><text x="${x0-8}" y="${y(t)+4}" fill="${COL.mut}" font-size="11" text-anchor="end">${fmt(t)}</text>`;
-  D.zones.forEach(z=>{ s+=`<rect x="${x0}" y="${y(z.hi)}" width="${x1-x0}" height="${y(z.lo)-y(z.hi)}" fill="rgba(38,166,154,0.15)" stroke="${COL.hvn}" stroke-dasharray="5 4"/><text x="${x0+8}" y="${y(z.hi)+15}" fill="#bff0e8" font-size="12">HVN ${fmt(z.lo)}–${fmt(z.hi)}</text>`; });
-  for(let i=1;i<D.zones.length;i++){ const a=D.zones[i-1].hi,b=D.zones[i].lo; if(y(a)-y(b)>16) s+=`<text x="${x0+8}" y="${(y(a)+y(b))/2+4}" fill="${COL.mut}" font-size="12">LVN ${fmt(a)}–${fmt(b)}</text>`; }
+let bTouched=false, lastPlan="", lastB=null, lastSvg="", importedComp=null, importedPer=null;
+
+function geomOf(pk, dir, ctx){
+  const z=ctx.z, up=ctx.up, dn=ctx.dn, w=15; const E=[]; let edge=null;
+  if(pk==="in" && z){ if(dir===0){ E.push({lo:z.hi-w,hi:z.hi},{lo:z.lo,hi:z.lo+w}); } edge = dir>0?z.lo: dir<0?z.hi : null; }
+  else if(pk==="edgeU" && z){ edge=z.hi; E.push(dir>0?{lo:z.hi,hi:z.hi+w}: dir<0?{lo:z.hi-w,hi:z.hi+5}:{lo:z.hi-w,hi:z.hi+w}); }
+  else if(pk==="edgeD" && z){ edge=z.lo; E.push(dir<0?{lo:z.lo-w,hi:z.lo}: dir>0?{lo:z.lo-5,hi:z.lo+w}:{lo:z.lo-w,hi:z.lo+w}); }
+  else if(pk==="lvn"){ if(dir>0 && dn){ edge=dn.hi; E.push({lo:dn.hi,hi:dn.hi+w}); } else if(dir<0 && up){ edge=up.lo; E.push({lo:up.lo-w,hi:up.lo}); } }
+  return {edge, entries:E};
+}
+function spread(labels, top, bot, gap){
+  labels.sort((a,b)=>a.y-b.y);
+  for(let i=0;i<labels.length;i++){ labels[i].ly=Math.max(labels[i].y, i?labels[i-1].ly+gap:top); }
+  for(let i=labels.length-1;i>=0;i--){ const lim = i===labels.length-1?bot:labels[i+1].ly-gap; if(labels[i].ly>lim) labels[i].ly=lim; }
+  return labels;
+}
+let drawSeq=0;
+function drawPlan(D, M){
+  M = M || {}; const u = "p"+(++drawSeq);
+  const W=900, H=600, x0=78, x1=740, top=86, bot=H-62;
+  const core=[D.px,D.rvah,D.rval,D.rpoc,D.ovah,D.oval,D.opoc,D.onh,D.onl,D.rhi,D.rlo,D.target].filter(v=>v!=null&&!isNaN(v));
+  (M.entries||[]).forEach(e=>core.push(e.lo,e.hi)); if(M.edge!=null) core.push(M.edge);
+  let lo=Math.min(...core), hi=Math.max(...core);
+  // extend to the edges of the HVN containing / next to price so the zone is visible
+  D.zones.forEach(z=>{ if(z.hi>=lo-80 && z.lo<=hi+80){ lo=Math.min(lo,Math.max(z.lo,lo-150)); hi=Math.max(hi,Math.min(z.hi,hi+150)); } });
+  if(hi-lo<200){ const m=(hi+lo)/2; lo=m-100; hi=m+100; }
+  const pad=(hi-lo)*0.06; lo-=pad; hi+=pad;
+  const y=v=>top+(hi-v)/(hi-lo)*(bot-top); const cl=v=>Math.max(top,Math.min(bot,y(v)));
+  const dir = M.dir||0, bcol = dir>0?COL.up:dir<0?COL.dn:"#9aa0a8";
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Plan map ${esc(M.date||"")}: HVN, LVN, pRTH VA, OVN VA, price, entry zone and target">`;
+  s+=`<defs><pattern id="hatch${u}" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#3a3d44" stroke-width="2"/></pattern><marker id="mk${u}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="${bcol}"/></marker><clipPath id="plot${u}"><rect x="${x0}" y="${top}" width="${x1-x0}" height="${bot-top}"/></clipPath></defs>`;
+  s+=`<rect width="${W}" height="${H}" fill="#141518"/><g font-family="${FONT}">`;
+  // header
+  const sub=String(M.loc||""); s+=`<text x="20" y="30" fill="#ffffff" font-size="18" font-weight="700">PLAN ${esc(M.date||"")}</text><text x="20" y="56" fill="#c9cdd3" font-size="13">${esc(sub.length>110?sub.slice(0,108)+"…":sub)}</text>`;
+  const pills=[[`Bias: ${M.word||"—"} · ${M.conf||""}`, dir>0?"#123a27":dir<0?"#401617":"#2a2c31", dir>0?"#c8f2da":dir<0?"#ffd0cf":"#e6e8eb", bcol],[`Setup: ${M.setup||"—"}`,"#2a2c31","#e6e8eb","#5f636b"]];
+  let px0=W-20; pills.forEach(([t,bg,fg,st])=>{ const w=t.length*7.4+22; px0-=w; s+=`<rect x="${px0}" y="10" width="${w}" height="28" rx="6" fill="${bg}" stroke="${st}"/><text x="${px0+w/2}" y="29" fill="${fg}" font-size="13" font-weight="700" text-anchor="middle">${esc(t)}</text>`; px0-=10; });
+  // grid
+  const span=hi-lo, ts=span>2500?500:span>1200?200:span>500?100:50;
+  s+=`<g font-family="${MONO}">`;
+  for(let t=Math.ceil(lo/ts)*ts;t<=hi;t+=ts) s+=`<line x1="${x0}" x2="${x1}" y1="${y(t)}" y2="${y(t)}" stroke="#24272c"/><text x="${x0-8}" y="${y(t)+4}" fill="#7d828a" font-size="11" text-anchor="end">${fmt(t)}</text>`;
+  s+=`</g><g clip-path="url(#plot${u})">`;
+  // LVN between HVNs
+  for(let i=1;i<D.zones.length;i++){ const a=D.zones[i-1].hi,b=D.zones[i].lo; if(b<=lo||a>=hi) continue; s+=`<rect x="${x0}" y="${cl(b)}" width="${x1-x0}" height="${Math.max(0,cl(a)-cl(b))}" fill="url(#hatch${u})" opacity=".55"/>`; }
+  // HVN
+  D.zones.forEach(z=>{ if(z.hi<lo||z.lo>hi) return; s+=`<rect x="${x0}" y="${cl(z.hi)}" width="${x1-x0}" height="${Math.max(2,cl(z.lo)-cl(z.hi))}" fill="rgba(38,166,154,0.16)" stroke="${COL.hvn}" stroke-dasharray="6 4"/>`; });
+  // entry zone
+  (M.entries||[]).forEach(e=>{ s+=`<rect x="${x0}" y="${y(e.hi)}" width="${x1-x0}" height="${Math.max(3,y(e.lo)-y(e.hi))}" fill="rgba(239,159,39,0.22)" stroke="#EF9F27" stroke-width="1"/>`; });
+  // composite VA
+  if(D.comp){ ["vah","val","poc"].forEach(k=>{ const v=D.comp[k]; if(v!=null && v>lo && v<hi) s+=`<line x1="${x0}" x2="${x1}" y1="${y(v)}" y2="${y(v)}" stroke="#ffffff" stroke-opacity="${k==="poc"?.7:.35}" stroke-dasharray="1 4" stroke-width="${k==="poc"?2:1.5}"/>`; }); }
+  s+=`</g>`;
+  // zone labels (left, inside the plot)
+  D.zones.forEach(z=>{ if(z.hi<lo||z.lo>hi) return; const yt=Math.max(top+14, cl(z.hi)+16); s+=`<text x="${x0+8}" y="${yt}" fill="#bff0e8" font-size="12" font-weight="700">HVN ${fmt(z.lo)}–${fmt(z.hi)}</text>`; });
+  for(let i=1;i<D.zones.length;i++){ const a=D.zones[i-1].hi,b=D.zones[i].lo; if(b<=lo||a>=hi) continue; const ym=(cl(a)+cl(b))/2; if(cl(a)-cl(b)>18) s+=`<text x="${x0+8}" y="${ym+4}" fill="#c9cdd3" font-size="12">LVN ${fmt(a)}–${fmt(b)} · price moves fast</text>`; }
+  const above=D.zones.filter(z=>z.lo>hi), below=D.zones.filter(z=>z.hi<lo);
+  if(above.length){ const z=above[0]; s+=`<text x="${x0+8}" y="${top-6}" fill="#9fd8cf" font-size="11">↑ Next HVN above ${fmt(z.lo)}–${fmt(z.hi)}</text>`; }
+  if(below.length){ const z=below[below.length-1]; s+=`<text x="${x0+8}" y="${bot+14}" fill="#9fd8cf" font-size="11">↓ Next HVN below ${fmt(z.lo)}–${fmt(z.hi)}</text>`; }
+  // box VA
   const box=(x,lab,vah,val,poc,h,l,col,pcol)=>{ if(vah==null||val==null) return ""; let t="";
-    if(h!=null&&l!=null) t+=`<line x1="${x+55}" x2="${x+55}" y1="${y(h)}" y2="${y(l)}" stroke="${col}" stroke-width="2" opacity=".7"/>`;
-    t+=`<rect x="${x}" y="${y(vah)}" width="110" height="${Math.max(2,y(val)-y(vah))}" fill="${col}" fill-opacity=".32" stroke="${col}"/>`;
-    if(poc!=null) t+=`<line x1="${x-6}" x2="${x+116}" y1="${y(poc)}" y2="${y(poc)}" stroke="${pcol}" stroke-width="2.5"/>`;
-    t+=`<text x="${x+55}" y="${y(Math.max(vah,h||vah))-8}" fill="#ffffff" font-size="12" font-weight="700" text-anchor="middle" font-family="${FONT}">${lab}</text>`;
-    t+=`<text x="${x+118}" y="${y(vah)+4}" fill="${col}" font-size="11">${fmt(vah)}</text><text x="${x+118}" y="${y(val)+4}" fill="${col}" font-size="11">${fmt(val)}</text>`;
+    if(h!=null&&l!=null) t+=`<line x1="${x+50}" x2="${x+50}" y1="${cl(h)}" y2="${cl(l)}" stroke="${col}" stroke-width="2" opacity=".75"/><line x1="${x+40}" x2="${x+60}" y1="${cl(h)}" y2="${cl(h)}" stroke="${col}" stroke-width="2"/><line x1="${x+40}" x2="${x+60}" y1="${cl(l)}" y2="${cl(l)}" stroke="${col}" stroke-width="2"/>`;
+    t+=`<rect x="${x}" y="${y(vah)}" width="100" height="${Math.max(3,y(val)-y(vah))}" rx="3" fill="${col}" fill-opacity=".34" stroke="${col}" stroke-width="1.5"/>`;
+    if(poc!=null) t+=`<line x1="${x-6}" x2="${x+106}" y1="${y(poc)}" y2="${y(poc)}" stroke="${pcol}" stroke-width="3"/>`;
+    t+=`<text x="${x+50}" y="${Math.max(top+12,cl(Math.max(vah,h!=null?h:vah))-8)}" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">${lab}</text>`;
+    t+=`<g font-family="${MONO}"><text x="${x+104}" y="${y(vah)-3}" fill="${col}" font-size="11">${fmt(vah)}</text><text x="${x+104}" y="${y(val)+12}" fill="${col}" font-size="11">${fmt(val)}</text></g>`;
     return t; };
-  s+=box(290,"pRTH",D.rvah,D.rval,D.rpoc,D.rhi,D.rlo,COL.rth,COL.rpoc);
-  s+=box(470,"OVN",D.ovah,D.oval,D.opoc,D.onh,D.onl,COL.ovn,COL.opoc);
-  if(D.px!=null){ s+=`<line x1="${x0}" x2="${x1}" y1="${y(D.px)}" y2="${y(D.px)}" stroke="#ffffff" stroke-dasharray="2 4" stroke-width="1.5"/><text x="${x1-4}" y="${y(D.px)-6}" fill="#ffffff" font-size="12" text-anchor="end">Price 9:25 ${fmt(D.px)}</text>`; }
-  if(D.px!=null && D.target!=null){ const c=D.target>D.px?COL.up:COL.dn; s+=`<defs><marker id="mk" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="${c}"/></marker></defs><line x1="700" x2="700" y1="${y(D.px)}" y2="${y(D.target)}" stroke="${c}" stroke-width="3" marker-end="url(#mk)"/><text x="690" y="${y(D.target)+(D.target>D.px?-6:14)}" fill="${c}" font-size="12" text-anchor="end" font-weight="700">Target ${fmt(D.target)}</text>`; }
+  // TPO profile rebuilt from each 30' (when the indicator sends data)
+  const steps=[1,2,2.5,5,10,20,25,50,100]; const dr=steps.find(v=>(hi-lo)/v<=110)||100; const rh=(bot-top)/((hi-lo)/dr);
+  const tpo=(x,wmax,lab,per,vah,val,poc,col,pcol)=>{
+    const i0=Math.floor(Math.min(...per.map(p=>p[1]))/dr), i1=Math.floor(Math.max(...per.map(p=>p[0]))/dr);
+    const rows=[]; let mx=1;
+    for(let i=i0;i<=i1;i++){ let c=0; per.forEach(([h,l])=>{ if(Math.floor(l/dr)<=i && Math.floor(h/dr)>=i) c++; }); rows.push([i,c]); mx=Math.max(mx,c); }
+    // single prints at both ends of the profile = tail
+    const tail=new Set(); for(let k=rows.length-1;k>=0 && rows[k][1]===1;k--) tail.add(rows[k][0]); for(let k=0;k<rows.length && rows[k][1]===1;k++) tail.add(rows[k][0]);
+    if(tail.size>=rows.length) tail.clear();
+    const bw=Math.max(2,Math.min(9,wmax/mx)), hh=Math.max(1,rh-(rh>3?1:0)); let t="";
+    rows.forEach(([i,c])=>{ const v=i*dr, m=v+dr/2, inVA=m>=val&&m<=vah, yy=y(v+dr);
+      for(let k=0;k<c;k++){ const f = tail.has(i)&&tail.size>1 ? "#EF5350" : col; t+=`<rect x="${x+k*bw}" y="${yy}" width="${Math.max(1,bw-1)}" height="${hh}" fill="${f}" fill-opacity="${tail.has(i)&&tail.size>1?0.8:inVA?0.9:0.4}"/>`; } });
+    const w=mx*bw;
+    t+=`<line x1="${x-5}" x2="${x-5}" y1="${y(vah)}" y2="${y(val)}" stroke="${col}" stroke-width="2"/>`;
+    if(poc!=null) t+=`<line x1="${x-8}" x2="${x+w+6}" y1="${y(poc)}" y2="${y(poc)}" stroke="${pcol}" stroke-width="2.5"/>`;
+    t+=`<text x="${x+w/2}" y="${Math.max(top+12,y(i1*dr+dr)-8)}" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">${lab} · TPO</text>`;
+    t+=`<g font-family="${MONO}"><text x="${x+w+8}" y="${y(vah)+4}" fill="${col}" font-size="11">${fmt(vah)}</text><text x="${x+w+8}" y="${y(val)+4}" fill="${col}" font-size="11">${fmt(val)}</text></g>`;
+    return t; };
+  const useTpo = M.view!=="box";
+  s+= useTpo && D.rper && D.rper.length ? tpo(300,165,"pRTH",D.rper,D.rvah,D.rval,D.rpoc,COL.rth,COL.rpoc) : box(330,"pRTH",D.rvah,D.rval,D.rpoc,D.rhi,D.rlo,COL.rth,COL.rpoc);
+  s+= useTpo && D.oper && D.oper.length ? tpo(495,180,"OVN",D.oper,D.ovah,D.oval,D.opoc,COL.ovn,COL.opoc) : box(500,"OVN",D.ovah,D.oval,D.opoc,D.onh,D.onl,COL.ovn,COL.opoc);
+  // bias-change level
+  if(M.edge!=null) s+=`<line x1="${x0}" x2="${x1}" y1="${y(M.edge)}" y2="${y(M.edge)}" stroke="#EF9F27" stroke-width="2" stroke-dasharray="8 5"/>`;
+  // price + target
+  if(D.px!=null) s+=`<line x1="${x0}" x2="${x1}" y1="${y(D.px)}" y2="${y(D.px)}" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="2 4"/>`;
+  if(D.px!=null && D.target!=null){ s+=`<line x1="690" x2="690" y1="${y(D.px)}" y2="${y(D.target)}" stroke="${bcol}" stroke-width="4" marker-end="url(#mk${u})"/><text x="682" y="${(y(D.px)+y(D.target))/2+4}" fill="${bcol}" font-size="12" font-weight="700" text-anchor="end">${fmt(Math.abs(D.target-D.px))} pts</text>`; }
+  // right-side labels, no overlap
+  const L=[];
+  const add=(v,t,c,b)=>{ if(v!=null && !isNaN(v) && v>lo && v<hi) L.push({y:y(v),t,c,b}); };
+  add(D.px,`Price ${fmt(D.px)}`,"#ffffff",true);
+  add(D.target,`Target ${fmt(D.target)}`,bcol,true);
+  add(M.edge,`Bias flip ${fmt(M.edge)}`,"#EF9F27",true);
+  add(D.onh,`ONH ${fmt(D.onh)}`,"#a9c4ea"); add(D.onl,`ONL ${fmt(D.onl)}`,"#a9c4ea");
+  add(D.rpoc,`POC pRTH ${fmt(D.rpoc)}`,COL.rpoc); add(D.opoc,`POC OVN ${fmt(D.opoc)}`,COL.opoc);
+  add(D.rhi,`pRTH H ${fmt(D.rhi)}`,"#e3c393"); add(D.rlo,`pRTH L ${fmt(D.rlo)}`,"#e3c393");
+  if(D.comp){ add(D.comp.poc,`cPOC ${fmt(D.comp.poc)}`,"#d3d1c7"); add(D.comp.vah,`cVAH ${fmt(D.comp.vah)}`,"#b4b2a9"); add(D.comp.val,`cVAL ${fmt(D.comp.val)}`,"#b4b2a9"); }
+  spread(L, top+6, bot, 15).forEach(l=>{ s+=`<line x1="${x1}" x2="${x1+10}" y1="${l.y}" y2="${l.ly}" stroke="${l.c}" stroke-opacity=".6"/><text x="${x1+14}" y="${l.ly+4}" fill="${l.c}" font-size="12" font-family="${MONO}" ${l.b?'font-weight="700"':""}>${esc(l.t)}</text>`; });
+  // legend
+  const lg=[["rect","rgba(38,166,154,0.35)",COL.hvn,"HVN (balance)"],["rect",`url(#hatch${u})`,"#555","LVN"],["rect",COL.rth,COL.rth,"VA pRTH"],["rect",COL.ovn,COL.ovn,"VA OVN"],["rect","rgba(239,159,39,0.35)","#EF9F27","Entry zone"],["line","#EF9F27",null,"Bias flip (TPO 30')"],["line","#ffffff",null,"Price 9:29"]]; if(useTpo && (D.rper||D.oper)) lg.splice(4,0,["rect","#EF5350","#EF5350","Tail (single print)"]);
+  let lx=x0, ly=H-24; lg.forEach(([k,f,st,t])=>{ if(k==="rect") s+=`<rect x="${lx}" y="${ly-10}" width="14" height="12" rx="2" fill="${f}" ${st?`stroke="${st}"`:""} ${f===COL.rth||f===COL.ovn?'fill-opacity=".5"':""}/>`; else s+=`<line x1="${lx}" x2="${lx+14}" y1="${ly-4}" y2="${ly-4}" stroke="${f}" stroke-width="2" stroke-dasharray="4 3"/>`; s+=`<text x="${lx+20}" y="${ly}" fill="#c9cdd3" font-size="12">${t}</text>`; lx+=30+t.length*6.3; });
   return s+`</g></svg>`;
 }
 function build(){
@@ -270,9 +353,12 @@ function build(){
   if(loc.pk==="lvn"){ ctx.up=loc.up; ctx.dn=loc.dn; }
   else if(loc.z){ ctx.up=zs.find(z=>z.lo>loc.z.hi)||null; ctx.dn=[...zs].reverse().find(z=>z.hi<loc.z.lo)||null; }
   const S=setupOf(loc.pk,B.dir,ctx);
-  const D={zones:zs,px,rvah:r.vah,rval:r.val,rpoc:num("b-rpoc"),rhi:num("b-rhi"),rlo:num("b-rlo"),ovah:o.vah,oval:o.val,opoc:num("b-opoc"),onh:num("b-onh"),onl:num("b-onl"),target:S.target};
-  $("#b-svg").innerHTML=drawMap(D);
+  const D={zones:zs,px,rvah:r.vah,rval:r.val,rpoc:num("b-rpoc"),rhi:num("b-rhi"),rlo:num("b-rlo"),ovah:o.vah,oval:o.val,opoc:num("b-opoc"),onh:num("b-onh"),onl:num("b-onl"),target:S.target,comp:importedComp,rper:importedPer&&importedPer.r,oper:importedPer&&importedPer.o};
   const P=byK(P_OPTS,loc.pk), Bo=byK(B_OPTS,bk), Oo=byK(O_OPTS,ok);
+  const G=geomOf(loc.pk,B.dir,ctx);
+  const locTxt = P.n + (loc.z?` · HVN ${fmt(loc.z.lo)}–${fmt(loc.z.hi)}`:"") + (loc.pk==="lvn"?` · between ${loc.dn?fmt(loc.dn.hi):"—"} and ${loc.up?fmt(loc.up.lo):"—"}`:"") + ` · pRTH ${Bo.n.toLowerCase()} · OVN ${Oo.n.toLowerCase()}`;
+  lastSvg = drawPlan(D,{date:$("#b-date").value, loc:locTxt, dir:B.dir, word:B.word, conf:B.conf, setup:S.type, edge:G.edge, entries:G.entries, view:$("#b-view").value});
+  $("#b-svg").innerHTML=lastSvg;
   const dist = S.target!=null ? Math.abs(S.target-px) : null;
   lastB={date:$("#b-date").value, p:loc.pk, b:bk, o:ok, bias:B.dir>0?"Up ":B.dir<0?"Down ":(B.conf==="Conflict"?"Conflict":"Balance")};
   lastPlan =
@@ -296,7 +382,7 @@ AT 10:00: open type + EMA 9/34 (5') + VWAP RTH set the direction; if the open ty
 const B_IDS=["b-tol","b-rvah","b-rval","b-rpoc","b-rhi","b-rlo","b-rcl","b-ovah","b-oval","b-opoc","b-onh","b-onl","b-px","b-date"];
 function collectB(){ const o={}; B_IDS.forEach(id=>o[id]=$("#"+id).value); for(let i=0;i<ZN;i++){ o["z"+i+"lo"]=$("#b-z"+i+"lo").value; o["z"+i+"hi"]=$("#b-z"+i+"hi").value; } o.b=$("#b-b").value; o.touched=bTouched; return o; }
 const EX = {"b-tol":30,"b-rvah":28010,"b-rval":27770,"b-rpoc":27965,"b-rhi":28420,"b-rlo":27700,"b-rcl":27760,"b-ovah":27880,"b-oval":27660,"b-opoc":27790,"b-onh":28290,"b-onl":27570,"b-px":27600,"b-date":"2026-11-16", zones:[[26840,27370],[27620,28040],[28200,28440]]};
-function loadEx(){ B_IDS.forEach(id=>$("#"+id).value = EX[id]!=null?EX[id]:""); setZones(EX.zones); bTouched=false; build(); }
+function loadEx(){ importedComp=null; importedPer=null; B_IDS.forEach(id=>$("#"+id).value = EX[id]!=null?EX[id]:""); setZones(EX.zones); bTouched=false; build(); }
 function initB(){
   $("#b-zones").innerHTML = Array.from({length:ZN},(_,i)=>`<div class="field"><label for="b-z${i}lo">HVN ${i+1} · from</label><input id="b-z${i}lo" type="number" step="0.25"></div><div class="field"><label for="b-z${i}hi">HVN ${i+1} · to</label><input id="b-z${i}hi" type="number" step="0.25"></div>`).join("");
   fillSel($("#b-b"),B_OPTS);
@@ -306,15 +392,56 @@ function initB(){
   $("#b-b").addEventListener("change", ()=>{ bTouched=true; build(); });
   $("#b-build").addEventListener("click", build);
   $("#b-example").addEventListener("click", ()=>{ loadEx(); $("#b-msg").textContent="Loaded the 16/11 example (numbers read approximately from the chart)."; });
-  $("#b-clear").addEventListener("click", ()=>{ B_IDS.forEach(id=>{ if(id!=="b-tol") $("#"+id).value=""; }); setZones([]); bTouched=false; $("#b-out").textContent="Enter numbers then press \"Build plan\"."; $("#b-svg").innerHTML=""; });
+  $("#b-clear").addEventListener("click", ()=>{ B_IDS.forEach(id=>{ if(id!=="b-tol") $("#"+id).value=""; }); setZones([]); bTouched=false; importedComp=null; importedPer=null; $("#b-out").textContent="Enter numbers then press \"Build plan\"."; $("#b-svg").innerHTML=""; });
   $("#b-copy").addEventListener("click", async()=>{ if(!lastPlan) build(); try{ await navigator.clipboard.writeText(lastPlan); $("#b-msg").textContent="Plan copied."; }catch(e){ $("#b-msg").textContent="The browser blocked copying; select the plan box to copy."; } });
   ["b-rvah","b-rval","b-rpoc","b-rhi","b-rlo","b-rcl"].forEach(id=>$("#"+id).addEventListener("change", ()=>{ bTouched=false; }));
+  $("#b-import").addEventListener("click", ()=>importAtas($("#b-json").value));
+  $("#b-view").addEventListener("change", build);
+  $("#b-example2").addEventListener("click", ()=>{ const t=JSON.stringify(SAMPLE_PLAN); $("#b-json").value=t; importAtas(t); });
+  $("#b-paste").addEventListener("click", async()=>{ try{ const t=await navigator.clipboard.readText(); $("#b-json").value=t; importAtas(t); }catch(e){ $("#b-imsg").textContent="The browser blocked clipboard access. Click the JSON box and paste with Ctrl+V."; } });
+  $("#b-file").addEventListener("change", e=>{ const f=e.target.files&&e.target.files[0]; if(!f) return; const rd=new FileReader(); rd.onload=()=>{ $("#b-json").value=rd.result; importAtas(rd.result); }; rd.readAsText(f); });
+  $("#b-svgdl").addEventListener("click", ()=>{ if(!lastSvg) build(); if(!lastSvg) return; download(new Blob([lastSvg],{type:"image/svg+xml"}), `plan_${$("#b-date").value||"nq"}.svg`); });
+  $("#b-png").addEventListener("click", ()=>{ if(!lastSvg) build(); if(!lastSvg) return;
+    const img=new Image(); const url=URL.createObjectURL(new Blob([lastSvg],{type:"image/svg+xml"}));
+    img.onload=()=>{ const c=document.createElement("canvas"); c.width=1800; c.height=1200; const g=c.getContext("2d"); g.drawImage(img,0,0,1800,1200); URL.revokeObjectURL(url); c.toBlob(b=>{ if(b) download(b,`plan_${$("#b-date").value||"nq"}.png`); else $("#b-msg").textContent="Could not create the PNG, use Download SVG."; },"image/png"); };
+    img.onerror=()=>{ $("#b-msg").textContent="Could not create the PNG, use Download SVG."; };
+    img.src=url; });
 }
+function download(blob, name){ const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); }
+function hvnOpt(){ return { n:+$("#h-n").value||16, k:+$("#h-k").value||3, merge:+$("#h-merge").value||0, minw:+$("#h-minw").value||0, mode:$("#h-mode").value }; }
+function importAtas(text){
+  const msg=t=>{ $("#b-imsg").textContent=t; };
+  let J; try{ J=JSON.parse(String(text||"").trim()); }catch(e){ msg("Invalid JSON. Check what you pasted."); return; }
+  if(!J || !J.prth || !J.ovn || J.price==null){ msg("JSON is missing prth, ovn or price."); return; }
+  const set=(id,v)=>{ $("#"+id).value = (v==null||isNaN(v))?"":v; };
+  $("#b-date").value = J.date||""; set("b-px",J.price);
+  set("b-rvah",J.prth.vah); set("b-rval",J.prth.val); set("b-rpoc",J.prth.poc); set("b-rhi",J.prth.high); set("b-rlo",J.prth.low); set("b-rcl",J.prth.close);
+  set("b-ovah",J.ovn.vah); set("b-oval",J.ovn.val); set("b-opoc",J.ovn.poc); set("b-onh",J.ovn.onh); set("b-onl",J.ovn.onl);
+  importedComp = J.composite && J.composite.poc!=null ? {vah:J.composite.vah, val:J.composite.val, poc:J.composite.poc} : null;
+  const okPer = a => Array.isArray(a) && a.length && a.every(p=>Array.isArray(p)&&p.length>=2&&!isNaN(p[0])&&!isNaN(p[1]));
+  importedPer = { r: okPer(J.prth.periods_hl)?J.prth.periods_hl:null, o: okPer(J.ovn.periods_hl)?J.ovn.periods_hl:null };
+  let zinfo="No session list: keeping the HVN zones already entered.";
+  if(Array.isArray(J.sessions) && J.sessions.length){
+    const txt=J.sessions.map(s=>`${s.date} ${s.type} ${s.val} ${s.vah}`).join("\n");
+    $("#h-text").value=txt;
+    const res=findZones(parseVA(txt), hvnOpt());
+    if(res){ const big=res.zones.filter(z=>!z.small); const dist=z=> J.price<z.lo?z.lo-J.price: J.price>z.hi?J.price-z.hi:0;
+      const pick=[...big].sort((a,b)=>dist(a)-dist(b)).slice(0,4).sort((a,b)=>a.lo-b.lo);
+      setZones(pick.map(z=>[z.lo,z.hi])); zinfo=`${pick.length} HVNs nearest to price (from ${J.sessions.length} session VAs).`; }
+    runHVN();
+  }
+  bTouched=false; build();
+  const warn = Array.isArray(J.warnings)&&J.warnings.length ? " Warnings: "+J.warnings.join("; ") : "";
+  msg(`Imported ${J.symbol||""} ${J.date||""} (${J.ts_et||"no time"}). ${zinfo}${warn}`);
+}
+
 
 
 function initVD(){
   const zs=EX.zones.map(z=>({lo:z[0],hi:z[1],mid:(z[0]+z[1])/2}));
-  $("#v-svg").innerHTML = drawMap({zones:zs,px:EX["b-px"],rvah:EX["b-rvah"],rval:EX["b-rval"],rpoc:EX["b-rpoc"],rhi:EX["b-rhi"],rlo:EX["b-rlo"],ovah:EX["b-ovah"],oval:EX["b-oval"],opoc:EX["b-opoc"],onh:EX["b-onh"],onl:EX["b-onl"],target:27370});
+  const z=zs[1], G=geomOf("edgeD",-1,{z,dn:zs[0],up:zs[2]});
+  $("#v-svg").innerHTML = drawPlan({zones:zs,px:EX["b-px"],rvah:EX["b-rvah"],rval:EX["b-rval"],rpoc:EX["b-rpoc"],rhi:EX["b-rhi"],rlo:EX["b-rlo"],ovah:EX["b-ovah"],oval:EX["b-oval"],opoc:EX["b-opoc"],onh:EX["b-onh"],onl:EX["b-onl"],target:27370},
+    {date:"2026-11-16", loc:"At the lower edge of HVN 27,620–28,040 · pRTH accepted lower · OVN shifted down", dir:-1, word:"Down ", conf:"A reinforced", setup:"Continuation down", edge:G.edge, entries:G.entries});
 }
 
 /* ---------- 06 · Quiz ---------- */
