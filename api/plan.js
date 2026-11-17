@@ -5,7 +5,7 @@
 // GET  /api/plan[?date=YYYY-MM-DD]   Header: Authorization: Bearer <PLAN_TOKEN>
 //                  → trả plan của ngày đó, hoặc plan mới nhất
 //
-// Biến môi trường trên Vercel: SUPABASE_URL, SUPABASE_SERVICE_KEY, PLAN_TOKEN
+// Biến môi trường trên Vercel: SUPABASE_URL, SUPABASE_SERVICE_KEY (hoặc SUPABASE_SECRET_KEY / SUPABASE_SERVICE_ROLE_KEY), PLAN_TOKEN
 //
 // Ghi chú: file dùng cú pháp ES module (export default). Nếu sau khi deploy, mở /api/plan
 // mà không thấy {"error":"unauthorized"} (ví dụ 500 do lỗi module), đổi tên file thành api/plan.mjs.
@@ -30,7 +30,11 @@ function safeEqual(a, b) {
 
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
-  const { SUPABASE_URL, SUPABASE_SERVICE_KEY, PLAN_TOKEN } = process.env;
+  const env = process.env;
+  // Nhận cả tên biến do tích hợp Supabase ↔ Vercel tự tạo (SUPABASE_SECRET_KEY / SUPABASE_SERVICE_ROLE_KEY).
+  const SUPABASE_URL = env.SUPABASE_URL || env.NEXT_PUBLIC_SUPABASE_URL;
+  const SUPABASE_SERVICE_KEY = env.SUPABASE_SERVICE_KEY || env.SUPABASE_SECRET_KEY || env.SUPABASE_SERVICE_ROLE_KEY;
+  const PLAN_TOKEN = env.PLAN_TOKEN;
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY || !PLAN_TOKEN) {
     return res.status(500).json({ error: "Thiếu biến môi trường SUPABASE_URL / SUPABASE_SERVICE_KEY / PLAN_TOKEN" });
   }
