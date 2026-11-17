@@ -23,7 +23,7 @@ const NAV=[
   {k:'plan',href:'plan.html',label:'Plan Builder',short:'Plan',sub:'Plan + bản đồ level',c:'var(--warn)',icon:'map'},
   {k:'testing',href:'testing.html',label:'Composite × pRTH × OVN',short:'Testing',sub:'Testing plan · forward test',c:'#26A69A',icon:'overlap',chapters:[
     ['khung','00','Khung plan'],['hvn','01','Xác định HVN'],['bias','02','Đọc bias'],['builder','03','Plan Builder'],
-    ['quy-trinh','04','Quy trình trade'],['vi-du','05','Ví dụ 16/11'],['mau','06','Màu ATAS'],['quiz','07','Quiz']]},
+    ['quy-trinh','04','Quy trình trade'],['vi-du','05','Ví dụ 16/11'],['quiz','06','Quiz']]},
   {k:'quiz',href:'quiz.html',label:'Trắc nghiệm',short:'Quiz',sub:'Luyện tập · Thi thử',c:'var(--c-quiz)',icon:'quiz',chapters:[
     ['luyen-tap','A','Luyện tập'],['thi-thu','B','Thi thử'],['cau-sai','C','Ôn câu sai']]}
 ];

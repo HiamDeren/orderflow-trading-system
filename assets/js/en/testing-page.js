@@ -307,33 +307,7 @@ function initVD(){
   $("#v-svg").innerHTML = drawMap({zones:zs,px:EX["b-px"],rvah:EX["b-rvah"],rval:EX["b-rval"],rpoc:EX["b-rpoc"],rhi:EX["b-rhi"],rlo:EX["b-rlo"],ovah:EX["b-ovah"],oval:EX["b-oval"],opoc:EX["b-opoc"],onh:EX["b-onh"],onl:EX["b-onl"],target:27370});
 }
 
-
-const COLORS = [
- ["RTH TPO · inside VA","#FFE0A458","Sand yellow, solid. Keeps RTH = yellow."],
- ["RTH TPO · outside VA","#73E0A458","Same color, 45%. The part outside value is lighter."],
- ["RTH POC","#FFFF9F1A","Strong orange, 2px line."],
- ["RTH VAH / VAL (extended)","#CCE0A458","Dashed."],
- ["OVN TPO · inside VA","#FF6F9BD9","Blue, solid."],
- ["OVN TPO · outside VA","#736F9BD9","Same color, 45%."],
- ["OVN POC","#FFE87BA4","Pink, clearly different from the RTH POC."],
- ["OVN VAH / VAL (extended)","#CC6F9BD9","Dashed."],
- ["Single print / tail","#FFEF5350","Marked red."],
- ["Composite · inside VA","#6626A69A","Teal 40%."],
- ["Composite · outside VA","#40888780","Grey 25%."],
- ["Composite POC","#FFFFFFFF","White, thin line."],
- ["HVN zone (rectangle fill)","#1F26A69A","Teal 12%, does not hide the TPO."],
- ["HVN zone border","#9926A69A","Dashed 1px."],
- ["LVN zone (optional)","#14FFFFFF","White 8%, or leave empty."],
- ["VWAP RTH","#FF26C6DA","Cyan."],
- ["Text labels","#FFE6E8EB","Light text, readable on a dark background."]
-];
-function argbToCss(a){ const h=a.replace("#",""); const al=parseInt(h.slice(0,2),16)/255; const r=parseInt(h.slice(2,4),16),g=parseInt(h.slice(4,6),16),b=parseInt(h.slice(6,8),16); return `rgba(${r},${g},${b},${al.toFixed(2)})`; }
-function initMau(){
-  $("#c-rows").innerHTML = COLORS.map(([n,c,d])=>`<tr><td>${esc(n)}</td><td><span class="swatch"><i style="background:${argbToCss(c)}"></i></span></td><td><button class="mx mono" data-c="${c}" aria-label="Copy ${c}">${c}</button></td><td class="small">${esc(d)}</td></tr>`).join("");
-  $("#c-rows").addEventListener("click", async e=>{ const b=e.target.closest("[data-c]"); if(!b) return; try{ await navigator.clipboard.writeText(b.dataset.c); const t=b.textContent; b.textContent="Copied"; setTimeout(()=>b.textContent=t,900); }catch(err){} });
-}
-
-/* ---------- 07 · Quiz ---------- */
+/* ---------- 06 · Quiz ---------- */
 const QZ = [
  {q:"In this frame, what does a composite HVN represent?",o:["A fast-move area","A balance area: price stayed there across many sessions","An area with many stops","A price with big volume in 1 minute"],a:1,e:"HVN = where both sides agreed on price across many sessions, i.e. a balance area."},
  {q:"Price is mid-LVN, bias up. What should you do?",o:["Long right away because the bias is up","Short because price is in a low-volume area","Do not enter mid-LVN; enter on the retest of the lower HVN edge or a VWAP pullback, target the lower edge of the upper HVN","Wait until tomorrow"],a:2,e:"An LVN is a path. Enter at an edge with a trigger, not in the middle."},
@@ -357,5 +331,5 @@ function initQuiz(){
 }
 
 /* ---------- boot ---------- */
-initHVN(); initX(); initB(); initVD(); initMau(); initQuiz();
+initHVN(); initX(); initB(); initVD(); initQuiz();
 })();

@@ -1,4 +1,4 @@
-/* Trang Testing plan · Composite × pRTH × OVN: logic gốc của artifact, bỏ router tab, Log phiên và Lưu trữ */
+/* Trang Testing plan · Composite × pRTH × OVN: logic gốc của artifact, bỏ router tab, Log phiên và Lưu trữ, Màu ATAS */
 (function(){
 if(!document.getElementById("b-build"))return;
 "use strict";
@@ -307,33 +307,7 @@ function initVD(){
   $("#v-svg").innerHTML = drawMap({zones:zs,px:EX["b-px"],rvah:EX["b-rvah"],rval:EX["b-rval"],rpoc:EX["b-rpoc"],rhi:EX["b-rhi"],rlo:EX["b-rlo"],ovah:EX["b-ovah"],oval:EX["b-oval"],opoc:EX["b-opoc"],onh:EX["b-onh"],onl:EX["b-onl"],target:27370});
 }
 
-/* ---------- 06 · Màu ---------- */
-const COLORS = [
- ["RTH TPO · trong VA","#FFE0A458","Vàng cát, đặc. Giữ quy ước RTH = vàng."],
- ["RTH TPO · ngoài VA","#73E0A458","Cùng màu, 45%. Phần ngoài value nhạt đi."],
- ["RTH POC","#FFFF9F1A","Cam đậm, nét 2px."],
- ["RTH VAH / VAL (kéo dài)","#CCE0A458","Nét đứt."],
- ["OVN TPO · trong VA","#FF6F9BD9","Xanh dương, đặc."],
- ["OVN TPO · ngoài VA","#736F9BD9","Cùng màu, 45%."],
- ["OVN POC","#FFE87BA4","Hồng, khác hẳn POC RTH để không nhầm."],
- ["OVN VAH / VAL (kéo dài)","#CC6F9BD9","Nét đứt."],
- ["Single print / tail","#FFEF5350","Đánh dấu đỏ."],
- ["Composite · trong VA","#6626A69A","Teal 40%."],
- ["Composite · ngoài VA","#40888780","Xám 25%."],
- ["Composite POC","#FFFFFFFF","Trắng, nét mảnh."],
- ["Vùng HVN (rectangle fill)","#1F26A69A","Teal 12%, không che TPO."],
- ["Viền vùng HVN","#9926A69A","Nét đứt 1px."],
- ["Vùng LVN (tuỳ chọn)","#14FFFFFF","Trắng 8%, hoặc để trống."],
- ["VWAP RTH","#FF26C6DA","Cyan."],
- ["Nhãn chữ","#FFE6E8EB","Chữ sáng, đọc được trên nền tối."]
-];
-function argbToCss(a){ const h=a.replace("#",""); const al=parseInt(h.slice(0,2),16)/255; const r=parseInt(h.slice(2,4),16),g=parseInt(h.slice(4,6),16),b=parseInt(h.slice(6,8),16); return `rgba(${r},${g},${b},${al.toFixed(2)})`; }
-function initMau(){
-  $("#c-rows").innerHTML = COLORS.map(([n,c,d])=>`<tr><td>${esc(n)}</td><td><span class="swatch"><i style="background:${argbToCss(c)}"></i></span></td><td><button class="mx mono" data-c="${c}" aria-label="Copy ${c}">${c}</button></td><td class="small">${esc(d)}</td></tr>`).join("");
-  $("#c-rows").addEventListener("click", async e=>{ const b=e.target.closest("[data-c]"); if(!b) return; try{ await navigator.clipboard.writeText(b.dataset.c); const t=b.textContent; b.textContent="Đã copy"; setTimeout(()=>b.textContent=t,900); }catch(err){} });
-}
-
-/* ---------- 07 · Quiz ---------- */
+/* ---------- 06 · Quiz ---------- */
 const QZ = [
  {q:"Trong khung này, HVN của composite đại diện cho gì?",o:["Vùng giá đi nhanh","Vùng balance: giá đã ở lâu qua nhiều phiên","Vùng có nhiều stop","Mức giá có volume lớn trong 1 phút"],a:1,e:"HVN = nơi hai phe đã đồng ý giá qua nhiều phiên, tức là vùng balance."},
  {q:"Giá đang ở giữa LVN, bias lên. Nên làm gì?",o:["Long ngay vì bias lên","Short vì giá ở vùng ít giao dịch","Không vào giữa LVN; vào ở retest mép HVN dưới hoặc pullback VWAP, target mép dưới HVN trên","Chờ tới ngày mai"],a:2,e:"LVN là đường đi. Vào lệnh ở mép có trigger, không ở giữa đường."},
@@ -357,5 +331,5 @@ function initQuiz(){
 }
 
 /* ---------- boot ---------- */
-initHVN(); initX(); initB(); initVD(); initMau(); initQuiz();
+initHVN(); initX(); initB(); initVD(); initQuiz();
 })();

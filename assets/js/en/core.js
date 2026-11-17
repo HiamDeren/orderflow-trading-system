@@ -20,7 +20,7 @@ const NAV=[
   {k:'plan',href:'plan.en.html',label:'Plan Builder',short:'Plan',sub:'Plan + level map',c:'var(--warn)',icon:'map'},
   {k:'testing',href:'testing.en.html',label:'Composite × pRTH × OVN',short:'Testing',sub:'Testing plan · forward test',c:'#26A69A',icon:'overlap',chapters:[
     ['khung','00','Khung plan'],['hvn','01','Finding HVNs'],['bias','02','Reading the bias'],['builder','03','Plan Builder'],
-    ['quy-trinh','04','Trading process'],['vi-du','05','Example 16/11'],['mau','06','ATAS colors'],['quiz','07','Quiz']]},
+    ['quy-trinh','04','Trading process'],['vi-du','05','Example 16/11'],['quiz','06','Quiz']]},
   {k:'quiz',href:'quiz.en.html',label:'Quiz',short:'Quiz',sub:'Practice · Mock exams',c:'var(--c-quiz)',icon:'quiz',chapters:[
     ['luyen-tap','A','Practice'],['thi-thu','B','Mock exam'],['cau-sai','C','Review mistakes']]}
 ];
