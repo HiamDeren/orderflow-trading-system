@@ -322,8 +322,9 @@
     <h3>Import from ATAS (Plan Sender indicator)</h3>
     <p class="small muted">At 9:29 ET press "Send plan" in the indicator: the JSON is copied to the clipboard and saved to <span class="mono">latest_plan.json</span>. Paste it into the box below (or choose the file) and press Import. HVN zones are computed from the session VAs in the JSON, using the parameters set in chapter 01.</p>
     <div class="field"><label for="b-json">JSON from ATAS</label><textarea id="b-json" spellcheck="false" style="min-height:90px" placeholder='{"v":1,"date":"2026-11-17","price":...,"prth":{...},"ovn":{...},"sessions":[...]}'></textarea></div>
-    <div class="row"><button class="primary" id="b-import">Import and build plan</button><button id="b-paste">Paste from clipboard</button><label class="small muted" for="b-file">or choose a file:</label><input id="b-file" type="file" accept=".json,application/json" style="width:auto"></div>
+    <div class="row"><button class="primary" id="b-import">Import and build plan</button><button class="primary" id="b-fetch">Load latest plan from web</button><button id="b-paste">Paste from clipboard</button><button id="b-token">Change token</button><label class="small muted" for="b-file">or choose a file:</label><input id="b-file" type="file" accept=".json,application/json" style="width:auto"></div>
     <p class="small" id="b-imsg"></p>
+    <p class="small muted">"Load latest plan from web" reads the plan the indicator sent (needs PLAN_TOKEN, stored in this browser only). The Vietnamese plan image made by the server is saved in Supabase Storage and sent to Discord.</p>
   </div>
   <div class="row"><button id="b-example2">Load 12/11 example (real data, with TPO)</button><button id="b-clear">Clear all</button><span class="small muted" id="b-msg"></span></div>
   <div class="grid g2">
@@ -444,6 +445,7 @@
 <script src="assets/js/en/bank-tools.js?v=18"></script>
 <script src="assets/js/en/quiz.js?v=18"></script>
 <script src="assets/js/en/core.js?v=19"></script>
-<script src="assets/js/en/testing-page.js?v=22"></script>
+<script src="assets/js/en/plan-core.js?v=2"></script>
+<script src="assets/js/en/testing-page.js?v=24"></script>
 </body>
 </html>

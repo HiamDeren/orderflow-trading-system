@@ -1986,3 +1986,20 @@ Vào lệnh	Entry
 Đã copy ảnh plan vào clipboard. Dán (Ctrl+V) vào Discord, Notion hoặc journal.	Plan image copied to the clipboard. Paste (Ctrl+V) into Discord, Notion or your journal.
 Copy ảnh plan	Copy plan image
 Ảnh gồm bản đồ và plan chữ bên phải. Trình duyệt chặn copy thì ảnh PNG được tải về.	The image includes the map and the written plan on the right. If the browser blocks copying, the PNG is downloaded.
+Cần ít nhất 1 HVN, VAH/VAL pRTH, VAH/VAL OVN và giá lúc 9:29.	Need at least 1 HVN, pRTH VAH/VAL, OVN VAH/VAL and the 9:29 price.
+(gửi lúc	(sent at
+(link hết hạn sau 1 giờ).	(link expires in 1 hour).
+Chưa có plan nào trên web. Bấm gửi trong indicator trước.	No plan on the web yet. Press send in the indicator first.
+Dán PLAN_TOKEN (chỉ lưu trên trình duyệt này)	Paste PLAN_TOKEN (stored in this browser only)
+Dán PLAN_TOKEN (chỉ lưu trên trình duyệt này, để trống = xoá)	Paste PLAN_TOKEN (stored in this browser only, leave empty to clear)
+Không lấy được plan:	Could not load the plan:
+Lỗi mạng khi gọi /api/plan. Trang này phải mở trên site, không chạy được trong file tải về.	Network error calling /api/plan. This page must be opened on the site, not from a downloaded file.
+Mở ảnh plan đã lưu	Open the saved plan image
+Token sai hoặc đã đổi. Bấm lại và dán token mới.	Wrong or changed token. Press again and paste the new token.
+Đang lấy plan…	Loading plan…
+Đã lưu token.	Token saved.
+Đã lấy plan	Loaded plan
+Đã xoá token.	Token cleared.
+Lấy plan mới nhất từ web	Load latest plan from web
+Đổi token	Change token
+đọc plan mà indicator đã gửi lên (cần PLAN_TOKEN, chỉ lưu trên trình duyệt này). Ảnh plan tiếng Việt do server tạo được lưu trong Supabase Storage và gửi Discord.	reads the plan the indicator sent (needs PLAN_TOKEN, stored in this browser only). The Vietnamese plan image made by the server is saved in Supabase Storage and sent to Discord.

@@ -322,8 +322,9 @@
     <h3>Nhập từ ATAS (indicator Plan Sender)</h3>
     <p class="small muted">Lúc 9:29 ET bấm "Gửi plan" trong indicator: JSON được copy vào clipboard và lưu file <span class="mono">latest_plan.json</span>. Dán vào ô dưới (hoặc chọn file) rồi bấm Nhập. Vùng HVN được tính từ VA các phiên trong JSON, theo tham số đang đặt ở chương 01.</p>
     <div class="field"><label for="b-json">JSON từ ATAS</label><textarea id="b-json" spellcheck="false" style="min-height:90px" placeholder='{"v":1,"date":"2026-11-17","price":...,"prth":{...},"ovn":{...},"sessions":[...]}'></textarea></div>
-    <div class="row"><button class="primary" id="b-import">Nhập và lập plan</button><button id="b-paste">Dán từ clipboard</button><label class="small muted" for="b-file">hoặc chọn file:</label><input id="b-file" type="file" accept=".json,application/json" style="width:auto"></div>
+    <div class="row"><button class="primary" id="b-import">Nhập và lập plan</button><button class="primary" id="b-fetch">Lấy plan mới nhất từ web</button><button id="b-paste">Dán từ clipboard</button><button id="b-token">Đổi token</button><label class="small muted" for="b-file">hoặc chọn file:</label><input id="b-file" type="file" accept=".json,application/json" style="width:auto"></div>
     <p class="small" id="b-imsg"></p>
+    <p class="small muted">"Lấy plan mới nhất từ web" đọc plan mà indicator đã gửi lên (cần PLAN_TOKEN, chỉ lưu trên trình duyệt này). Ảnh plan tiếng Việt do server tạo được lưu trong Supabase Storage và gửi Discord.</p>
   </div>
   <div class="row"><button id="b-example2">Nạp ví dụ 12/11 (data thật, có TPO)</button><button id="b-clear">Xoá trắng</button><span class="small muted" id="b-msg"></span></div>
   <div class="grid g2">
@@ -444,6 +445,7 @@
 <script src="assets/js/bank-tools.js?v=18"></script>
 <script src="assets/js/quiz.js?v=18"></script>
 <script src="assets/js/core.js?v=19"></script>
-<script src="assets/js/testing-page.js?v=22"></script>
+<script src="assets/js/plan-core.js?v=2"></script>
+<script src="assets/js/testing-page.js?v=24"></script>
 </body>
 </html>

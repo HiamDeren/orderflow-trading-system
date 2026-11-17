@@ -101,8 +101,42 @@ Tạo chuỗi ngẫu nhiên từ 32 ký tự (chữ + số) bằng trình tạo 
 | `GET /api/plan` | như trên | plan mới nhất |
 | `GET /api/plan?date=YYYY-MM-DD` | như trên | plan của ngày đó |
 
-### Việc tiếp theo
-Thêm nút **"Lấy plan mới nhất"** vào Plan Builder: gọi `GET /api/plan` với token lưu trong trình duyệt, rồi tự chạy "Nhập và lập plan". Làm sau khi D chạy ổn.
+---
+
+## Bước 3 · Ảnh plan tự động + Discord (đã có trong code)
+
+Mỗi lần indicator gửi plan (`POST /api/plan`), server tự làm thêm:
+1. Lập plan bằng `assets/js/plan-core.js`, **cùng code với trang Testing plan**, nên ảnh giống hệt ảnh trên web.
+2. Vẽ ảnh **tiếng Việt** (font Be Vietnam Pro + JetBrains Mono trong `api/_fonts/`), xuất PNG 2600 px.
+3. Lưu PNG vào Supabase Storage, bucket **private** `trade-plans`, đường dẫn `YYYY/MM/plan_YYYY-MM-DD_SYMBOL.png`.
+   Bảng `trade_plans` có thêm cột `image_path`, `plan_text`, `summary` (bias, setup, target...).
+4. Gửi ảnh + tóm tắt plan vào kênh Discord (nếu đã đặt `DISCORD_WEBHOOK_URL`).
+
+Ảnh lỗi hoặc Discord lỗi thì plan **vẫn được lưu**; response cho biết từng bước:
+`{"ok":true,"image":{"path":"2026/11/plan_..png"},"discord":{"sent":true}}` hoặc `{"discord":{"error":"..."}}`.
+Gửi lại cùng ngày thì ghi đè ảnh và Discord nhận thêm một tin. Không muốn gửi Discord cho một lần nào đó: thêm `"notify": false` vào JSON.
+
+### Setup Discord (webhook, không cần bot)
+1. Discord → server của bạn → tạo kênh, ví dụ `#trade-plan`.
+2. Bấm bánh răng của kênh (**Edit Channel**) → **Integrations** → **Webhooks** → **New Webhook**.
+3. Đặt tên `Trade Plan`, chọn đúng kênh → **Copy Webhook URL** (dạng `https://discord.com/api/webhooks/...`).
+4. Vercel → project → Environments → **Production** → Environment Variables → thêm `DISCORD_WEBHOOK_URL` (Secret) = URL vừa copy → Save → **Redeploy**.
+5. Ai có URL webhook đều gửi được tin vào kênh: giữ kín như token; lộ thì xoá webhook và tạo cái mới.
+
+Webhook chỉ **gửi** tin. Khi cần gõ lệnh trong Discord (ví dụ `/plan` để xem lại plan) mới phải làm bot riêng: xem `docs/ROADMAP.md`.
+
+### Xem lại ảnh đã lưu
+- Trên web: Testing plan → 04 · Plan Builder → **"Lấy plan mới nhất từ web"** (lần đầu dán `PLAN_TOKEN`, chỉ lưu trên trình duyệt đó). Builder nạp plan và hiện link ảnh đã lưu (link ký tạm 1 giờ).
+- Trên Supabase: **Storage → trade-plans**.
+- Trên Discord: kênh `#trade-plan`.
+
+### Thử ngay không cần ATAS
+Mở site → F12 → Console (`allow pasting` nếu bị chặn), chạy (token hỏi qua hộp nhập):
+```js
+const t = prompt("Dán PLAN_TOKEN").trim();
+const J = await fetch("/assets/sample_plan_20261112.json").then(r => r.json());
+await fetch("/api/plan", { method: "POST", headers: { Authorization: "Bearer " + t, "Content-Type": "application/json" }, body: JSON.stringify(J) }).then(r => r.json()).then(console.log);
+```
 
 ---
 

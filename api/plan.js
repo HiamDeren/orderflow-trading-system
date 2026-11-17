@@ -1,22 +1,31 @@
-// api/plan.js — Vercel Function (Node.js runtime, không cần thư viện ngoài)
+// api/plan.js — Vercel Function (Node.js runtime)
 //
-// POST /api/plan   Header: Authorization: Bearer <PLAN_TOKEN>   Body: JSON từ "Deren · Plan Sender"
-//                  → lưu (upsert theo ngày + symbol) vào bảng public.trade_plans trên Supabase
+// POST /api/plan   Header: Authorization: Bearer <PLAN_TOKEN>   Body: JSON v1 từ indicator "Deren · Plan Sender"
+//   1. Lưu (upsert theo ngày + symbol) vào bảng public.trade_plans trên Supabase
+//   2. Lập plan bằng assets/js/plan-core.js (cùng code với trang Testing plan), vẽ ảnh tiếng Việt, đổi sang PNG
+//   3. Lưu PNG vào Supabase Storage (bucket private "trade-plans"), ghi đường dẫn + plan chữ vào bảng
+//   4. Gửi ảnh + tóm tắt plan lên Discord (nếu có DISCORD_WEBHOOK_URL và payload không có "notify": false)
+//   Bước 2–4 lỗi thì plan vẫn được lưu; kết quả từng bước nằm trong response.
+//
 // GET  /api/plan[?date=YYYY-MM-DD]   Header: Authorization: Bearer <PLAN_TOKEN>
-//                  → trả plan của ngày đó, hoặc plan mới nhất
+//   → plan của ngày đó (hoặc mới nhất) + image_url (link ký tạm 1 giờ) nếu đã có ảnh
 //
-// Biến môi trường trên Vercel: SUPABASE_URL, SUPABASE_SERVICE_KEY (hoặc SUPABASE_SECRET_KEY / SUPABASE_SERVICE_ROLE_KEY), PLAN_TOKEN
-//
-// Ghi chú: file dùng cú pháp ES module (export default). Nếu sau khi deploy, mở /api/plan
-// mà không thấy {"error":"unauthorized"} (ví dụ 500 do lỗi module), đổi tên file thành api/plan.mjs.
-// Nếu repo là Next.js App Router thì dùng route handler app/api/plan/route.js thay vì file này.
+// Biến môi trường trên Vercel:
+//   SUPABASE_URL, SUPABASE_SERVICE_KEY (hoặc SUPABASE_SECRET_KEY / SUPABASE_SERVICE_ROLE_KEY), PLAN_TOKEN,
+//   DISCORD_WEBHOOK_URL (tuỳ chọn), PLAN_BUCKET (tuỳ chọn, mặc định "trade-plans")
+
+import path from "path";
+import { Resvg } from "@resvg/resvg-js";
+import core from "../assets/js/plan-core.js";
 
 const TABLE = "trade_plans";
+const FONT_DIR = path.join(process.cwd(), "api", "_fonts");
+const FONT_FILES = ["BeVietnamPro-Regular.ttf", "BeVietnamPro-Bold.ttf", "JetBrainsMono-Regular.ttf", "JetBrainsMono-Bold.ttf"]
+  .map(f => path.join(FONT_DIR, f));
 
 function supaHeaders(key) {
-  const h = { apikey: key, "Content-Type": "application/json" };
-  // Key dạng JWT cũ (service_role, bắt đầu "eyJ") gửi thêm Authorization.
-  // Key mới "sb_secret_..." chỉ cần header apikey.
+  const h = { apikey: key };
+  // Key dạng JWT cũ (service_role, bắt đầu "eyJ") gửi thêm Authorization. Key mới "sb_secret_..." chỉ cần apikey.
   if (key.startsWith("eyJ")) h.Authorization = "Bearer " + key;
   return h;
 }
@@ -28,13 +37,57 @@ function safeEqual(a, b) {
   return diff === 0;
 }
 
+function svgToPng(svg) {
+  const r = new Resvg(svg, {
+    fitTo: { mode: "zoom", value: 2 },
+    font: { fontFiles: FONT_FILES, loadSystemFonts: false, defaultFontFamily: "Be Vietnam Pro" },
+  });
+  return Buffer.from(r.render().asPng());
+}
+
+function imagePath(date, symbol) {
+  const safe = String(symbol).replace(/[^A-Za-z0-9_-]/g, "_");
+  return `${date.slice(0, 4)}/${date.slice(5, 7)}/plan_${date}_${safe}.png`;
+}
+
+async function sendDiscord(webhook, plan, png, fileName, symbol) {
+  const s = plan.summary;
+  const color = s.bias === "Lên" ? 0x3fbf7f : s.bias === "Xuống" ? 0xef5350 : 0x9aa0a8;
+  const lines = [
+    `**Bias:** ${s.bias} · ${s.conf}`,
+    `**Vị trí:** ${s.location}${s.zone ? ` (HVN ${core.fmt(s.zone.lo)}–${core.fmt(s.zone.hi)})` : ""}`,
+    `**Setup:** ${s.setup}`,
+    `**Target:** ${s.target != null ? `${core.fmt(s.target)} (cách giá 9:29 ${core.fmt(s.distance)} điểm)` : "theo mô tả setup"}`,
+    `**Đổi bias:** ${s.flip}`,
+    `**Giá 9:29:** ${core.fmt(s.price)} · Prev RTH ${core.lc1(s.prth)} · OVN ${core.lc1(s.ovn)}`,
+  ];
+  const payload = {
+    username: "Trade Plan",
+    embeds: [{
+      title: `PLAN ${s.date} · ${symbol}`,
+      description: lines.join("\n").slice(0, 4000),
+      color,
+      image: { url: `attachment://${fileName}` },
+      footer: { text: "Composite × pRTH × OVN · TPO 30' đổi bias, vào lệnh trên M1" },
+    }],
+    allowed_mentions: { parse: [] },
+  };
+  const fd = new FormData();
+  fd.append("payload_json", JSON.stringify(payload));
+  fd.append("files[0]", new Blob([png], { type: "image/png" }), fileName);
+  const r = await fetch(webhook, { method: "POST", body: fd });
+  if (!r.ok) throw new Error(`discord ${r.status}: ${(await r.text()).slice(0, 200)}`);
+  return { sent: true };
+}
+
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   const env = process.env;
   // Nhận cả tên biến do tích hợp Supabase ↔ Vercel tự tạo (SUPABASE_SECRET_KEY / SUPABASE_SERVICE_ROLE_KEY).
-  const SUPABASE_URL = env.SUPABASE_URL || env.NEXT_PUBLIC_SUPABASE_URL;
+  const SUPABASE_URL = (env.SUPABASE_URL || env.NEXT_PUBLIC_SUPABASE_URL || "").replace(/\/$/, "");
   const SUPABASE_SERVICE_KEY = env.SUPABASE_SERVICE_KEY || env.SUPABASE_SECRET_KEY || env.SUPABASE_SERVICE_ROLE_KEY;
   const PLAN_TOKEN = env.PLAN_TOKEN;
+  const BUCKET = env.PLAN_BUCKET || "trade-plans";
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY || !PLAN_TOKEN) {
     return res.status(500).json({ error: "Thiếu biến môi trường SUPABASE_URL / SUPABASE_SERVICE_KEY / PLAN_TOKEN" });
   }
@@ -42,8 +95,10 @@ export default async function handler(req, res) {
   const token = String(req.headers.authorization || "").replace(/^Bearer\s+/i, "").trim();
   if (!safeEqual(token, PLAN_TOKEN)) return res.status(401).json({ error: "unauthorized" });
 
-  const base = SUPABASE_URL.replace(/\/$/, "") + "/rest/v1/" + TABLE;
+  const rest = SUPABASE_URL + "/rest/v1/" + TABLE;
+  const storage = SUPABASE_URL + "/storage/v1";
   const h = supaHeaders(SUPABASE_SERVICE_KEY);
+  const hj = { ...h, "Content-Type": "application/json" };
 
   try {
     if (req.method === "POST") {
@@ -51,25 +106,71 @@ export default async function handler(req, res) {
       if (!p || !/^\d{4}-\d{2}-\d{2}$/.test(p.date || "") || !p.prth || !p.ovn) {
         return res.status(400).json({ error: "Payload thiếu date (yyyy-MM-dd), prth hoặc ovn" });
       }
-      const row = { trade_date: p.date, symbol: String(p.symbol || "NQ").slice(0, 20), price: p.price ?? null, payload: p };
-      const r = await fetch(base + "?on_conflict=trade_date,symbol", {
+      const symbol = String(p.symbol || "NQ").slice(0, 20);
+      const row = { trade_date: p.date, symbol, price: p.price ?? null, payload: p };
+      const r = await fetch(rest + "?on_conflict=trade_date,symbol", {
         method: "POST",
-        headers: { ...h, Prefer: "resolution=merge-duplicates,return=minimal" },
+        headers: { ...hj, Prefer: "resolution=merge-duplicates,return=minimal" },
         body: JSON.stringify(row),
       });
       if (!r.ok) return res.status(502).json({ error: "supabase", status: r.status, detail: (await r.text()).slice(0, 300) });
-      return res.status(200).json({ ok: true, date: p.date, symbol: row.symbol });
+
+      const out = { ok: true, date: p.date, symbol, image: null, discord: null };
+      let plan = null, png = null, objPath = null;
+
+      // 2–3. Lập plan, vẽ ảnh, lưu Storage
+      try {
+        plan = core.planFromJson(p);
+        if (plan.error) throw new Error(plan.error);
+        png = svgToPng(plan.svg);
+        objPath = imagePath(p.date, symbol);
+        const up = await fetch(`${storage}/object/${BUCKET}/${objPath}`, {
+          method: "POST",
+          headers: { ...h, "Content-Type": "image/png", "x-upsert": "true", "cache-control": "no-cache" },
+          body: png,
+        });
+        if (!up.ok) throw new Error(`storage ${up.status}: ${(await up.text()).slice(0, 200)}`);
+        const upd = await fetch(`${rest}?trade_date=eq.${p.date}&symbol=eq.${encodeURIComponent(symbol)}`, {
+          method: "PATCH",
+          headers: { ...hj, Prefer: "return=minimal" },
+          body: JSON.stringify({ image_path: objPath, plan_text: plan.text, summary: plan.summary }),
+        });
+        if (!upd.ok) throw new Error(`update ${upd.status}: ${(await upd.text()).slice(0, 200)}`);
+        out.image = { path: objPath, bytes: png.length };
+      } catch (e) {
+        out.image = { error: String((e && e.message) || e) };
+      }
+
+      // 4. Discord
+      if (env.DISCORD_WEBHOOK_URL && p.notify !== false) {
+        try {
+          if (!plan || plan.error || !png) throw new Error("không có ảnh plan để gửi");
+          out.discord = await sendDiscord(env.DISCORD_WEBHOOK_URL, plan, png, objPath.split("/").pop(), symbol);
+        } catch (e) {
+          out.discord = { error: String((e && e.message) || e) };
+        }
+      }
+      return res.status(200).json(out);
     }
 
     if (req.method === "GET") {
       const date = String((req.query && req.query.date) || "");
       if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) return res.status(400).json({ error: "date phải dạng yyyy-MM-dd" });
       const filter = date ? `&trade_date=eq.${date}` : "";
-      const r = await fetch(`${base}?select=trade_date,symbol,price,payload,updated_at${filter}&order=trade_date.desc,updated_at.desc&limit=1`, { headers: h });
+      const r = await fetch(`${rest}?select=trade_date,symbol,price,payload,image_path,plan_text,summary,updated_at${filter}&order=trade_date.desc,updated_at.desc&limit=1`, { headers: h });
       if (!r.ok) return res.status(502).json({ error: "supabase", status: r.status, detail: (await r.text()).slice(0, 300) });
       const rows = await r.json();
       if (!rows.length) return res.status(404).json({ error: "Chưa có plan" });
-      return res.status(200).json(rows[0]);
+      const row = rows[0];
+      if (row.image_path) {
+        try {
+          const s = await fetch(`${storage}/object/sign/${BUCKET}/${row.image_path}`, {
+            method: "POST", headers: hj, body: JSON.stringify({ expiresIn: 3600 }),
+          });
+          if (s.ok) { const j = await s.json(); const u = j.signedURL || j.signedUrl; if (u) row.image_url = storage + u; }
+        } catch (e) { /* bỏ qua: vẫn trả plan */ }
+      }
+      return res.status(200).json(row);
     }
 
     res.setHeader("Allow", "GET, POST");

@@ -36,5 +36,11 @@
       "destination": "/testing.en",
       "permanent": false
     }
-  ]
+  ],
+  "functions": {
+    "api/plan.js": {
+      "includeFiles": "api/_fonts/**",
+      "maxDuration": 30
+    }
+  }
 }

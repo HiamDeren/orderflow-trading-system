@@ -27,3 +27,16 @@ end $$;
 drop trigger if exists trade_plans_touch on public.trade_plans;
 create trigger trade_plans_touch before update on public.trade_plans
 for each row execute function public.touch_updated_at();
+
+-- ---------- Bước 3: ảnh plan + Discord (17/11/2026) ----------
+alter table public.trade_plans
+  add column if not exists image_path text,   -- đường dẫn ảnh trong bucket trade-plans
+  add column if not exists plan_text  text,   -- plan chữ (giống khung plan trên web)
+  add column if not exists summary    jsonb;  -- bias, setup, target... để lọc / thống kê sau này
+
+-- Bucket private, chỉ PNG, tối đa 5 MB. Không tạo policy: chỉ secret key (Vercel) đọc / ghi được.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('trade-plans', 'trade-plans', false, 5242880, array['image/png'])
+on conflict (id) do update set public = false, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
+
+alter function public.touch_updated_at() set search_path = '';

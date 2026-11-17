@@ -1,0 +1,8 @@
+{
+  "name": "orderflow-trading-system",
+  "private": true,
+  "description": "Site học orderflow + API lưu plan (Vercel Functions)",
+  "dependencies": {
+    "@resvg/resvg-js": "2.6.2"
+  }
+}
