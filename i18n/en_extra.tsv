@@ -1967,3 +1967,22 @@ Tải SVG	Download SVG
 hoặc chọn file:	or choose a file:
 trong indicator: JSON được copy vào clipboard và lưu file	in the indicator: the JSON is copied to the clipboard and saved to
 Ảnh 1800×1200, dùng để lưu vào journal hoặc gửi nhóm.	1800×1200 image, for your journal or to share with the group.
+(cách giá 9:29	(from the 9:29 price
+) + VWAP RTH chốt hướng. Dừng 11:30 ET.	) + VWAP RTH lock the direction. Stop at 11:30 ET.
+// chú thích	// legend
+// khối chữ bên phải: tính chiều cao trước	// right-hand text block: measure height first
+// khối chữ plan bên phải	// plan text block on the right
+// lưới giá	// price grid
+// nhãn giá bên phải, không chồng nhau	// right-side price labels, no overlap
+// pRTH và OVN đặt sát nhau, cùng độ rộng ô	// pRTH and OVN side by side, same cell width
+// thang giá: tập trung vào số liệu của phiên, chỉ kéo thêm tới mép HVN gần	// price scale: focus on session data, extend only to nearby HVN edges
+// tiêu đề	// title
+Không tạo được ảnh plan.	Could not create the plan image.
+Setup ưu tiên ·	Priority setup ·
+Theo mô tả setup	As described in the setup
+Trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Lúc 10:00 open type + EMA 9/34 (5	On M1 + footprint, stop on M1 structure. No entries in the middle of an LVN. At 10:00 open type + EMA 9/34 (5
+Trình duyệt chặn copy ảnh nên ảnh PNG đã được tải về.	The browser blocked image copy, so the PNG was downloaded instead.
+Vào lệnh	Entry
+Đã copy ảnh plan vào clipboard. Dán (Ctrl+V) vào Discord, Notion hoặc journal.	Plan image copied to the clipboard. Paste (Ctrl+V) into Discord, Notion or your journal.
+Copy ảnh plan	Copy plan image
+Ảnh gồm bản đồ và plan chữ bên phải. Trình duyệt chặn copy thì ảnh PNG được tải về.	The image includes the map and the written plan on the right. If the browser blocks copying, the PNG is downloaded.

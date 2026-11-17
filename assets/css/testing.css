@@ -87,4 +87,5 @@
 .pg-testing .pill.nt{background:#2a2c31;color:#e6e8eb;border:1px solid #4a4d55}
 .pg-testing textarea{min-height:180px;resize:vertical;line-height:1.5}
 .pg-testing .chip.vw{background:#0f2e33;color:#bdf2f8;border-color:#26c6da}
-.pg-testing #b-svg svg,.pg-testing #v-svg svg{max-width:900px}
+.pg-testing #b-svg svg{max-width:1300px}
+.pg-testing #v-svg svg{max-width:900px}

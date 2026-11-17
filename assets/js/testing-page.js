@@ -251,95 +251,109 @@ function spread(labels, top, bot, gap){
   return labels;
 }
 let drawSeq=0;
+function wrapText(t, n){
+  const out=[]; String(t||"").split(/\n/).forEach(par=>{ let line="";
+    par.split(/\s+/).forEach(w=>{ if(!w) return; if((line+" "+w).trim().length>n && line){ out.push(line); line=w; } else line=(line+" "+w).trim(); });
+    if(line) out.push(line); });
+  return out;
+}
 function drawPlan(D, M){
   M = M || {}; const u = "p"+(++drawSeq);
-  const W=900, H=600, x0=78, x1=740, top=86, bot=H-62;
+  const panel = Array.isArray(M.panel) && M.panel.length ? M.panel : null;
+  const x0=70, x1=640, top=88, PX=830;
+  const W = panel ? 1300 : 820;
+  // khối chữ bên phải: tính chiều cao trước
+  const PW = W-24-PX, CH = Math.floor((PW-32)/6.6);
+  let blocks=[], need=18;
+  if(panel){ blocks = panel.map(it=>({k:it.k, c:it.c, lines:wrapText(it.v, CH)})); blocks.forEach(b=>{ need += 18 + b.lines.length*20 + 12; }); }
+  const H = Math.max(660, panel ? top+need+70 : 0), bot=H-64;
+  // thang giá: tập trung vào số liệu của phiên, chỉ kéo thêm tới mép HVN gần
   const core=[D.px,D.rvah,D.rval,D.rpoc,D.ovah,D.oval,D.opoc,D.onh,D.onl,D.rhi,D.rlo,D.target].filter(v=>v!=null&&!isNaN(v));
   (M.entries||[]).forEach(e=>core.push(e.lo,e.hi)); if(M.edge!=null) core.push(M.edge);
   let lo=Math.min(...core), hi=Math.max(...core);
-  // mở rộng tới mép của HVN chứa / kề giá để thấy được vùng
-  D.zones.forEach(z=>{ if(z.hi>=lo-80 && z.lo<=hi+80){ lo=Math.min(lo,Math.max(z.lo,lo-150)); hi=Math.max(hi,Math.min(z.hi,hi+150)); } });
-  if(hi-lo<200){ const m=(hi+lo)/2; lo=m-100; hi=m+100; }
-  const pad=(hi-lo)*0.06; lo-=pad; hi+=pad;
+  D.zones.forEach(z=>{ if(z.lo>=lo-120 && z.lo<=hi+120) { lo=Math.min(lo,z.lo); hi=Math.max(hi,z.lo); } if(z.hi>=lo-120 && z.hi<=hi+120){ lo=Math.min(lo,z.hi); hi=Math.max(hi,z.hi); } });
+  if(hi-lo<250){ const m=(hi+lo)/2; lo=m-125; hi=m+125; }
+  const pad=(hi-lo)*0.05; lo-=pad; hi+=pad;
   const y=v=>top+(hi-v)/(hi-lo)*(bot-top); const cl=v=>Math.max(top,Math.min(bot,y(v)));
   const dir = M.dir||0, bcol = dir>0?COL.up:dir<0?COL.dn:"#9aa0a8";
   let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Bản đồ plan ${esc(M.date||"")}: HVN, LVN, VA pRTH, VA OVN, giá, vùng vào lệnh và target">`;
   s+=`<defs><pattern id="hatch${u}" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#3a3d44" stroke-width="2"/></pattern><marker id="mk${u}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="${bcol}"/></marker><clipPath id="plot${u}"><rect x="${x0}" y="${top}" width="${x1-x0}" height="${bot-top}"/></clipPath></defs>`;
   s+=`<rect width="${W}" height="${H}" fill="#141518"/><g font-family="${FONT}">`;
-  // header
-  const sub=String(M.loc||""); s+=`<text x="20" y="30" fill="#ffffff" font-size="18" font-weight="700">PLAN ${esc(M.date||"")}</text><text x="20" y="56" fill="#c9cdd3" font-size="13">${esc(sub.length>110?sub.slice(0,108)+"…":sub)}</text>`;
+  // tiêu đề
+  const sub=String(M.loc||""); const subMax = panel?150:100;
+  s+=`<text x="24" y="32" fill="#ffffff" font-size="20" font-weight="700">PLAN ${esc(M.date||"")}</text><text x="24" y="58" fill="#c9cdd3" font-size="13">${esc(sub.length>subMax?sub.slice(0,subMax-2)+"…":sub)}</text>`;
   const pills=[[`Bias: ${M.word||"—"} · ${M.conf||""}`, dir>0?"#123a27":dir<0?"#401617":"#2a2c31", dir>0?"#c8f2da":dir<0?"#ffd0cf":"#e6e8eb", bcol],[`Setup: ${M.setup||"—"}`,"#2a2c31","#e6e8eb","#5f636b"]];
-  let px0=W-20; pills.forEach(([t,bg,fg,st])=>{ const w=t.length*7.4+22; px0-=w; s+=`<rect x="${px0}" y="10" width="${w}" height="28" rx="6" fill="${bg}" stroke="${st}"/><text x="${px0+w/2}" y="29" fill="${fg}" font-size="13" font-weight="700" text-anchor="middle">${esc(t)}</text>`; px0-=10; });
-  // grid
-  const span=hi-lo, ts=span>2500?500:span>1200?200:span>500?100:50;
+  let px0=W-24; pills.forEach(([t,bg,fg,st])=>{ const w=t.length*7.4+22; px0-=w; s+=`<rect x="${px0}" y="12" width="${w}" height="28" rx="6" fill="${bg}" stroke="${st}"/><text x="${px0+w/2}" y="31" fill="${fg}" font-size="13" font-weight="700" text-anchor="middle">${esc(t)}</text>`; px0-=10; });
+  // lưới giá
+  const span=hi-lo, ts= span>2500?500:span>1200?200:span>600?100:50;
   s+=`<g font-family="${MONO}">`;
   for(let t=Math.ceil(lo/ts)*ts;t<=hi;t+=ts) s+=`<line x1="${x0}" x2="${x1}" y1="${y(t)}" y2="${y(t)}" stroke="#24272c"/><text x="${x0-8}" y="${y(t)+4}" fill="#7d828a" font-size="11" text-anchor="end">${fmt(t)}</text>`;
   s+=`</g><g clip-path="url(#plot${u})">`;
-  // LVN giữa các HVN
   for(let i=1;i<D.zones.length;i++){ const a=D.zones[i-1].hi,b=D.zones[i].lo; if(b<=lo||a>=hi) continue; s+=`<rect x="${x0}" y="${cl(b)}" width="${x1-x0}" height="${Math.max(0,cl(a)-cl(b))}" fill="url(#hatch${u})" opacity=".55"/>`; }
-  // HVN
   D.zones.forEach(z=>{ if(z.hi<lo||z.lo>hi) return; s+=`<rect x="${x0}" y="${cl(z.hi)}" width="${x1-x0}" height="${Math.max(2,cl(z.lo)-cl(z.hi))}" fill="rgba(38,166,154,0.16)" stroke="${COL.hvn}" stroke-dasharray="6 4"/>`; });
-  // vùng vào lệnh
   (M.entries||[]).forEach(e=>{ s+=`<rect x="${x0}" y="${y(e.hi)}" width="${x1-x0}" height="${Math.max(3,y(e.lo)-y(e.hi))}" fill="rgba(239,159,39,0.22)" stroke="#EF9F27" stroke-width="1"/>`; });
-  // composite VA
   if(D.comp){ ["vah","val","poc"].forEach(k=>{ const v=D.comp[k]; if(v!=null && v>lo && v<hi) s+=`<line x1="${x0}" x2="${x1}" y1="${y(v)}" y2="${y(v)}" stroke="#ffffff" stroke-opacity="${k==="poc"?.7:.35}" stroke-dasharray="1 4" stroke-width="${k==="poc"?2:1.5}"/>`; }); }
   s+=`</g>`;
-  // nhãn vùng (bên trái, trong khung)
   D.zones.forEach(z=>{ if(z.hi<lo||z.lo>hi) return; const yt=Math.max(top+14, cl(z.hi)+16); s+=`<text x="${x0+8}" y="${yt}" fill="#bff0e8" font-size="12" font-weight="700">HVN ${fmt(z.lo)}–${fmt(z.hi)}</text>`; });
-  for(let i=1;i<D.zones.length;i++){ const a=D.zones[i-1].hi,b=D.zones[i].lo; if(b<=lo||a>=hi) continue; const ym=(cl(a)+cl(b))/2; if(cl(a)-cl(b)>18) s+=`<text x="${x0+8}" y="${ym+4}" fill="#c9cdd3" font-size="12">LVN ${fmt(a)}–${fmt(b)} · giá đi nhanh</text>`; }
+  for(let i=1;i<D.zones.length;i++){ const a=D.zones[i-1].hi,b=D.zones[i].lo; if(b<=lo||a>=hi) continue; const ym=(cl(a)+cl(b))/2; if(cl(a)-cl(b)>18) s+=`<text x="${x0+8}" y="${ym+4}" fill="#c9cdd3" font-size="12">LVN ${fmt(a)}–${fmt(b)}</text>`; }
   const above=D.zones.filter(z=>z.lo>hi), below=D.zones.filter(z=>z.hi<lo);
-  if(above.length){ const z=above[0]; s+=`<text x="${x0+8}" y="${top-6}" fill="#9fd8cf" font-size="11">↑ HVN kế trên ${fmt(z.lo)}–${fmt(z.hi)}</text>`; }
-  if(below.length){ const z=below[below.length-1]; s+=`<text x="${x0+8}" y="${bot+14}" fill="#9fd8cf" font-size="11">↓ HVN kế dưới ${fmt(z.lo)}–${fmt(z.hi)}</text>`; }
-  // box VA
-  const box=(x,lab,vah,val,poc,h,l,col,pcol)=>{ if(vah==null||val==null) return ""; let t="";
-    if(h!=null&&l!=null) t+=`<line x1="${x+50}" x2="${x+50}" y1="${cl(h)}" y2="${cl(l)}" stroke="${col}" stroke-width="2" opacity=".75"/><line x1="${x+40}" x2="${x+60}" y1="${cl(h)}" y2="${cl(h)}" stroke="${col}" stroke-width="2"/><line x1="${x+40}" x2="${x+60}" y1="${cl(l)}" y2="${cl(l)}" stroke="${col}" stroke-width="2"/>`;
-    t+=`<rect x="${x}" y="${y(vah)}" width="100" height="${Math.max(3,y(val)-y(vah))}" rx="3" fill="${col}" fill-opacity=".34" stroke="${col}" stroke-width="1.5"/>`;
-    if(poc!=null) t+=`<line x1="${x-6}" x2="${x+106}" y1="${y(poc)}" y2="${y(poc)}" stroke="${pcol}" stroke-width="3"/>`;
-    t+=`<text x="${x+50}" y="${Math.max(top+12,cl(Math.max(vah,h!=null?h:vah))-8)}" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">${lab}</text>`;
-    t+=`<g font-family="${MONO}"><text x="${x+104}" y="${y(vah)-3}" fill="${col}" font-size="11">${fmt(vah)}</text><text x="${x+104}" y="${y(val)+12}" fill="${col}" font-size="11">${fmt(val)}</text></g>`;
-    return t; };
-  // Profile TPO dựng lại từ high/low từng period 30' (khi có dữ liệu từ indicator)
-  const steps=[1,2,2.5,5,10,20,25,50,100]; const dr=steps.find(v=>(hi-lo)/v<=110)||100; const rh=(bot-top)/((hi-lo)/dr);
-  const tpo=(x,wmax,lab,per,vah,val,poc,col,pcol)=>{
-    const i0=Math.floor(Math.min(...per.map(p=>p[1]))/dr), i1=Math.floor(Math.max(...per.map(p=>p[0]))/dr);
-    const rows=[]; let mx=1;
+  if(above.length){ const z=above[0]; s+=`<text x="${x0+8}" y="${top-8}" fill="#9fd8cf" font-size="11">↑ HVN kế trên ${fmt(z.lo)}–${fmt(z.hi)}</text>`; }
+  if(below.length){ const z=below[below.length-1]; s+=`<text x="${x0+8}" y="${bot+15}" fill="#9fd8cf" font-size="11">↓ HVN kế dưới ${fmt(z.lo)}–${fmt(z.hi)}</text>`; }
+  // pRTH và OVN đặt sát nhau, cùng độ rộng ô
+  const steps=[1,2,2.5,5,10,20,25,50,100]; const dr=steps.find(v=>(hi-lo)/v<=120)||100; const rh=(bot-top)/((hi-lo)/dr);
+  const prof = per => { if(!per||!per.length) return null; const i0=Math.floor(Math.min(...per.map(p=>p[1]))/dr), i1=Math.floor(Math.max(...per.map(p=>p[0]))/dr); const rows=[]; let mx=1;
     for(let i=i0;i<=i1;i++){ let c=0; per.forEach(([h,l])=>{ if(Math.floor(l/dr)<=i && Math.floor(h/dr)>=i) c++; }); rows.push([i,c]); mx=Math.max(mx,c); }
-    // single print ở hai đầu profile = tail
     const tail=new Set(); for(let k=rows.length-1;k>=0 && rows[k][1]===1;k--) tail.add(rows[k][0]); for(let k=0;k<rows.length && rows[k][1]===1;k++) tail.add(rows[k][0]);
-    if(tail.size>=rows.length) tail.clear();
-    const bw=Math.max(2,Math.min(9,wmax/mx)), hh=Math.max(1,rh-(rh>3?1:0)); let t="";
-    rows.forEach(([i,c])=>{ const v=i*dr, m=v+dr/2, inVA=m>=val&&m<=vah, yy=y(v+dr);
-      for(let k=0;k<c;k++){ const f = tail.has(i)&&tail.size>1 ? "#EF5350" : col; t+=`<rect x="${x+k*bw}" y="${yy}" width="${Math.max(1,bw-1)}" height="${hh}" fill="${f}" fill-opacity="${tail.has(i)&&tail.size>1?0.8:inVA?0.9:0.4}"/>`; } });
-    const w=mx*bw;
-    t+=`<line x1="${x-5}" x2="${x-5}" y1="${y(vah)}" y2="${y(val)}" stroke="${col}" stroke-width="2"/>`;
-    if(poc!=null) t+=`<line x1="${x-8}" x2="${x+w+6}" y1="${y(poc)}" y2="${y(poc)}" stroke="${pcol}" stroke-width="2.5"/>`;
-    t+=`<text x="${x+w/2}" y="${Math.max(top+12,y(i1*dr+dr)-8)}" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">${lab} · TPO</text>`;
-    t+=`<g font-family="${MONO}"><text x="${x+w+8}" y="${y(vah)+4}" fill="${col}" font-size="11">${fmt(vah)}</text><text x="${x+w+8}" y="${y(val)+4}" fill="${col}" font-size="11">${fmt(val)}</text></g>`;
-    return t; };
+    if(tail.size<2 || tail.size>=rows.length) tail.clear(); return {rows,mx,i1,tail}; };
   const useTpo = M.view!=="box";
-  s+= useTpo && D.rper && D.rper.length ? tpo(300,165,"pRTH",D.rper,D.rvah,D.rval,D.rpoc,COL.rth,COL.rpoc) : box(330,"pRTH",D.rvah,D.rval,D.rpoc,D.rhi,D.rlo,COL.rth,COL.rpoc);
-  s+= useTpo && D.oper && D.oper.length ? tpo(495,180,"OVN",D.oper,D.ovah,D.oval,D.opoc,COL.ovn,COL.opoc) : box(500,"OVN",D.ovah,D.oval,D.opoc,D.onh,D.onl,COL.ovn,COL.opoc);
-  // level đổi bias
+  const PR = useTpo ? prof(D.rper) : null, OV = useTpo ? prof(D.oper) : null;
+  const startX = x0+175, labW = 58, gap = 22, avail = (x1-40) - startX - 2*labW - gap;
+  const bw = Math.max(3, Math.min(10, avail/((PR?PR.mx:12)+(OV?OV.mx:14))));
+  const drawTpo=(x,P,lab,vah,val,poc,col,pcol)=>{ let t=""; const hh=Math.max(1,rh-(rh>3?1:0));
+    P.rows.forEach(([i,c])=>{ const v=i*dr, m=v+dr/2, inVA=m>=val&&m<=vah, yy=y(v+dr), tl=P.tail.has(i);
+      for(let k=0;k<c;k++) t+=`<rect x="${x+k*bw}" y="${yy}" width="${Math.max(1,bw-1)}" height="${hh}" fill="${tl?"#EF5350":col}" fill-opacity="${tl?0.85:inVA?0.92:0.4}"/>`; });
+    const w=P.mx*bw;
+    t+=`<line x1="${x-5}" x2="${x-5}" y1="${y(vah)}" y2="${y(val)}" stroke="${col}" stroke-width="2"/>`;
+    if(poc!=null) t+=`<line x1="${x-8}" x2="${x+w+4}" y1="${y(poc)}" y2="${y(poc)}" stroke="${pcol}" stroke-width="2.5"/>`;
+    t+=`<text x="${x+w/2}" y="${Math.max(top+12,y(P.i1*dr+dr)-8)}" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">${lab}</text>`;
+    t+=`<g font-family="${MONO}"><text x="${x+w+6}" y="${y(vah)+4}" fill="${col}" font-size="11">${fmt(vah)}</text><text x="${x+w+6}" y="${y(val)+4}" fill="${col}" font-size="11">${fmt(val)}</text></g>`;
+    return {t, w}; };
+  const drawBox=(x,lab,vah,val,poc,h,l,col,pcol)=>{ if(vah==null||val==null) return {t:"",w:0}; let t="", w=80;
+    if(h!=null&&l!=null) t+=`<line x1="${x+w/2}" x2="${x+w/2}" y1="${cl(h)}" y2="${cl(l)}" stroke="${col}" stroke-width="2" opacity=".75"/><line x1="${x+w/2-10}" x2="${x+w/2+10}" y1="${cl(h)}" y2="${cl(h)}" stroke="${col}" stroke-width="2"/><line x1="${x+w/2-10}" x2="${x+w/2+10}" y1="${cl(l)}" y2="${cl(l)}" stroke="${col}" stroke-width="2"/>`;
+    t+=`<rect x="${x}" y="${y(vah)}" width="${w}" height="${Math.max(3,y(val)-y(vah))}" rx="3" fill="${col}" fill-opacity=".34" stroke="${col}" stroke-width="1.5"/>`;
+    if(poc!=null) t+=`<line x1="${x-6}" x2="${x+w+6}" y1="${y(poc)}" y2="${y(poc)}" stroke="${pcol}" stroke-width="3"/>`;
+    t+=`<text x="${x+w/2}" y="${Math.max(top+12,cl(Math.max(vah,h!=null?h:vah))-8)}" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">${lab}</text>`;
+    t+=`<g font-family="${MONO}"><text x="${x+w+6}" y="${y(vah)+4}" fill="${col}" font-size="11">${fmt(vah)}</text><text x="${x+w+6}" y="${y(val)+4}" fill="${col}" font-size="11">${fmt(val)}</text></g>`;
+    return {t, w}; };
+  const a = PR ? drawTpo(startX,PR,"pRTH",D.rvah,D.rval,D.rpoc,COL.rth,COL.rpoc) : drawBox(startX,"pRTH",D.rvah,D.rval,D.rpoc,D.rhi,D.rlo,COL.rth,COL.rpoc);
+  const ox = startX + Math.max(a.w,40) + labW + gap;
+  const b = OV ? drawTpo(ox,OV,"OVN",D.ovah,D.oval,D.opoc,COL.ovn,COL.opoc) : drawBox(ox,"OVN",D.ovah,D.oval,D.opoc,D.onh,D.onl,COL.ovn,COL.opoc);
+  s+=a.t+b.t;
   if(M.edge!=null) s+=`<line x1="${x0}" x2="${x1}" y1="${y(M.edge)}" y2="${y(M.edge)}" stroke="#EF9F27" stroke-width="2" stroke-dasharray="8 5"/>`;
-  // giá + target
   if(D.px!=null) s+=`<line x1="${x0}" x2="${x1}" y1="${y(D.px)}" y2="${y(D.px)}" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="2 4"/>`;
-  if(D.px!=null && D.target!=null){ s+=`<line x1="690" x2="690" y1="${y(D.px)}" y2="${y(D.target)}" stroke="${bcol}" stroke-width="4" marker-end="url(#mk${u})"/><text x="682" y="${(y(D.px)+y(D.target))/2+4}" fill="${bcol}" font-size="12" font-weight="700" text-anchor="end">${fmt(Math.abs(D.target-D.px))} điểm</text>`; }
-  // nhãn bên phải, không chồng nhau
-  const L=[];
-  const add=(v,t,c,b)=>{ if(v!=null && !isNaN(v) && v>lo && v<hi) L.push({y:y(v),t,c,b}); };
-  add(D.px,`Giá ${fmt(D.px)}`,"#ffffff",true);
-  add(D.target,`Target ${fmt(D.target)}`,bcol,true);
-  add(M.edge,`Đổi bias ${fmt(M.edge)}`,"#EF9F27",true);
+  if(D.px!=null && D.target!=null){ const ax=x1-24; s+=`<line x1="${ax}" x2="${ax}" y1="${y(D.px)}" y2="${y(D.target)}" stroke="${bcol}" stroke-width="4" marker-end="url(#mk${u})"/><text x="${ax-8}" y="${(y(D.px)+y(D.target))/2+4}" fill="${bcol}" font-size="12" font-weight="700" text-anchor="end">${fmt(Math.abs(D.target-D.px))} điểm</text>`; }
+  // nhãn giá bên phải, không chồng nhau
+  const L=[]; const add=(v,t,c,bo)=>{ if(v!=null && !isNaN(v) && v>lo && v<hi) L.push({y:y(v),t,c,b:bo}); };
+  add(D.px,`Giá ${fmt(D.px)}`,"#ffffff",true); add(D.target,`Target ${fmt(D.target)}`,bcol,true); add(M.edge,`Đổi bias ${fmt(M.edge)}`,"#EF9F27",true);
   add(D.onh,`ONH ${fmt(D.onh)}`,"#a9c4ea"); add(D.onl,`ONL ${fmt(D.onl)}`,"#a9c4ea");
   add(D.rpoc,`POC pRTH ${fmt(D.rpoc)}`,COL.rpoc); add(D.opoc,`POC OVN ${fmt(D.opoc)}`,COL.opoc);
   add(D.rhi,`pRTH H ${fmt(D.rhi)}`,"#e3c393"); add(D.rlo,`pRTH L ${fmt(D.rlo)}`,"#e3c393");
   if(D.comp){ add(D.comp.poc,`cPOC ${fmt(D.comp.poc)}`,"#d3d1c7"); add(D.comp.vah,`cVAH ${fmt(D.comp.vah)}`,"#b4b2a9"); add(D.comp.val,`cVAL ${fmt(D.comp.val)}`,"#b4b2a9"); }
-  spread(L, top+6, bot, 15).forEach(l=>{ s+=`<line x1="${x1}" x2="${x1+10}" y1="${l.y}" y2="${l.ly}" stroke="${l.c}" stroke-opacity=".6"/><text x="${x1+14}" y="${l.ly+4}" fill="${l.c}" font-size="12" font-family="${MONO}" ${l.b?'font-weight="700"':""}>${esc(l.t)}</text>`; });
-  // legend
-  const lg=[["rect","rgba(38,166,154,0.35)",COL.hvn,"HVN (balance)"],["rect",`url(#hatch${u})`,"#555","LVN"],["rect",COL.rth,COL.rth,"VA pRTH"],["rect",COL.ovn,COL.ovn,"VA OVN"],["rect","rgba(239,159,39,0.35)","#EF9F27","Vùng vào lệnh"],["line","#EF9F27",null,"Đổi bias (TPO 30')"],["line","#ffffff",null,"Giá 9:29"]]; if(useTpo && (D.rper||D.oper)) lg.splice(4,0,["rect","#EF5350","#EF5350","Tail (single print)"]);
-  let lx=x0, ly=H-24; lg.forEach(([k,f,st,t])=>{ if(k==="rect") s+=`<rect x="${lx}" y="${ly-10}" width="14" height="12" rx="2" fill="${f}" ${st?`stroke="${st}"`:""} ${f===COL.rth||f===COL.ovn?'fill-opacity=".5"':""}/>`; else s+=`<line x1="${lx}" x2="${lx+14}" y1="${ly-4}" y2="${ly-4}" stroke="${f}" stroke-width="2" stroke-dasharray="4 3"/>`; s+=`<text x="${lx+20}" y="${ly}" fill="#c9cdd3" font-size="12">${t}</text>`; lx+=30+t.length*6.3; });
+  spread(L, top+6, bot, 16).forEach(l=>{ s+=`<line x1="${x1}" x2="${x1+10}" y1="${l.y}" y2="${l.ly}" stroke="${l.c}" stroke-opacity=".6"/><text x="${x1+14}" y="${l.ly+4}" fill="${l.c}" font-size="12" font-family="${MONO}" ${l.b?'font-weight="700"':""}>${esc(l.t)}</text>`; });
+  // chú thích
+  const lg=[["rect","rgba(38,166,154,0.35)",COL.hvn,"HVN (balance)"],["rect",`url(#hatch${u})`,"#555","LVN"],["rect",COL.rth,COL.rth,"pRTH"],["rect",COL.ovn,COL.ovn,"OVN"],["rect","rgba(239,159,39,0.35)","#EF9F27","Vùng vào lệnh"],["line","#EF9F27",null,"Đổi bias (TPO 30')"],["line","#ffffff",null,"Giá 9:29"]];
+  if(PR||OV) lg.splice(4,0,["rect","#EF5350","#EF5350","Tail"]);
+  let lx=x0, ly=H-26; lg.forEach(([k,f,st,t])=>{ if(k==="rect") s+=`<rect x="${lx}" y="${ly-10}" width="14" height="12" rx="2" fill="${f}" ${st?`stroke="${st}"`:""} ${f===COL.rth||f===COL.ovn?'fill-opacity=".5"':""}/>`; else s+=`<line x1="${lx}" x2="${lx+14}" y1="${ly-4}" y2="${ly-4}" stroke="${f}" stroke-width="2" stroke-dasharray="4 3"/>`; s+=`<text x="${lx+20}" y="${ly}" fill="#c9cdd3" font-size="12">${t}</text>`; lx+=32+t.length*6.4; });
+  // khối chữ plan bên phải
+  if(panel){
+    s+=`<rect x="${PX}" y="${top-6}" width="${PW}" height="${H-top-30}" rx="10" fill="#1a1c20" stroke="#2c2f35"/>`;
+    let ty=top+20;
+    blocks.forEach(bk=>{ s+=`<text x="${PX+16}" y="${ty}" fill="${bk.c||"#9aa0a8"}" font-size="12" font-weight="700" letter-spacing=".05em">${esc(String(bk.k).toUpperCase())}</text>`; ty+=20;
+      bk.lines.forEach(line=>{ s+=`<text x="${PX+16}" y="${ty}" fill="#e6e8eb" font-size="14">${esc(line)}</text>`; ty+=20; }); ty+=12; });
+  }
   return s+`</g></svg>`;
 }
+
 function build(){
   const zs=getZones(), tol=num("b-tol")||30;
   const r={vah:num("b-rvah"), val:num("b-rval")}, o={vah:num("b-ovah"), val:num("b-oval")};
@@ -357,8 +371,6 @@ function build(){
   const P=byK(P_OPTS,loc.pk), Bo=byK(B_OPTS,bk), Oo=byK(O_OPTS,ok);
   const G=geomOf(loc.pk,B.dir,ctx);
   const locTxt = P.n + (loc.z?` · HVN ${fmt(loc.z.lo)}–${fmt(loc.z.hi)}`:"") + (loc.pk==="lvn"?` · giữa ${loc.dn?fmt(loc.dn.hi):"—"} và ${loc.up?fmt(loc.up.lo):"—"}`:"") + ` · pRTH ${Bo.n.toLowerCase()} · OVN ${Oo.n.toLowerCase()}`;
-  lastSvg = drawPlan(D,{date:$("#b-date").value, loc:locTxt, dir:B.dir, word:B.word, conf:B.conf, setup:S.type, edge:G.edge, entries:G.entries, view:$("#b-view").value});
-  $("#b-svg").innerHTML=lastSvg;
   const dist = S.target!=null ? Math.abs(S.target-px) : null;
   lastB={date:$("#b-date").value, p:loc.pk, b:bk, o:ok, bias:B.dir>0?"Lên":B.dir<0?"Xuống":(B.conf==="Xung đột"?"Xung đột":"Balance")};
   lastPlan =
@@ -377,22 +389,35 @@ VWAP RTH: ${vwapGate(S.type,B.dir)}
 VÀO LỆNH: trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Dừng 11:30 ET.
 LÚC 10:00: open type + EMA 9/34 (5') + VWAP RTH chốt hướng; open type ngược bias thì đi theo open type.`;
   $("#b-out").textContent = lastPlan;
+  const panel=[
+    {k:"Bias", v:`${B.word} · ${B.conf}. ${B.need}`, c: B.dir>0?"#5DCAA5":B.dir<0?"#F09595":"#c9cdd3"},
+    {k:"Setup ưu tiên · "+S.type, v:S.text, c:"#FAC775"},
+    {k:"Target", v: S.target!=null?`${fmt(S.target)} (cách giá 9:29 ${fmt(dist)} điểm)`:"Theo mô tả setup"},
+    {k:"Đổi bias (TPO 30')", v:S.flip, c:"#EF9F27"},
+    {k:"VWAP RTH", v:vwapGate(S.type,B.dir), c:"#26C6DA"},
+    {k:"pRTH", v:`${Bo.n} · VA ${fmt(r.val)}–${fmt(r.vah)} · POC ${fmt(D.rpoc)}`, c:"#E3C393"},
+    {k:"OVN", v:`${Oo.n} · VA ${fmt(o.val)}–${fmt(o.vah)} · POC ${fmt(D.opoc)} · ONH ${fmt(D.onh)} / ONL ${fmt(D.onl)}`, c:"#A9C4EA"},
+    {k:"Vào lệnh", v:"Trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Lúc 10:00 open type + EMA 9/34 (5') + VWAP RTH chốt hướng. Dừng 11:30 ET."}
+  ];
+  lastSvg = drawPlan(D,{date:$("#b-date").value, loc:locTxt, dir:B.dir, word:B.word, conf:B.conf, setup:S.type, edge:G.edge, entries:G.entries, view:$("#b-view").value, panel});
+  $("#b-svg").innerHTML=lastSvg;
   store.set("ofs.tp.builder", collectB());
 }
 const B_IDS=["b-tol","b-rvah","b-rval","b-rpoc","b-rhi","b-rlo","b-rcl","b-ovah","b-oval","b-opoc","b-onh","b-onl","b-px","b-date"];
-function collectB(){ const o={}; B_IDS.forEach(id=>o[id]=$("#"+id).value); for(let i=0;i<ZN;i++){ o["z"+i+"lo"]=$("#b-z"+i+"lo").value; o["z"+i+"hi"]=$("#b-z"+i+"hi").value; } o.b=$("#b-b").value; o.touched=bTouched; return o; }
+function collectB(){ const o={}; B_IDS.forEach(id=>o[id]=$("#"+id).value); for(let i=0;i<ZN;i++){ o["z"+i+"lo"]=$("#b-z"+i+"lo").value; o["z"+i+"hi"]=$("#b-z"+i+"hi").value; } o.b=$("#b-b").value; o.touched=bTouched; o.manual=!importedPer; return o; }
 const EX = {"b-tol":30,"b-rvah":28010,"b-rval":27770,"b-rpoc":27965,"b-rhi":28420,"b-rlo":27700,"b-rcl":27760,"b-ovah":27880,"b-oval":27660,"b-opoc":27790,"b-onh":28290,"b-onl":27570,"b-px":27600,"b-date":"2026-11-16", zones:[[26840,27370],[27620,28040],[28200,28440]]};
 function loadEx(){ importedComp=null; importedPer=null; B_IDS.forEach(id=>$("#"+id).value = EX[id]!=null?EX[id]:""); setZones(EX.zones); bTouched=false; build(); }
 function initB(){
   $("#b-zones").innerHTML = Array.from({length:ZN},(_,i)=>`<div class="field"><label for="b-z${i}lo">HVN ${i+1} · từ</label><input id="b-z${i}lo" type="number" step="0.25"></div><div class="field"><label for="b-z${i}hi">HVN ${i+1} · đến</label><input id="b-z${i}hi" type="number" step="0.25"></div>`).join("");
   fillSel($("#b-b"),B_OPTS);
   const sv=store.get("ofs.tp.builder",null);
-  if(sv){ B_IDS.forEach(id=>{ if(sv[id]!=null) $("#"+id).value=sv[id]; }); for(let i=0;i<ZN;i++){ $("#b-z"+i+"lo").value=sv["z"+i+"lo"]||""; $("#b-z"+i+"hi").value=sv["z"+i+"hi"]||""; } if(sv.b) $("#b-b").value=sv.b; bTouched=!!sv.touched; build(); }
-  else loadEx();
+  const sj=store.get("ofs.tp.builder.json",null);
+  if(sj){ $("#b-json").value=sj; importAtas(sj); }
+  else if(sv && sv.manual){ B_IDS.forEach(id=>{ if(sv[id]!=null) $("#"+id).value=sv[id]; }); for(let i=0;i<ZN;i++){ $("#b-z"+i+"lo").value=sv["z"+i+"lo"]||""; $("#b-z"+i+"hi").value=sv["z"+i+"hi"]||""; } if(sv.b) $("#b-b").value=sv.b; bTouched=!!sv.touched; build(); }
+  else { const t=JSON.stringify(SAMPLE_PLAN); $("#b-json").value=t; importAtas(t); }
   $("#b-b").addEventListener("change", ()=>{ bTouched=true; build(); });
   $("#b-build").addEventListener("click", build);
-  $("#b-example").addEventListener("click", ()=>{ loadEx(); $("#b-msg").textContent="Đã nạp ví dụ 16/11 (số đọc gần đúng từ chart)."; });
-  $("#b-clear").addEventListener("click", ()=>{ B_IDS.forEach(id=>{ if(id!=="b-tol") $("#"+id).value=""; }); setZones([]); bTouched=false; importedComp=null; importedPer=null; $("#b-out").textContent="Nhập số rồi bấm \"Lập plan\"."; $("#b-svg").innerHTML=""; });
+  $("#b-clear").addEventListener("click", ()=>{ B_IDS.forEach(id=>{ if(id!=="b-tol") $("#"+id).value=""; }); setZones([]); bTouched=false; importedComp=null; importedPer=null; store.set("ofs.tp.builder.json",null); $("#b-out").textContent="Nhập số rồi bấm \"Lập plan\"."; $("#b-svg").innerHTML=""; });
   $("#b-copy").addEventListener("click", async()=>{ if(!lastPlan) build(); try{ await navigator.clipboard.writeText(lastPlan); $("#b-msg").textContent="Đã copy plan."; }catch(e){ $("#b-msg").textContent="Trình duyệt chặn copy, bôi đen khung plan để copy."; } });
   ["b-rvah","b-rval","b-rpoc","b-rhi","b-rlo","b-rcl"].forEach(id=>$("#"+id).addEventListener("change", ()=>{ bTouched=false; }));
   $("#b-import").addEventListener("click", ()=>importAtas($("#b-json").value));
@@ -400,12 +425,22 @@ function initB(){
   $("#b-example2").addEventListener("click", ()=>{ const t=JSON.stringify(SAMPLE_PLAN); $("#b-json").value=t; importAtas(t); });
   $("#b-paste").addEventListener("click", async()=>{ try{ const t=await navigator.clipboard.readText(); $("#b-json").value=t; importAtas(t); }catch(e){ $("#b-imsg").textContent="Trình duyệt không cho đọc clipboard. Bấm vào ô JSON và dán bằng Ctrl+V."; } });
   $("#b-file").addEventListener("change", e=>{ const f=e.target.files&&e.target.files[0]; if(!f) return; const rd=new FileReader(); rd.onload=()=>{ $("#b-json").value=rd.result; importAtas(rd.result); }; rd.readAsText(f); });
-  $("#b-svgdl").addEventListener("click", ()=>{ if(!lastSvg) build(); if(!lastSvg) return; download(new Blob([lastSvg],{type:"image/svg+xml"}), `plan_${$("#b-date").value||"nq"}.svg`); });
-  $("#b-png").addEventListener("click", ()=>{ if(!lastSvg) build(); if(!lastSvg) return;
-    const img=new Image(); const url=URL.createObjectURL(new Blob([lastSvg],{type:"image/svg+xml"}));
-    img.onload=()=>{ const c=document.createElement("canvas"); c.width=1800; c.height=1200; const g=c.getContext("2d"); g.drawImage(img,0,0,1800,1200); URL.revokeObjectURL(url); c.toBlob(b=>{ if(b) download(b,`plan_${$("#b-date").value||"nq"}.png`); else $("#b-msg").textContent="Không tạo được PNG, dùng Tải SVG."; },"image/png"); };
-    img.onerror=()=>{ $("#b-msg").textContent="Không tạo được PNG, dùng Tải SVG."; };
-    img.src=url; });
+  $("#b-copyimg").addEventListener("click", copyPlanImage);
+}
+function svgToPng(svg){ return new Promise((res,rej)=>{ const m=svg.match(/viewBox="0 0 (\d+) (\d+)"/); const w=+m[1], h=+m[2]; const img=new Image(); const url=URL.createObjectURL(new Blob([svg],{type:"image/svg+xml"}));
+  img.onload=()=>{ const c=document.createElement("canvas"); c.width=w*2; c.height=h*2; c.getContext("2d").drawImage(img,0,0,w*2,h*2); URL.revokeObjectURL(url); c.toBlob(b=>b?res(b):rej(new Error("png")),"image/png"); };
+  img.onerror=()=>rej(new Error("svg")); img.src=url; }); }
+async function copyPlanImage(){
+  if(!lastSvg) build(); if(!lastSvg) return;
+  const msg=t=>{ $("#b-msg").textContent=t; };
+  const p=svgToPng(lastSvg);
+  try{
+    if(!navigator.clipboard || typeof ClipboardItem==="undefined") throw new Error("no clipboard");
+    await navigator.clipboard.write([new ClipboardItem({"image/png": p})]);
+    msg("Đã copy ảnh plan vào clipboard. Dán (Ctrl+V) vào Discord, Notion hoặc journal.");
+  }catch(e){
+    try{ download(await p, `plan_${$("#b-date").value||"nq"}.png`); msg("Trình duyệt chặn copy ảnh nên ảnh PNG đã được tải về."); }catch(e2){ msg("Không tạo được ảnh plan."); }
+  }
 }
 function download(blob, name){ const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); }
 function hvnOpt(){ return { n:+$("#h-n").value||16, k:+$("#h-k").value||3, merge:+$("#h-merge").value||0, minw:+$("#h-minw").value||0, mode:$("#h-mode").value }; }
@@ -413,6 +448,7 @@ function importAtas(text){
   const msg=t=>{ $("#b-imsg").textContent=t; };
   let J; try{ J=JSON.parse(String(text||"").trim()); }catch(e){ msg("JSON không hợp lệ. Kiểm tra lại nội dung đã dán."); return; }
   if(!J || !J.prth || !J.ovn || J.price==null){ msg("JSON thiếu prth, ovn hoặc price."); return; }
+  store.set("ofs.tp.builder.json", String(text));
   const set=(id,v)=>{ $("#"+id).value = (v==null||isNaN(v))?"":v; };
   $("#b-date").value = J.date||""; set("b-px",J.price);
   set("b-rvah",J.prth.vah); set("b-rval",J.prth.val); set("b-rpoc",J.prth.poc); set("b-rhi",J.prth.high); set("b-rlo",J.prth.low); set("b-rcl",J.prth.close);

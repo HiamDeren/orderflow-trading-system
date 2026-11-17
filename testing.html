@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="assets/css/app.css?v=18">
-<link rel="stylesheet" href="assets/css/testing.css?v=19">
+<link rel="stylesheet" href="assets/css/testing.css?v=20">
 </head>
 <body data-page="testing">
 <main class="ui-main">
@@ -325,7 +325,7 @@
     <div class="row"><button class="primary" id="b-import">Nhập và lập plan</button><button id="b-paste">Dán từ clipboard</button><label class="small muted" for="b-file">hoặc chọn file:</label><input id="b-file" type="file" accept=".json,application/json" style="width:auto"></div>
     <p class="small" id="b-imsg"></p>
   </div>
-  <div class="row"><button id="b-example2">Nạp ví dụ 12/11 (data thật, có TPO)</button><button id="b-example">Nạp ví dụ 16/11</button><button id="b-clear">Xoá trắng</button><span class="small muted" id="b-msg"></span></div>
+  <div class="row"><button id="b-example2">Nạp ví dụ 12/11 (data thật, có TPO)</button><button id="b-clear">Xoá trắng</button><span class="small muted" id="b-msg"></span></div>
   <div class="grid g2">
     <fieldset><legend>Composite · HVN (từ thấp đến cao)</legend>
       <div class="form" id="b-zones"></div>
@@ -360,7 +360,7 @@
       </div>
     </fieldset>
   </div>
-  <div class="row"><div class="field" style="width:auto"><label for="b-view">Kiểu vẽ pRTH / OVN</label><select id="b-view" style="width:auto"><option value="tpo">TPO (khi có dữ liệu từ indicator)</option><option value="box">Box VA</option></select></div><button id="b-png">Tải ảnh PNG</button><button id="b-svgdl">Tải SVG</button><span class="small muted">Ảnh 1800×1200, dùng để lưu vào journal hoặc gửi nhóm.</span></div>
+  <div class="row"><div class="field" style="width:auto"><label for="b-view">Kiểu vẽ pRTH / OVN</label><select id="b-view" style="width:auto"><option value="tpo">TPO (khi có dữ liệu từ indicator)</option><option value="box">Box VA</option></select></div><button class="primary" id="b-copyimg">Copy ảnh plan</button><span class="small muted">Ảnh gồm bản đồ và plan chữ bên phải. Trình duyệt chặn copy thì ảnh PNG được tải về.</span></div>
   <div class="svgwrap" id="b-svg"></div>
   <div class="out" id="b-out">Nhập số rồi bấm "Lập plan".</div>
 </section>
@@ -474,6 +474,6 @@
 <script src="assets/js/bank-tools.js?v=18"></script>
 <script src="assets/js/quiz.js?v=18"></script>
 <script src="assets/js/core.js?v=18"></script>
-<script src="assets/js/testing-page.js?v=19"></script>
+<script src="assets/js/testing-page.js?v=20"></script>
 </body>
 </html>
