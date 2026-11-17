@@ -71,6 +71,8 @@ Mọi bảng: RLS bật, policy `to authenticated using ((select auth.uid()) = u
 - **Dữ liệu ATAS / Rithmic / CME:** chỉ dùng cá nhân, chỉ hiện ở trang cần đăng nhập.
 
 ## Các giai đoạn
+Prompt dùng cho từng giai đoạn: [prompts/chuyen-doi-web-app.md](prompts/chuyen-doi-web-app.md). Subagent dẫn dắt: `migration-architect`.
+
 0. **Chuẩn bị (xong 2026-11-17):** ghi bối cảnh vào `CLAUDE.md` + `claude/`; luồng plan tự động chạy ổn.
 1. **Khung Next.js trong cùng repo:** tạo app, chuyển HTML hiện tại vào `public/legacy/`, thêm rewrites để `/levels`, `/tools`, `/plan`, `/testing`, `/quiz`, `.en`, `/overlap` vẫn chạy. Chuyển `api/plan.js` sang `app/api/plan/route.ts` giữ đúng request / response. Deploy, kiểm tra không có gì gãy.
 2. **Đăng nhập + dữ liệu người dùng:** Supabase Auth, middleware bảo vệ `(app)/`, bảng `profiles` + `user_state`, trang nhập file sao lưu cũ để chuyển tiến độ lên DB.
@@ -82,7 +84,7 @@ Mỗi giai đoạn deploy được độc lập; không có bước "viết lạ
 
 ## Phải giữ khi chuyển
 - Hợp đồng `/api/plan` và JSON v1 (indicator ATAS đã code theo đó).
-- Kết quả `plan-core`: kiểm bằng `assets/sample_plan_20261112.json` và bảng số 11/11, 12/11 ở [04](04-du-lieu-api.md).
+- Kết quả `plan-core`: `node scripts/check-plan-core.mjs` phải pass (snapshot từ `assets/sample_plan_20261112.json`); số indicator khớp bảng 11/11, 12/11 ở [04](04-du-lieu-api.md).
 - URL và hash chương đang dùng (bookmark, `ofs.last`).
 - Ngân hàng 188 câu giữ nguyên văn và id `T001…`, `L001…`.
 - Giao diện tối, chữ đọc được trên nền tối, tiếng Việt mặc định.

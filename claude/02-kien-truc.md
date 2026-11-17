@@ -50,7 +50,10 @@ assets/js/en/                     Bản EN sinh tự động của các file JS 
 assets/sample_plan_20261112.json  Payload mẫu để test API
 docs/plan-sender/                 PlanSender.cs, prompt build, supabase.sql, hướng dẫn (không deploy)
 i18n/                             build_en.py, extract.py, en.tsv, en_extra.tsv, keys.tsv (không deploy)
-claude/                           Bộ nhớ dự án (không deploy)
+claude/                           Bộ nhớ dự án + prompts/ (không deploy)
+CLAUDE.md                         Quy tắc cho Claude Code (không deploy)
+.claude/                          settings.json (hook, quyền), hooks/*.mjs, agents/*.md, commands/*.md (không deploy)
+scripts/check-plan-core.mjs       Kiểm hồi quy plan-core với scripts/plan-core.snapshot.json (không deploy)
 ```
 
 ## Script mỗi trang nạp
@@ -81,11 +84,11 @@ Phiên bản cache hiện tại: phần lớn `?v=18`, `core.js?v=19`, `plan-cor
 ## Deploy
 - Push `main` → Vercel build. Framework preset "Other", không có build command; `package.json` chỉ để cài `@resvg/resvg-js` cho Function.
 - `vercel.json`: `functions."api/plan.js"` có `includeFiles: "api/_fonts/**"`, `maxDuration: 30` (không đặt `memory` vì gói Hobby).
-- `.vercelignore`: `i18n/`, `docs/`, `claude/`, `CLAUDE.md`.
+- `.vercelignore`: `i18n/`, `docs/`, `claude/`, `CLAUDE.md`, `.claude/`, `scripts/`.
 - Redirect `/overlap` → `/testing` (tên cũ của trang Testing).
 
 ## Giới hạn của kiến trúc hiện tại
 - Không có đăng nhập; trạng thái nằm ở `localStorage` nên mỗi thiết bị một kiểu, phải sao lưu tay.
 - Không có component / template: shell dựng bằng JS, nội dung HTML lặp giữa VI và EN (sinh tự động).
 - Một token chung `PLAN_TOKEN` cho API; token nằm trong `localStorage` của trình duyệt chủ site.
-- Không có test tự động; kiểm tra bằng Playwright thủ công và test API bằng JSON mẫu.
+- Test tự động mới có snapshot engine plan (`scripts/check-plan-core.mjs`); phần giao diện kiểm bằng Playwright thủ công, API bằng JSON mẫu.

@@ -17,9 +17,13 @@ Không deploy lên site (đã chặn trong `.vercelignore`). Không chứa bí m
 | [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md) | Kế hoạch chuyển site tĩnh → web app dashboard | Khi bắt đầu chuyển đổi |
 | [08-roadmap.md](08-roadmap.md) | Việc còn lại, ý tưởng | "Liệt kê các việc còn lại" |
 | [09-nhat-ky.md](09-nhat-ky.md) | Nhật ký thay đổi theo ngày | Muốn biết cái gì đổi khi nào |
+| [10-claude-code.md](10-claude-code.md) | Hook, subagent, lệnh tắt, script kiểm tra | Khi dùng Claude Code trong repo |
+| [prompts/chuyen-doi-web-app.md](prompts/chuyen-doi-web-app.md) | Prompt khởi động + từng giai đoạn chuyển web app | Khi bắt đầu chuyển đổi |
 
 Tài liệu khác trong repo:
 - `CLAUDE.md` (gốc repo): quy tắc ngắn gọn bắt buộc.
+- `.claude/`: hook, subagent, lệnh tắt của Claude Code (xem 10).
+- `scripts/check-plan-core.mjs`: kiểm hồi quy engine plan.
 - `docs/plan-sender/`: indicator ATAS Plan Sender (C#), prompt build, SQL Supabase, hướng dẫn setup từng bước.
 
 ## Quy ước giữ thư mục này

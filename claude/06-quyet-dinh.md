@@ -22,3 +22,5 @@ Mỗi mục: đã chọn gì, vì sao, và khi nào nên xem lại. Muốn đổ
 | D16 | 2026-11 | Ảnh plan: profile TPO (không phải nến), pRTH và OVN sát nhau, khối chữ bên phải, nút copy ảnh thay cho tải về | Đọc nhanh trước phiên, dán thẳng vào chat | — |
 | D17 | 2026-11 | Một phiên Claude giữ artifact và repo đồng bộ, push `main` để Vercel tự deploy | Tránh trôi tin nhắn giữa nhiều phiên | Khi chuyển sang web app |
 | D18 | 2026-11-17 | Bối cảnh dự án ghi trong `CLAUDE.md` + `claude/` | Chuẩn bị chuyển sang web app dài hạn | — |
+| D19 | 2026-11-17 | Hook Claude Code viết bằng Node (`.mjs`), không dùng bash + jq | Chạy được cả Windows (máy trade) lẫn Linux; Node đã có sẵn cho dự án | — |
+| D20 | 2026-11-17 | Snapshot `scripts/plan-core.snapshot.json` là chuẩn nghiệm thu engine plan | Port sang TypeScript / web app phải ra đúng kết quả cũ | Khi đổi luật cố ý (`--update` + ghi nhật ký) |

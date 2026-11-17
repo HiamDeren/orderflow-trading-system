@@ -24,6 +24,13 @@
 - Sau mỗi thay đổi đáng kể: cập nhật [`claude/08-roadmap.md`](claude/08-roadmap.md) và [`claude/09-nhat-ky.md`](claude/09-nhat-ky.md).
 - Khi Deren nhắn "liệt kê các việc còn lại": trả lời từ `claude/08-roadmap.md`.
 
+## Công cụ Claude Code (`.claude/`)
+- Hook tự chạy: nạp bối cảnh đầu phiên, chặn force push / bí mật / CSV / sửa tay bản EN / thuật ngữ ICT, kiểm cú pháp và snapshot plan-core sau khi sửa, không cho kết thúc khi bản EN chưa sinh lại. Chi tiết: [`claude/10-claude-code.md`](claude/10-claude-code.md).
+- Subagent: `i18n-sync`, `plan-engine`, `content-reviewer`, `backend-supabase`, `atas-indicator`, `docs-keeper`, `migration-architect`.
+- Lệnh: `/viec-con-lai`, `/kiem-tra`, `/ship`.
+- Chuyển sang web app: dùng [`claude/prompts/chuyen-doi-web-app.md`](claude/prompts/chuyen-doi-web-app.md).
+
 ## Kiểm tra nhanh
+- Engine plan: `node scripts/check-plan-core.mjs` (snapshot `scripts/plan-core.snapshot.json`).
 - Local: `python3 -m http.server 8000` (trang tĩnh). API cần Vercel (`vercel dev`) hoặc test trên production.
 - Test API bằng `assets/sample_plan_20261112.json` (xem `docs/plan-sender/README.md`, Bước 3). Test xong nhớ xoá dòng mẫu trong `trade_plans` và ảnh trong Storage.

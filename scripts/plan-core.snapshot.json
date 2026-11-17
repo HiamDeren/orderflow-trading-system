@@ -1,0 +1,41 @@
+{
+  "assets/sample_plan_20261112.json": {
+    "summary": {
+      "date": "2026-11-12",
+      "location": "Sát mép trên HVN",
+      "prth": "Balance",
+      "ovn": "Lệch xuống / dưới VA pRTH",
+      "bias": "Xuống",
+      "conf": "A cần xác nhận",
+      "setup": "Fade mép trên",
+      "target": 27975,
+      "distance": 89.25,
+      "flip": "Period 30' đóng trên 28,050 → ngừng fade, cân nhắc continuation lên.",
+      "price": 28064.25,
+      "zone": {
+        "lo": 27900,
+        "hi": 28050
+      }
+    },
+    "zones": [
+      {
+        "lo": 26930,
+        "hi": 27240
+      },
+      {
+        "lo": 27900,
+        "hi": 28050
+      },
+      {
+        "lo": 28120,
+        "hi": 28860
+      },
+      {
+        "lo": 29100,
+        "hi": 29220
+      }
+    ],
+    "text": "PLAN 2026-11-12 · Composite × pRTH × OVN\nVỊ TRÍ: Sát mép trên HVN (HVN 27,900–28,050)\npRTH: Balance · VA 28,416–28,697 · POC 28,548.5\nOVN: Lệch xuống / dưới VA pRTH · VA 28,176–28,307 · POC 28,204.5 · ONH 28,368.75 / ONL 28,013.75\nBIAS: Xuống · A cần xác nhận\n  Cần OD/OTD xuống cùng hướng OVN.\n\nSETUP ƯU TIÊN: Fade mép trên\n  Short khi giá bị từ chối ở 28,050 (nến đóng lại vào trong, delta âm hoặc absorption). Target 27,975, sau đó 27,900.\nTARGET: 27,975 (cách giá 9:29 89.25 điểm)\nĐỔI BIAS (TPO 30'): Period 30' đóng trên 28,050 → ngừng fade, cân nhắc continuation lên.\nVWAP RTH: Chỉ fade khi VWAP RTH phẳng. VWAP dốc ra phía mép đang fade thì bỏ. Mép trùng band ±2σ là chỗ fade tốt nhất.\nVÀO LỆNH: trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Dừng 11:30 ET.\nLÚC 10:00: open type + EMA 9/34 (5') + VWAP RTH chốt hướng; open type ngược bias thì đi theo open type.",
+    "svgBytes": 70830
+  }
+}

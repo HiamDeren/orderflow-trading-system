@@ -14,6 +14,7 @@ Cập nhật: 2026-11-17.
 - [x] `plan-core.js`: một nguồn code cho tính plan + vẽ ảnh, dùng chung web và server.
 - [x] Avatar webhook Discord "Trade Plan".
 - [x] Bối cảnh dự án ghi vào `CLAUDE.md` + thư mục `claude/`.
+- [x] Claude Code: hook, 7 subagent, lệnh `/viec-con-lai` `/kiem-tra` `/ship`, snapshot plan-core, prompt chuyển đổi web app.
 
 ## Việc còn lại · plan tự động
 1. [ ] **Indicator Plan Sender (tối 2026-11-17):** chart NQ M30 lookback 30 ngày, Claude Code build `docs/plan-sender/PlanSender.cs` theo `PROMPT_PlanSender.md`, kiểm số với 11/11 và 12/11.
@@ -36,7 +37,7 @@ Cập nhật: 2026-11-17.
 
 ## Chuyển sang web app / personal dashboard
 Chi tiết: [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md).
-- [ ] Deren duyệt stack (đề xuất Next.js + Supabase Auth) và thứ tự module.
+- [ ] Giai đoạn 0: Deren duyệt stack (đề xuất Next.js + Supabase Auth) và thứ tự module (prompt: `claude/prompts/chuyen-doi-web-app.md`).
 - [ ] Giai đoạn 1: khung Next.js trong repo, trang cũ chạy qua `public/legacy/`, `/api/plan` chuyển sang route handler.
 - [ ] Giai đoạn 2: đăng nhập chủ site, `profiles` + `user_state`, nhập file sao lưu tiến độ cũ.
 - [ ] Giai đoạn 3: shell component + trang dashboard (plan hôm nay, đồng hồ phiên, lịch tin).

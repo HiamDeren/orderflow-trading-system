@@ -3,6 +3,7 @@
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
 ## 2026-11-17 · Plan tự động và chuẩn bị chuyển web app
+- Claude Code: `.claude/settings.json` + 5 hook Node, 7 subagent, 3 lệnh tắt; `scripts/check-plan-core.mjs` + snapshot; `claude/10-claude-code.md`, `claude/prompts/chuyen-doi-web-app.md`.
 - Ghi bối cảnh dự án: `CLAUDE.md` + thư mục `claude/` (roadmap chuyển từ `docs/ROADMAP.md` sang `claude/08-roadmap.md`).
 - Discord: biến `DISCORD_WEBHOOK_TRADE_PLAN` (vẫn nhận `DISCORD_WEBHOOK_URL`), avatar webhook. Test đầu-cuối web → Supabase → Storage → Discord thành công; xoá dòng test.
 - Server tự vẽ ảnh plan tiếng Việt (resvg + font gói kèm), lưu Supabase Storage, gửi Discord; `GET /api/plan` trả link ảnh ký tạm; nút "Lấy plan mới nhất từ web" (`94cd84e`).
