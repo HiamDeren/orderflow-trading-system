@@ -16,7 +16,7 @@ Cập nhật: 17/11/2026.
 ## Việc còn lại · plan tự động
 1. [ ] **Indicator Plan Sender (tối 17/11):** chart NQ M30 lookback 35 ngày, Claude Code build `docs/plan-sender/PlanSender.cs` theo `PROMPT_PlanSender.md`, kiểm số với 11/11 và 12/11.
 2. [ ] **Bật gửi web trong indicator:** API URL `https://orderflow-trading-system.vercel.app/api/plan` + `PLAN_TOKEN`, log phải có `HTTP 200`.
-3. [ ] **Discord:** tạo webhook kênh `#trade-plan`, đặt `DISCORD_WEBHOOK_URL` trên Vercel, Redeploy, test bằng JSON mẫu.
+3. [ ] **Discord:** tạo webhook kênh `#trade-plan`, đặt `DISCORD_WEBHOOK_TRADE_PLAN` trên Vercel, Redeploy, test bằng JSON mẫu.
 4. [ ] **Test đầu-cuối buổi sáng thật:** 9:29 ET bấm gửi → ảnh lên Discord + Storage, web "Lấy plan mới nhất" khớp.
 5. [ ] Xoá dòng test (nếu có) trong `trade_plans` sau khi chạy thật ổn.
 

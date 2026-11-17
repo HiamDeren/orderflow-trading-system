@@ -4,7 +4,7 @@
 //   1. Lưu (upsert theo ngày + symbol) vào bảng public.trade_plans trên Supabase
 //   2. Lập plan bằng assets/js/plan-core.js (cùng code với trang Testing plan), vẽ ảnh tiếng Việt, đổi sang PNG
 //   3. Lưu PNG vào Supabase Storage (bucket private "trade-plans"), ghi đường dẫn + plan chữ vào bảng
-//   4. Gửi ảnh + tóm tắt plan lên Discord (nếu có DISCORD_WEBHOOK_URL và payload không có "notify": false)
+//   4. Gửi ảnh + tóm tắt plan lên Discord (nếu có DISCORD_WEBHOOK_TRADE_PLAN và payload không có "notify": false)
 //   Bước 2–4 lỗi thì plan vẫn được lưu; kết quả từng bước nằm trong response.
 //
 // GET  /api/plan[?date=YYYY-MM-DD]   Header: Authorization: Bearer <PLAN_TOKEN>
@@ -12,7 +12,7 @@
 //
 // Biến môi trường trên Vercel:
 //   SUPABASE_URL, SUPABASE_SERVICE_KEY (hoặc SUPABASE_SECRET_KEY / SUPABASE_SERVICE_ROLE_KEY), PLAN_TOKEN,
-//   DISCORD_WEBHOOK_URL (tuỳ chọn), PLAN_BUCKET (tuỳ chọn, mặc định "trade-plans")
+//   DISCORD_WEBHOOK_TRADE_PLAN (tuỳ chọn; tên cũ DISCORD_WEBHOOK_URL vẫn nhận), PLAN_BUCKET (tuỳ chọn, mặc định "trade-plans")
 
 import path from "path";
 import { Resvg } from "@resvg/resvg-js";
@@ -142,10 +142,11 @@ export default async function handler(req, res) {
       }
 
       // 4. Discord
-      if (env.DISCORD_WEBHOOK_URL && p.notify !== false) {
+      const hook = env.DISCORD_WEBHOOK_TRADE_PLAN || env.DISCORD_WEBHOOK_URL;
+      if (hook && p.notify !== false) {
         try {
           if (!plan || plan.error || !png) throw new Error("không có ảnh plan để gửi");
-          out.discord = await sendDiscord(env.DISCORD_WEBHOOK_URL, plan, png, objPath.split("/").pop(), symbol);
+          out.discord = await sendDiscord(hook, plan, png, objPath.split("/").pop(), symbol);
         } catch (e) {
           out.discord = { error: String((e && e.message) || e) };
         }

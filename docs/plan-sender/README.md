@@ -110,7 +110,7 @@ Mỗi lần indicator gửi plan (`POST /api/plan`), server tự làm thêm:
 2. Vẽ ảnh **tiếng Việt** (font Be Vietnam Pro + JetBrains Mono trong `api/_fonts/`), xuất PNG 2600 px.
 3. Lưu PNG vào Supabase Storage, bucket **private** `trade-plans`, đường dẫn `YYYY/MM/plan_YYYY-MM-DD_SYMBOL.png`.
    Bảng `trade_plans` có thêm cột `image_path`, `plan_text`, `summary` (bias, setup, target...).
-4. Gửi ảnh + tóm tắt plan vào kênh Discord (nếu đã đặt `DISCORD_WEBHOOK_URL`).
+4. Gửi ảnh + tóm tắt plan vào kênh Discord (nếu đã đặt `DISCORD_WEBHOOK_TRADE_PLAN`).
 
 Ảnh lỗi hoặc Discord lỗi thì plan **vẫn được lưu**; response cho biết từng bước:
 `{"ok":true,"image":{"path":"2026/11/plan_..png"},"discord":{"sent":true}}` hoặc `{"discord":{"error":"..."}}`.
@@ -120,7 +120,7 @@ Gửi lại cùng ngày thì ghi đè ảnh và Discord nhận thêm một tin. 
 1. Discord → server của bạn → tạo kênh, ví dụ `#trade-plan`.
 2. Bấm bánh răng của kênh (**Edit Channel**) → **Integrations** → **Webhooks** → **New Webhook**.
 3. Đặt tên `Trade Plan`, chọn đúng kênh → **Copy Webhook URL** (dạng `https://discord.com/api/webhooks/...`).
-4. Vercel → project → Environments → **Production** → Environment Variables → thêm `DISCORD_WEBHOOK_URL` (Secret) = URL vừa copy → Save → **Redeploy**.
+4. Vercel → project → Environments → **Production** → Environment Variables → thêm `DISCORD_WEBHOOK_TRADE_PLAN` (Secret) = URL vừa copy (quy ước tên: `DISCORD_WEBHOOK_<MỤC_ĐÍCH>`, ví dụ sau này `DISCORD_WEBHOOK_SESSION_LOG`) → Save → **Redeploy**.
 5. Ai có URL webhook đều gửi được tin vào kênh: giữ kín như token; lộ thì xoá webhook và tạo cái mới.
 
 Webhook chỉ **gửi** tin. Khi cần gõ lệnh trong Discord (ví dụ `/plan` để xem lại plan) mới phải làm bot riêng: xem `docs/ROADMAP.md`.
