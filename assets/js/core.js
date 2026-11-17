@@ -21,9 +21,9 @@ const NAV=[
     ['delta','04','Delta & CVD'],['dom','05','DOM'],['tape','06','Tape'],['kich-ban','07','13 kịch bản'],
     ['ket-hop','08','Kết hợp tại level']]},
   {k:'plan',href:'plan.html',label:'Plan Builder',short:'Plan',sub:'Plan + bản đồ level',c:'var(--warn)',icon:'map'},
-  {k:'overlap',href:'overlap.html',label:'RTH × OVN Overlap',short:'Overlap',sub:'Testing plan · log 30 phiên',c:'#9A93E8',icon:'overlap',chapters:[
-    ['tong-quan','00','Tổng quan & cách kẻ'],['kich-ban','01','6 kịch bản'],['ma-tran','02','Open × Day type'],
-    ['builder','03','Plan Builder overlap'],['log','04','Log 30 phiên'],['quiz','05','Quiz']]},
+  {k:'testing',href:'testing.html',label:'Composite × pRTH × OVN',short:'Testing',sub:'Testing plan · forward test',c:'#26A69A',icon:'overlap',chapters:[
+    ['khung','00','Khung plan'],['hvn','01','Xác định HVN'],['bias','02','Đọc bias'],['builder','03','Plan Builder'],
+    ['quy-trinh','04','Quy trình trade'],['vi-du','05','Ví dụ 16/11'],['mau','06','Màu ATAS'],['quiz','07','Quiz']]},
   {k:'quiz',href:'quiz.html',label:'Trắc nghiệm',short:'Quiz',sub:'Luyện tập · Thi thử',c:'var(--c-quiz)',icon:'quiz',chapters:[
     ['luyen-tap','A','Luyện tập'],['thi-thu','B','Thi thử'],['cau-sai','C','Ôn câu sai']]}
 ];
@@ -48,7 +48,7 @@ const cur=NAV.find(n=>n.k===page)||NAV[0];
 document.body.style.setProperty('--c',cur.c);
 /* ---------- ngôn ngữ: trang VI = x.html, trang EN = x.en.html ---------- */
 const LANG=document.documentElement.lang==='en'?'en':'vi';
-const FILE={home:'index',tools:'tools',levels:'levels',plan:'plan',overlap:'overlap',quiz:'quiz'}[page]||'index';
+const FILE={home:'index',tools:'tools',levels:'levels',plan:'plan',testing:'testing',quiz:'quiz'}[page]||'index';
 const langHref=to=>FILE+(to==='en'?'.en':'')+'.html'+location.hash;
 (function(){const pref=store.get('ofs.lang',null);if(pref&&pref!==LANG&&!/[?&]stay/.test(location.search))location.replace(langHref(pref));})();
 
@@ -61,7 +61,7 @@ function buildShell(){
   NAV.forEach((n,i)=>{
     if(i===1) h+=`<div class="ui-sec-label">Khoá học</div>`;
     if(n.k==='plan') h+=`<div class="ui-sec-label">Công cụ</div>`;
-    if(n.k==='overlap') h+=`<div class="ui-sec-label">Testing plan</div>`;
+    if(n.k==='testing') h+=`<div class="ui-sec-label">Testing plan</div>`;
     if(n.k==='quiz') h+=`<div class="ui-sec-label">Ôn luyện</div>`;
     const on=n.k===page;
     h+=`<a class="ui-item${on?' on':''}" href="${n.href}" style="--c:${n.c}"${on?' aria-current="page"':''}><span class="ico">${svg(n.icon)}</span><span class="lbl">${n.label}<small>${n.sub}</small></span></a>`;

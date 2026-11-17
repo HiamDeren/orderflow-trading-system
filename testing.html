@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080B10">
+<title>Composite × pRTH × OVN · Orderflow System</title>
+<meta name="description" content="Testing plan: composite 30 ngày cho bản đồ HVN/LVN, pRTH và OVN cho hướng, Plan Builder và quy trình trade NY AM.">
+<link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/css/app.css?v=16">
+<link rel="stylesheet" href="assets/css/testing.css?v=16">
+</head>
+<body data-page="testing">
+<main class="ui-main">
+<div class="ui-content pg-testing">
+<section class="tp-ch" id="ch-khung" data-chapter="khung">
+  <div class="head">
+    <span class="eyebrow">00 · Khung plan mỗi ngày</span>
+    <h2>Composite cho bản đồ, pRTH và OVN cho hướng</h2>
+    <p class="lead">Thị trường đi từ vùng balance này sang vùng balance khác. Composite 30 ngày cho biết các vùng balance (HVN) và đường đi giữa chúng (LVN). RTH hôm qua (pRTH) và phiên qua đêm (OVN) cho biết hai phe đang chấp nhận giá ở đâu trong bản đồ đó, từ đó ra bias cho phiên NY AM.</p>
+    <div class="tp-test" role="note"><span class="badge">TESTING PLAN</span><p><b>Khung giả thuyết đang forward test, chưa thuộc system chính.</b> Dùng song song với plan TPO hằng ngày, size nhỏ. Phần log phiên và lưu trữ backtest khung cũ (RTH × OVN overlap) tạm thời không đưa lên web.</p></div>
+  </div>
+
+  <div class="svgwrap"><svg viewBox="0 0 820 250" role="img" aria-label="Ba lớp của plan: Composite, pRTH, OVN dẫn tới bias và lệnh M1">
+    <g font-family="Be Vietnam Pro, sans-serif">
+      <rect x="10" y="20" width="230" height="120" rx="8" fill="#0f302c" stroke="#26A69A"/>
+      <text x="125" y="50" fill="#d8fbf5" font-size="15" font-weight="700" text-anchor="middle">1 · Composite 30D</text>
+      <text x="125" y="76" fill="#bff0e8" font-size="13" text-anchor="middle">HVN = vùng balance</text>
+      <text x="125" y="98" fill="#bff0e8" font-size="13" text-anchor="middle">LVN = đường đi nhanh</text>
+      <text x="125" y="122" fill="#9fd8cf" font-size="12" text-anchor="middle">Giá đang ở đâu trên bản đồ?</text>
+      <rect x="295" y="20" width="230" height="120" rx="8" fill="#3a2a14" stroke="#E0A458"/>
+      <text x="410" y="50" fill="#fbe9cf" font-size="15" font-weight="700" text-anchor="middle">2 · pRTH</text>
+      <text x="410" y="76" fill="#f6dcb2" font-size="13" text-anchor="middle">Hôm qua build value ở đâu?</text>
+      <text x="410" y="98" fill="#f6dcb2" font-size="13" text-anchor="middle">Chấp nhận hay từ chối mép?</text>
+      <text x="410" y="122" fill="#e3c393" font-size="12" text-anchor="middle">Hướng chính (dB)</text>
+      <rect x="580" y="20" width="230" height="120" rx="8" fill="#16263f" stroke="#6F9BD9"/>
+      <text x="695" y="50" fill="#e4eefb" font-size="15" font-weight="700" text-anchor="middle">3 · OVN</text>
+      <text x="695" y="76" fill="#cfe0f7" font-size="13" text-anchor="middle">Qua đêm chấp nhận tiếp</text>
+      <text x="695" y="98" fill="#cfe0f7" font-size="13" text-anchor="middle">hay đẩy ngược lại?</text>
+      <text x="695" y="122" fill="#a9c4ea" font-size="12" text-anchor="middle">Xác nhận hướng (dO)</text>
+      <path d="M240 80 H290" stroke="#9aa0a8" stroke-width="2" marker-end="url(#ah0)"/>
+      <path d="M525 80 H575" stroke="#9aa0a8" stroke-width="2" marker-end="url(#ah0)"/>
+      <path d="M695 140 V170 H410 V182" stroke="#9aa0a8" stroke-width="2" fill="none" marker-end="url(#ah0)"/>
+      <path d="M125 140 V170 H410" stroke="#9aa0a8" stroke-width="2" fill="none"/>
+      <rect x="250" y="186" width="320" height="56" rx="8" fill="#2a2c31" stroke="#6b6f78"/>
+      <text x="410" y="210" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">Vị trí + bias → Fade hay Continuation</text>
+      <text x="410" y="230" fill="#c9cdd3" font-size="12" text-anchor="middle">Chốt lúc 10:00 với open type + EMA 9/34 · vào lệnh trên M1</text>
+      <defs><marker id="ah0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#9aa0a8"/></marker></defs>
+    </g>
+  </svg></div>
+
+  <div class="ab">
+    <div class="card a"><span class="k">Giá ở trong HVN</span><p><b>Fade range.</b> Hai phe đã đồng ý giá ở đây. Bán mép trên, mua mép dưới khi có trigger, target giữa vùng (POC của HVN).</p></div>
+    <div class="card b"><span class="k">Giá được chấp nhận ngoài mép HVN</span><p><b>Continuation.</b> Balance bị phá. Giá đi qua LVN khá nhanh tới mép của HVN kế tiếp. Vào ở lần retest mép vừa phá, trên M1.</p></div>
+  </div>
+
+  <div class="callout">
+    <h4>Quy tắc nền</h4>
+    <ul class="clean small">
+      <li><b>TPO 30' chỉ để đổi bias.</b> Một period đóng ngoài mép HVN = bias chuyển từ fade sang continuation. Hai period = chắc chắn hơn.</li>
+      <li><b>Vào và ra lệnh trên M1 + footprint.</b> Stop theo cấu trúc M1 ngoài level. Không chờ period đóng mới thoát lệnh.</li>
+      <li><b>Không vào lệnh ở giữa LVN.</b> LVN là đường đi, không phải nơi để đứng chờ.</li>
+      <li><b>Target = mép HVN kế tiếp</b> theo hướng lệnh. Nếu khoảng cách tới đó dưới 1.5R thì bỏ qua lệnh.</li>
+      <li><b>Hướng cuối cùng chốt lúc 10:00 ET</b> bằng open type và EMA 9/34 (nến 5'). Bias từ pRTH + OVN chỉ là giả thuyết trước phiên.</li>
+      <li>Tối đa 2–3 lệnh, dừng 11:30 ET. Khung này <b>chưa được backtest</b>: forward test với size nhỏ.</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Ba thứ cần có trên chart</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Thành phần</th><th>Thời gian</th><th>Giờ VN (mùa đông)</th><th>Lấy gì</th></tr></thead>
+      <tbody>
+        <tr><td><span class="chip hvn">Composite</span></td><td class="mono">30 ngày gần nhất (ETH)</td><td class="mono">cập nhật mỗi sáng</td><td>HVN (vùng balance), LVN (đường đi), POC composite</td></tr>
+        <tr><td><span class="chip rth">pRTH</span></td><td class="mono">9:30 – 16:14 ET hôm qua</td><td class="mono">21:30 – 04:14</td><td>VAH, VAL, POC, high/low, close, tail, single print</td></tr>
+        <tr><td><span class="chip ovn">OVN</span></td><td class="mono">18:00 – 9:29 ET</td><td class="mono">06:00 – 21:29</td><td>VAH, VAL, POC, ONH, ONL</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">pRTH và OVN dùng VA của TPO (70% thời gian) vì khung này đánh balance–imbalance: acceptance được đo bằng thời gian giá ở lại một vùng.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Lịch mỗi ngày</h3>
+    <div class="flow">
+      <div class="step"><span class="dot">1</span><div><b>Sáng (giờ VN):</b> cập nhật composite, kẻ lại HVN/LVN nếu có phiên mới làm đổi hình dạng profile (chương 01).</div></div>
+      <div class="step"><span class="dot">2</span><div><b>Trước 21:29 VN:</b> nhập pRTH và OVN vào Plan Builder (chương 03). Ghi vị trí, bias, setup ưu tiên, target, level đổi bias.</div></div>
+      <div class="step"><span class="dot">3</span><div><b>21:30–22:00 (A period):</b> không vào lệnh. Xem open type và phản ứng đầu tiên ở mép gần nhất.</div></div>
+      <div class="step"><span class="dot">4</span><div><b>22:00:</b> chốt hướng bằng open type + EMA 9/34. Chọn Fade hay Continuation theo vị trí.</div></div>
+      <div class="step"><span class="dot">5</span><div><b>22:00–23:30:</b> vào lệnh trên M1 khi có trigger. Dừng 23:30 hoặc sau 2–3 lệnh.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="tp-ch" id="ch-hvn" data-chapter="hvn">
+  <div class="head">
+    <span class="eyebrow">01 · Xác định vùng balance</span>
+    <h2>HVN là nơi giá ở lâu qua nhiều phiên. LVN là nơi giá chỉ đi ngang qua.</h2>
+    <p class="lead">Có hai cách. Cách 1 nhìn thẳng composite trong ATAS. Cách 2 chồng VA của từng phiên RTH và OVN lên nhau: chỗ nhiều VA chồng nhau là HVN. Cách 2 khách quan, không phụ thuộc mắt, và đúng với ý tưởng tham chiếu RTH + OVN của bạn. HVN tốt nhất là chỗ cả hai cách cùng đồng ý.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Cách 1 · Nhìn composite (5 bước)</h3>
+      <ol class="clean small">
+        <li><b>Làm mượt profile:</b> composite 30D, row lớn hơn chart ngày (khoảng 10–20 điểm với NQ) để thấy hình dạng thay vì răng cưa.</li>
+        <li><b>Tìm "bụng":</b> đoạn profile phình ra liên tục, dày gần bằng phần dày nhất xung quanh. Mỗi bụng là một HVN.</li>
+        <li><b>Tìm "eo":</b> chỗ profile thắt lại giữa hai bụng, còn khoảng 1/3 độ dày của bụng trở xuống. Đó là LVN.</li>
+        <li><b>Kẻ mép HVN</b> ở chỗ profile bắt đầu co lại rõ, không kẻ ở đỉnh nhọn lẻ. Vẽ vùng (box), không vẽ một đường.</li>
+        <li><b>Gộp hoặc bỏ:</b> hai bụng cách nhau một eo dưới khoảng 40 điểm thì gộp. Bụng hẹp dưới khoảng 100 điểm thì coi là level, không phải vùng balance.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Cách 2 · Chồng VA RTH + OVN</h3>
+      <ol class="clean small">
+        <li>Lấy VA (VAL–VAH) của mỗi phiên RTH và mỗi phiên OVN trong 10–20 ngày gần nhất.</li>
+        <li>Ở mỗi mức giá, đếm có bao nhiêu VA chứa mức giá đó.</li>
+        <li><b>HVN</b> = đoạn giá có từ <b>3 VA</b> chồng nhau trở lên.</li>
+        <li><b>LVN</b> = khoảng giữa hai HVN. LVN rõ khi không có VA nào phủ.</li>
+        <li>Chế độ <b>RTH ∩ OVN</b>: chỉ giữ chỗ mà cả VA RTH lẫn VA OVN đều chồng nhiều. Đây là balance được cả hai nhóm chấp nhận.</li>
+      </ol>
+      <p class="small muted">Thử trên data 21/10 → 12/11: công cụ bên dưới tìm ra lõi LVN trống khoảng 27360–27650 (vạch đỏ bên trái), gần trùng vùng LVN 27370–27620 mà bạn của bạn kẻ bằng mắt.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Công cụ: tìm HVN bằng cách chồng VA</h3>
+    <p class="small muted">Mỗi dòng: <span class="mono">ngày  RTH|OVN  VAL  VAH</span>. Dữ liệu mẫu là VA tính từ data M1 bạn đã export. Thay bằng số trên ATAS để dùng hằng ngày.</p>
+    <div class="grid g2">
+      <div class="field"><label for="h-text">VA từng phiên</label><textarea id="h-text" spellcheck="false"></textarea></div>
+      <div class="form">
+        <div class="field"><label for="h-n">Số ngày gần nhất</label><input id="h-n" type="number" min="3" max="60" value="16"></div>
+        <div class="field"><label for="h-k">Số VA tối thiểu (HVN)</label><input id="h-k" type="number" min="1" max="20" value="3"></div>
+        <div class="field"><label for="h-merge">Gộp nếu khe dưới (điểm)</label><input id="h-merge" type="number" min="0" value="40"></div>
+        <div class="field"><label for="h-minw">HVN rộng tối thiểu (điểm)</label><input id="h-minw" type="number" min="0" value="100"></div>
+        <div class="field"><label for="h-mode">Chế độ</label><select id="h-mode"><option value="both">Cả RTH và OVN</option><option value="inter">RTH ∩ OVN</option><option value="rth">Chỉ RTH</option><option value="ovn">Chỉ OVN</option></select></div>
+        <div class="field"><label>&nbsp;</label><button class="primary" id="h-run">Tìm HVN</button></div>
+        <div class="field"><label>&nbsp;</label><button id="h-to-builder">Đưa vùng sang Plan Builder</button></div>
+        <div class="field"><label>&nbsp;</label><button id="h-reset">Nạp lại dữ liệu mẫu</button></div>
+      </div>
+    </div>
+    <div class="svgwrap" id="h-svg"></div>
+    <div class="tablewrap"><table><thead><tr><th>Vùng</th><th>Từ</th><th>Đến</th><th class="num">Rộng</th><th>Ghi chú</th></tr></thead><tbody id="h-rows"></tbody></table></div>
+    <p class="small muted" id="h-msg"></p>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Kiểm tra một HVN có "thật" không</h3>
+      <ul class="clean small">
+        <li>Có ít nhất 2–3 TPOC phiên (RTH hoặc OVN) nằm trong vùng.</li>
+        <li>Giá đã quay lại vùng này nhiều lần, không chỉ một lần đi qua.</li>
+        <li>Cả composite (cách 1) và chồng VA (cách 2) đều thấy vùng này.</li>
+        <li>Rộng ít nhất khoảng nửa biên độ RTH trung bình. Hiện tại biên độ RTH khoảng 250–350 điểm, nên HVN hẹp hơn khoảng 120 điểm chỉ nên coi là level.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Lỗi hay gặp</h3>
+      <ul class="clean small">
+        <li>Coi mọi đỉnh nhọn của profile là HVN. Kết quả là giá ở đâu cũng "gần HVN" và vùng mất ý nghĩa.</li>
+        <li>Dùng composite quá dài khi thị trường chạy mạnh. 30 ngày gần đây range khoảng 5000 điểm, vùng cũ có thể đã hết tác dụng. Khi đó ưu tiên 10–20 ngày.</li>
+        <li>Kẻ mép HVN bằng một đường mảnh rồi vào lệnh đúng đường đó. Mép là một vùng; vào lệnh khi có trigger, không phải khi chạm.</li>
+        <li>Quên cập nhật: khi giá build value mới trong LVN 2–3 phiên, LVN đó đang thành HVN.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="tp-ch" id="ch-bias" data-chapter="bias">
+  <div class="head">
+    <span class="eyebrow">02 · Đọc bias</span>
+    <h2>Vị trí trên composite chọn kiểu lệnh. pRTH và OVN chọn hướng.</h2>
+    <p class="lead">Chọn ba thứ bên dưới để xem cách trade. Plan Builder (chương 03) tự xếp loại từ số bạn nhập.</p>
+  </div>
+
+  <div class="panel">
+    <div class="grid g3">
+      <div class="field"><label for="x-p">1 · Giá trước open ở đâu trên composite</label><select id="x-p"></select></div>
+      <div class="field"><label for="x-b">2 · pRTH đã build gì</label><select id="x-b"></select></div>
+      <div class="field"><label for="x-o">3 · OVN so với VA pRTH</label><select id="x-o"></select></div>
+    </div>
+    <div id="x-out" class="flow"></div>
+  </div>
+
+  <div class="grid g3">
+    <div class="panel">
+      <h3><span class="chip hvn">1</span> Vị trí</h3>
+      <dl class="dl" id="d-p"></dl>
+    </div>
+    <div class="panel">
+      <h3><span class="chip rth">2</span> pRTH build</h3>
+      <dl class="dl" id="d-b"></dl>
+    </div>
+    <div class="panel">
+      <h3><span class="chip ovn">3</span> OVN build</h3>
+      <dl class="dl" id="d-o"></dl>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Ghép pRTH và OVN thành bias</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>pRTH (dB)</th><th>OVN (dO)</th><th>Bias</th><th>Cần gì lúc 10:00</th></tr></thead>
+      <tbody>
+        <tr><td>Lên / xuống</td><td>Cùng hướng</td><td><span class="pill up">A củng cố</span></td><td>Open type không ngược hướng là được</td></tr>
+        <tr><td>Lên / xuống</td><td>Trong VA pRTH hoặc bao trùm</td><td><span class="pill nt">A cần xác nhận</span></td><td>OD/OTD cùng hướng + EMA 9/34 cùng hướng</td></tr>
+        <tr><td>Balance</td><td>Lên / xuống</td><td><span class="pill nt">A cần xác nhận</span></td><td>OD/OTD cùng hướng OVN</td></tr>
+        <tr><td>Lên / xuống</td><td>Ngược hướng</td><td><span class="pill dn">Xung đột</span></td><td>Chờ IB, đi theo phía IB được chấp nhận</td></tr>
+        <tr><td>Balance</td><td>Trong / bao trùm</td><td><span class="pill nt">Balance</span></td><td>Fade trong HVN, chờ mép</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section class="tp-ch" id="ch-builder" data-chapter="builder">
+  <div class="head">
+    <span class="eyebrow">03 · Plan Builder</span>
+    <h2>Nhập số trước 21:29 VN, nhận plan và bản đồ</h2>
+    <p class="lead">Nhập các vùng HVN của composite, VA pRTH và VA OVN. Builder tự xếp vị trí, hướng OVN, gợi ý pRTH build, rồi vẽ bản đồ với target là mép HVN kế tiếp.</p>
+  </div>
+  <div class="row"><button id="b-example">Nạp ví dụ 16/11</button><button id="b-clear">Xoá trắng</button><span class="small muted" id="b-msg"></span></div>
+  <div class="grid g2">
+    <fieldset><legend>Composite · HVN (từ thấp đến cao)</legend>
+      <div class="form" id="b-zones"></div>
+      <div class="form"><div class="field"><label for="b-tol">Sát mép nếu cách (điểm)</label><input id="b-tol" type="number" value="30"></div></div>
+    </fieldset>
+    <fieldset><legend>pRTH</legend>
+      <div class="form">
+        <div class="field"><label for="b-rvah">VAH</label><input id="b-rvah" type="number" step="0.25"></div>
+        <div class="field"><label for="b-rval">VAL</label><input id="b-rval" type="number" step="0.25"></div>
+        <div class="field"><label for="b-rpoc">POC</label><input id="b-rpoc" type="number" step="0.25"></div>
+        <div class="field"><label for="b-rhi">High</label><input id="b-rhi" type="number" step="0.25"></div>
+        <div class="field"><label for="b-rlo">Low</label><input id="b-rlo" type="number" step="0.25"></div>
+        <div class="field"><label for="b-rcl">Close</label><input id="b-rcl" type="number" step="0.25"></div>
+        <div class="field" style="grid-column:1/-1"><label for="b-b">pRTH build (tự gợi ý, sửa nếu cần)</label><select id="b-b"></select></div>
+      </div>
+    </fieldset>
+    <fieldset><legend>OVN</legend>
+      <div class="form">
+        <div class="field"><label for="b-ovah">VAH</label><input id="b-ovah" type="number" step="0.25"></div>
+        <div class="field"><label for="b-oval">VAL</label><input id="b-oval" type="number" step="0.25"></div>
+        <div class="field"><label for="b-opoc">POC</label><input id="b-opoc" type="number" step="0.25"></div>
+        <div class="field"><label for="b-onh">ONH</label><input id="b-onh" type="number" step="0.25"></div>
+        <div class="field"><label for="b-onl">ONL</label><input id="b-onl" type="number" step="0.25"></div>
+        <div class="field"><label for="b-px">Giá lúc 9:25 ET</label><input id="b-px" type="number" step="0.25"></div>
+      </div>
+    </fieldset>
+    <fieldset><legend>Ngày</legend>
+      <div class="form">
+        <div class="field"><label for="b-date">Ngày trade</label><input id="b-date" type="date"></div>
+        <div class="field"><label>&nbsp;</label><button class="primary" id="b-build">Lập plan</button></div>
+        <div class="field"><label>&nbsp;</label><button id="b-copy">Copy plan</button></div>
+      </div>
+    </fieldset>
+  </div>
+  <div class="svgwrap" id="b-svg"></div>
+  <div class="out" id="b-out">Nhập số rồi bấm "Lập plan".</div>
+</section>
+
+<section class="tp-ch" id="ch-quy-trinh" data-chapter="quy-trinh">
+  <div class="head">
+    <span class="eyebrow">04 · Quy trình trade</span>
+    <h2>Ba setup, một hướng, vào lệnh trên M1</h2>
+    <p class="lead">Bias trước phiên là giả thuyết. Lúc 10:00 ET chốt hướng bằng open type và EMA 9/34. Sau đó chỉ có ba setup được phép.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Chốt hướng lúc 10:00 ET (22:00 VN)</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Open type</th><th>EMA 9/34 (5')</th><th>Kết luận</th></tr></thead>
+      <tbody>
+        <tr><td>OD / OTD / ORR có hướng</td><td>Cùng hướng</td><td>Trade theo hướng open type. Nếu ngược bias trước phiên thì <b>open type thắng</b>.</td></tr>
+        <tr><td>OD / OTD / ORR có hướng</td><td>Ngược hướng</td><td>Không trade theo hướng. Chỉ fade trong HVN nếu có trigger.</td></tr>
+        <tr><td>OA</td><td>Bất kỳ</td><td>Balance trong ngày. Fade mép HVN / mép IB, hoặc chờ IB xong (10:30).</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="grid g3">
+    <div class="panel">
+      <h3><span class="chip hvn">F</span> Fade trong HVN</h3>
+      <dl class="dl">
+        <dt>Khi nào</dt><dd>Giá trong HVN, open type OA hoặc bias hướng vào trong vùng, VWAP phẳng.</dd>
+        <dt>Vào</dt><dd>Giá tới mép HVN (hoặc mép VA pRTH nằm trong HVN). Trong 5 nến M1 có nến đóng lại vào trong với delta ngược hướng chạm, hoặc absorption.</dd>
+        <dt>Stop</dt><dd>Ngoài cực trị vừa tạo, theo M1.</dd>
+        <dt>Target</dt><dd>POC của HVN, sau đó mép bên kia.</dd>
+        <dt>Bỏ khi</dt><dd>Open type OD ra phía mép, VWAP dốc ra ngoài, hoặc giá đã chạm mép lần thứ 3.</dd>
+      </dl>
+    </div>
+    <div class="panel">
+      <h3><span class="chip ov">C</span> Continuation qua LVN</h3>
+      <dl class="dl">
+        <dt>Khi nào</dt><dd>Một period 30' đóng ngoài mép HVN theo hướng bias (bias đổi sang continuation).</dd>
+        <dt>Vào</dt><dd>Retest mép vừa phá trên M1: nến đóng giữ được phía ngoài, delta cùng hướng, EMA 9 &gt; 34 (long).</dd>
+        <dt>Stop</dt><dd>Quay lại trong HVN theo M1.</dd>
+        <dt>Target</dt><dd>Mép gần của HVN kế tiếp. Dưới 1.5R thì bỏ.</dd>
+        <dt>Bỏ khi</dt><dd>Period kế tiếp đóng lại trong HVN: breakout thất bại, quay về fade.</dd>
+      </dl>
+    </div>
+    <div class="panel">
+      <h3><span class="chip">V</span> Pullback về VWAP</h3>
+      <dl class="dl">
+        <dt>Khi nào</dt><dd>Sau 10:00, giá đã ở một phía VWAP ít nhất 15 phút, đúng hướng bias.</dd>
+        <dt>Vào</dt><dd>Lần chạm VWAP đầu tiên, có trigger delta, EMA 9/34 cùng hướng.</dd>
+        <dt>Target</dt><dd>High/low phiên, hoặc mép HVN kế tiếp.</dd>
+        <dt>Ghi chú</dt><dd>Setup tốt nhất của backtest khung cũ (45%, chưa đủ mẫu).</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Quản lý lệnh và rủi ro</h3>
+    <ul class="clean small">
+      <li>Stop nằm trên M1. Không dời stop để chờ period 30' đóng.</li>
+      <li>Thoát theo target, stop, hoặc 11:30 ET, cái nào đến trước. Không giữ lệnh qua 11:30 nếu không có rule riêng viết trước phiên.</li>
+      <li>Lệnh bị stop ở một mép thì không vào lại mép đó, trừ khi bias đã đổi và giá retest từ phía bên kia.</li>
+      <li>Tối đa 3 lệnh. Thua 2 lệnh liên tiếp thì dừng. Không vào lệnh trong LVN giữa đường.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="tp-ch" id="ch-vi-du" data-chapter="vi-du">
+  <div class="head">
+    <span class="eyebrow">05 · Ví dụ</span>
+    <h2>Phiên 16/11: pRTH và OVN cùng chấp nhận xuống, giá ở mép dưới HVN</h2>
+    <p class="lead">Số đọc gần đúng từ hai hình chart (composite của bạn và chart của bạn của bạn), chỉ để minh hoạ cách đọc. Kiểm lại trên ATAS trước khi dùng làm số liệu.</p>
+  </div>
+  <div class="svgwrap" id="v-svg"></div>
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Đọc trước phiên</h3>
+      <ol class="clean small">
+        <li><b>Composite:</b> ba HVN khoảng 26840–27370, 27620–28040, 28200–28440. LVN rõ nhất 27370–27620.</li>
+        <li><b>pRTH (13/11):</b> giảm mạnh từ HVN trên xuống, value build trong HVN giữa, đóng gần đáy. Chấp nhận xuống.</li>
+        <li><b>OVN (16/11):</b> mở gap lên khoảng 28260 nhưng bị bán ngược, VA khoảng 27660–27880, thấp hơn VA pRTH. Lệch xuống.</li>
+        <li><b>Giá trước open</b> khoảng 27600: sát mép dưới HVN giữa.</li>
+        <li><b>Bias:</b> pRTH xuống + OVN xuống = A củng cố. Vị trí sát mép dưới với bias hướng ra ngoài → ưu tiên Continuation xuống, target mép trên HVN dưới 27370.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Diễn biến và cách vào lệnh</h3>
+      <ol class="clean small">
+        <li>RTH mở dưới mép 27620, đi xuống trong LVN.</li>
+        <li>Period đóng dưới 27620 xác nhận bias continuation. Lệnh vào ở nhịp hồi lên retest vùng 27620 trên M1, có delta âm.</li>
+        <li>Giá chạy qua LVN tới khoảng 27350, đúng mép trên HVN dưới (27370). Target đạt.</li>
+        <li>Tại 27370 chuyển sang tư duy fade: giá về lại HVN dưới, mép là nơi chờ phản ứng ngược nếu có trigger. Mũi tên trên chart của bạn của bạn (xuống 27370 rồi bật lên lại) là đúng kịch bản này.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="tp-ch" id="ch-mau" data-chapter="mau">
+  <div class="head">
+    <span class="eyebrow">06 · Màu cho ATAS X</span>
+    <h2>Bảng màu ARGB (#AARRGGBB) cho TPO RTH, OVN và composite</h2>
+    <p class="lead">Giữ quy ước bạn đang dùng: RTH màu vàng cát, OVN màu xanh dương. Phần trong VA đậm hơn phần ngoài VA để mắt đọc value nhanh. POC hai phiên khác màu nhau để không nhầm. Bấm vào mã để copy.</p>
+  </div>
+  <div class="panel">
+    <div class="tablewrap"><table><thead><tr><th>Thành phần</th><th>Màu</th><th>ARGB</th><th>Ghi chú</th></tr></thead><tbody id="c-rows"></tbody></table></div>
+    <p class="small muted">Alpha (2 ký tự đầu): FF = đặc, CC = 80%, 99 = 60%, 66 = 40%, 33 = 20%, 1F = 12%. Nền chart gợi ý <span class="mono">#FF141518</span>.</p>
+  </div>
+</section>
+
+<section class="tp-ch" id="ch-quiz" data-chapter="quiz">
+  <div class="head">
+    <span class="eyebrow">07 · Kiểm tra</span>
+    <h2>Quiz khung Composite × pRTH × OVN</h2>
+  </div>
+  <div class="row"><button id="q-reset">Làm lại</button><span class="small muted" id="q-score"></span></div>
+  <div class="flow" id="q-list"></div>
+</section>
+</div>
+</main>
+<script src="assets/js/fp.js?v=16"></script>
+<script src="assets/js/bank-levels.js?v=16"></script>
+<script src="assets/js/bank-ema.js?v=16"></script>
+<script src="assets/js/bank-tools.js?v=16"></script>
+<script src="assets/js/quiz.js?v=16"></script>
+<script src="assets/js/core.js?v=16"></script>
+<script src="assets/js/testing-page.js?v=16"></script>
+</body>
+</html>

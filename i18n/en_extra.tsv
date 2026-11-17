@@ -1410,3 +1410,424 @@ xác nhận phe chủ động thật. A được củng cố, target có thể k
 Đỉnh/đáy range extension và cạnh IB hôm qua.	Range-extension high/low and the prior IB edges.
 Đọc trước khi chọn open type: cấu trúc hôm qua làm A mạnh lên hay cần thêm xác nhận.	Read this before picking the open type: does yesterday’s structure strengthen A or need more confirmation.
 Ưu tiên B	Prefer B
+(cách giá 9:25	(from the 9:25 price
+(dùng như POC của vùng).	(use it as the zone POC).
+(giữa	(between
+(nến đóng lại vào trong, delta dương hoặc absorption). Target	(candle closes back inside, positive delta or absorption). Target
+(nến đóng lại vào trong, delta âm hoặc absorption). Target	(candle closes back inside, negative delta or absorption). Target
+) chốt hướng; open type ngược bias thì đi theo open type.	) sets the direction; if the open type is against the bias, follow the open type.
+). Bias từ pRTH + OVN chỉ là giả thuyết trước phiên.	). The bias from pRTH + OVN is only a pre-session hypothesis.
+). Chờ IB. Phía nào được chấp nhận trước thì đi theo tới mép HVN đó.	). Wait for the IB. Follow whichever side is accepted first, to that HVN edge.
+, sau đó	, then
+. Dữ liệu mẫu là VA tính từ data M1 bạn đã export. Thay bằng số trên ATAS để dùng hằng ngày.	. The sample data are VAs computed from the M1 data you exported. Replace them with ATAS numbers for daily use.
+. Không long ở mép trên. Tới mép dưới thì xử lý như	. No longs at the upper edge. At the lower edge, handle it as
+. Không short ở mép dưới. Tới mép trên thì xử lý như	. No shorts at the lower edge. At the upper edge, handle it as
+. Long ở lần retest	. Long on the retest of
+. Period đóng dưới → continuation tới	. Period closes below → continuation to
+. Period đóng trên → continuation tới	. Period closes above → continuation to
+. Short ở lần retest	. Short on the retest of
+. Vào ở retest	. Enter on the retest of
+// gộp khe nhỏ	// merge small gaps
+00 · Khung plan mỗi ngày	00 · Daily plan frame
+01 · Xác định vùng balance	01 · Finding balance areas
+02 · Đọc bias	02 · Reading the bias
+04 · Quy trình trade	04 · Trading process
+05 · Ví dụ	05 · Example
+06 · Màu cho ATAS X	06 · Colors for ATAS X
+07 · Kiểm tra	07 · Check
+1 · Giá trước open ở đâu trên composite	1 · Where is price before the open on the composite
+2 · pRTH đã build gì	2 · What did pRTH build
+2R cố định	Fixed 2R
+3 · OVN so với VA pRTH	3 · OVN vs the pRTH VA
+30 ngày gần nhất (ETH)	Last 30 days (ETH)
+9:30 – 16:14 ET hôm qua	9:30 – 16:14 ET yesterday
+: chỉ giữ chỗ mà cả VA RTH lẫn VA OVN đều chồng nhiều. Đây là balance được cả hai nhóm chấp nhận.	: keeps only areas where both RTH VAs and OVN VAs stack heavily. That is balance accepted by both groups.
+: forward test với size nhỏ.	: forward test with small size.
+: giá thường đi nhanh qua.	: price usually moves through fast.
+: short ở mép trên, long ở mép dưới khi có trigger M1. Target	: short the upper edge, long the lower edge on an M1 trigger. Target
+= khoảng giữa hai HVN. LVN rõ khi không có VA nào phủ.	= the gap between two HVNs. An LVN is clear when no VA covers it.
+= đoạn giá có từ	= a price stretch with
+A củng cố	A reinforced
+A củng cố lên	A reinforced up
+A củng cố xuống	A reinforced down
+Alpha (2 ký tự đầu): FF = đặc, CC = 80%, 99 = 60%, 66 = 40%, 33 = 20%, 1F = 12%. Nền chart gợi ý	Alpha (first 2 characters): FF = solid, CC = 80%, 99 = 60%, 66 = 40%, 33 = 20%, 1F = 12%. Suggested chart background
+Ba lớp của plan: Composite, pRTH, OVN dẫn tới bias và lệnh M1	Three plan layers: Composite, pRTH, OVN lead to the bias and the M1 trade
+Ba setup, một hướng, vào lệnh trên M1	Three setups, one direction, entries on M1
+Ba thứ cần có trên chart	Three things needed on the chart
+Balance bị phá. Giá đi qua LVN khá nhanh tới mép của HVN kế tiếp. Vào ở lần retest mép vừa phá, trên M1.	Balance is broken. Price crosses the LVN fairly fast to the edge of the next HVN. Enter on the retest of the edge just broken, on M1.
+Balance trong ngày. Fade mép HVN / mép IB, hoặc chờ IB xong (10:30).	Intraday balance. Fade the HVN / IB edges, or wait for the IB to finish (10:30).
+Balance, fade hai mép	Balance, fade both edges
+Bao trùm VA pRTH	Engulfs the pRTH VA
+Bias ngược phía giá đang khám phá. Chỉ trade khi period đóng quay lại vào trong HVN	The bias is against the side price is exploring. Only trade once a period closes back inside the HVN
+Bias trước phiên là giả thuyết. Lúc 10:00 ET chốt hướng bằng open type và EMA 9/34. Sau đó chỉ có ba setup được phép.	The pre-session bias is a hypothesis. At 10:00 ET the open type and EMA 9/34 set the direction. After that only three setups are allowed.
+Bias đổi sang continuation xuống; vào short ở lần retest mép trên M1	The bias flips to continuation down; short the retest of the edge on M1
+Bán nhịp hồi trong HVN (về POC / VWAP) theo bias xuống, target mép dưới	Sell bounces inside the HVN (to POC / VWAP) with the down bias, target the lower edge
+Bạn fade mép trên HVN, giá phá lên trên M1 và lệnh chạm stop. Sau đó period đóng trên mép. Làm gì?	You fade the upper HVN edge, price breaks up on M1 and the trade hits its stop. Then a period closes above the edge. What now?
+Bản đồ plan: HVN, VA pRTH, VA OVN, giá và target	Plan map: HVN, pRTH VA, OVN VA, price and target
+Bảng màu ARGB (#AARRGGBB) cho TPO RTH, OVN và composite	ARGB (#AARRGGBB) palette for RTH TPO, OVN and the composite
+Bỏ composite	Drop the composite
+Bỏ khi	Skip when
+Cam đậm, nét 2px.	Strong orange, 2px line.
+Chấp nhận hay từ chối mép?	Edge accepted or rejected?
+Chấp nhận lên	Accepted up
+Chấp nhận xuống	Accepted down
+Chế độ	Mode
+Chỉ OVN	OVN only
+Chỉ RTH	RTH only
+Chỉ dùng POC composite	Use only the composite POC
+Chọn ba thứ bên dưới để xem cách trade. Plan Builder (chương 03) tự xếp loại từ số bạn nhập.	Pick the three items below to see how to trade. Plan Builder (chapter 03) classifies automatically from your numbers.
+Chốt hướng lúc 10:00 ET (22:00 VN)	Set the direction at 10:00 ET (22:00 VN)
+Chốt lúc 10:00 với open type + EMA 9/34 · vào lệnh trên M1	Set at 10:00 with open type + EMA 9/34 · entries on M1
+Chồng nhiều nhất quanh	Most stacked around
+Chỗ nhiều VA chồng nhau là nơi giá được chấp nhận nhiều phiên.	Where many VAs stack is where price was accepted across many sessions.
+Chờ 1 period 30	Wait for one 30
+Chờ IB, đi theo phía IB được chấp nhận	Wait for the IB, follow the side the IB accepts
+Chờ phản ứng ở mép	Wait for the edge reaction
+Chờ tới ngày mai	Wait until tomorrow
+Chữ sáng, đọc được trên nền tối.	Light text, readable on a dark background.
+Coi mọi đỉnh nhọn của profile là HVN. Kết quả là giá ở đâu cũng	Treating every spike in the profile as an HVN. Then price is always
+Composite 30 ngày cho bản đồ HVN/LVN, pRTH và OVN cho hướng, Plan Builder và quy trình trade NY AM.	30-day composite for the HVN/LVN map, pRTH and OVN for direction, Plan Builder and the NY AM trading process.
+Composite 30 ngày có range 5000 điểm, HVN rất rộng và nhiều. Nên làm gì?	The 30-day composite spans 5000 points, with many very wide HVNs. What should you do?
+Composite cho bản đồ, pRTH và OVN cho hướng	Composite for the map, pRTH and OVN for direction
+Composite · HVN (từ thấp đến cao)	Composite · HVN (low to high)
+Composite · ngoài VA	Composite · outside VA
+Continuation lên	Continuation up
+Continuation lên qua LVN	Continuation up through the LVN
+Continuation xuống	Continuation down
+Continuation xuống qua LVN	Continuation down through the LVN
+Cách 1 · Nhìn composite (5 bước)	Method 1 · Read the composite (5 steps)
+Cách 2 xác định HVN (chồng VA) làm gì?	What does method 2 for finding HVNs (stacking VAs) do?
+Cách 2 · Chồng VA RTH + OVN	Method 2 · Stack RTH + OVN VAs
+Cách trade	How to trade
+Có hai cách. Cách 1 nhìn thẳng composite trong ATAS. Cách 2 chồng VA của từng phiên RTH và OVN lên nhau: chỗ nhiều VA chồng nhau là HVN. Cách 2 khách quan, không phụ thuộc mắt, và đúng với ý tưởng tham chiếu RTH + OVN của bạn. HVN tốt nhất là chỗ cả hai cách cùng đồng ý.	There are two methods. Method 1 reads the composite directly in ATAS. Method 2 stacks the VAs of each RTH and OVN session: where many VAs overlap is an HVN. Method 2 is objective, does not depend on your eye, and matches your RTH + OVN reference idea. The best HVNs are where both methods agree.
+Có ít nhất 2–3 TPOC phiên (RTH hoặc OVN) nằm trong vùng.	At least 2–3 session TPOCs (RTH or OVN) sit inside the zone.
+Công cụ: tìm HVN bằng cách chồng VA	Tool: find HVNs by stacking VAs
+Cùng hướng	Same direction
+Cùng màu, 45%.	Same color, 45%.
+Cùng màu, 45%. Phần ngoài value nhạt đi.	Same color, 45%. The part outside value is lighter.
+Cả RTH và OVN	Both RTH and OVN
+Cả composite (cách 1) và chồng VA (cách 2) đều thấy vùng này.	Both the composite (method 1) and VA stacking (method 2) show this zone.
+Cần OD/OTD	Needs OD/OTD
+Cần gì lúc 10:00	Needed at 10:00
+Cần lúc 10:00	Needed at 10:00
+Cần ít nhất 1 HVN, VAH/VAL pRTH, VAH/VAL OVN và giá lúc 9:25.	Needs at least 1 HVN, pRTH VAH/VAL, OVN VAH/VAL and the 9:25 price.
+Diễn biến và cách vào lệnh	How it played out and the entry
+Dùng composite quá dài khi thị trường chạy mạnh. 30 ngày gần đây range khoảng 5000 điểm, vùng cũ có thể đã hết tác dụng. Khi đó ưu tiên 10–20 ngày.	Using too long a composite when the market runs hard. The last 30 days span about 5000 points and old zones may no longer matter. Prefer 10–20 days then.
+Dùng song song với plan TPO hằng ngày, size nhỏ. Phần log phiên và lưu trữ backtest khung cũ (RTH × OVN overlap) tạm thời không đưa lên web.	Use it alongside the daily TPO plan, with small size. The session log and the archived backtest of the old frame (RTH × OVN overlap) are left off the site for now.
+Dời stop	Move the stop
+Fade hai mép HVN	Fade both HVN edges
+Fade mép dưới	Fade the lower edge
+Fade mép trên	Fade the upper edge
+Fade trong HVN, chờ mép	Fade inside the HVN, wait for the edges
+Ghép pRTH và OVN thành bias	Combine pRTH and OVN into a bias
+Giá 9:25	Price 9:25
+Giá chạy qua LVN tới khoảng 27350, đúng mép trên HVN dưới (27370). Target đạt.	Price ran through the LVN to about 27350, right at the upper edge of the lower HVN (27370). Target hit.
+Giá lúc 9:25 ET	Price at 9:25 ET
+Giá lơ lửng trong LVN (	Price is floating in the LVN (
+Giá nằm giữa hai HVN. Ít người đồng ý giá ở đây, giá thường đi nhanh tới một trong hai mép.	Price sits between two HVNs. Few agree on price here; it usually moves fast to one of the two edges.
+Giá trong HVN, open type OA hoặc bias hướng vào trong vùng, VWAP phẳng.	Price inside the HVN, OA open type or a bias pointing into the zone, flat VWAP.
+Giá trước open	Price before the open
+Giá tới mép HVN (hoặc mép VA pRTH nằm trong HVN). Trong 5 nến M1 có nến đóng lại vào trong với delta ngược hướng chạm, hoặc absorption.	Price reaches an HVN edge (or a pRTH VA edge inside the HVN). Within 5 M1 candles one closes back inside with delta against the touch, or absorption.
+Giá đang khám phá ngoài composite, không có hướng rõ. Chờ IB, không fade.	Price is exploring outside the composite with no clear direction. Wait for the IB, do not fade.
+Giá đang ở giữa LVN, bias lên. Nên làm gì?	Price is mid-LVN, bias up. What should you do?
+Giá đang ở đâu trên bản đồ?	Where is price on the map?
+Giá đi qua LVN tới vùng balance kế tiếp; mép gần của vùng đó là nơi dễ gặp phản ứng.	Price crosses the LVN to the next balance area; the near edge of that area is where a reaction is likely.
+Giá đã quay lại vùng này nhiều lần, không chỉ một lần đi qua.	Price has returned to this zone many times, not just passed through once.
+Giá được chấp nhận ngoài mép HVN	Price accepted beyond an HVN edge
+Giá ở	Price is
+Giá ở giữa một vùng balance, cách hai mép xa hơn ngưỡng sát mép.	Price is inside a balance area, farther from both edges than the near-edge threshold.
+Giá ở mép dưới một HVN. Bị từ chối thì fade lên, được chấp nhận thì continuation xuống.	Price is at the lower edge of an HVN. Rejected → fade up; accepted → continuation down.
+Giá ở mép trên một HVN (ngay trong hoặc ngay ngoài). Điểm quyết định: bị từ chối thì fade xuống, được chấp nhận thì continuation lên.	Price is at the upper edge of an HVN (just inside or just outside). Decision point: rejected → fade down; accepted → continuation up.
+Giá ở trong HVN	Price inside an HVN
+Giá ở trên hoặc dưới mọi HVN: đang khám phá giá. Ưu tiên đi theo, không fade.	Price is above or below every HVN: price discovery. Prefer going with it, do not fade.
+Giữ nguyên 30 ngày	Keep 30 days
+Giữ quy ước bạn đang dùng: RTH màu vàng cát, OVN màu xanh dương. Phần trong VA đậm hơn phần ngoài VA để mắt đọc value nhanh. POC hai phiên khác màu nhau để không nhầm. Bấm vào mã để copy.	Keep your current convention: RTH sand yellow, OVN blue. The part inside the VA is stronger than outside so the eye reads value fast. The two session POCs use different colors so they are not confused. Click a code to copy it.
+Gộp hoặc bỏ:	Merge or drop:
+Gộp nếu khe dưới (điểm)	Merge if the gap is under (pts)
+HVN (vùng balance), LVN (đường đi), POC composite	HVN (balance areas), LVN (paths), composite POC
+HVN = nơi hai phe đã đồng ý giá qua nhiều phiên, tức là vùng balance.	HVN = where both sides agreed on price across many sessions, i.e. a balance area.
+HVN = vùng balance	HVN = balance area
+HVN là nơi giá ở lâu qua nhiều phiên. LVN là nơi giá chỉ đi ngang qua.	An HVN is where price stays across many sessions. An LVN is where price only passes through.
+HVN rộng tối thiểu (điểm)	Min HVN width (pts)
+HVN từ công cụ chồng VA.	HVNs from the VA-stacking tool.
+Hai lớp ngược nhau thì không có bias trước phiên.	When the two layers disagree there is no pre-session bias.
+Hai phe đã đồng ý giá ở đây. Bán mép trên, mua mép dưới khi có trigger, target giữa vùng (POC của HVN).	Both sides agreed on price here. Sell the upper edge, buy the lower edge on a trigger, target the middle (the HVN POC).
+High/low phiên, hoặc mép HVN kế tiếp.	Session high/low, or the next HVN edge.
+High/low tuần	Weekly high/low
+Hôm qua build value ở đâu?	Where did yesterday build value?
+Hướng chính (dB)	Main direction (dB)
+Hướng cuối cùng chốt lúc 10:00 ET	The final direction is set at 10:00 ET
+Hướng:	Direction:
+Hẹp hơn ngưỡng: coi là level, không phải vùng balance.	Narrower than the threshold: treat it as a level, not a balance area.
+Hồng, khác hẳn POC RTH để không nhầm.	Pink, clearly different from the RTH POC.
+IB extension (không có HVN phía dưới trong composite)	IB extension (no HVN below in the composite)
+IB extension (không có HVN phía trên trong composite)	IB extension (no HVN above in the composite)
+Khi thị trường chạy mạnh, vùng cũ dễ hết tác dụng và quá rộng so với biên độ một phiên.	When the market runs hard, old zones lose relevance and are too wide for a single session’s range.
+Khung giả thuyết đang forward test, chưa thuộc system chính.	A hypothesis frame in forward test, not yet part of the main system.
+Không có hướng. Fade trong HVN, chờ mép.	No direction. Fade inside the HVN, wait for the edges.
+Không có period đóng quay lại thì đứng ngoài.	No period closing back inside → stand aside.
+Không trade theo hướng. Chỉ fade trong HVN nếu có trigger.	Do not trade a direction. Only fade inside the HVN on a trigger.
+Không vào giữa LVN; vào ở retest mép HVN dưới hoặc pullback VWAP, target mép dưới HVN trên	Do not enter mid-LVN; enter on the retest of the lower HVN edge or a VWAP pullback, target the lower edge of the upper HVN
+Không vào lệnh ở giữa LVN.	No entries in the middle of an LVN.
+Không đọc được dòng nào. Mỗi dòng: ngày RTH|OVN VAL VAH.	No lines could be read. Each line: date RTH|OVN VAL VAH.
+Kiểm tra một HVN có	Check whether an HVN is
+Kẻ mép HVN	Draw the HVN edges
+Kẻ mép HVN bằng một đường mảnh rồi vào lệnh đúng đường đó. Mép là một vùng; vào lệnh khi có trigger, không phải khi chạm.	Drawing the HVN edge as a thin line and entering exactly at it. An edge is a zone; enter on a trigger, not on the touch.
+LVN = đường đi nhanh	LVN = fast path
+LVN là đường đi, không phải nơi để đứng chờ.	An LVN is a path, not a place to wait.
+LVN là đường đi. Vào lệnh ở mép có trigger, không ở giữa đường.	An LVN is a path. Enter at an edge with a trigger, not in the middle.
+LVN thường không giữ giá lâu.	LVNs rarely hold price for long.
+Long khi giá bị từ chối ở	Long when price is rejected at
+Long ngay vì bias lên	Long right away because the bias is up
+Long vì giá rẻ	Long because price is cheap
+LÚC 10:00: open type + EMA 9/34 (5	AT 10:00: open type + EMA 9/34 (5
+Làm mượt profile:	Smooth the profile:
+Lên / xuống	Up / down
+Lõi trống (không VA nào phủ)	Empty core (no VA covers it)
+Lấy VA (VAL–VAH) của mỗi phiên RTH và mỗi phiên OVN trong 10–20 ngày gần nhất.	Take the VA (VAL–VAH) of every RTH and OVN session over the last 10–20 days.
+Lấy VA của ngày gần nhất	Take the most recent day’s VA
+Lấy gì	What to take
+Lấy high/low của 30 ngày	Take the 30-day high/low
+Lần chạm VWAP đầu tiên, có trigger delta, EMA 9/34 cùng hướng.	First VWAP touch, with a delta trigger and EMA 9/34 aligned.
+Lập plan	Build plan
+Lập plan\	Build plan\
+Lệch lên / trên VA pRTH	Skewed up / above the pRTH VA
+Lệch xuống / dưới VA pRTH	Skewed down / below the pRTH VA
+Lệnh bị stop ở một mép thì không vào lại mép đó, trừ khi bias đã đổi và giá retest từ phía bên kia.	After a stop-out at an edge, do not re-enter that edge unless the bias has flipped and price retests from the other side.
+Lệnh đã ra ở stop M1; bias đổi sang continuation lên, chờ retest để long	The trade is out at the M1 stop; the bias flips to continuation up, wait for the retest to go long
+Lịch mỗi ngày	Daily schedule
+Mua pullback trong HVN (về POC / VWAP) theo bias lên, target mép trên	Buy pullbacks inside the HVN (to POC / VWAP) with the up bias, target the upper edge
+Màu ATAS	ATAS colors
+Mép gần của HVN kế tiếp theo hướng lệnh (bỏ nếu dưới 1.5R)	The near edge of the next HVN in the trade direction (skip if under 1.5R)
+Mép gần của HVN kế tiếp. Dưới 1.5R thì bỏ.	The near edge of the next HVN. Skip if under 1.5R.
+Mỏng nhất	Thinnest
+Một period 30	One 30
+Một period đóng ngoài mép HVN = bias chuyển từ fade sang continuation. Hai period = chắc chắn hơn.	One period closing beyond an HVN edge = the bias switches from fade to continuation. Two periods = more certain.
+Mức giá có volume lớn trong 1 phút	A price with big volume in 1 minute
+Ngoài composite	Outside the composite
+Ngoài cực trị vừa tạo, theo M1.	Beyond the new extreme, on M1.
+Ngày trade	Trade date
+Ngược hướng	Opposite direction
+Nhãn chữ	Text labels
+Nhập các vùng HVN của composite, VA pRTH và VA OVN. Builder tự xếp vị trí, hướng OVN, gợi ý pRTH build, rồi vẽ bản đồ với target là mép HVN kế tiếp.	Enter the composite HVN zones, the pRTH VA and the OVN VA. The builder classifies the location and OVN direction, suggests the pRTH build, then draws the map with the next HVN edge as target.
+Nhập số rồi bấm	Enter numbers then press
+Nhập số rồi bấm \	Enter numbers then press \
+Nhập số trước 21:29 VN, nhận plan và bản đồ	Enter numbers before 21:29 VN, get the plan and the map
+Node nhỏ	Small node
+Nét đứt 1px.	Dashed 1px.
+Nét đứt.	Dashed.
+Nạp lại dữ liệu mẫu	Reload sample data
+Nạp ví dụ 16/11	Load the 16/11 example
+OD / OTD / ORR có hướng	Directional OD / OTD / ORR
+OD/OTD cùng hướng + EMA 9/34 cùng hướng	OD/OTD aligned + EMA 9/34 aligned
+OD/OTD cùng hướng OVN	OD/OTD in the OVN direction
+OVN TPO · ngoài VA	OVN TPO · outside VA
+OVN VAH / VAL (kéo dài)	OVN VAH / VAL (extended)
+OVN bao trùm: không trade A period.	OVN engulfs: no A-period trades.
+Open type OD ra phía mép, VWAP dốc ra ngoài, hoặc giá đã chạm mép lần thứ 3.	OD open type toward the edge, VWAP sloping outward, or price touching the edge for the 3rd time.
+Open type không ngược hướng là được	Any open type not against the direction
+Open type không ngược hướng là đủ.	An open type not against the direction is enough.
+POC của HVN, sau đó mép bên kia.	The HVN POC, then the other edge.
+Period kế tiếp đóng lại dưới	Next period closes back below
+Period kế tiếp đóng lại trong HVN: breakout thất bại, quay về fade.	Next period closes back inside the HVN: failed breakout, back to fading.
+Period kế tiếp đóng lại trên	Next period closes back above
+Period đóng dưới 27620 xác nhận bias continuation. Lệnh vào ở nhịp hồi lên retest vùng 27620 trên M1, có delta âm.	A period close below 27620 confirms the continuation bias. The entry is on the bounce retesting 27620 on M1, with negative delta.
+Period đóng quay lại vào composite → dừng đi theo.	A period closes back inside the composite → stop going with it.
+Period đóng trên	Period closes above
+Phiên 16/11: pRTH và OVN cùng chấp nhận xuống, giá ở mép dưới HVN	Session 16/11: pRTH and OVN both accepted lower, price at the lower HVN edge
+Phải chờ thêm 2 period mới làm gì	Must wait 2 more periods before doing anything
+Phản ứng nào đến trước thì theo phía đó.	Follow whichever reaction comes first.
+Profile đếm số VA chồng nhau, vùng HVN tô xanh	Profile counting stacked VAs, HVN zones in teal
+Pullback về VWAP	Pullback to VWAP
+Qua đêm chấp nhận tiếp	Did overnight keep accepting
+Qua đêm chấp nhận value hôm qua, chưa chọn hướng.	Overnight accepted yesterday’s value and has not picked a direction.
+Qua đêm đi hai chiều, quét cả hai phía value hôm qua. Chờ IB.	Overnight was two-sided and swept both sides of yesterday’s value. Wait for the IB.
+Quay lại composite	Back into the composite
+Quay lại trong HVN theo M1.	Back inside the HVN on M1.
+Quy trình trade	Trading process
+Quy tắc nền	Core rules
+Quên cập nhật: khi giá build value mới trong LVN 2–3 phiên, LVN đó đang thành HVN.	Forgetting to update: when price builds new value inside an LVN for 2–3 sessions, that LVN is becoming an HVN.
+Quản lý lệnh và rủi ro	Trade and risk management
+RTH TPO · ngoài VA	RTH TPO · outside VA
+RTH VAH / VAL (kéo dài)	RTH VAH / VAL (extended)
+RTH mở dưới mép 27620, đi xuống trong LVN.	RTH opened below the 27620 edge and moved down inside the LVN.
+Retest mép vừa phá trên M1: nến đóng giữ được phía ngoài, delta cùng hướng, EMA 9 &gt; 34 (long).	Retest of the edge just broken on M1: the candle closes holding outside, delta aligned, EMA 9 &gt; 34 (long).
+Rộng ít nhất khoảng nửa biên độ RTH trung bình. Hiện tại biên độ RTH khoảng 250–350 điểm, nên HVN hẹp hơn khoảng 120 điểm chỉ nên coi là level.	At least about half the average RTH range wide. The RTH range is currently about 250–350 points, so an HVN narrower than about 120 points should be treated as a level.
+SETUP ƯU TIÊN:	PRIORITY SETUP:
+Sau 10:00, giá đã ở một phía VWAP ít nhất 15 phút, đúng hướng bias.	After 10:00, price has held one side of VWAP for at least 15 minutes, in the bias direction.
+Setup tốt nhất của backtest khung cũ (45%, chưa đủ mẫu).	Best setup in the old-frame backtest (45%, sample too small).
+Short khi giá bị từ chối ở	Short when price is rejected at
+Short vì giá ở vùng ít giao dịch	Short because price is in a low-volume area
+Stop nằm trên M1. Không dời stop để chờ period 30	The stop lives on M1. Do not move it to wait for a 30
+Stop nằm trên M1. Period đóng ngoài mép là tín hiệu đổi bias, không phải điểm thoát.	The stop lives on M1. A period closing beyond the edge is a bias-flip signal, not an exit point.
+Stop theo cấu trúc M1 ngoài level. Không chờ period đóng mới thoát lệnh.	Stop by M1 structure beyond the level. Do not wait for a period close to exit.
+Sáng (giờ VN):	Morning (VN time):
+Sát mép dưới	Near the lower edge
+Sát mép dưới HVN	Near the lower HVN edge
+Sát mép nếu cách (điểm)	Near the edge if within (pts)
+Sát mép trên	Near the upper edge
+Sát mép trên HVN	Near the upper HVN edge
+Số VA tối thiểu	Min VA count
+Số VA tối thiểu (HVN)	Min VA count (HVN)
+Số ngày gần nhất	Recent days
+Số đọc gần đúng từ hai hình chart (composite của bạn và chart của bạn của bạn), chỉ để minh hoạ cách đọc. Kiểm lại trên ATAS trước khi dùng làm số liệu.	Numbers read approximately from two charts (your composite and your friend’s chart), only to illustrate the reading. Check them on ATAS before using them as data.
+Target = mép HVN kế tiếp	Target = next HVN edge
+Target của lệnh continuation là gì?	What is the target of a continuation trade?
+Teal 12%, không che TPO.	Teal 12%, does not hide the TPO.
+Testing plan: composite 30 ngày cho bản đồ HVN/LVN, pRTH và OVN cho hướng, Plan Builder và quy trình trade NY AM.	Testing plan: 30-day composite for the HVN/LVN map, pRTH and OVN for direction, Plan Builder and the NY AM trading process.
+Thoát theo target, stop, hoặc 11:30 ET, cái nào đến trước. Không giữ lệnh qua 11:30 nếu không có rule riêng viết trước phiên.	Exit at target, stop or 11:30 ET, whichever comes first. Do not hold past 11:30 without a rule written before the session.
+Thị trường đi từ vùng balance này sang vùng balance khác. Composite 30 ngày cho biết các vùng balance (HVN) và đường đi giữa chúng (LVN). RTH hôm qua (pRTH) và phiên qua đêm (OVN) cho biết hai phe đang chấp nhận giá ở đâu trong bản đồ đó, từ đó ra bias cho phiên NY AM.	The market moves from one balance area to another. The 30-day composite shows the balance areas (HVN) and the paths between them (LVN). Yesterday’s RTH (pRTH) and the overnight session (OVN) show where both sides are accepting price on that map, which gives the bias for the NY AM session.
+Thử composite ngắn hơn (10–20 ngày) để vùng sát với quy mô intraday	Try a shorter composite (10–20 days) so zones fit the intraday scale
+Thử lên bị từ chối	Tried up, rejected
+Thử trên data 21/10 → 12/11: công cụ bên dưới tìm ra lõi LVN trống khoảng 27360–27650 (vạch đỏ bên trái), gần trùng vùng LVN 27370–27620 mà bạn của bạn kẻ bằng mắt.	Tested on 21/10 → 12/11 data: the tool below finds an empty LVN core around 27360–27650 (red mark on the left), close to the 27370–27620 LVN your friend drew by eye.
+Thử xuống bị từ chối	Tried down, rejected
+Trade theo hướng open type. Nếu ngược bias trước phiên thì	Trade in the open-type direction. If it is against the pre-session bias,
+Trong / bao trùm	Inside / engulfing
+Trong VA pRTH hoặc bao trùm	Inside the pRTH VA or engulfing
+Trong khung này, HVN của composite đại diện cho gì?	In this frame, what does a composite HVN represent?
+Trước 21:29 VN:	Before 21:29 VN:
+Trắng 8%, hoặc để trống.	White 8%, or leave empty.
+Trắng, nét mảnh.	White, thin line.
+Tìm	Find
+Tìm HVN	Find HVNs
+Tại 27370 chuyển sang tư duy fade: giá về lại HVN dưới, mép là nơi chờ phản ứng ngược nếu có trigger. Mũi tên trên chart của bạn của bạn (xuống 27370 rồi bật lên lại) là đúng kịch bản này.	At 27370 switch to fade thinking: price is back at the lower HVN and the edge is where to wait for a reversal on a trigger. The arrow on your friend’s chart (down to 27370, then bouncing) is exactly this scenario.
+Tối đa 2–3 lệnh, dừng 11:30 ET. Khung này	Max 2–3 trades, stop at 11:30 ET. This frame
+Tối đa 3 lệnh. Thua 2 lệnh liên tiếp thì dừng. Không vào lệnh trong LVN giữa đường.	Max 3 trades. Stop after 2 losses in a row. No entries in the middle of an LVN.
+Từ	From
+VA OVN cao hơn VA pRTH: overlap lệch lên hoặc nằm hẳn phía trên.	OVN VA higher than the pRTH VA: overlap skewed up or entirely above.
+VA OVN thấp hơn VA pRTH: overlap lệch xuống hoặc nằm hẳn phía dưới.	OVN VA lower than the pRTH VA: overlap skewed down or entirely below.
+VA từng phiên	Per-session VA
+VA): đường đi nhưng chậm hơn.	VA): a path, but slower.
+Viền vùng HVN	HVN zone border
+VÀO LỆNH: trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Dừng 11:30 ET.	ENTRY: on M1 + footprint, stop by M1 structure. Never mid-LVN. Stop at 11:30 ET.
+Vàng cát, đặc. Giữ quy ước RTH = vàng.	Sand yellow, solid. Keeps RTH = yellow.
+Vào	Entry
+Vào lại short	Re-enter short
+Vào short ngay lúc period đóng	Short right at the period close
+Vào và ra lệnh trên M1 + footprint.	Enter and exit on M1 + footprint.
+Ví dụ 16/11	Example 16/11
+Vùng	Zone
+Vùng HVN (rectangle fill)	HVN zone (rectangle fill)
+Vùng LVN (tuỳ chọn)	LVN zone (optional)
+Vùng balance: giá đã ở lâu qua nhiều phiên	A balance area: price stayed there across many sessions
+Vùng có nhiều stop	An area with many stops
+Vùng giá đi nhanh	A fast-move area
+Vẽ đường nối các POC	Draw a line through the POCs
+VỊ TRÍ:	LOCATION:
+Vị trí	Location
+Vị trí + bias → Fade hay Continuation	Location + bias → Fade or Continuation
+Vị trí trên composite chọn kiểu lệnh. pRTH và OVN chọn hướng.	Location on the composite picks the trade type. pRTH and OVN pick the direction.
+Xanh dương, đặc.	Blue, solid.
+Xoá trắng	Clear all
+Xung đột	Conflict
+Xung đột: chờ IB, đi theo phía IB được chấp nhận	Conflict: wait for the IB, follow the side the IB accepts
+Xác nhận hướng (dO)	Direction check (dO)
+Xác định HVN	Finding HVNs
+Xám 25%.	Grey 25%.
+ba HVN khoảng 26840–27370, 27620–28040, 28200–28440. LVN rõ nhất 27370–27620.	three HVNs around 26840–27370, 27620–28040, 28200–28440. The clearest LVN is 27370–27620.
+bằng open type và EMA 9/34 (nến 5	by the open type and EMA 9/34 (5
+bụng	bulges
+chưa được backtest	has not been backtested
+chỉ để đổi bias.	only flips the bias.
+chốt hướng bằng open type + EMA 9/34. Chọn Fade hay Continuation theo vị trí.	set the direction by open type + EMA 9/34. Pick Fade or Continuation by location.
+chồng nhau trở lên.	or more stacked.
+chỗ profile thắt lại giữa hai bụng, còn khoảng 1/3 độ dày của bụng trở xuống. Đó là LVN.	where the profile narrows between two bulges, down to about 1/3 of the bulge thickness or less. That is an LVN.
+composite 30D, row lớn hơn chart ngày (khoảng 10–20 điểm với NQ) để thấy hình dạng thay vì răng cưa.	30D composite with a larger row than the daily chart (about 10–20 points for NQ) to see the shape instead of a sawtooth.
+composite và bias cùng phía: chỉ đi theo bằng pullback VWAP hoặc retest IB, không fade. Target IB 1.5x–2x.	the composite with the bias on the same side: only go with it via VWAP pullbacks or IB retests, no fading. Target IB 1.5x–2x.
+câu còn lại	questions left
+cùng hướng OVN.	in the OVN direction.
+cập nhật composite, kẻ lại HVN/LVN nếu có phiên mới làm đổi hình dạng profile (chương 01).	update the composite, redraw HVN/LVN if a new session changed the profile shape (chapter 01).
+cập nhật mỗi sáng	updated every morning
+giảm mạnh từ HVN trên xuống, value build trong HVN giữa, đóng gần đáy. Chấp nhận xuống.	fell hard from the upper HVN, built value in the middle HVN, closed near the low. Accepted lower.
+giữa HVN	HVN middle
+giữa HVN gần nhất	middle of the nearest HVN
+gần HVN	near an HVN
+hai bụng cách nhau một eo dưới khoảng 40 điểm thì gộp. Bụng hẹp dưới khoảng 100 điểm thì coi là level, không phải vùng balance.	merge two bulges separated by a waist under about 40 points. A bulge narrower than about 100 points is a level, not a balance area.
+hay đẩy ngược lại?	or push back?
+hoặc nhịp hồi về VWAP có trigger. Không bán ở giữa LVN.	or a bounce to VWAP with a trigger. Do not sell mid-LVN.
+hoặc pullback VWAP có trigger. Không mua ở giữa LVN.	or a VWAP pullback with a trigger. Do not buy mid-LVN.
+khoảng 27600: sát mép dưới HVN giữa.	about 27600: near the lower edge of the middle HVN.
+khoảng LVN. Đổi	LVN gaps. Change
+không vào lệnh. Xem open type và phản ứng đầu tiên ở mép gần nhất.	no entries. Watch the open type and the first reaction at the nearest edge.
+là điểm quyết định. Bị từ chối → fade về	is the decision point. Rejected → fade to
+mép dưới HVN	lower HVN edge
+mép dưới HVN kế trên	lower edge of the next HVN up
+mép dưới HVN phía trên	lower edge of the HVN above
+mép trên HVN	upper HVN edge
+mép trên HVN kế dưới	upper edge of the next HVN down
+mép trên HVN phía dưới	upper edge of the HVN below
+mờ	faint
+mở gap lên khoảng 28260 nhưng bị bán ngược, VA khoảng 27660–27880, thấp hơn VA pRTH. Lệch xuống.	gapped up to about 28260 but was sold back, VA about 27660–27880, below the pRTH VA. Skewed down.
+ngoài	outside
+ngày  RTH|OVN  VAL  VAH	date  RTH|OVN  VAL  VAH
+ngày ·	days ·
+nhập pRTH và OVN vào Plan Builder (chương 03). Ghi vị trí, bias, setup ưu tiên, target, level đổi bias.	enter pRTH and OVN in Plan Builder (chapter 03). Note the location, bias, priority setup, target and bias-flip level.
+node nhỏ	small node
+node nhỏ,	small nodes,
+open type thắng	the open type wins
+pRTH build (tự gợi ý, sửa nếu cần)	pRTH build (auto-suggested, edit if needed)
+pRTH chấp nhận xuống, OVN lệch lên so với VA pRTH. Bias?	pRTH accepted lower, OVN skewed up vs the pRTH VA. Bias?
+pRTH và OVN dùng VA của TPO (70% thời gian) vì khung này đánh balance–imbalance: acceptance được đo bằng thời gian giá ở lại một vùng.	pRTH and OVN use the TPO VA (70% of time) because this frame trades balance–imbalance: acceptance is measured by how long price stays in an area.
+pRTH và OVN ngược nhau. Chờ IB, đi theo phía IB được chấp nhận.	pRTH and OVN disagree. Wait for the IB, follow the side the IB accepts.
+pRTH xuống + OVN xuống = A củng cố. Vị trí sát mép dưới với bias hướng ra ngoài → ưu tiên Continuation xuống, target mép trên HVN dưới 27370.	pRTH down + OVN down = A reinforced. Near the lower edge with the bias pointing out → prefer Continuation down, target the upper edge of the lower HVN at 27370.
+rõ	clear
+theo hướng lệnh. Nếu khoảng cách tới đó dưới 1.5R thì bỏ qua lệnh.	in the trade direction. If the distance there is under 1.5R, skip the trade.
+theo mô tả	as described
+thật	real
+trên M1 (nến giữ phía dưới, delta âm, EMA 9	on M1 (candle holds below, negative delta, EMA 9
+trên M1 (nến giữ phía trên, delta dương, EMA 9	on M1 (candle holds above, positive delta, EMA 9
+và EMA 9/34 cùng hướng lúc 10:00.	and EMA 9/34 aligned at 10:00.
+và vùng mất ý nghĩa.	and zones lose meaning.
+vào lệnh trên M1 khi có trigger. Dừng 23:30 hoặc sau 2–3 lệnh.	enter on M1 on a trigger. Stop at 23:30 or after 2–3 trades.
+vừa đóng dưới mép dưới HVN. Ý nghĩa?	period just closed below the lower HVN edge. Meaning?
+· từ	· from
+· đến	· to
+Đi lên trên VAH hoặc mép HVN nhưng để lại tail / poor high, đóng lại phía dưới.	Went above VAH or an HVN edge but left a tail / poor high and closed back below.
+Đi theo (khám phá giá)	Go with it (price discovery)
+Đi theo lên tới	Go with it up to
+Đi theo xuống tới	Go with it down to
+Đi xuống dưới VAL hoặc mép HVN nhưng để lại tail dưới, đóng lại phía trên.	Went below VAL or an HVN edge but left a lower tail and closed back above.
+Đánh dấu đỏ.	Marked red.
+Đã copy	Copied
+Đã nhận	Received
+Đã nạp ví dụ 16/11 (số đọc gần đúng từ chart).	Loaded the 16/11 example (numbers read approximately from the chart).
+Đóng dưới VAL, hoặc value thấp hơn hôm trước, không có tail dưới.	Closed below VAL, or value lower than the day before, no lower tail.
+Đóng trong VA, profile cân (D / Normal), không phía nào được chấp nhận.	Closed inside the VA, balanced profile (D / Normal), no side accepted.
+Đóng trên VAH, hoặc value cao hơn hôm trước, không có tail trên.	Closed above VAH, or value higher than the day before, no upper tail.
+Đưa vùng sang Plan Builder	Send zones to Plan Builder
+Đếm ở mỗi mức giá có bao nhiêu VA RTH và OVN chứa nó; chỗ từ 3 VA trở lên là HVN	Count how many RTH and OVN VAs contain each price; 3 or more VAs is an HVN
+Đến	To
+Đọc bias	Reading the bias
+Đọc trước phiên	Pre-session read
+ĐỔI BIAS (TPO 30	BIAS FLIP (TPO 30
+Đổi bias khi	Bias flips when
+Độ dài thanh = số VA chồng nhau ở mức giá đó (tối đa	Bar length = number of stacked VAs at that price (max
+điểm)	pts)
+đoạn profile phình ra liên tục, dày gần bằng phần dày nhất xung quanh. Mỗi bụng là một HVN.	a stretch where the profile keeps bulging, almost as thick as the thickest part nearby. Each bulge is an HVN.
+đóng dưới	close below
+đóng ngoài mép HVN theo hướng bias (bias đổi sang continuation).	period closes beyond the HVN edge in the bias direction (the bias switches to continuation).
+đóng ngoài một mép → chuyển sang continuation theo phía đó.	close beyond one edge → switch to continuation on that side.
+đóng trên	close above
+đóng.	close.
+để vùng chặt hơn (tăng) hoặc rộng hơn (giảm).	to make zones tighter (raise) or wider (lower).
+đổi bias. Điểm vào lấy trên M1 ở lần retest, vì lúc period đóng giá thường đã chạy xa.	flips the bias. The entry comes from the M1 retest, because by the period close price has usually run far.
+Ở mỗi mức giá, đếm có bao nhiêu VA chứa mức giá đó.	At each price, count how many VAs contain it.
+ở chỗ profile bắt đầu co lại rõ, không kẻ ở đỉnh nhọn lẻ. Vẽ vùng (box), không vẽ một đường.	where the profile clearly starts to narrow, not at a lone spike. Draw a zone (box), not a line.
+→ bias hỏng.	→ bias broken.
+→ breakdown thất bại, đứng ngoài hoặc fade về	→ failed breakdown, stand aside or fade to
+→ breakout thất bại, đứng ngoài hoặc fade về	→ failed breakout, stand aside or fade to
+→ hướng lên hỏng.	→ upside idea broken.
+→ hướng xuống hỏng.	→ downside idea broken.
+→ ngừng fade, cân nhắc continuation lên.	→ stop fading, consider continuation up.
+→ ngừng fade, cân nhắc continuation xuống.	→ stop fading, consider continuation down.
+Tìm "bụng"	Find the “bulges”
+Tìm "eo"	Find the “waist”
+Kiểm tra một HVN có "thật" không	Check whether an HVN is “real”
+cũng "gần HVN" và vùng mất ý nghĩa.	“near an HVN” and zones lose meaning.
+(qua "+fmt	(through "+fmt
+Continuation qua LVN	Continuation through the LVN
+Fade trong HVN	Fade inside the HVN
+Composite · trong VA	Composite · inside VA
+OVN TPO · trong VA	OVN TPO · inside VA
+RTH TPO · trong VA	RTH TPO · inside VA
+Theo bias trong HVN	With the bias inside the HVN

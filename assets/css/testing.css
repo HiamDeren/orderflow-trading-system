@@ -1,0 +1,89 @@
+/* Trang Testing plan · Composite × pRTH × OVN, CSS gốc của artifact được scope dưới .pg-testing */
+.pg-testing{--rth:#E0A458;--ovn:#6F9BD9;--poc:#FF9F1A;--ov:#EF9F27;--hvn:#26A69A;font-size:15.5px;line-height:1.6}
+.pg-testing p{margin:0}
+.pg-testing a{color:var(--vwap)}
+.pg-testing .tp-ch{display:flex;flex-direction:column;gap:20px}
+.pg-testing .tp-test{display:flex;gap:12px;align-items:flex-start;border:1px dashed #1e6b63;background:#121c1b;border-radius:10px;padding:12px 14px;font-size:14px}
+.pg-testing .tp-test .badge{flex:none;font:700 11px var(--font-mono);letter-spacing:.08em;color:#9fe3d9;background:#123430;border:1px solid #1e6b63;border-radius:999px;padding:3px 9px}
+.pg-testing .tp-test b{color:var(--text)}
+.pg-testing h2, .pg-testing h3, .pg-testing h4{margin:0;line-height:1.25;text-wrap:balance}
+.pg-testing h2{font-size:1.5rem;font-weight:800}
+.pg-testing h3{font-size:1.1rem;font-weight:700}
+.pg-testing h4{font-size:.98rem;font-weight:700}
+.pg-testing .mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.pg-testing button:focus-visible, .pg-testing input:focus-visible, .pg-testing select:focus-visible, .pg-testing textarea:focus-visible{outline:2px solid var(--vwap);outline-offset:2px}
+.pg-testing .head{display:flex;flex-direction:column;gap:8px}
+.pg-testing .eyebrow{font-family:var(--font-mono);font-size:.74rem;color:var(--poc);letter-spacing:.08em;text-transform:uppercase}
+.pg-testing .lead{color:#c9cdd3;max-width:74ch}
+.pg-testing .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.pg-testing .grid{display:grid;gap:12px}
+.pg-testing .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.pg-testing .g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.pg-testing .card{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.pg-testing .k{font-family:var(--font-mono);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.pg-testing .small{font-size:.88rem}
+.pg-testing .muted{color:var(--muted)}
+.pg-testing .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pg-testing ul.clean, .pg-testing ol.clean{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:5px}
+.pg-testing .chip{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:.72rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:#25282d;color:#d9dce0;white-space:nowrap}
+.pg-testing .chip.rth{background:#3a2a14;border-color:#8a6630;color:#f6dcb2}
+.pg-testing .chip.ovn{background:#16263f;border-color:#3d6699;color:#cfe0f7}
+.pg-testing .chip.hvn{background:#0f302c;border-color:#1f7a70;color:#bff0e8}
+.pg-testing .chip.lvn{background:#26272b;border-color:#4a4d55;color:#c9cdd3}
+.pg-testing .chip.ov{background:#3d2d10;border-color:#7a5618;color:#fac775}
+.pg-testing .chip.good{background:#123a27;border-color:#24704a;color:#c8f2da}
+.pg-testing .chip.bad{background:#401617;border-color:#7d2a2c;color:#ffd0cf}
+.pg-testing .chip.liq{background:#2a2a2a;border-color:#555;color:#e6e8eb}
+.pg-testing table{border-collapse:collapse;width:100%;font-size:.9rem}
+.pg-testing th, .pg-testing td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+.pg-testing th{font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:#1c1e22;font-weight:600}
+.pg-testing td.num, .pg-testing th.num{text-align:right}
+.pg-testing .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+.pg-testing .svgwrap{overflow-x:auto;background:#141518;border:1px solid var(--line);border-radius:8px;padding:6px}
+.pg-testing .svgwrap svg{display:block;margin:0 auto;width:100%;max-width:820px;height:auto}
+.pg-testing button{font-family:var(--font-body);font-size:.86rem;font-weight:600;color:var(--text);background:#262a30;border:1px solid #3a3f47;border-radius:7px;padding:7px 12px;cursor:pointer}
+.pg-testing button:hover{background:#2e333a}
+.pg-testing button.on{background:#0f302c;border-color:#26A69A;color:#d8fbf5}
+.pg-testing button.mx{background:transparent;border:1px solid transparent;padding:2px 4px}
+.pg-testing button.mx.on{border-color:#9b2a58;background:#2a1520}
+.pg-testing button.primary{background:#145049;border-color:#26A69A}
+.pg-testing .seg{display:flex;gap:6px;flex-wrap:wrap}
+.pg-testing .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;align-content:start}
+.pg-testing .field{display:flex;flex-direction:column;gap:4px}
+.pg-testing .field label{font-size:.74rem;color:var(--muted);font-family:var(--font-mono)}
+.pg-testing input, .pg-testing select, .pg-testing textarea{background:#121316;color:var(--text);border:1px solid #363a41;border-radius:6px;padding:7px 9px;font-family:var(--font-mono);font-size:.88rem;width:100%}
+.pg-testing fieldset{border:1px solid var(--line);border-radius:8px;padding:12px 14px 14px;margin:0}
+.pg-testing legend{font-size:.8rem;font-weight:700;color:var(--poc);padding:0 6px}
+.pg-testing .out{background:#0f1012;border:1px solid var(--line);border-radius:8px;padding:14px;white-space:pre-wrap;font-family:var(--font-mono);font-size:.84rem;line-height:1.6}
+.pg-testing .callout{border-left:3px solid var(--poc);background:#1d1a14;padding:12px 14px;border-radius:0 8px 8px 0;display:flex;flex-direction:column;gap:6px}
+.pg-testing .callout.red{border-left-color:var(--rth);background:#1f1418}
+.pg-testing .callout.purple{border-left-color:var(--ovn);background:#18162a}
+.pg-testing .ab{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.pg-testing .ab .card.a{border-left:3px solid var(--good)}
+.pg-testing .ab .card.b{border-left:3px solid var(--bad)}
+.pg-testing .dl{display:grid;grid-template-columns:96px 1fr;gap:4px 10px;font-size:.9rem}
+.pg-testing .dl dt{color:var(--muted);font-family:var(--font-mono);font-size:.76rem;padding-top:2px}
+.pg-testing .dl dd{margin:0}
+.pg-testing .flow{display:flex;flex-direction:column;gap:8px}
+.pg-testing .step{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}
+.pg-testing .step .dot{width:26px;height:26px;border-radius:50%;background:#3b2d12;border:1px solid #6b5220;color:#ffe2ad;display:grid;place-items:center;font-family:var(--font-mono);font-size:.78rem;font-weight:700}
+.pg-testing .q{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.pg-testing .opts{display:flex;flex-direction:column;gap:6px}
+.pg-testing .opts button{text-align:left;font-weight:500;background:#1a1c20}
+.pg-testing .opts button.right{background:#123a27;border-color:#2c8a5a;color:#d7f7e5}
+.pg-testing .opts button.wrong{background:#401617;border-color:#8c2f31;color:#ffd7d6}
+.pg-testing .expl{font-size:.88rem;color:#cfd3d8;border-top:1px dashed var(--line);padding-top:6px}
+.pg-testing .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.pg-testing .tile{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.pg-testing .tile .v{font-family:var(--font-mono);font-size:1.3rem;font-weight:700}
+@media (max-width:620px){
+.pg-testing .dl{grid-template-columns:1fr}
+}
+.pg-testing .callout.teal{border-left-color:var(--hvn);background:#132220}
+.pg-testing .swatch{display:inline-block;width:34px;height:18px;border-radius:4px;border:1px solid #3a3f47;vertical-align:middle;background-image:linear-gradient(45deg,#2a2a2a 25%,transparent 25%,transparent 75%,#2a2a2a 75%),linear-gradient(45deg,#2a2a2a 25%,transparent 25%,transparent 75%,#2a2a2a 75%);background-size:8px 8px;background-position:0 0,4px 4px;position:relative;overflow:hidden}
+.pg-testing .swatch i{position:absolute;inset:0}
+.pg-testing .pill{display:inline-block;font-family:var(--font-mono);font-size:.8rem;font-weight:700;padding:3px 10px;border-radius:6px}
+.pg-testing .pill.up{background:#123a27;color:#c8f2da;border:1px solid #2c8a5a}
+.pg-testing .pill.dn{background:#401617;color:#ffd0cf;border:1px solid #8c2f31}
+.pg-testing .pill.nt{background:#2a2c31;color:#e6e8eb;border:1px solid #4a4d55}
+.pg-testing textarea{min-height:180px;resize:vertical;line-height:1.5}
