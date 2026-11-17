@@ -61,7 +61,7 @@ Ghi kết quả so sánh (bảng: field, chuẩn, indicator, lệch) vào `plans
 ## Bước 6 · (Sau khi setup Vercel + Supabase xong) gửi lên web
 1. Trong nhóm "2 · Web": bật "Gửi lên web", điền API URL (`https://<site>.vercel.app/api/plan`) và API token.
 2. Bấm "Bấm để gửi plan" → `plan_sender.log` phải có dòng `HTTP 200`.
-3. Kiểm tra bảng `plans` trong Supabase có dòng của ngày đó.
+3. Kiểm tra bảng `trade_plans` trong Supabase có dòng của ngày đó.
 4. Không lưu template ATAS có token vào repo.
 
 Báo lại: kết quả build, bảng VALIDATION, ảnh chụp Plan Builder sau khi dán JSON, dòng log HTTP (nếu làm bước 6).

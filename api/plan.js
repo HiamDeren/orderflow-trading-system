@@ -1,7 +1,7 @@
 // api/plan.js — Vercel Function (Node.js runtime, không cần thư viện ngoài)
 //
 // POST /api/plan   Header: Authorization: Bearer <PLAN_TOKEN>   Body: JSON từ "Deren · Plan Sender"
-//                  → lưu (upsert theo ngày + symbol) vào bảng public.plans trên Supabase
+//                  → lưu (upsert theo ngày + symbol) vào bảng public.trade_plans trên Supabase
 // GET  /api/plan[?date=YYYY-MM-DD]   Header: Authorization: Bearer <PLAN_TOKEN>
 //                  → trả plan của ngày đó, hoặc plan mới nhất
 //
@@ -11,7 +11,7 @@
 // mà không thấy {"error":"unauthorized"} (ví dụ 500 do lỗi module), đổi tên file thành api/plan.mjs.
 // Nếu repo là Next.js App Router thì dùng route handler app/api/plan/route.js thay vì file này.
 
-const TABLE = "plans";
+const TABLE = "trade_plans";
 
 function supaHeaders(key) {
   const h = { apikey: key, "Content-Type": "application/json" };

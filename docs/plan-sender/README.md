@@ -8,7 +8,7 @@ ATAS X (chart M30, 30 ngày)
   └─ Deren · Plan Sender, bấm lúc 9:29 ET
        ├─ Bước 1: copy JSON vào clipboard + lưu latest_plan.json
        │          → dán vào trang Testing plan · chương 04 Plan Builder
-       └─ Bước 2: POST /api/plan (token) → Vercel → Supabase (bảng plans)
+       └─ Bước 2: POST /api/plan (token) → Vercel → Supabase (bảng trade_plans)
                   → trang plan đọc GET /api/plan
 ```
 
@@ -16,7 +16,7 @@ ATAS X (chart M30, 30 ngày)
 |---|---|
 | `PlanSender.cs` | Indicator C# cho ATAS X: tính VA TPO của pRTH, OVN, VA từng phiên 30 ngày, composite; xuất JSON |
 | `PROMPT_PlanSender.md` | Prompt cho Claude Code: build, cài, kiểm số liệu với giá trị chuẩn |
-| `supabase.sql` | Tạo bảng `plans` trên Supabase (RLS bật, không public) |
+| `supabase.sql` | Tạo bảng `trade_plans` trên Supabase (RLS bật, không public) |
 | `../../api/plan.js` | Vercel Function nhận / trả plan, đã nằm trong repo |
 
 Thư mục `docs/` không được deploy lên site (khai báo trong `.vercelignore`), nhưng repo đang public trên GitHub: **không đưa token, key, CSV hay file JSON dữ liệu vào repo**.
@@ -59,7 +59,7 @@ Kiểm tra nhanh không cần ATAS: nút **"Nạp ví dụ 12/11 (data thật, c
 
 ### A. Supabase
 1. supabase.com → **New project**, region **Southeast Asia (Singapore)**, đặt Database password và lưu lại.
-2. **SQL Editor → New query** → dán nội dung `supabase.sql` → **Run**. Kiểm tra **Table Editor** có bảng `plans`, RLS bật.
+2. **SQL Editor → New query** → dán nội dung `supabase.sql` → **Run**. Kiểm tra **Table Editor** có bảng `trade_plans`, RLS bật.
 3. **Project Settings → API Keys** (tên mục có thể khác nhẹ):
    - Copy **Project URL** (`https://xxxx.supabase.co`).
    - Copy **secret key** (`sb_secret_...`); project kiểu cũ thì dùng **service_role**.
@@ -91,7 +91,7 @@ Tạo chuỗi ngẫu nhiên từ 32 ký tự (chữ + số) bằng trình tạo 
    Invoke-RestMethod -Method Post -Uri $u -Headers @{Authorization="Bearer $t"} -ContentType "application/json" -InFile "$HOME\Documents\ATAS_Export\plans\latest_plan.json"
    Invoke-RestMethod -Uri $u -Headers @{Authorization="Bearer $t"}
    ```
-   Lệnh 1 trả `ok: True`, lệnh 2 trả lại plan, bảng `plans` có 1 dòng.
+   Lệnh 1 trả `ok: True`, lệnh 2 trả lại plan, bảng `trade_plans` có 1 dòng.
 3. Trong indicator, nhóm **"2 · Web"**: bật "Gửi lên web", điền API URL = `$u`, API token = `$t`. Bấm gửi → `plan_sender.log` có `HTTP 200`.
 
 ### API
@@ -117,6 +117,6 @@ Thêm nút **"Lấy plan mới nhất"** vào Plan Builder: gọi `GET /api/plan
 Vùng HVN: fill `#1F26A69A`, viền `#9926A69A`. Single print / tail `#FFEF5350`. VWAP RTH `#FF26C6DA`.
 
 ## An toàn
-- Data Rithmic / CME chỉ dùng cá nhân: bảng `plans` không public, endpoint bắt buộc token.
+- Data Rithmic / CME chỉ dùng cá nhân: bảng `trade_plans` không public, endpoint bắt buộc token.
 - Token nằm trong template ATAS dạng chữ thường: không chia sẻ template, không commit.
 - Khung Composite × pRTH × OVN **chưa được backtest**: forward test với size nhỏ, ghi log mỗi phiên.
