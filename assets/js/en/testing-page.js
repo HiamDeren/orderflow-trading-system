@@ -35,6 +35,15 @@ const O_OPTS = [
 const byK = (arr,k) => arr.find(x=>x.k===k);
 const fillSel = (sel, arr) => { sel.innerHTML = arr.map(o=>`<option value="${o.k}">${esc(o.n)}</option>`).join(""); };
 
+
+function vwapGate(type, dir){
+  const w = dir>0?"up":dir<0?"down":"";
+  if(/^Fade/.test(type)) return "Only fade when VWAP RTH is flat. Drop it if VWAP slopes out toward the edge being faded. An edge on the ±2σ band is the best fade.";
+  if(/^Continuation|^Go with it/.test(type)) return `Needs VWAP RTH sloping ${w||"in the break direction"} and price holding that side. A pullback to VWAP / ±1σ is the entry; price crossing back through VWAP cancels it.`;
+  if(type==="With the bias inside the HVN") return `Price must hold its side of VWAP RTH with the bias ${w}; enter on the first VWAP touch with a trigger.`;
+  if(type==="Wait for the edge reaction") return "Flat VWAP → lean to the fade. VWAP sloping out past the edge → wait for continuation.";
+  return "Wait for VWAP RTH to pick a slope after the IB, then trade that side.";
+}
 function biasOf(bk, ok){
   const dB = byK(B_OPTS,bk).dir, dO = byK(O_OPTS,ok).dir;
   let dir=0, conf, cls, need;
@@ -183,7 +192,7 @@ function renderX(){
     <div class="row"><span class="pill ${B.cls}">${B.conf}</span><span class="pill ${B.dir>0?"up":B.dir<0?"dn":"nt"}">Direction: ${B.word}</span><span class="pill nt">Setup: ${esc(S.type)}</span></div>
     <div class="ab">
       <div class="card a"><span class="k">How to trade</span><p class="small">${esc(S.text)}</p></div>
-      <div class="card b"><span class="k">Bias flips when</span><p class="small">${esc(S.flip)}</p><span class="k">Needed at 10:00</span><p class="small">${esc(B.need)}</p></div>
+      <div class="card b"><span class="k">Bias flips when</span><p class="small">${esc(S.flip)}</p><span class="k">Needed at 10:00</span><p class="small">${esc(B.need)}</p><span class="k">VWAP RTH gate</span><p class="small">${esc(vwapGate(S.type,B.dir))}</p></div>
     </div>`;
 }
 function initX(){
@@ -278,8 +287,9 @@ PRIORITY SETUP: ${S.type}
   ${S.text}
 TARGET: ${S.target!=null?fmt(S.target)+` (from the 9:25 price ${fmt(dist)} pts)`:"as described"}
 BIAS FLIP (TPO 30'): ${S.flip}
+VWAP RTH: ${vwapGate(S.type,B.dir)}
 ENTRY: on M1 + footprint, stop by M1 structure. Never mid-LVN. Stop at 11:30 ET.
-AT 10:00: open type + EMA 9/34 (5') sets the direction; if the open type is against the bias, follow the open type.`;
+AT 10:00: open type + EMA 9/34 (5') + VWAP RTH set the direction; if the open type is against the bias, follow the open type.`;
   $("#b-out").textContent = lastPlan;
   store.set("ofs.tp.builder", collectB());
 }
@@ -316,7 +326,9 @@ const QZ = [
  {q:"What does method 2 for finding HVNs (stacking VAs) do?",o:["Take the most recent day’s VA","Count how many RTH and OVN VAs contain each price; 3 or more VAs is an HVN","Draw a line through the POCs","Take the 30-day high/low"],a:1,e:"Where many VAs stack is where price was accepted across many sessions."},
  {q:"You fade the upper HVN edge, price breaks up on M1 and the trade hits its stop. Then a period closes above the edge. What now?",o:["Re-enter short","The trade is out at the M1 stop; the bias flips to continuation up, wait for the retest to go long","Move the stop","Stand aside all day"],a:1,e:"The stop lives on M1. A period closing beyond the edge is a bias-flip signal, not an exit point."},
  {q:"The 30-day composite spans 5000 points, with many very wide HVNs. What should you do?",o:["Keep 30 days","Try a shorter composite (10–20 days) so zones fit the intraday scale","Drop the composite","Use only the composite POC"],a:1,e:"When the market runs hard, old zones lose relevance and are too wide for a single session’s range."},
- {q:"What is the target of a continuation trade?",o:["Fixed 2R","The near edge of the next HVN in the trade direction (skip if under 1.5R)","POC composite","Weekly high/low"],a:1,e:"Price crosses the LVN to the next balance area; the near edge of that area is where a reaction is likely."}
+ {q:"What is the target of a continuation trade?",o:["Fixed 2R","The near edge of the next HVN in the trade direction (skip if under 1.5R)","POC composite","Weekly high/low"],a:1,e:"Price crosses the LVN to the next balance area; the near edge of that area is where a reaction is likely."},
+ {q:"Price at the upper HVN edge, fade bias. After 10:00 VWAP RTH slopes up hard and price rides +1σ. What now?",o:["Fade harder because price is stretched","Drop the fade; VWAP sloping out past the edge means a trend day, wait for continuation or a VWAP pullback","Short at +2σ","Ignore VWAP because the bias is set"],a:1,e:"VWAP is the in-session filter: when it slopes out toward the edge, do not fade."},
+ {q:"When is an HVN edge the best place to fade?",o:["When VWAP slopes in the break direction","When VWAP is flat and the ±2σ band sits on the HVN edge","Before 10:00 while the bands are tight","On the third touch of the edge"],a:1,e:"Flat VWAP = in-session balance; ±2σ on the HVN edge adds another location layer."}
 ];
 function initQuiz(){
   const st={ans:{}};

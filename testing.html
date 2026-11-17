@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=17">
-<link rel="stylesheet" href="assets/css/testing.css?v=17">
+<link rel="stylesheet" href="assets/css/app.css?v=18">
+<link rel="stylesheet" href="assets/css/testing.css?v=18">
 </head>
 <body data-page="testing">
 <main class="ui-main">
@@ -28,7 +28,7 @@
     <div class="tp-test" role="note"><span class="badge">TESTING PLAN</span><p><b>Khung giả thuyết đang forward test, chưa thuộc system chính.</b> Dùng song song với plan TPO hằng ngày, size nhỏ. Phần log phiên và lưu trữ backtest khung cũ (RTH × OVN overlap) tạm thời không đưa lên web.</p></div>
   </div>
 
-  <div class="svgwrap"><svg viewBox="0 0 820 250" role="img" aria-label="Ba lớp của plan: Composite, pRTH, OVN dẫn tới bias và lệnh M1">
+  <div class="svgwrap"><svg viewBox="0 0 820 250" role="img" aria-label="Ba lớp trước phiên: Composite, pRTH, OVN dẫn tới bias; VWAP RTH lọc trong phiên">
     <g font-family="Be Vietnam Pro, sans-serif">
       <rect x="10" y="20" width="230" height="120" rx="8" fill="#0f302c" stroke="#26A69A"/>
       <text x="125" y="50" fill="#d8fbf5" font-size="15" font-weight="700" text-anchor="middle">1 · Composite 30D</text>
@@ -51,7 +51,7 @@
       <path d="M125 140 V170 H410" stroke="#9aa0a8" stroke-width="2" fill="none"/>
       <rect x="250" y="186" width="320" height="56" rx="8" fill="#2a2c31" stroke="#6b6f78"/>
       <text x="410" y="210" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">Vị trí + bias → Fade hay Continuation</text>
-      <text x="410" y="230" fill="#c9cdd3" font-size="12" text-anchor="middle">Chốt lúc 10:00 với open type + EMA 9/34 · vào lệnh trên M1</text>
+      <text x="410" y="230" fill="#c9cdd3" font-size="12" text-anchor="middle">Chốt 10:00: open type + EMA 9/34 + VWAP RTH · vào lệnh M1</text>
       <defs><marker id="ah0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#9aa0a8"/></marker></defs>
     </g>
   </svg></div>
@@ -69,18 +69,20 @@
       <li><b>Không vào lệnh ở giữa LVN.</b> LVN là đường đi, không phải nơi để đứng chờ.</li>
       <li><b>Target = mép HVN kế tiếp</b> theo hướng lệnh. Nếu khoảng cách tới đó dưới 1.5R thì bỏ qua lệnh.</li>
       <li><b>Hướng cuối cùng chốt lúc 10:00 ET</b> bằng open type và EMA 9/34 (nến 5'). Bias từ pRTH + OVN chỉ là giả thuyết trước phiên.</li>
+      <li><b>VWAP RTH là cổng lọc trong phiên.</b> VWAP phẳng thì được fade mép HVN. VWAP dốc và giá chạy dọc band thì chỉ continuation hoặc pullback, không fade (chương 03).</li>
       <li>Tối đa 2–3 lệnh, dừng 11:30 ET. Khung này <b>chưa được backtest</b>: forward test với size nhỏ.</li>
     </ul>
   </div>
 
   <div class="panel">
-    <h3>Ba thứ cần có trên chart</h3>
+    <h3>Bốn thứ cần có trên chart</h3>
     <div class="tablewrap"><table>
       <thead><tr><th>Thành phần</th><th>Thời gian</th><th>Giờ VN (mùa đông)</th><th>Lấy gì</th></tr></thead>
       <tbody>
         <tr><td><span class="chip hvn">Composite</span></td><td class="mono">30 ngày gần nhất (ETH)</td><td class="mono">cập nhật mỗi sáng</td><td>HVN (vùng balance), LVN (đường đi), POC composite</td></tr>
         <tr><td><span class="chip rth">pRTH</span></td><td class="mono">9:30 – 16:14 ET hôm qua</td><td class="mono">21:30 – 04:14</td><td>VAH, VAL, POC, high/low, close, tail, single print</td></tr>
         <tr><td><span class="chip ovn">OVN</span></td><td class="mono">18:00 – 9:29 ET</td><td class="mono">06:00 – 21:29</td><td>VAH, VAL, POC, ONH, ONL</td></tr>
+        <tr><td><span class="chip vw">VWAP RTH</span></td><td class="mono">anchor 9:30 ET, chạy trong phiên</td><td class="mono">từ 21:30</td><td>VWAP, band ±1σ / ±2σ / ±3σ, độ dốc (chart M1)</td></tr>
       </tbody>
     </table></div>
     <p class="small muted">pRTH và OVN dùng VA của TPO (70% thời gian) vì khung này đánh balance–imbalance: acceptance được đo bằng thời gian giá ở lại một vùng.</p>
@@ -90,9 +92,9 @@
     <h3>Lịch mỗi ngày</h3>
     <div class="flow">
       <div class="step"><span class="dot">1</span><div><b>Sáng (giờ VN):</b> cập nhật composite, kẻ lại HVN/LVN nếu có phiên mới làm đổi hình dạng profile (chương 01).</div></div>
-      <div class="step"><span class="dot">2</span><div><b>Trước 21:29 VN:</b> nhập pRTH và OVN vào Plan Builder (chương 03). Ghi vị trí, bias, setup ưu tiên, target, level đổi bias.</div></div>
+      <div class="step"><span class="dot">2</span><div><b>Trước 21:29 VN:</b> nhập pRTH và OVN vào Plan Builder (chương 04). Ghi vị trí, bias, setup ưu tiên, target, level đổi bias.</div></div>
       <div class="step"><span class="dot">3</span><div><b>21:30–22:00 (A period):</b> không vào lệnh. Xem open type và phản ứng đầu tiên ở mép gần nhất.</div></div>
-      <div class="step"><span class="dot">4</span><div><b>22:00:</b> chốt hướng bằng open type + EMA 9/34. Chọn Fade hay Continuation theo vị trí.</div></div>
+      <div class="step"><span class="dot">4</span><div><b>22:00:</b> chốt hướng bằng open type + EMA 9/34, đọc trạng thái VWAP RTH. Chọn Fade hay Continuation theo vị trí, VWAP quyết định có được làm hay không.</div></div>
       <div class="step"><span class="dot">5</span><div><b>22:00–23:30:</b> vào lệnh trên M1 khi có trigger. Dừng 23:30 hoặc sau 2–3 lệnh.</div></div>
     </div>
   </div>
@@ -176,7 +178,7 @@
   <div class="head">
     <span class="eyebrow">02 · Đọc bias</span>
     <h2>Vị trí trên composite chọn kiểu lệnh. pRTH và OVN chọn hướng.</h2>
-    <p class="lead">Chọn ba thứ bên dưới để xem cách trade. Plan Builder (chương 03) tự xếp loại từ số bạn nhập.</p>
+    <p class="lead">Chọn ba thứ bên dưới để xem cách trade. Plan Builder (chương 04) tự xếp loại từ số bạn nhập.</p>
   </div>
 
   <div class="panel">
@@ -218,9 +220,101 @@
   </div>
 </section>
 
+<section class="tp-ch" id="ch-vwap" data-chapter="vwap">
+  <div class="head">
+    <span class="eyebrow">03 · VWAP RTH</span>
+    <h2>VWAP RTH: la bàn trong phiên, đặt lên bản đồ HVN</h2>
+    <p class="lead">Composite, pRTH và OVN trả lời câu hỏi trước phiên: giá ở đâu trên bản đồ và nên nghiêng về phía nào. VWAP RTH trả lời câu hỏi trong phiên: từ 9:30 hôm nay, phe nào đang kiểm soát. Vị trí chọn kiểu lệnh (Fade hay Continuation), VWAP quyết định kiểu lệnh đó có được làm hay không.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Định nghĩa và cách cài</h3>
+      <ul class="clean small">
+        <li><b>VWAP</b> = Σ(giá × volume) / Σ volume, tính từ <b>9:30 ET</b> (21:30 VN). Cùng mốc với RTH và IB nên ba công cụ nói cùng một ngôn ngữ thời gian.</li>
+        <li><b>Band ±1σ / ±2σ / ±3σ</b> = độ lệch chuẩn có trọng số volume quanh VWAP. ±1σ là vùng xoay bình thường, ±2σ và ±3σ là vùng giãn.</li>
+        <li>Đặt trên chart <b>M1 execution</b>. VWAP ETH (anchor 18:00) chỉ để tham chiếu khi volume qua đêm bất thường, không dùng làm cổng lọc.</li>
+        <li>Giá trên VWAP: người mua trung bình hôm nay đang lãi, buyers kiểm soát trong phiên. Dưới VWAP thì ngược lại.</li>
+        <li>15–20 phút đầu σ còn nhỏ và nhảy liên tục, band rất hẹp. <b>Không fade band trước 10:00 ET.</b></li>
+      </ul>
+    </div>
+    <div class="svgwrap"><svg viewBox="0 0 520 260" role="img" aria-label="Hai trạng thái VWAP: phẳng trong HVN thì fade, dốc thì đi theo">
+      <g font-family="Be Vietnam Pro, sans-serif">
+        <rect x="10" y="10" width="240" height="240" rx="8" fill="#16181c" stroke="#2c2f35"/>
+        <rect x="18" y="70" width="224" height="120" fill="rgba(38,166,154,0.14)" stroke="#26A69A" stroke-dasharray="5 4"/>
+        <text x="26" y="86" fill="#bff0e8" font-size="11">HVN</text>
+        <path d="M24 130 H236" stroke="#26c6da" stroke-width="2.5"/>
+        <path d="M24 104 H236 M24 156 H236" stroke="#26c6da" stroke-width="1" stroke-dasharray="4 4" opacity=".7"/>
+        <path d="M24 82 H236 M24 178 H236" stroke="#b388ff" stroke-width="1" stroke-dasharray="2 4"/>
+        <path d="M30 128 L50 110 L70 138 L92 160 L112 132 L132 100 L150 86 L170 118 L192 150 L212 176 L232 140" stroke="#e6e8eb" stroke-width="1.6" fill="none"/>
+        <text x="130" y="32" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">VWAP phẳng</text>
+        <text x="130" y="50" fill="#c9cdd3" font-size="11" text-anchor="middle">fade mép HVN / ±2σ về VWAP</text>
+        <text x="130" y="218" fill="#9fe3d9" font-size="11" text-anchor="middle">Setup F</text>
+        <rect x="270" y="10" width="240" height="240" rx="8" fill="#16181c" stroke="#2c2f35"/>
+        <rect x="278" y="150" width="224" height="80" fill="rgba(38,166,154,0.14)" stroke="#26A69A" stroke-dasharray="5 4"/>
+        <text x="286" y="224" fill="#bff0e8" font-size="11">HVN</text>
+        <path d="M284 206 L500 96" stroke="#26c6da" stroke-width="2.5"/>
+        <path d="M284 184 L500 74" stroke="#26c6da" stroke-width="1" stroke-dasharray="4 4" opacity=".7"/>
+        <path d="M290 196 L310 176 L326 186 L350 160 L372 150 L388 160 L412 132 L436 118 L452 128 L476 100 L498 86" stroke="#e6e8eb" stroke-width="1.6" fill="none"/>
+        <circle cx="388" cy="160" r="5" fill="none" stroke="#3fbf7f" stroke-width="2"/>
+        <circle cx="452" cy="128" r="5" fill="none" stroke="#3fbf7f" stroke-width="2"/>
+        <text x="390" y="32" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">VWAP dốc</text>
+        <text x="390" y="50" fill="#c9cdd3" font-size="11" text-anchor="middle">giá chạy dọc +1σ, mua pullback</text>
+        <text x="390" y="246" fill="#c8f2da" font-size="11" text-anchor="middle">Setup C / V · cấm fade</text>
+      </g></svg></div>
+  </div>
+
+  <div class="panel">
+    <h3>Bốn trạng thái VWAP và setup được phép</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Trạng thái</th><th>Nhận diện</th><th>Trong khung này</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill nt">Balance</span></td><td>VWAP phẳng, giá cắt qua lại nhiều lần, chủ yếu trong ±1σ</td><td><b>F · Fade trong HVN.</b> Fade mép HVN hoặc band ±2/±3σ về VWAP / POC HVN.</td></tr>
+        <tr><td><span class="pill up">Trend lên</span></td><td>VWAP dốc lên, giá giữ trên VWAP, chạy dọc +1σ / +2σ</td><td><b>C hoặc V.</b> Mua retest mép HVN vừa phá hoặc pullback về VWAP / +1σ. Cấm short ở +2σ.</td></tr>
+        <tr><td><span class="pill dn">Trend xuống</span></td><td>Đối xứng</td><td><b>C hoặc V</b> phía bán. Cấm long ở −2σ.</td></tr>
+        <tr><td><span class="pill nt">Chuyển pha</span></td><td>Giá reclaim hoặc mất VWAP sau IB, VWAP bắt đầu đổi độ dốc</td><td><b>V.</b> Trade retest VWAP theo hướng mới, cần delta / CVD xác nhận.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel">
+    <h3>VWAP × bản đồ HVN</h3>
+    <div class="grid g2">
+      <div class="card a"><span class="k">VWAP phẳng nằm trong HVN</span><p class="small">Balance ở cả khung lớn lẫn trong phiên. Fade hai mép, target VWAP hoặc POC của HVN.</p></div>
+      <div class="card a"><span class="k">Band ±2 SD trùng mép HVN (trong 10–15 điểm)</span><p class="small">Mép mạnh hơn. Nếu VWAP phẳng, đây là chỗ fade ưu tiên nhất trong ngày.</p></div>
+      <div class="card b"><span class="k">Phá mép HVN, VWAP dốc theo hướng phá</span><p class="small">Continuation đáng tin. Pullback về VWAP / ±1σ hoặc retest mép là điểm vào, target mép HVN kế tiếp.</p></div>
+      <div class="card b"><span class="k">Ra ngoài mép nhưng VWAP phẳng</span><p class="small">Breakout yếu. Giá hay quay lại VWAP và period đóng lại trong HVN. Đừng đuổi, chờ xem có fade ngược không.</p></div>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Cổng VWAP cho ba setup</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Setup</th><th>Được làm khi</th><th>Bỏ khi</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip hvn">F</span></td><td>VWAP phẳng; giá chạm mép HVN hoặc ±2σ</td><td>VWAP dốc ra phía mép đang fade</td></tr>
+          <tr><td><span class="chip ov">C</span></td><td>VWAP dốc theo hướng phá, giá giữ phía đó</td><td>Giá quay lại cắt VWAP</td></tr>
+          <tr><td><span class="chip">V</span></td><td>Sau 10:00, giá giữ một phía VWAP ≥ 15 phút, đúng hướng bias</td><td>Lần chạm thứ 3, hoặc 2 nến M1 đóng xuyên VWAP ngược hướng</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">Dù setup nào, khoảng tới target đầu tiên vẫn phải ≥ 1.5R.</p>
+    </div>
+    <div class="panel">
+      <h3>Lỗi hay gặp</h3>
+      <ul class="clean small">
+        <li>Fade ±2σ trong ngày Open Drive khi VWAP đang dốc. Đó là ngày trend, band là chỗ thêm lệnh chứ không phải chỗ đảo.</li>
+        <li>Coi chạm VWAP là tín hiệu. Chạm chỉ là location, vẫn cần trigger delta / footprint trên M1.</li>
+        <li>Nhầm VWAP ETH với VWAP RTH trên chart M1.</li>
+        <li>Fade band trước 10:00 ET khi σ còn quá hẹp.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <section class="tp-ch" id="ch-builder" data-chapter="builder">
   <div class="head">
-    <span class="eyebrow">03 · Plan Builder</span>
+    <span class="eyebrow">04 · Plan Builder</span>
     <h2>Nhập số trước 21:29 VN, nhận plan và bản đồ</h2>
     <p class="lead">Nhập các vùng HVN của composite, VA pRTH và VA OVN. Builder tự xếp vị trí, hướng OVN, gợi ý pRTH build, rồi vẽ bản đồ với target là mép HVN kế tiếp.</p>
   </div>
@@ -265,7 +359,7 @@
 
 <section class="tp-ch" id="ch-quy-trinh" data-chapter="quy-trinh">
   <div class="head">
-    <span class="eyebrow">04 · Quy trình trade</span>
+    <span class="eyebrow">05 · Quy trình trade</span>
     <h2>Ba setup, một hướng, vào lệnh trên M1</h2>
     <p class="lead">Bias trước phiên là giả thuyết. Lúc 10:00 ET chốt hướng bằng open type và EMA 9/34. Sau đó chỉ có ba setup được phép.</p>
   </div>
@@ -273,11 +367,11 @@
   <div class="panel">
     <h3>Chốt hướng lúc 10:00 ET (22:00 VN)</h3>
     <div class="tablewrap"><table>
-      <thead><tr><th>Open type</th><th>EMA 9/34 (5')</th><th>Kết luận</th></tr></thead>
+      <thead><tr><th>Open type</th><th>EMA 9/34 (5')</th><th>VWAP RTH</th><th>Kết luận</th></tr></thead>
       <tbody>
-        <tr><td>OD / OTD / ORR có hướng</td><td>Cùng hướng</td><td>Trade theo hướng open type. Nếu ngược bias trước phiên thì <b>open type thắng</b>.</td></tr>
-        <tr><td>OD / OTD / ORR có hướng</td><td>Ngược hướng</td><td>Không trade theo hướng. Chỉ fade trong HVN nếu có trigger.</td></tr>
-        <tr><td>OA</td><td>Bất kỳ</td><td>Balance trong ngày. Fade mép HVN / mép IB, hoặc chờ IB xong (10:30).</td></tr>
+        <tr><td>OD / OTD / ORR có hướng</td><td>Cùng hướng</td><td>Giá giữ phía open type, VWAP bắt đầu dốc theo</td><td>Trade theo hướng open type. Nếu ngược bias trước phiên thì <b>open type thắng</b>.</td></tr>
+        <tr><td>OD / OTD / ORR có hướng</td><td>Ngược hướng</td><td>Bất kỳ</td><td>Không trade theo hướng. Chỉ fade trong HVN nếu có trigger.</td></tr>
+        <tr><td>OA</td><td>Bất kỳ</td><td>Phẳng, giá cắt qua lại</td><td>Balance trong ngày. Fade mép HVN / mép IB, hoặc chờ IB xong (10:30).</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -286,7 +380,7 @@
     <div class="panel">
       <h3><span class="chip hvn">F</span> Fade trong HVN</h3>
       <dl class="dl">
-        <dt>Khi nào</dt><dd>Giá trong HVN, open type OA hoặc bias hướng vào trong vùng, VWAP phẳng.</dd>
+        <dt>Khi nào</dt><dd>Giá trong HVN, open type OA hoặc bias hướng vào trong vùng, VWAP RTH phẳng. Mép HVN trùng band ±2σ là chỗ fade tốt nhất.</dd>
         <dt>Vào</dt><dd>Giá tới mép HVN (hoặc mép VA pRTH nằm trong HVN). Trong 5 nến M1 có nến đóng lại vào trong với delta ngược hướng chạm, hoặc absorption.</dd>
         <dt>Stop</dt><dd>Ngoài cực trị vừa tạo, theo M1.</dd>
         <dt>Target</dt><dd>POC của HVN, sau đó mép bên kia.</dd>
@@ -296,11 +390,11 @@
     <div class="panel">
       <h3><span class="chip ov">C</span> Continuation qua LVN</h3>
       <dl class="dl">
-        <dt>Khi nào</dt><dd>Một period 30' đóng ngoài mép HVN theo hướng bias (bias đổi sang continuation).</dd>
+        <dt>Khi nào</dt><dd>Một period 30' đóng ngoài mép HVN theo hướng bias (bias đổi sang continuation), VWAP RTH dốc theo hướng phá.</dd>
         <dt>Vào</dt><dd>Retest mép vừa phá trên M1: nến đóng giữ được phía ngoài, delta cùng hướng, EMA 9 &gt; 34 (long).</dd>
         <dt>Stop</dt><dd>Quay lại trong HVN theo M1.</dd>
         <dt>Target</dt><dd>Mép gần của HVN kế tiếp. Dưới 1.5R thì bỏ.</dd>
-        <dt>Bỏ khi</dt><dd>Period kế tiếp đóng lại trong HVN: breakout thất bại, quay về fade.</dd>
+        <dt>Bỏ khi</dt><dd>Period kế tiếp đóng lại trong HVN, hoặc giá quay lại cắt VWAP: breakout thất bại, quay về fade.</dd>
       </dl>
     </div>
     <div class="panel">
@@ -309,6 +403,7 @@
         <dt>Khi nào</dt><dd>Sau 10:00, giá đã ở một phía VWAP ít nhất 15 phút, đúng hướng bias.</dd>
         <dt>Vào</dt><dd>Lần chạm VWAP đầu tiên, có trigger delta, EMA 9/34 cùng hướng.</dd>
         <dt>Target</dt><dd>High/low phiên, hoặc mép HVN kế tiếp.</dd>
+        <dt>Bỏ khi</dt><dd>Lần chạm VWAP thứ 3, hoặc 2 nến M1 đóng xuyên VWAP ngược hướng.</dd>
         <dt>Ghi chú</dt><dd>Setup tốt nhất của backtest khung cũ (45%, chưa đủ mẫu).</dd>
       </dl>
     </div>
@@ -327,7 +422,7 @@
 
 <section class="tp-ch" id="ch-vi-du" data-chapter="vi-du">
   <div class="head">
-    <span class="eyebrow">05 · Ví dụ</span>
+    <span class="eyebrow">06 · Ví dụ</span>
     <h2>Phiên 16/11: pRTH và OVN cùng chấp nhận xuống, giá ở mép dưới HVN</h2>
     <p class="lead">Số đọc gần đúng từ hai hình chart (composite của bạn và chart của bạn của bạn), chỉ để minh hoạ cách đọc. Kiểm lại trên ATAS trước khi dùng làm số liệu.</p>
   </div>
@@ -357,7 +452,7 @@
 
 <section class="tp-ch" id="ch-quiz" data-chapter="quiz">
   <div class="head">
-    <span class="eyebrow">06 · Kiểm tra</span>
+    <span class="eyebrow">07 · Kiểm tra</span>
     <h2>Quiz khung Composite × pRTH × OVN</h2>
   </div>
   <div class="row"><button id="q-reset">Làm lại</button><span class="small muted" id="q-score"></span></div>
@@ -365,12 +460,12 @@
 </section>
 </div>
 </main>
-<script src="assets/js/fp.js?v=17"></script>
-<script src="assets/js/bank-levels.js?v=17"></script>
-<script src="assets/js/bank-ema.js?v=17"></script>
-<script src="assets/js/bank-tools.js?v=17"></script>
-<script src="assets/js/quiz.js?v=17"></script>
-<script src="assets/js/core.js?v=17"></script>
-<script src="assets/js/testing-page.js?v=17"></script>
+<script src="assets/js/fp.js?v=18"></script>
+<script src="assets/js/bank-levels.js?v=18"></script>
+<script src="assets/js/bank-ema.js?v=18"></script>
+<script src="assets/js/bank-tools.js?v=18"></script>
+<script src="assets/js/quiz.js?v=18"></script>
+<script src="assets/js/core.js?v=18"></script>
+<script src="assets/js/testing-page.js?v=18"></script>
 </body>
 </html>

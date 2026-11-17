@@ -1832,3 +1832,94 @@ OVN TPO · trong VA	OVN TPO · inside VA
 RTH TPO · trong VA	RTH TPO · inside VA
 Theo bias trong HVN	With the bias inside the HVN
 06 · Kiểm tra	06 · Check
+(21:30 VN). Cùng mốc với RTH và IB nên ba công cụ nói cùng một ngôn ngữ thời gian.	(21:30 VN). Same anchor as RTH and the IB, so all three tools speak the same time language.
+) + VWAP RTH chốt hướng; open type ngược bias thì đi theo open type.	) + VWAP RTH set the direction; if the open type is against the bias, follow the open type.
+. VWAP ETH (anchor 18:00) chỉ để tham chiếu khi volume qua đêm bất thường, không dùng làm cổng lọc.	. VWAP ETH (anchor 18:00) is only a reference when overnight volume is unusual, never the filter.
+05 · Quy trình trade	05 · Trading process
+06 · Ví dụ	06 · Example
+15–20 phút đầu σ còn nhỏ và nhảy liên tục, band rất hẹp.	In the first 15–20 minutes σ is small and jumpy, so the bands are very tight.
+; vào ở lần chạm VWAP đầu tiên có trigger.	; enter on the first VWAP touch with a trigger.
+= độ lệch chuẩn có trọng số volume quanh VWAP. ±1σ là vùng xoay bình thường, ±2σ và ±3σ là vùng giãn.	= volume-weighted standard deviation around VWAP. ±1σ is normal rotation, ±2σ and ±3σ are stretched.
+= Σ(giá × volume) / Σ volume, tính từ	= Σ(price × volume) / Σ volume, from
+Ba lớp trước phiên: Composite, pRTH, OVN dẫn tới bias; VWAP RTH lọc trong phiên	Three pre-session layers: Composite, pRTH, OVN lead to the bias; VWAP RTH filters in session
+Balance ở cả khung lớn lẫn trong phiên. Fade hai mép, target VWAP hoặc POC của HVN.	Balance on both the larger frame and in session. Fade both edges, target VWAP or the HVN POC.
+Band ±2 SD trùng mép HVN (trong 10–15 điểm)	±2 SD band on an HVN edge (within 10–15 pts)
+Breakout yếu. Giá hay quay lại VWAP và period đóng lại trong HVN. Đừng đuổi, chờ xem có fade ngược không.	Weak breakout. Price often returns to VWAP and a period closes back inside the HVN. Do not chase; see whether a fade sets up.
+Bỏ fade; VWAP dốc ra phía mép là ngày trend, chờ continuation hoặc pullback VWAP	Drop the fade; VWAP sloping out past the edge means a trend day, wait for continuation or a VWAP pullback
+Bỏ qua VWAP vì bias đã chốt	Ignore VWAP because the bias is set
+Bốn thứ cần có trên chart	Four things needed on the chart
+Bốn trạng thái VWAP và setup được phép	Four VWAP states and the allowed setups
+C hoặc V	C or V
+C hoặc V.	C or V.
+Chỉ fade khi VWAP RTH phẳng. VWAP dốc ra phía mép đang fade thì bỏ. Mép trùng band ±2σ là chỗ fade tốt nhất.	Only fade when VWAP RTH is flat. Drop it if VWAP slopes out toward the edge being faded. An edge on the ±2σ band is the best fade.
+Chọn ba thứ bên dưới để xem cách trade. Plan Builder (chương 04) tự xếp loại từ số bạn nhập.	Pick the three items below to see how to trade. Plan Builder (chapter 04) classifies automatically from your numbers.
+Chốt 10:00: open type + EMA 9/34 + VWAP RTH · vào lệnh M1	Set at 10:00: open type + EMA 9/34 + VWAP RTH · enter on M1
+Chờ VWAP RTH chọn độ dốc sau IB rồi mới trade theo phía đó.	Wait for VWAP RTH to pick a slope after the IB, then trade that side.
+Coi chạm VWAP là tín hiệu. Chạm chỉ là location, vẫn cần trigger delta / footprint trên M1.	Treating a VWAP touch as a signal. A touch is only location; you still need a delta / footprint trigger on M1.
+Composite, pRTH và OVN trả lời câu hỏi trước phiên: giá ở đâu trên bản đồ và nên nghiêng về phía nào. VWAP RTH trả lời câu hỏi trong phiên: từ 9:30 hôm nay, phe nào đang kiểm soát. Vị trí chọn kiểu lệnh (Fade hay Continuation), VWAP quyết định kiểu lệnh đó có được làm hay không.	Composite, pRTH and OVN answer the pre-session question: where price is on the map and which way to lean. VWAP RTH answers the in-session question: since 9:30 today, which side is in control. Location picks the trade type (Fade or Continuation); VWAP decides whether that trade is allowed.
+Continuation đáng tin. Pullback về VWAP / ±1σ hoặc retest mép là điểm vào, target mép HVN kế tiếp.	A trustworthy continuation. A pullback to VWAP / ±1σ or an edge retest is the entry, target the next HVN edge.
+Cần VWAP RTH dốc	Needs VWAP RTH sloping
+Cổng VWAP RTH	VWAP RTH gate
+Cổng VWAP cho ba setup	VWAP gate for the three setups
+Dù setup nào, khoảng tới target đầu tiên vẫn phải ≥ 1.5R.	Whatever the setup, the distance to the first target must still be ≥ 1.5R.
+Fade band trước 10:00 ET khi σ còn quá hẹp.	Fading the bands before 10:00 ET while σ is still too tight.
+Fade mép HVN hoặc band ±2/±3σ về VWAP / POC HVN.	Fade the HVN edges or the ±2/±3σ bands back to VWAP / the HVN POC.
+Fade mạnh hơn vì giá đã giãn	Fade harder because price is stretched
+Fade ±2σ trong ngày Open Drive khi VWAP đang dốc. Đó là ngày trend, band là chỗ thêm lệnh chứ không phải chỗ đảo.	Fading ±2σ on an Open Drive day while VWAP slopes. It is a trend day; the band is where to add, not where it reverses.
+Giá giữ phía open type, VWAP bắt đầu dốc theo	Price holds the open-type side, VWAP starts sloping with it
+Giá phải giữ phía VWAP RTH theo bias	Price must hold its side of VWAP RTH with the bias
+Giá quay lại cắt VWAP	Price crosses back through VWAP
+Giá reclaim hoặc mất VWAP sau IB, VWAP bắt đầu đổi độ dốc	Price reclaims or loses VWAP after the IB, VWAP starts changing slope
+Giá trong HVN, open type OA hoặc bias hướng vào trong vùng, VWAP RTH phẳng. Mép HVN trùng band ±2σ là chỗ fade tốt nhất.	Price inside the HVN, OA open type or a bias pointing into the zone, flat VWAP RTH. An HVN edge on the ±2σ band is the best fade.
+Giá trên VWAP: người mua trung bình hôm nay đang lãi, buyers kiểm soát trong phiên. Dưới VWAP thì ngược lại.	Price above VWAP: today’s average buyer is in profit, buyers control the session. Below VWAP, the reverse.
+Giá ở mép trên HVN, bias fade. Sau 10:00 VWAP RTH dốc lên mạnh, giá chạy dọc +1σ. Làm gì?	Price at the upper HVN edge, fade bias. After 10:00 VWAP RTH slopes up hard and price rides +1σ. What now?
+Hai trạng thái VWAP: phẳng trong HVN thì fade, dốc thì đi theo	Two VWAP states: flat inside an HVN → fade, sloping → go with it
+Khi VWAP dốc theo hướng phá	When VWAP slopes in the break direction
+Khi VWAP phẳng và band ±2σ trùng mép HVN	When VWAP is flat and the ±2σ band sits on the HVN edge
+Khi giá chạm mép lần thứ 3	On the third touch of the edge
+Khi nào mép HVN là chỗ fade tốt nhất?	When is an HVN edge the best place to fade?
+Không fade band trước 10:00 ET.	Do not fade the bands before 10:00 ET.
+Lần chạm VWAP thứ 3, hoặc 2 nến M1 đóng xuyên VWAP ngược hướng.	Third VWAP touch, or 2 M1 candles closing through VWAP against the trade.
+Lần chạm thứ 3, hoặc 2 nến M1 đóng xuyên VWAP ngược hướng	Third touch, or 2 M1 candles closing through VWAP against the trade
+Mua retest mép HVN vừa phá hoặc pullback về VWAP / +1σ. Cấm short ở +2σ.	Buy the retest of the HVN edge just broken or a pullback to VWAP / +1σ. No shorts at +2σ.
+Mép mạnh hơn. Nếu VWAP phẳng, đây là chỗ fade ưu tiên nhất trong ngày.	A stronger edge. If VWAP is flat, this is the top fade spot of the day.
+Nhầm VWAP ETH với VWAP RTH trên chart M1.	Confusing VWAP ETH with VWAP RTH on the M1 chart.
+Period kế tiếp đóng lại trong HVN, hoặc giá quay lại cắt VWAP: breakout thất bại, quay về fade.	Next period closes back inside the HVN, or price crosses back through VWAP: failed breakout, back to fading.
+Phá mép HVN, VWAP dốc theo hướng phá	HVN edge breaks, VWAP slopes with the break
+Phẳng, giá cắt qua lại	Flat, price crossing back and forth
+Ra ngoài mép nhưng VWAP phẳng	Beyond the edge but VWAP flat
+Sau 10:00, giá giữ một phía VWAP ≥ 15 phút, đúng hướng bias	After 10:00, price has held one side of VWAP ≥ 15 minutes, in the bias direction
+Setup C / V · cấm fade	Setup C / V · no fading
+Short ở +2σ	Short at +2σ
+Trade retest VWAP theo hướng mới, cần delta / CVD xác nhận.	Trade the VWAP retest in the new direction, with delta / CVD confirmation.
+Trong khung này	In this frame
+Trước 10:00 khi band còn hẹp	Before 10:00 while the bands are tight
+VWAP RTH là cổng lọc trong phiên.	VWAP RTH is the in-session filter.
+VWAP RTH: la bàn trong phiên, đặt lên bản đồ HVN	VWAP RTH: the in-session compass, laid over the HVN map
+VWAP dốc	Sloping VWAP
+VWAP dốc lên, giá giữ trên VWAP, chạy dọc +1σ / +2σ	VWAP sloping up, price holding above VWAP, riding +1σ / +2σ
+VWAP dốc ra phía mép đang fade	VWAP slopes out toward the edge being faded
+VWAP là cổng lọc trong phiên: VWAP dốc ra phía mép thì không fade.	VWAP is the in-session filter: when it slopes out toward the edge, do not fade.
+VWAP phẳng	Flat VWAP
+VWAP phẳng = balance trong phiên; ±2σ trùng mép HVN cộng thêm một lớp location.	Flat VWAP = in-session balance; ±2σ on the HVN edge adds another location layer.
+VWAP phẳng nằm trong HVN	Flat VWAP inside the HVN
+VWAP phẳng thì được fade mép HVN. VWAP dốc và giá chạy dọc band thì chỉ continuation hoặc pullback, không fade (chương 03).	Flat VWAP allows fading the HVN edges. Sloping VWAP with price riding a band allows only continuation or pullbacks, no fading (chapter 03).
+VWAP phẳng → nghiêng về fade. VWAP dốc ra phía mép → chờ continuation.	Flat VWAP → lean to the fade. VWAP sloping out past the edge → wait for continuation.
+VWAP phẳng, giá cắt qua lại nhiều lần, chủ yếu trong ±1σ	Flat VWAP, price crossing it many times, mostly within ±1σ
+VWAP phẳng; giá chạm mép HVN hoặc ±2σ	Flat VWAP; price touches the HVN edge or ±2σ
+VWAP × bản đồ HVN	VWAP × the HVN map
+VWAP, band ±1σ / ±2σ / ±3σ, độ dốc (chart M1)	VWAP, ±1σ / ±2σ / ±3σ bands, slope (M1 chart)
+anchor 9:30 ET, chạy trong phiên	anchor 9:30 ET, runs in session
+chốt hướng bằng open type + EMA 9/34, đọc trạng thái VWAP RTH. Chọn Fade hay Continuation theo vị trí, VWAP quyết định có được làm hay không.	set the direction with open type + EMA 9/34 and read the VWAP RTH state. Pick Fade or Continuation by location; VWAP decides whether it is allowed.
+fade mép HVN / ±2σ về VWAP	fade HVN edge / ±2σ to VWAP
+giá chạy dọc +1σ, mua pullback	price rides +1σ, buy pullbacks
+if(/^Continuation|^Đi theo/.test(type)) return	if(/^Continuation|^Go with it/.test(type)) return
+nhập pRTH và OVN vào Plan Builder (chương 04). Ghi vị trí, bias, setup ưu tiên, target, level đổi bias.	enter pRTH and OVN in Plan Builder (chapter 04). Note the location, bias, priority setup, target and bias-flip level.
+phía bán. Cấm long ở −2σ.	on the sell side. No longs at −2σ.
+theo hướng phá	in the break direction
+từ 21:30	from 21:30
+và giá giữ phía đó. Pullback về VWAP / ±1σ là điểm vào; giá cắt lại VWAP thì bỏ.	and price holding that side. A pullback to VWAP / ±1σ is the entry; price crossing back through VWAP cancels it.
+Được làm khi	Allowed when
+Đặt trên chart	Put it on the
+Định nghĩa và cách cài	Definition and setup
+đóng ngoài mép HVN theo hướng bias (bias đổi sang continuation), VWAP RTH dốc theo hướng phá.	period closes beyond the HVN edge in the bias direction (the bias switches to continuation), with VWAP RTH sloping in the break direction.

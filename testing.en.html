@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="assets/css/app.css?v=17">
-<link rel="stylesheet" href="assets/css/testing.css?v=17">
+<link rel="stylesheet" href="assets/css/app.css?v=18">
+<link rel="stylesheet" href="assets/css/testing.css?v=18">
 </head>
 <body data-page="testing">
 <main class="ui-main">
@@ -28,7 +28,7 @@
     <div class="tp-test" role="note"><span class="badge">TESTING PLAN</span><p><b>A hypothesis frame in forward test, not yet part of the main system.</b> Use it alongside the daily TPO plan, with small size. The session log and the archived backtest of the old frame (RTH × OVN overlap) are left off the site for now.</p></div>
   </div>
 
-  <div class="svgwrap"><svg viewBox="0 0 820 250" role="img" aria-label="Three plan layers: Composite, pRTH, OVN lead to the bias and the M1 trade">
+  <div class="svgwrap"><svg viewBox="0 0 820 250" role="img" aria-label="Three pre-session layers: Composite, pRTH, OVN lead to the bias; VWAP RTH filters in session">
     <g font-family="Be Vietnam Pro, sans-serif">
       <rect x="10" y="20" width="230" height="120" rx="8" fill="#0f302c" stroke="#26A69A"/>
       <text x="125" y="50" fill="#d8fbf5" font-size="15" font-weight="700" text-anchor="middle">1 · Composite 30D</text>
@@ -51,7 +51,7 @@
       <path d="M125 140 V170 H410" stroke="#9aa0a8" stroke-width="2" fill="none"/>
       <rect x="250" y="186" width="320" height="56" rx="8" fill="#2a2c31" stroke="#6b6f78"/>
       <text x="410" y="210" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">Location + bias → Fade or Continuation</text>
-      <text x="410" y="230" fill="#c9cdd3" font-size="12" text-anchor="middle">Set at 10:00 with open type + EMA 9/34 · entries on M1</text>
+      <text x="410" y="230" fill="#c9cdd3" font-size="12" text-anchor="middle">Set at 10:00: open type + EMA 9/34 + VWAP RTH · enter on M1</text>
       <defs><marker id="ah0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#9aa0a8"/></marker></defs>
     </g>
   </svg></div>
@@ -69,18 +69,20 @@
       <li><b>No entries in the middle of an LVN.</b> An LVN is a path, not a place to wait.</li>
       <li><b>Target = next HVN edge</b> in the trade direction. If the distance there is under 1.5R, skip the trade.</li>
       <li><b>The final direction is set at 10:00 ET</b> by the open type and EMA 9/34 (5'). The bias from pRTH + OVN is only a pre-session hypothesis.</li>
+      <li><b>VWAP RTH is the in-session filter.</b> Flat VWAP allows fading the HVN edges. Sloping VWAP with price riding a band allows only continuation or pullbacks, no fading (chapter 03).</li>
       <li>Max 2–3 trades, stop at 11:30 ET. This frame <b>has not been backtested</b>: forward test with small size.</li>
     </ul>
   </div>
 
   <div class="panel">
-    <h3>Three things needed on the chart</h3>
+    <h3>Four things needed on the chart</h3>
     <div class="tablewrap"><table>
       <thead><tr><th>Component</th><th>Time</th><th>VN time (winter)</th><th>What to take</th></tr></thead>
       <tbody>
         <tr><td><span class="chip hvn">Composite</span></td><td class="mono">Last 30 days (ETH)</td><td class="mono">updated every morning</td><td>HVN (balance areas), LVN (paths), composite POC</td></tr>
         <tr><td><span class="chip rth">pRTH</span></td><td class="mono">9:30 – 16:14 ET yesterday</td><td class="mono">21:30 – 04:14</td><td>VAH, VAL, POC, high/low, close, tail, single print</td></tr>
         <tr><td><span class="chip ovn">OVN</span></td><td class="mono">18:00 – 9:29 ET</td><td class="mono">06:00 – 21:29</td><td>VAH, VAL, POC, ONH, ONL</td></tr>
+        <tr><td><span class="chip vw">VWAP RTH</span></td><td class="mono">anchor 9:30 ET, runs in session</td><td class="mono">from 21:30</td><td>VWAP, ±1σ / ±2σ / ±3σ bands, slope (M1 chart)</td></tr>
       </tbody>
     </table></div>
     <p class="small muted">pRTH and OVN use the TPO VA (70% of time) because this frame trades balance–imbalance: acceptance is measured by how long price stays in an area.</p>
@@ -90,9 +92,9 @@
     <h3>Daily schedule</h3>
     <div class="flow">
       <div class="step"><span class="dot">1</span><div><b>Morning (VN time):</b> update the composite, redraw HVN/LVN if a new session changed the profile shape (chapter 01).</div></div>
-      <div class="step"><span class="dot">2</span><div><b>Before 21:29 VN:</b> enter pRTH and OVN in Plan Builder (chapter 03). Note the location, bias, priority setup, target and bias-flip level.</div></div>
+      <div class="step"><span class="dot">2</span><div><b>Before 21:29 VN:</b> enter pRTH and OVN in Plan Builder (chapter 04). Note the location, bias, priority setup, target and bias-flip level.</div></div>
       <div class="step"><span class="dot">3</span><div><b>21:30–22:00 (A period):</b> no entries. Watch the open type and the first reaction at the nearest edge.</div></div>
-      <div class="step"><span class="dot">4</span><div><b>22:00:</b> set the direction by open type + EMA 9/34. Pick Fade or Continuation by location.</div></div>
+      <div class="step"><span class="dot">4</span><div><b>22:00:</b> set the direction with open type + EMA 9/34 and read the VWAP RTH state. Pick Fade or Continuation by location; VWAP decides whether it is allowed.</div></div>
       <div class="step"><span class="dot">5</span><div><b>22:00–23:30:</b> enter on M1 on a trigger. Stop at 23:30 or after 2–3 trades.</div></div>
     </div>
   </div>
@@ -176,7 +178,7 @@
   <div class="head">
     <span class="eyebrow">02 · Reading the bias</span>
     <h2>Location on the composite picks the trade type. pRTH and OVN pick the direction.</h2>
-    <p class="lead">Pick the three items below to see how to trade. Plan Builder (chapter 03) classifies automatically from your numbers.</p>
+    <p class="lead">Pick the three items below to see how to trade. Plan Builder (chapter 04) classifies automatically from your numbers.</p>
   </div>
 
   <div class="panel">
@@ -218,9 +220,101 @@
   </div>
 </section>
 
+<section class="tp-ch" id="ch-vwap" data-chapter="vwap">
+  <div class="head">
+    <span class="eyebrow">03 · VWAP RTH</span>
+    <h2>VWAP RTH: the in-session compass, laid over the HVN map</h2>
+    <p class="lead">Composite, pRTH and OVN answer the pre-session question: where price is on the map and which way to lean. VWAP RTH answers the in-session question: since 9:30 today, which side is in control. Location picks the trade type (Fade or Continuation); VWAP decides whether that trade is allowed.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Definition and setup</h3>
+      <ul class="clean small">
+        <li><b>VWAP</b> = Σ(price × volume) / Σ volume, from <b>9:30 ET</b> (21:30 VN). Same anchor as RTH and the IB, so all three tools speak the same time language.</li>
+        <li><b>Band ±1σ / ±2σ / ±3σ</b> = volume-weighted standard deviation around VWAP. ±1σ is normal rotation, ±2σ and ±3σ are stretched.</li>
+        <li>Put it on the <b>M1 execution</b>. VWAP ETH (anchor 18:00) is only a reference when overnight volume is unusual, never the filter.</li>
+        <li>Price above VWAP: today’s average buyer is in profit, buyers control the session. Below VWAP, the reverse.</li>
+        <li>In the first 15–20 minutes σ is small and jumpy, so the bands are very tight. <b>Do not fade the bands before 10:00 ET.</b></li>
+      </ul>
+    </div>
+    <div class="svgwrap"><svg viewBox="0 0 520 260" role="img" aria-label="Two VWAP states: flat inside an HVN → fade, sloping → go with it">
+      <g font-family="Be Vietnam Pro, sans-serif">
+        <rect x="10" y="10" width="240" height="240" rx="8" fill="#16181c" stroke="#2c2f35"/>
+        <rect x="18" y="70" width="224" height="120" fill="rgba(38,166,154,0.14)" stroke="#26A69A" stroke-dasharray="5 4"/>
+        <text x="26" y="86" fill="#bff0e8" font-size="11">HVN</text>
+        <path d="M24 130 H236" stroke="#26c6da" stroke-width="2.5"/>
+        <path d="M24 104 H236 M24 156 H236" stroke="#26c6da" stroke-width="1" stroke-dasharray="4 4" opacity=".7"/>
+        <path d="M24 82 H236 M24 178 H236" stroke="#b388ff" stroke-width="1" stroke-dasharray="2 4"/>
+        <path d="M30 128 L50 110 L70 138 L92 160 L112 132 L132 100 L150 86 L170 118 L192 150 L212 176 L232 140" stroke="#e6e8eb" stroke-width="1.6" fill="none"/>
+        <text x="130" y="32" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">Flat VWAP</text>
+        <text x="130" y="50" fill="#c9cdd3" font-size="11" text-anchor="middle">fade HVN edge / ±2σ to VWAP</text>
+        <text x="130" y="218" fill="#9fe3d9" font-size="11" text-anchor="middle">Setup F</text>
+        <rect x="270" y="10" width="240" height="240" rx="8" fill="#16181c" stroke="#2c2f35"/>
+        <rect x="278" y="150" width="224" height="80" fill="rgba(38,166,154,0.14)" stroke="#26A69A" stroke-dasharray="5 4"/>
+        <text x="286" y="224" fill="#bff0e8" font-size="11">HVN</text>
+        <path d="M284 206 L500 96" stroke="#26c6da" stroke-width="2.5"/>
+        <path d="M284 184 L500 74" stroke="#26c6da" stroke-width="1" stroke-dasharray="4 4" opacity=".7"/>
+        <path d="M290 196 L310 176 L326 186 L350 160 L372 150 L388 160 L412 132 L436 118 L452 128 L476 100 L498 86" stroke="#e6e8eb" stroke-width="1.6" fill="none"/>
+        <circle cx="388" cy="160" r="5" fill="none" stroke="#3fbf7f" stroke-width="2"/>
+        <circle cx="452" cy="128" r="5" fill="none" stroke="#3fbf7f" stroke-width="2"/>
+        <text x="390" y="32" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">Sloping VWAP</text>
+        <text x="390" y="50" fill="#c9cdd3" font-size="11" text-anchor="middle">price rides +1σ, buy pullbacks</text>
+        <text x="390" y="246" fill="#c8f2da" font-size="11" text-anchor="middle">Setup C / V · no fading</text>
+      </g></svg></div>
+  </div>
+
+  <div class="panel">
+    <h3>Four VWAP states and the allowed setups</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>State</th><th>Recognition</th><th>In this frame</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill nt">Balance</span></td><td>Flat VWAP, price crossing it many times, mostly within ±1σ</td><td><b>F · Fade inside the HVN.</b> Fade the HVN edges or the ±2/±3σ bands back to VWAP / the HVN POC.</td></tr>
+        <tr><td><span class="pill up">Uptrend</span></td><td>VWAP sloping up, price holding above VWAP, riding +1σ / +2σ</td><td><b>C or V.</b> Buy the retest of the HVN edge just broken or a pullback to VWAP / +1σ. No shorts at +2σ.</td></tr>
+        <tr><td><span class="pill dn">Downtrend</span></td><td>Mirror image</td><td><b>C or V</b> on the sell side. No longs at −2σ.</td></tr>
+        <tr><td><span class="pill nt">Phase change</span></td><td>Price reclaims or loses VWAP after the IB, VWAP starts changing slope</td><td><b>V.</b> Trade the VWAP retest in the new direction, with delta / CVD confirmation.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel">
+    <h3>VWAP × the HVN map</h3>
+    <div class="grid g2">
+      <div class="card a"><span class="k">Flat VWAP inside the HVN</span><p class="small">Balance on both the larger frame and in session. Fade both edges, target VWAP or the HVN POC.</p></div>
+      <div class="card a"><span class="k">±2 SD band on an HVN edge (within 10–15 pts)</span><p class="small">A stronger edge. If VWAP is flat, this is the top fade spot of the day.</p></div>
+      <div class="card b"><span class="k">HVN edge breaks, VWAP slopes with the break</span><p class="small">A trustworthy continuation. A pullback to VWAP / ±1σ or an edge retest is the entry, target the next HVN edge.</p></div>
+      <div class="card b"><span class="k">Beyond the edge but VWAP flat</span><p class="small">Weak breakout. Price often returns to VWAP and a period closes back inside the HVN. Do not chase; see whether a fade sets up.</p></div>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>VWAP gate for the three setups</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Setup</th><th>Allowed when</th><th>Skip when</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip hvn">F</span></td><td>Flat VWAP; price touches the HVN edge or ±2σ</td><td>VWAP slopes out toward the edge being faded</td></tr>
+          <tr><td><span class="chip ov">C</span></td><td>VWAP slopes in the break direction, price holds that side</td><td>Price crosses back through VWAP</td></tr>
+          <tr><td><span class="chip">V</span></td><td>After 10:00, price has held one side of VWAP ≥ 15 minutes, in the bias direction</td><td>Third touch, or 2 M1 candles closing through VWAP against the trade</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">Whatever the setup, the distance to the first target must still be ≥ 1.5R.</p>
+    </div>
+    <div class="panel">
+      <h3>Common mistakes</h3>
+      <ul class="clean small">
+        <li>Fading ±2σ on an Open Drive day while VWAP slopes. It is a trend day; the band is where to add, not where it reverses.</li>
+        <li>Treating a VWAP touch as a signal. A touch is only location; you still need a delta / footprint trigger on M1.</li>
+        <li>Confusing VWAP ETH with VWAP RTH on the M1 chart.</li>
+        <li>Fading the bands before 10:00 ET while σ is still too tight.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <section class="tp-ch" id="ch-builder" data-chapter="builder">
   <div class="head">
-    <span class="eyebrow">03 · Plan Builder</span>
+    <span class="eyebrow">04 · Plan Builder</span>
     <h2>Enter numbers before 21:29 VN, get the plan and the map</h2>
     <p class="lead">Enter the composite HVN zones, the pRTH VA and the OVN VA. The builder classifies the location and OVN direction, suggests the pRTH build, then draws the map with the next HVN edge as target.</p>
   </div>
@@ -265,7 +359,7 @@
 
 <section class="tp-ch" id="ch-quy-trinh" data-chapter="quy-trinh">
   <div class="head">
-    <span class="eyebrow">04 · Trading process</span>
+    <span class="eyebrow">05 · Trading process</span>
     <h2>Three setups, one direction, entries on M1</h2>
     <p class="lead">The pre-session bias is a hypothesis. At 10:00 ET the open type and EMA 9/34 set the direction. After that only three setups are allowed.</p>
   </div>
@@ -273,11 +367,11 @@
   <div class="panel">
     <h3>Set the direction at 10:00 ET (22:00 VN)</h3>
     <div class="tablewrap"><table>
-      <thead><tr><th>Open type</th><th>EMA 9/34 (5')</th><th>Conclusion</th></tr></thead>
+      <thead><tr><th>Open type</th><th>EMA 9/34 (5')</th><th>VWAP RTH</th><th>Conclusion</th></tr></thead>
       <tbody>
-        <tr><td>Directional OD / OTD / ORR</td><td>Same direction</td><td>Trade in the open-type direction. If it is against the pre-session bias, <b>the open type wins</b>.</td></tr>
-        <tr><td>Directional OD / OTD / ORR</td><td>Opposite direction</td><td>Do not trade a direction. Only fade inside the HVN on a trigger.</td></tr>
-        <tr><td>OA</td><td>Any</td><td>Intraday balance. Fade the HVN / IB edges, or wait for the IB to finish (10:30).</td></tr>
+        <tr><td>Directional OD / OTD / ORR</td><td>Same direction</td><td>Price holds the open-type side, VWAP starts sloping with it</td><td>Trade in the open-type direction. If it is against the pre-session bias, <b>the open type wins</b>.</td></tr>
+        <tr><td>Directional OD / OTD / ORR</td><td>Opposite direction</td><td>Any</td><td>Do not trade a direction. Only fade inside the HVN on a trigger.</td></tr>
+        <tr><td>OA</td><td>Any</td><td>Flat, price crossing back and forth</td><td>Intraday balance. Fade the HVN / IB edges, or wait for the IB to finish (10:30).</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -286,7 +380,7 @@
     <div class="panel">
       <h3><span class="chip hvn">F</span> Fade inside the HVN</h3>
       <dl class="dl">
-        <dt>When</dt><dd>Price inside the HVN, OA open type or a bias pointing into the zone, flat VWAP.</dd>
+        <dt>When</dt><dd>Price inside the HVN, OA open type or a bias pointing into the zone, flat VWAP RTH. An HVN edge on the ±2σ band is the best fade.</dd>
         <dt>Entry</dt><dd>Price reaches an HVN edge (or a pRTH VA edge inside the HVN). Within 5 M1 candles one closes back inside with delta against the touch, or absorption.</dd>
         <dt>Stop</dt><dd>Beyond the new extreme, on M1.</dd>
         <dt>Target</dt><dd>The HVN POC, then the other edge.</dd>
@@ -296,11 +390,11 @@
     <div class="panel">
       <h3><span class="chip ov">C</span> Continuation through the LVN</h3>
       <dl class="dl">
-        <dt>When</dt><dd>One 30' period closes beyond the HVN edge in the bias direction (the bias switches to continuation).</dd>
+        <dt>When</dt><dd>One 30' period closes beyond the HVN edge in the bias direction (the bias switches to continuation), with VWAP RTH sloping in the break direction.</dd>
         <dt>Entry</dt><dd>Retest of the edge just broken on M1: the candle closes holding outside, delta aligned, EMA 9 &gt; 34 (long).</dd>
         <dt>Stop</dt><dd>Back inside the HVN on M1.</dd>
         <dt>Target</dt><dd>The near edge of the next HVN. Skip if under 1.5R.</dd>
-        <dt>Skip when</dt><dd>Next period closes back inside the HVN: failed breakout, back to fading.</dd>
+        <dt>Skip when</dt><dd>Next period closes back inside the HVN, or price crosses back through VWAP: failed breakout, back to fading.</dd>
       </dl>
     </div>
     <div class="panel">
@@ -309,6 +403,7 @@
         <dt>When</dt><dd>After 10:00, price has held one side of VWAP for at least 15 minutes, in the bias direction.</dd>
         <dt>Entry</dt><dd>First VWAP touch, with a delta trigger and EMA 9/34 aligned.</dd>
         <dt>Target</dt><dd>Session high/low, or the next HVN edge.</dd>
+        <dt>Skip when</dt><dd>Third VWAP touch, or 2 M1 candles closing through VWAP against the trade.</dd>
         <dt>Note</dt><dd>Best setup in the old-frame backtest (45%, sample too small).</dd>
       </dl>
     </div>
@@ -327,7 +422,7 @@
 
 <section class="tp-ch" id="ch-vi-du" data-chapter="vi-du">
   <div class="head">
-    <span class="eyebrow">05 · Example</span>
+    <span class="eyebrow">06 · Example</span>
     <h2>Session 16/11: pRTH and OVN both accepted lower, price at the lower HVN edge</h2>
     <p class="lead">Numbers read approximately from two charts (your composite and your friend’s chart), only to illustrate the reading. Check them on ATAS before using them as data.</p>
   </div>
@@ -357,7 +452,7 @@
 
 <section class="tp-ch" id="ch-quiz" data-chapter="quiz">
   <div class="head">
-    <span class="eyebrow">06 · Check</span>
+    <span class="eyebrow">07 · Check</span>
     <h2>Quiz khung Composite × pRTH × OVN</h2>
   </div>
   <div class="row"><button id="q-reset">Reset</button><span class="small muted" id="q-score"></span></div>
@@ -365,12 +460,12 @@
 </section>
 </div>
 </main>
-<script src="assets/js/en/fp.js?v=17"></script>
-<script src="assets/js/en/bank-levels.js?v=17"></script>
-<script src="assets/js/en/bank-ema.js?v=17"></script>
-<script src="assets/js/en/bank-tools.js?v=17"></script>
-<script src="assets/js/en/quiz.js?v=17"></script>
-<script src="assets/js/en/core.js?v=17"></script>
-<script src="assets/js/en/testing-page.js?v=17"></script>
+<script src="assets/js/en/fp.js?v=18"></script>
+<script src="assets/js/en/bank-levels.js?v=18"></script>
+<script src="assets/js/en/bank-ema.js?v=18"></script>
+<script src="assets/js/en/bank-tools.js?v=18"></script>
+<script src="assets/js/en/quiz.js?v=18"></script>
+<script src="assets/js/en/core.js?v=18"></script>
+<script src="assets/js/en/testing-page.js?v=18"></script>
 </body>
 </html>

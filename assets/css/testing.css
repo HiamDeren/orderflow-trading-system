@@ -2,6 +2,7 @@
 .pg-testing{--rth:#E0A458;--ovn:#6F9BD9;--poc:#FF9F1A;--ov:#EF9F27;--hvn:#26A69A;font-size:15.5px;line-height:1.6}
 .pg-testing p{margin:0}
 .pg-testing a{color:var(--vwap)}
+.pg-testing .pill{white-space:nowrap}
 .pg-testing .tp-ch{display:flex;flex-direction:column;gap:20px}
 .pg-testing .tp-test{display:flex;gap:12px;align-items:flex-start;border:1px dashed #1e6b63;background:#121c1b;border-radius:10px;padding:12px 14px;font-size:14px}
 .pg-testing .tp-test .badge{flex:none;font:700 11px var(--font-mono);letter-spacing:.08em;color:#9fe3d9;background:#123430;border:1px solid #1e6b63;border-radius:999px;padding:3px 9px}
@@ -85,3 +86,4 @@
 .pg-testing .pill.dn{background:#401617;color:#ffd0cf;border:1px solid #8c2f31}
 .pg-testing .pill.nt{background:#2a2c31;color:#e6e8eb;border:1px solid #4a4d55}
 .pg-testing textarea{min-height:180px;resize:vertical;line-height:1.5}
+.pg-testing .chip.vw{background:#0f2e33;color:#bdf2f8;border-color:#26c6da}

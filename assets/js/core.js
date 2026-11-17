@@ -21,9 +21,9 @@ const NAV=[
     ['delta','04','Delta & CVD'],['dom','05','DOM'],['tape','06','Tape'],['kich-ban','07','13 kịch bản'],
     ['ket-hop','08','Kết hợp tại level']]},
   {k:'plan',href:'plan.html',label:'Plan Builder',short:'Plan',sub:'Plan + bản đồ level',c:'var(--warn)',icon:'map'},
-  {k:'testing',href:'testing.html',label:'Composite × pRTH × OVN',short:'Testing',sub:'Testing plan · forward test',c:'#26A69A',icon:'overlap',chapters:[
-    ['khung','00','Khung plan'],['hvn','01','Xác định HVN'],['bias','02','Đọc bias'],['builder','03','Plan Builder'],
-    ['quy-trinh','04','Quy trình trade'],['vi-du','05','Ví dụ 16/11'],['quiz','06','Quiz']]},
+  {k:'testing',href:'testing.html',label:'Composite × pRTH × OVN',short:'Testing',sub:'Testing plan · HVN · VWAP RTH',c:'#26A69A',icon:'overlap',chapters:[
+    ['khung','00','Khung plan'],['hvn','01','Xác định HVN'],['bias','02','Đọc bias'],['vwap','03','VWAP RTH'],
+    ['builder','04','Plan Builder'],['quy-trinh','05','Quy trình trade'],['vi-du','06','Ví dụ 16/11'],['quiz','07','Quiz']]},
   {k:'quiz',href:'quiz.html',label:'Trắc nghiệm',short:'Quiz',sub:'Luyện tập · Thi thử',c:'var(--c-quiz)',icon:'quiz',chapters:[
     ['luyen-tap','A','Luyện tập'],['thi-thu','B','Thi thử'],['cau-sai','C','Ôn câu sai']]}
 ];

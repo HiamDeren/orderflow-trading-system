@@ -35,6 +35,15 @@ const O_OPTS = [
 const byK = (arr,k) => arr.find(x=>x.k===k);
 const fillSel = (sel, arr) => { sel.innerHTML = arr.map(o=>`<option value="${o.k}">${esc(o.n)}</option>`).join(""); };
 
+/* Cổng VWAP RTH cho setup (đọc trong phiên, sau 10:00) */
+function vwapGate(type, dir){
+  const w = dir>0?"lên":dir<0?"xuống":"";
+  if(/^Fade/.test(type)) return "Chỉ fade khi VWAP RTH phẳng. VWAP dốc ra phía mép đang fade thì bỏ. Mép trùng band ±2σ là chỗ fade tốt nhất.";
+  if(/^Continuation|^Đi theo/.test(type)) return `Cần VWAP RTH dốc ${w||"theo hướng phá"} và giá giữ phía đó. Pullback về VWAP / ±1σ là điểm vào; giá cắt lại VWAP thì bỏ.`;
+  if(type==="Theo bias trong HVN") return `Giá phải giữ phía VWAP RTH theo bias ${w}; vào ở lần chạm VWAP đầu tiên có trigger.`;
+  if(type==="Chờ phản ứng ở mép") return "VWAP phẳng → nghiêng về fade. VWAP dốc ra phía mép → chờ continuation.";
+  return "Chờ VWAP RTH chọn độ dốc sau IB rồi mới trade theo phía đó.";
+}
 function biasOf(bk, ok){
   const dB = byK(B_OPTS,bk).dir, dO = byK(O_OPTS,ok).dir;
   let dir=0, conf, cls, need;
@@ -183,7 +192,7 @@ function renderX(){
     <div class="row"><span class="pill ${B.cls}">${B.conf}</span><span class="pill ${B.dir>0?"up":B.dir<0?"dn":"nt"}">Hướng: ${B.word}</span><span class="pill nt">Setup: ${esc(S.type)}</span></div>
     <div class="ab">
       <div class="card a"><span class="k">Cách trade</span><p class="small">${esc(S.text)}</p></div>
-      <div class="card b"><span class="k">Đổi bias khi</span><p class="small">${esc(S.flip)}</p><span class="k">Cần lúc 10:00</span><p class="small">${esc(B.need)}</p></div>
+      <div class="card b"><span class="k">Đổi bias khi</span><p class="small">${esc(S.flip)}</p><span class="k">Cần lúc 10:00</span><p class="small">${esc(B.need)}</p><span class="k">Cổng VWAP RTH</span><p class="small">${esc(vwapGate(S.type,B.dir))}</p></div>
     </div>`;
 }
 function initX(){
@@ -278,8 +287,9 @@ SETUP ƯU TIÊN: ${S.type}
   ${S.text}
 TARGET: ${S.target!=null?fmt(S.target)+` (cách giá 9:25 ${fmt(dist)} điểm)`:"theo mô tả"}
 ĐỔI BIAS (TPO 30'): ${S.flip}
+VWAP RTH: ${vwapGate(S.type,B.dir)}
 VÀO LỆNH: trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Dừng 11:30 ET.
-LÚC 10:00: open type + EMA 9/34 (5') chốt hướng; open type ngược bias thì đi theo open type.`;
+LÚC 10:00: open type + EMA 9/34 (5') + VWAP RTH chốt hướng; open type ngược bias thì đi theo open type.`;
   $("#b-out").textContent = lastPlan;
   store.set("ofs.tp.builder", collectB());
 }
@@ -316,7 +326,9 @@ const QZ = [
  {q:"Cách 2 xác định HVN (chồng VA) làm gì?",o:["Lấy VA của ngày gần nhất","Đếm ở mỗi mức giá có bao nhiêu VA RTH và OVN chứa nó; chỗ từ 3 VA trở lên là HVN","Vẽ đường nối các POC","Lấy high/low của 30 ngày"],a:1,e:"Chỗ nhiều VA chồng nhau là nơi giá được chấp nhận nhiều phiên."},
  {q:"Bạn fade mép trên HVN, giá phá lên trên M1 và lệnh chạm stop. Sau đó period đóng trên mép. Làm gì?",o:["Vào lại short","Lệnh đã ra ở stop M1; bias đổi sang continuation lên, chờ retest để long","Dời stop","Đứng ngoài cả ngày"],a:1,e:"Stop nằm trên M1. Period đóng ngoài mép là tín hiệu đổi bias, không phải điểm thoát."},
  {q:"Composite 30 ngày có range 5000 điểm, HVN rất rộng và nhiều. Nên làm gì?",o:["Giữ nguyên 30 ngày","Thử composite ngắn hơn (10–20 ngày) để vùng sát với quy mô intraday","Bỏ composite","Chỉ dùng POC composite"],a:1,e:"Khi thị trường chạy mạnh, vùng cũ dễ hết tác dụng và quá rộng so với biên độ một phiên."},
- {q:"Target của lệnh continuation là gì?",o:["2R cố định","Mép gần của HVN kế tiếp theo hướng lệnh (bỏ nếu dưới 1.5R)","POC composite","High/low tuần"],a:1,e:"Giá đi qua LVN tới vùng balance kế tiếp; mép gần của vùng đó là nơi dễ gặp phản ứng."}
+ {q:"Target của lệnh continuation là gì?",o:["2R cố định","Mép gần của HVN kế tiếp theo hướng lệnh (bỏ nếu dưới 1.5R)","POC composite","High/low tuần"],a:1,e:"Giá đi qua LVN tới vùng balance kế tiếp; mép gần của vùng đó là nơi dễ gặp phản ứng."},
+ {q:"Giá ở mép trên HVN, bias fade. Sau 10:00 VWAP RTH dốc lên mạnh, giá chạy dọc +1σ. Làm gì?",o:["Fade mạnh hơn vì giá đã giãn","Bỏ fade; VWAP dốc ra phía mép là ngày trend, chờ continuation hoặc pullback VWAP","Short ở +2σ","Bỏ qua VWAP vì bias đã chốt"],a:1,e:"VWAP là cổng lọc trong phiên: VWAP dốc ra phía mép thì không fade."},
+ {q:"Khi nào mép HVN là chỗ fade tốt nhất?",o:["Khi VWAP dốc theo hướng phá","Khi VWAP phẳng và band ±2σ trùng mép HVN","Trước 10:00 khi band còn hẹp","Khi giá chạm mép lần thứ 3"],a:1,e:"VWAP phẳng = balance trong phiên; ±2σ trùng mép HVN cộng thêm một lớp location."}
 ];
 function initQuiz(){
   const st={ans:{}};
