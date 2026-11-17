@@ -49,6 +49,7 @@ Gọi trực tiếp: "dùng subagent plan-engine để ...". Claude cũng tự c
 ## Script kiểm tra
 - `node scripts/check-plan-core.mjs` (hoặc `npm run check`): chạy `plan-core` trên payload mẫu, so `summary`, vùng HVN và plan chữ với `scripts/plan-core.snapshot.json`. Đổi luật cố ý thì `--update`.
 - Khi port sang TypeScript, bản mới phải cho ra đúng snapshot này.
+- `node scripts/build-artifact.mjs`: ghép `plan-core.js` + `artifact/app.src.js` thành `artifact/app.js` để publish artifact.
 
 ## Prompt chuyển đổi web app
 [`prompts/chuyen-doi-web-app.md`](prompts/chuyen-doi-web-app.md): prompt khởi động + prompt từng giai đoạn + prompt nghiệm thu.

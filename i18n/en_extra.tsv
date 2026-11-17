@@ -2003,3 +2003,14 @@ Token sai hoặc đã đổi. Bấm lại và dán token mới.	Wrong or changed
 Lấy plan mới nhất từ web	Load latest plan from web
 Đổi token	Change token
 đọc plan mà indicator đã gửi lên (cần PLAN_TOKEN, chỉ lưu trên trình duyệt này). Ảnh plan tiếng Việt do server tạo được lưu trong Supabase Storage và gửi Discord.	reads the plan the indicator sent (needs PLAN_TOKEN, stored in this browser only). The Vietnamese plan image made by the server is saved in Supabase Storage and sent to Discord.
+Lấy plan từ indicator ATAS, ra bias, setup, target và ảnh plan; quy trình trade NY AM.	Pull the plan from the ATAS indicator and get bias, setup, target and the plan image; NY AM trading routine.
+(indicator ATAS gửi số lúc 9:29 ET). Chương này giữ làm nền tảng: timeline, checklist trước phiên và review sau phiên vẫn dùng chung.	(the ATAS indicator sends the numbers at 9:29 ET). This chapter stays as the foundation: the timeline, pre-session checklist and post-session review are still shared.
+Plan hằng ngày nay lập ở trang Trade Plan	The daily plan now lives on the Trade Plan page
+Từ 17/11/2026 plan mỗi ngày theo khung	From 17/11/2026 the daily plan follows the
+ở trang	framework on the
+Khung trade plan chính thức từ 17/11/2026.	The official trade plan framework since 17/11/2026.
+Mỗi ngày lập plan theo khung này: indicator ATAS gửi số lúc 9:29 ET, Plan Builder (chương 04) ra bias, setup, target và ảnh plan. Khung chưa có backtest dài hạn, nên ghi lại kết quả từng phiên để kiểm tra theo thời gian.	Build the plan with this framework every day: the ATAS indicator sends the numbers at 9:29 ET, and the Plan Builder (chapter 04) returns the bias, setup, target and plan image. The framework has no long-term backtest yet, so log each session's result to review it over time.
+SYSTEM CHÍNH	MAIN SYSTEM
+Trade plan NQ mỗi ngày: composite 30 ngày cho bản đồ HVN/LVN, pRTH và OVN cho hướng, Plan Builder nhận số từ ATAS và quy trình trade NY AM.	Daily NQ trade plan: 30-day composite for the HVN/LVN map, pRTH and OVN for direction, a Plan Builder fed by ATAS and the NY AM trading routine.
+Tối đa 2–3 lệnh, dừng 11:30 ET, giữ đúng giới hạn rủi ro của tài khoản prop.	At most 2–3 trades, stop at 11:30 ET, and keep to the prop account's risk limits.
+Khung plan	Plan framework

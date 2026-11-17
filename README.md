@@ -9,8 +9,7 @@ Website học tập gộp hai playbook **Orderflow Tools** và **TPO Level** cho
 | `index.html` | Tổng quan: tiếp tục học, hệ thống 4 lớp, tiến độ 2 khoá, thống kê trắc nghiệm, sao lưu tiến độ |
 | `tools.html` | Khoá 2 · Orderflow Tools: DOM, Tape, Footprint, Delta & CVD, 13 kịch bản, kết hợp tại level, thuật ngữ |
 | `levels.html` | Khoá 1 · TPO Level: TPO, day/open types, IB, level map, VWAP RTH, EMA 9/34, CVD, quy trình lên plan |
-| `plan.html` | Plan Builder + bản đồ level (PNG / copy ảnh) |
-| `testing.html` | Testing plan · Composite × pRTH × OVN: khung plan, xác định HVN, đọc bias, VWAP RTH, Plan Builder (nhập JSON từ indicator ATAS, ảnh plan TPO kèm plan chữ, copy ảnh), quy trình trade, quiz 10 câu riêng (không tính vào thi thử) |
+| `plan.html` | **Trade Plan** (system chính từ 17/11/2026) · Composite × pRTH × OVN: khung plan, xác định HVN, đọc bias, VWAP RTH, Plan Builder (nhập JSON từ indicator ATAS hoặc lấy plan đã gửi từ web, ảnh plan TPO kèm plan chữ, copy ảnh), quy trình trade, quiz 10 câu riêng (không tính vào thi thử) |
 | `quiz.html` | Trung tâm trắc nghiệm: luyện tập, thi thử, ôn câu sai |
 
 **Ngân hàng câu hỏi: 188 câu, giữ nguyên văn** — 87 câu Orderflow Tools (`assets/js/bank-tools.js`, id `T001…T087`) và 101 câu TPO Level (chương EMA: `assets/js/bank-ema.js`, id `L094…L108`; `assets/js/bank-levels.js`, id `L001…L093`, bỏ 7 câu case study).

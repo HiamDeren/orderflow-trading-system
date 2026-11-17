@@ -1,5 +1,5 @@
 /* plan-core.js · Composite × pRTH × OVN
- * Hàm thuần dùng chung cho trang Testing plan (trình duyệt) và API /api/plan (server, Node):
+ * Hàm thuần dùng chung cho trang Trade Plan (plan.html, trình duyệt), API /api/plan (server, Node) và artifact claude.ai:
  * tìm HVN từ VA các phiên, xếp vị trí, bias, setup, vẽ ảnh plan (SVG).
  * Không dùng DOM. Trình duyệt: window.PlanCore. Node: require / import default.
  */

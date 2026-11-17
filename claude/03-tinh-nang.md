@@ -8,7 +8,7 @@ Danh mục này dùng làm checklist khi port sang web app: mỗi dòng là mộ
 - Đồng hồ phiên realtime theo giờ VN: đếm tới RTH, trạng thái "Cửa sổ trade" 9:30–11:30 ET.
 - Nút VI | EN, nhớ lựa chọn (`ofs.lang`).
 - Toast thông báo, icon SVG nội tuyến, logo TPO.
-- Giao diện tối, màu theo trang (`--c`): Level, Tools, Plan, Testing (#26A69A), Quiz.
+- Giao diện tối, màu theo trang (`--c`): Level, Tools, Trade Plan (#26A69A), Quiz. Nhóm sidebar: Khoá học · Trade plan · Ôn luyện.
 
 ## Trang Tổng quan (`index.html`, home.js)
 - Hero minh hoạ, đồng hồ phiên lớn.
@@ -29,7 +29,7 @@ Widget chính:
 - VWAP RTH: 4 trạng thái, VWAP × TPO, màu ATAS gợi ý (ARGB).
 - EMA 9/34: engine chart tự viết (không thư viện), trạng thái S1–S5, entry E1–E4, holding ladder.
 - CVD divergence.
-- Plan mỗi ngày (bản cổ điển) và checklist.
+- Chương 08: timeline, checklist trước / sau phiên; có callout trỏ sang trang Trade Plan cho plan hằng ngày.
 - Khoá localStorage: `plan-in`, `dt-last`, `tog-scalp`, `ib-in2`, `ibj-rows`, các khoá checklist; EMA dùng tiền tố `emapb:`.
 
 ## Khoá Orderflow Tools (`tools.html`, fp.js, tools-page.js, tape-pats.js)
@@ -41,13 +41,10 @@ Widget chính:
 - DOM mẫu, tape mẫu; chuyển layout tape Đầy đủ / 2 cột như Smart Tape (`ofs.tape.layout`).
 - Trình tự 5 pha tại key level, ma trận kiểm soát tape, 7 pattern tape, chấm hạng setup (A++ / A+ / B / Skip).
 
-## Plan Builder cổ điển (`plan.html`, levels-page.js, plan-chart.js)
-- Form nhập: ngày, PD High/Low, VAH/POC/VAL, close, day type, shape, poor high/low, ON High/Low, inventory, giá 9:15, tin tức.
-- Level tuỳ chỉnh theo dòng: `[TAG điểm] tên: giá` hoặc `[TAG] lo-hi: nhãn` (tag A/B/T/TK/Z, có thể có GEX).
-- Sinh plan chữ (kịch bản A/B, zone, trigger, target, invalidation) và **bản đồ level SVG**, tải PNG / copy ảnh.
-- Lưu nhập liệu ở `plan-in`.
+## Đã bỏ: Plan Builder cổ điển (2026-11-17)
+Trang `plan.html` cũ (form PD High/Low, VAH/POC/VAL, ON High/Low, level tuỳ chỉnh `[TAG] giá`, kịch bản A/B, bản đồ level SVG qua `plan-chart.js`) đã bỏ khi Deren chốt khung Composite × pRTH × OVN làm system chính. Code còn trong lịch sử git (commit trước `Gộp Plan Builder và Testing plan`). Khoá `plan-in` không còn dùng.
 
-## Testing plan · Composite × pRTH × OVN (`testing.html`, plan-core.js, testing-page.js)
+## Trade Plan · Composite × pRTH × OVN (`plan.html`, plan-core.js, plan-page.js) · system chính
 Chương: 00 Khung plan · 01 Xác định HVN · 02 Đọc bias · 03 VWAP RTH · 04 Plan Builder · 05 Quy trình trade · 06 Quiz (10 câu riêng, không tính vào thi thử).
 
 Widget chính:
@@ -79,7 +76,7 @@ Chi tiết hợp đồng API: [04-du-lieu-api.md](04-du-lieu-api.md).
 
 ## Ngoài repo
 - **Indicator ATAS `Deren · Plan Sender`** (`docs/plan-sender/PlanSender.cs`): tính TPO / VA từng phiên RTH / OVN từ nến M30, composite 30 ngày, xuất JSON v1, copy clipboard, ghi file, POST lên API. Chưa build (dự kiến tối 2026-11-17 bằng Claude Code).
-- **Artifact claude.ai "Composite × pRTH × OVN Playbook"**: bản tự chứa của trang Testing, có thêm tab Log phiên, Màu ATAS, Lưu trữ backtest cũ. Chưa dùng `plan-core.js`.
+- **Artifact claude.ai "NQ Trade Plan · Composite × pRTH × OVN"**: bản song song của trang Trade Plan, cùng engine `plan-core.js` (nguồn ở `artifact/`), có thêm tab 06 Log phiên, 07 Màu ATAS, 09 Lưu trữ backtest cũ.
 - **Discord**: kênh `#trade-plan`, webhook tên "Trade Plan" (avatar TPO profile).
 
 ## Bảng khoá localStorage
@@ -90,11 +87,11 @@ Chi tiết hợp đồng API: [04-du-lieu-api.md](04-du-lieu-api.md).
 | `ofs.quiz.v1` | quiz | đáp án, câu sai, lịch sử thi |
 | `ofs.exam.cur` | quiz | bài thi đang làm |
 | `ofs.tape.layout` | tools | layout tape mẫu |
-| `ofs.tp.hvn` | testing | nhập liệu công cụ HVN |
-| `ofs.tp.builder` | testing | nhập tay Plan Builder |
-| `ofs.tp.builder.json` | testing | JSON ATAS gần nhất |
-| `ofs.api.token` | testing | `PLAN_TOKEN` (chỉ trình duyệt chủ site) |
-| `plan-in`, `dt-last`, `tog-scalp`, `ib-in2`, `ibj-rows`, checklist | levels, plan | nhập liệu, IB journal |
+| `ofs.tp.hvn` | plan | nhập liệu công cụ HVN |
+| `ofs.tp.builder` | plan | nhập tay Plan Builder |
+| `ofs.tp.builder.json` | plan | JSON ATAS gần nhất |
+| `ofs.api.token` | plan | `PLAN_TOKEN` (chỉ trình duyệt chủ site) |
+| `dt-last`, `tog-scalp`, `ib-in2`, `ibj-rows`, checklist | levels | nhập liệu, IB journal (`plan-in` của builder cũ không còn dùng) |
 | `emapb:*` | levels (EMA) | trạng thái widget EMA |
 
 Khi chuyển web app: các khoá này là dữ liệu cần migrate lên DB theo user (xem [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md)).

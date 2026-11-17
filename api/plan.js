@@ -2,7 +2,7 @@
 //
 // POST /api/plan   Header: Authorization: Bearer <PLAN_TOKEN>   Body: JSON v1 từ indicator "Deren · Plan Sender"
 //   1. Lưu (upsert theo ngày + symbol) vào bảng public.trade_plans trên Supabase
-//   2. Lập plan bằng assets/js/plan-core.js (cùng code với trang Testing plan), vẽ ảnh tiếng Việt, đổi sang PNG
+//   2. Lập plan bằng assets/js/plan-core.js (cùng code với trang Trade Plan), vẽ ảnh tiếng Việt, đổi sang PNG
 //   3. Lưu PNG vào Supabase Storage (bucket private "trade-plans"), ghi đường dẫn + plan chữ vào bảng
 //   4. Gửi ảnh + tóm tắt plan lên Discord (nếu có DISCORD_WEBHOOK_TRADE_PLAN và payload không có "notify": false)
 //   Bước 2–4 lỗi thì plan vẫn được lưu; kết quả từng bước nằm trong response.

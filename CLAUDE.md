@@ -20,7 +20,8 @@
 - Đổi file JS / CSS thì tăng `?v=` trong thẻ `<script>` / `<link>` của các trang dùng nó (cache 1 giờ).
 - Logic plan (HVN, bias, setup, vẽ ảnh) chỉ sửa ở `assets/js/plan-core.js`; file này chạy cả trình duyệt lẫn server.
 - Push lên `main` là Vercel tự deploy production. Commit message tiếng Việt, ngắn, nói thay đổi gì.
-- Artifact "Composite × pRTH × OVN Playbook" trên claude.ai là bản song song của trang Testing; đổi logic plan thì cập nhật cả hai.
+- Trade plan chính thức (từ 2026-11-17) là khung **Composite × pRTH × OVN** ở trang `plan.html` (Trade Plan). `/testing`, `/overlap` chỉ còn là redirect.
+- Artifact "NQ Trade Plan · Composite × pRTH × OVN" trên claude.ai: nguồn ở `artifact/`, engine lấy từ `plan-core.js`. Đổi engine hoặc trang plan thì `node scripts/build-artifact.mjs` rồi publish lại artifact (xem `artifact/README.md`).
 - Sau mỗi thay đổi đáng kể: cập nhật [`claude/08-roadmap.md`](claude/08-roadmap.md) và [`claude/09-nhat-ky.md`](claude/09-nhat-ky.md).
 - Khi Deren nhắn "liệt kê các việc còn lại": trả lời từ `claude/08-roadmap.md`.
 

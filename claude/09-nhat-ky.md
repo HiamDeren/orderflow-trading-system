@@ -3,6 +3,8 @@
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
 ## 2026-11-17 · Plan tự động và chuẩn bị chuyển web app
+- **Composite × pRTH × OVN thành system trade plan chính.** Gộp Plan Builder cổ điển và Testing plan thành trang **Trade Plan** (`plan.html`, chương 00–06); bỏ builder cổ điển (`plan-chart.js`, code builder trong `levels-page.js`); `testing.*` → `plan.*` (`plan-page.js`, `plan.css`, scope `.pg-plan`); `/testing`, `/overlap` redirect về `/plan`; sidebar nhóm "Trade plan"; trang chủ một thẻ Trade Plan; chương 08 khoá Level có callout trỏ sang Trade Plan.
+- Artifact đổi tên "NQ Trade Plan · Composite × pRTH × OVN", engine lấy từ `plan-core.js` (bỏ bản engine riêng), nguồn đưa vào `artifact/` + `scripts/build-artifact.mjs`.
 - Claude Code: `.claude/settings.json` + 5 hook Node, 7 subagent, 3 lệnh tắt; `scripts/check-plan-core.mjs` + snapshot; `claude/10-claude-code.md`, `claude/prompts/chuyen-doi-web-app.md`.
 - Ghi bối cảnh dự án: `CLAUDE.md` + thư mục `claude/` (roadmap chuyển từ `docs/ROADMAP.md` sang `claude/08-roadmap.md`).
 - Discord: biến `DISCORD_WEBHOOK_TRADE_PLAN` (vẫn nhận `DISCORD_WEBHOOK_URL`), avatar webhook. Test đầu-cuối web → Supabase → Storage → Discord thành công; xoá dòng test.
@@ -15,7 +17,7 @@ Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 - Thay trang RTH × OVN Overlap bằng **Composite × pRTH × OVN** (`testing.html`; `/overlap` chuyển hướng về `/testing`).
 - Ngoài repo: Supabase project và bucket, biến môi trường Vercel, artifact "Composite × pRTH × OVN Playbook" làm lại theo hướng composite.
 
-## 2026-11-12 · Testing plan đầu tiên
+## 2026-11-12 · Testing plan đầu tiên (RTH × OVN overlap, đã thay)
 - Thêm trang RTH × OVN Overlap, thêm lớp day type RTH hôm qua.
 - Backtest 47 phiên: overlap chưa có edge; open type + EMA cho nhiều thông tin hơn (xem [05](05-nghiep-vu-trading.md#kết-luận-backtest-để-không-lặp-lại)).
 

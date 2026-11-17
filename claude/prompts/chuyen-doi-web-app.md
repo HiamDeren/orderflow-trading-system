@@ -46,7 +46,7 @@ Dùng subagent migration-architect:
 ```
 Giai đoạn 1: dựng khung Next.js trong cùng repo, nhánh webapp/g1.
 Yêu cầu:
-- Tạo app Next.js (App Router, TypeScript) ở gốc repo. Chuyển các trang HTML cũ + assets vào public/legacy/ (hoặc cách tương đương) và thêm rewrites để mọi URL cũ vẫn chạy y như hiện tại: /, /levels, /tools, /plan, /testing, /quiz, các bản .en, /overlap → /testing, hash chương (#ema, #builder...).
+- Tạo app Next.js (App Router, TypeScript) ở gốc repo. Chuyển các trang HTML cũ + assets vào public/legacy/ (hoặc cách tương đương) và thêm rewrites để mọi URL cũ vẫn chạy y như hiện tại: /, /levels, /tools, /plan, /quiz, các bản .en, /testing và /overlap → /plan, hash chương (#ema, #builder...).
 - Chuyển api/plan.js sang app/api/plan/route.ts, giữ nguyên request/response, xác thực PLAN_TOKEN, render PNG bằng @resvg/resvg-js với font api/_fonts (đảm bảo font được đóng gói vào function).
 - Port assets/js/plan-core.js sang lib/plan-core.ts nhưng trang legacy vẫn dùng bản JS cũ; viết test chạy cả hai trên assets/sample_plan_20261112.json, kết quả phải khớp scripts/plan-core.snapshot.json.
 - Cập nhật hook trong .claude/ nếu đường dẫn đổi (guard bản EN, check plan-core).
@@ -82,11 +82,11 @@ Yêu cầu:
 ## Giai đoạn 4 · Port từng trang cũ
 
 ```
-Giai đoạn 4: port trang <tên trang: testing | plan | quiz | levels | tools> sang React, nhánh webapp/g4-<trang>.
+Giai đoạn 4: port trang <tên trang: plan | quiz | levels | tools> sang React, nhánh webapp/g4-<trang>.
 Yêu cầu:
 - Dùng danh mục trong claude/03-tinh-nang.md làm checklist: mọi widget, chương, tương tác, khoá dữ liệu của trang này phải có ở bản mới (hoặc mình đồng ý bỏ).
 - Nội dung bài học / câu hỏi tách sang content/ (MDX hoặc JSON); ngân hàng câu hỏi giữ nguyên văn và id T001…, L001….
-- Testing / Plan dùng lib/plan-core.ts; snapshot phải pass. Vẽ TPO, footprint giữ code SVG hiện có.
+- Trade Plan dùng lib/plan-core.ts (artifact/ cũng build từ engine này); snapshot phải pass. Vẽ TPO, footprint giữ code SVG hiện có.
 - Dữ liệu người dùng đọc / ghi user_state thay cho localStorage.
 - Giữ URL và hash chương. Xong thì gỡ bản legacy của riêng trang này.
 - Gọi content-reviewer, cập nhật claude/, mở PR.

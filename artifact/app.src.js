@@ -1,24 +1,28 @@
-/* Trang Testing plan · Composite × pRTH × OVN: logic gốc của artifact, bỏ router tab, Log phiên và Lưu trữ, Màu ATAS */
 (function(){
-if(!document.getElementById("b-build"))return;
 "use strict";
 const $ = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+/* Engine plan (HVN, bias, setup, ảnh plan) lấy từ plan-core.js, dán phía trên file này lúc build:
+   cùng một code với web (plan.html) và server (/api/plan). Không sửa engine ở đây. */
 const { fmt, esc, COL, FONT, MONO, P_OPTS, B_OPTS, O_OPTS, byK, biasOf, setupOf, vwapGate, parseVA, findZones, locate, ovnKey,
   geomOf, spread, wrapText, drawPlan, suggestBFrom, makePlan } = window.PlanCore;
 const num = id => { const v = parseFloat($("#"+id).value); return isNaN(v) ? null : v; };
 const store = { get(k,d){ try{ const v=localStorage.getItem(k); return v==null?d:JSON.parse(v);}catch(e){return d;} }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
 
+/* ---------- tabs ---------- */
+const TABS = ["khung","hvn","bias","vwap","builder","quy-trinh","log","mau","quiz","backtest"];
+function route(){
+  let h = (location.hash||"").slice(1); if(!TABS.includes(h)) h = "khung";
+  $$("section.tab").forEach(s=>s.classList.toggle("active", s.id==="t-"+h));
+  $$("nav.tabs a").forEach(a=>{ if(a.getAttribute("href")==="#"+h) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+}
+window.addEventListener("hashchange", ()=>{ route(); window.scrollTo(0,0); });
+
 /* ---------- định nghĩa ---------- */
 const fillSel = (sel, arr) => { sel.innerHTML = arr.map(o=>`<option value="${o.k}">${esc(o.n)}</option>`).join(""); };
 
-
-/* Sinh setup theo vị trí + hướng. ctx có số (từ builder) hoặc không (chương 02). */
-
-/* Cổng VWAP RTH cho setup (đọc trong phiên, sau 10:00) */
-
 /* ---------- 01 · Tìm HVN bằng chồng VA ---------- */
-const SAMPLE = "2026-10-21 RTH 29916 30111\n2026-10-22 OVN 29418 29751\n2026-10-22 RTH 29093 29366\n2026-10-23 OVN 29088 29197\n2026-10-23 RTH 29128 29273\n2026-10-26 OVN 29062 29215\n2026-10-26 RTH 29361 29572\n2026-10-27 OVN 29378 29565\n2026-10-27 RTH 29659 29882\n2026-10-28 OVN 29871 29976\n2026-10-28 RTH 29801 29940\n2026-10-29 OVN 29605 29734\n2026-10-29 RTH 29448 29617\n2026-10-30 OVN 28835 29044\n2026-10-30 RTH 28462 28859\n2026-11-02 OVN 28712 28805\n2026-11-02 RTH 28332 28891\n2026-11-03 OVN 28120 28263\n2026-11-03 RTH 28284 28391\n2026-11-04 OVN 27951 28602\n2026-11-04 RTH 28564 28785\n2026-11-05 OVN 28253 28444\n2026-11-05 RTH 26815 27358\n2026-11-06 OVN 26898 27191\n2026-11-06 RTH 27082 27269\n2026-11-09 OVN 26925 27238\n2026-11-09 RTH 27796 28129\n2026-11-10 OVN 27897 28044\n2026-11-10 RTH 27647 27916\n2026-11-11 OVN 28118 28407\n2026-11-11 RTH 28416 28697\n2026-11-12 OVN 28176 28307";
+const SAMPLE = "__VA_LINES__";
 const SAMPLE_PLAN = {"v":1,"source":"mo phong tu data M1 (Deren.PlanSender v1)","symbol":"NQZ6","date":"2026-11-12","ts_et":"2026-11-12T09:29:00-05:00","price":28064.25,"prth":{"date":"2026-11-11","vah":28697.0,"val":28416.0,"poc":28548.5,"high":28697.0,"low":28199.0,"close":28457.25,"periods_hl":[[28426.0,28199.0],[28388.5,28256.5],[28550.25,28336.5],[28573.0,28462.0],[28619.25,28520.5],[28660.0,28575.0],[28666.25,28622.0],[28690.5,28601.25],[28697.0,28660.5],[28666.0,28535.0],[28588.25,28548.75],[28572.25,28499.5],[28534.25,28443.5],[28510.5,28452.25]]},"ovn":{"vah":28307.0,"val":28176.0,"poc":28204.5,"onh":28368.75,"onl":28013.75,"periods_hl":[[28319.75,28131.75],[28296.75,28193.75],[28270.0,28166.0],[28249.0,28194.0],[28274.0,28187.75],[28311.25,28248.5],[28368.75,28278.0],[28358.5,28280.5],[28334.25,28233.5],[28277.25,28204.5],[28275.25,28234.25],[28238.5,28201.5],[28223.25,28142.5],[28176.25,28134.25],[28231.0,28141.75],[28212.25,28162.25],[28236.5,28182.5],[28237.0,28168.0],[28249.75,28191.0],[28252.5,28195.25],[28267.75,28198.25],[28312.75,28265.0],[28307.25,28268.75],[28301.5,28239.0],[28270.75,28223.75],[28255.5,28214.25],[28308.75,28195.0],[28219.25,28173.0],[28242.5,28013.75],[28169.0,28055.0],[28145.0,28050.25]]},"sessions":[{"date":"2026-10-02","type":"OVN","val":30798.0,"vah":30989.0,"poc":30884.5},{"date":"2026-10-02","type":"RTH","val":31001.0,"vah":31148.0,"poc":31057.5},{"date":"2026-10-05","type":"OVN","val":30976.0,"vah":31119.0,"poc":31042.5},{"date":"2026-10-05","type":"RTH","val":31191.0,"vah":31348.0,"poc":31235.5},{"date":"2026-10-06","type":"OVN","val":31328.0,"vah":31419.0,"poc":31358.5},{"date":"2026-10-06","type":"RTH","val":31484.0,"vah":31557.0,"poc":31526.5},{"date":"2026-10-07","type":"OVN","val":31326.0,"vah":31521.0,"poc":31480.5},{"date":"2026-10-07","type":"RTH","val":31258.0,"vah":31423.0,"poc":31344.5},{"date":"2026-10-08","type":"OVN","val":31131.0,"vah":31392.0,"poc":31219.5},{"date":"2026-10-08","type":"RTH","val":30955.0,"vah":31370.0,"poc":31243.5},{"date":"2026-10-09","type":"OVN","val":31054.0,"vah":31267.0,"poc":31216.5},{"date":"2026-10-09","type":"RTH","val":31037.0,"vah":31122.0,"poc":31087.5},{"date":"2026-10-12","type":"OVN","val":31104.0,"vah":31289.0,"poc":31232.5},{"date":"2026-10-12","type":"RTH","val":30870.0,"vah":30953.0,"poc":30886.5},{"date":"2026-10-13","type":"OVN","val":30636.0,"vah":30749.0,"poc":30666.5},{"date":"2026-10-13","type":"RTH","val":30701.0,"vah":30794.0,"poc":30763.5},{"date":"2026-10-14","type":"OVN","val":30745.0,"vah":30848.0,"poc":30789.5},{"date":"2026-10-14","type":"RTH","val":30103.0,"vah":30434.0,"poc":30199.5},{"date":"2026-10-15","type":"OVN","val":29787.0,"vah":29952.0,"poc":29843.5},{"date":"2026-10-15","type":"RTH","val":29862.0,"vah":30197.0,"poc":29958.5},{"date":"2026-10-16","type":"OVN","val":30043.0,"vah":30174.0,"poc":30091.5},{"date":"2026-10-16","type":"RTH","val":29302.0,"vah":29807.0,"poc":29390.5},{"date":"2026-10-19","type":"OVN","val":29638.0,"vah":29813.0,"poc":29766.5},{"date":"2026-10-19","type":"RTH","val":29709.0,"vah":29852.0,"poc":29785.5},{"date":"2026-10-20","type":"OVN","val":29576.0,"vah":29741.0,"poc":29646.5},{"date":"2026-10-20","type":"RTH","val":29656.0,"vah":29833.0,"poc":29700.5},{"date":"2026-10-21","type":"OVN","val":29824.0,"vah":29965.0,"poc":29868.5},{"date":"2026-10-21","type":"RTH","val":29916.0,"vah":30111.0,"poc":29990.5},{"date":"2026-10-22","type":"OVN","val":29418.0,"vah":29751.0,"poc":29508.5},{"date":"2026-10-22","type":"RTH","val":29093.0,"vah":29366.0,"poc":29155.5},{"date":"2026-10-23","type":"OVN","val":29088.0,"vah":29197.0,"poc":29128.5},{"date":"2026-10-23","type":"RTH","val":29128.0,"vah":29273.0,"poc":29150.5},{"date":"2026-10-26","type":"OVN","val":29062.0,"vah":29215.0,"poc":29138.5},{"date":"2026-10-26","type":"RTH","val":29361.0,"vah":29572.0,"poc":29483.5},{"date":"2026-10-27","type":"OVN","val":29378.0,"vah":29565.0,"poc":29432.5},{"date":"2026-10-27","type":"RTH","val":29659.0,"vah":29882.0,"poc":29805.5},{"date":"2026-10-28","type":"OVN","val":29871.0,"vah":29976.0,"poc":29913.5},{"date":"2026-10-28","type":"RTH","val":29797.0,"vah":29934.0,"poc":29861.5},{"date":"2026-10-29","type":"OVN","val":29605.0,"vah":29734.0,"poc":29653.5},{"date":"2026-10-29","type":"RTH","val":29448.0,"vah":29617.0,"poc":29538.5},{"date":"2026-10-30","type":"OVN","val":28835.0,"vah":29044.0,"poc":28923.5},{"date":"2026-10-30","type":"RTH","val":28462.0,"vah":28859.0,"poc":28668.5},{"date":"2026-11-02","type":"OVN","val":28712.0,"vah":28805.0,"poc":28764.5},{"date":"2026-11-02","type":"RTH","val":28330.0,"vah":28891.0,"poc":28664.5},{"date":"2026-11-03","type":"OVN","val":28120.0,"vah":28263.0,"poc":28232.5},{"date":"2026-11-03","type":"RTH","val":28288.0,"vah":28395.0,"poc":28330.5},{"date":"2026-11-04","type":"OVN","val":27951.0,"vah":28602.0,"poc":28409.5},{"date":"2026-11-04","type":"RTH","val":28564.0,"vah":28783.0,"poc":28646.5},{"date":"2026-11-05","type":"OVN","val":28253.0,"vah":28444.0,"poc":28375.5},{"date":"2026-11-05","type":"RTH","val":26797.0,"vah":27358.0,"poc":26955.5},{"date":"2026-11-06","type":"OVN","val":26898.0,"vah":27191.0,"poc":26978.5},{"date":"2026-11-06","type":"RTH","val":27082.0,"vah":27269.0,"poc":27206.5},{"date":"2026-11-09","type":"OVN","val":26925.0,"vah":27238.0,"poc":27113.5},{"date":"2026-11-09","type":"RTH","val":27796.0,"vah":28129.0,"poc":27928.5},{"date":"2026-11-10","type":"OVN","val":27897.0,"vah":28044.0,"poc":27989.5},{"date":"2026-11-10","type":"RTH","val":27647.0,"vah":27916.0,"poc":27789.5},{"date":"2026-11-11","type":"OVN","val":28118.0,"vah":28407.0,"poc":28226.5},{"date":"2026-11-11","type":"RTH","val":28416.0,"vah":28697.0,"poc":28548.5},{"date":"2026-11-12","type":"OVN","val":28176.0,"vah":28307.0,"poc":28204.5}],"composite":{"days":30,"row":10,"vah":30310.0,"val":27160.0,"poc":29845.0},"warnings":[]};
 function drawZones(res){
   const W=820, H=520, x0=110, x1=760, top=16, bot=H-24;
@@ -41,7 +45,7 @@ let lastZones = null;
 function runHVN(){
   const rows = parseVA($("#h-text").value);
   const opt = { n:+$("#h-n").value||16, k:+$("#h-k").value||3, merge:+$("#h-merge").value||0, minw:+$("#h-minw").value||0, mode:$("#h-mode").value };
-  store.set("ofs.tp.hvn", {text:$("#h-text").value, ...opt});
+  store.set("cb-hvn", {text:$("#h-text").value, ...opt});
   const res = findZones(rows, opt);
   if(!res){ $("#h-svg").innerHTML=""; $("#h-rows").innerHTML=""; $("#h-msg").textContent="Không đọc được dòng nào. Mỗi dòng: ngày RTH|OVN VAL VAH."; return; }
   lastZones = res;
@@ -54,7 +58,7 @@ function runHVN(){
   $("#h-msg").textContent = `${big} HVN, ${res.zones.length-big} node nhỏ, ${res.gaps.length} khoảng LVN. Đổi "Số VA tối thiểu" để vùng chặt hơn (tăng) hoặc rộng hơn (giảm).`;
 }
 function initHVN(){
-  const sv = store.get("ofs.tp.hvn", null);
+  const sv = store.get("cb-hvn", null);
   $("#h-text").value = sv && sv.text ? sv.text : SAMPLE;
   if(sv){ ["n","k","merge","minw","mode"].forEach(k=>{ if(sv[k]!=null) $("#h-"+k).value = sv[k]; }); }
   $("#h-run").addEventListener("click", runHVN);
@@ -98,7 +102,6 @@ function getZones(){ const zs=[]; for(let i=0;i<ZN;i++){ let a=num("b-z"+i+"lo")
 function suggestB(){ return suggestBFrom({vah:num("b-rvah"), val:num("b-rval"), poc:num("b-rpoc"), high:num("b-rhi"), low:num("b-rlo"), close:num("b-rcl")}); }
 let bTouched=false, lastPlan="", lastB=null, lastSvg="", importedComp=null, importedPer=null;
 /* Vùng vào lệnh + level đổi bias theo vị trí và hướng */
-
 function build(){
   const sug=suggestB();
   if(sug && !bTouched) $("#b-b").value = sug;
@@ -112,26 +115,25 @@ function build(){
   $("#b-out").textContent = lastPlan;
   lastSvg = R.svg;
   $("#b-svg").innerHTML = lastSvg;
-  store.set("ofs.tp.builder", collectB());
+  store.set("cb-builder", collectB());
 }
 const B_IDS=["b-tol","b-rvah","b-rval","b-rpoc","b-rhi","b-rlo","b-rcl","b-ovah","b-oval","b-opoc","b-onh","b-onl","b-px","b-date"];
 function collectB(){ const o={}; B_IDS.forEach(id=>o[id]=$("#"+id).value); for(let i=0;i<ZN;i++){ o["z"+i+"lo"]=$("#b-z"+i+"lo").value; o["z"+i+"hi"]=$("#b-z"+i+"hi").value; } o.b=$("#b-b").value; o.touched=bTouched; o.manual=!importedPer; return o; }
 function initB(){
   $("#b-zones").innerHTML = Array.from({length:ZN},(_,i)=>`<div class="field"><label for="b-z${i}lo">HVN ${i+1} · từ</label><input id="b-z${i}lo" type="number" step="0.25"></div><div class="field"><label for="b-z${i}hi">HVN ${i+1} · đến</label><input id="b-z${i}hi" type="number" step="0.25"></div>`).join("");
   fillSel($("#b-b"),B_OPTS);
-  const sv=store.get("ofs.tp.builder",null);
-  const sj=store.get("ofs.tp.builder.json",null);
+  const sv=store.get("cb-builder",null);
+  const sj=store.get("cb-builder-json",null);
   if(sj){ $("#b-json").value=sj; importAtas(sj); }
   else if(sv && sv.manual){ B_IDS.forEach(id=>{ if(sv[id]!=null) $("#"+id).value=sv[id]; }); for(let i=0;i<ZN;i++){ $("#b-z"+i+"lo").value=sv["z"+i+"lo"]||""; $("#b-z"+i+"hi").value=sv["z"+i+"hi"]||""; } if(sv.b) $("#b-b").value=sv.b; bTouched=!!sv.touched; build(); }
   else { const t=JSON.stringify(SAMPLE_PLAN); $("#b-json").value=t; importAtas(t); }
   $("#b-b").addEventListener("change", ()=>{ bTouched=true; build(); });
   $("#b-build").addEventListener("click", build);
-  $("#b-clear").addEventListener("click", ()=>{ B_IDS.forEach(id=>{ if(id!=="b-tol") $("#"+id).value=""; }); setZones([]); bTouched=false; importedComp=null; importedPer=null; store.set("ofs.tp.builder.json",null); $("#b-out").textContent="Nhập số rồi bấm \"Lập plan\"."; $("#b-svg").innerHTML=""; });
+  $("#b-clear").addEventListener("click", ()=>{ B_IDS.forEach(id=>{ if(id!=="b-tol") $("#"+id).value=""; }); setZones([]); bTouched=false; importedComp=null; importedPer=null; store.set("cb-builder-json",null); $("#b-out").textContent="Nhập số rồi bấm \"Lập plan\"."; $("#b-svg").innerHTML=""; });
   $("#b-copy").addEventListener("click", async()=>{ if(!lastPlan) build(); try{ await navigator.clipboard.writeText(lastPlan); $("#b-msg").textContent="Đã copy plan."; }catch(e){ $("#b-msg").textContent="Trình duyệt chặn copy, bôi đen khung plan để copy."; } });
+  $("#b-tolog").addEventListener("click", ()=>{ if(!lastB) build(); if(!lastB) return; $("#l-date").value=lastB.date||""; $("#l-p").value=lastB.p; $("#l-b").value=lastB.b; $("#l-o").value=lastB.o; $("#l-bias").value=lastB.bias; location.hash="log"; $("#l-msg").textContent="Đã điền sẵn từ Plan Builder. Bổ sung kết quả sau phiên rồi bấm Thêm phiên."; });
   ["b-rvah","b-rval","b-rpoc","b-rhi","b-rlo","b-rcl"].forEach(id=>$("#"+id).addEventListener("change", ()=>{ bTouched=false; }));
   $("#b-import").addEventListener("click", ()=>importAtas($("#b-json").value));
-  $("#b-fetch").addEventListener("click", fetchLatest);
-  $("#b-token").addEventListener("click", ()=>{ const t=prompt("Dán PLAN_TOKEN (chỉ lưu trên trình duyệt này, để trống = xoá)"); if(t===null) return; store.set("ofs.api.token", t.trim()||null); $("#b-imsg").textContent = t.trim()?"Đã lưu token.":"Đã xoá token."; });
   $("#b-view").addEventListener("change", build);
   $("#b-example2").addEventListener("click", ()=>{ const t=JSON.stringify(SAMPLE_PLAN); $("#b-json").value=t; importAtas(t); });
   $("#b-paste").addEventListener("click", async()=>{ try{ const t=await navigator.clipboard.readText(); $("#b-json").value=t; importAtas(t); }catch(e){ $("#b-imsg").textContent="Trình duyệt không cho đọc clipboard. Bấm vào ô JSON và dán bằng Ctrl+V."; } });
@@ -153,29 +155,13 @@ async function copyPlanImage(){
     try{ download(await p, `plan_${$("#b-date").value||"nq"}.png`); msg("Trình duyệt chặn copy ảnh nên ảnh PNG đã được tải về."); }catch(e2){ msg("Không tạo được ảnh plan."); }
   }
 }
-async function fetchLatest(){
-  const msg=t=>{ $("#b-imsg").innerHTML=t; };
-  let t=store.get("ofs.api.token",null);
-  if(!t){ t=(prompt("Dán PLAN_TOKEN (chỉ lưu trên trình duyệt này)")||"").trim(); if(!t) return; store.set("ofs.api.token",t); }
-  msg("Đang lấy plan…");
-  try{
-    const r=await fetch("/api/plan",{headers:{Authorization:"Bearer "+t}});
-    const j=await r.json().catch(()=>({}));
-    if(r.status===401){ store.set("ofs.api.token",null); msg("Token sai hoặc đã đổi. Bấm lại và dán token mới."); return; }
-    if(r.status===404){ msg("Chưa có plan nào trên web. Bấm gửi trong indicator trước."); return; }
-    if(!r.ok || !j.payload){ msg("Không lấy được plan: "+esc(j.error||r.status)); return; }
-    const txt=JSON.stringify(j.payload); $("#b-json").value=txt; importAtas(txt);
-    const when=j.updated_at?new Date(j.updated_at).toLocaleString("vi-VN"):"";
-    msg(`Đã lấy plan ${esc(j.trade_date)} · ${esc(j.symbol)} (gửi lúc ${esc(when)}).`+(j.image_url?` <a href="${esc(j.image_url)}" target="_blank" rel="noopener">Mở ảnh plan đã lưu</a> (link hết hạn sau 1 giờ).`:""));
-  }catch(e){ msg("Lỗi mạng khi gọi /api/plan. Trang này phải mở trên site, không chạy được trong file tải về."); }
-}
 function download(blob, name){ const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500); }
 function hvnOpt(){ return { n:+$("#h-n").value||16, k:+$("#h-k").value||3, merge:+$("#h-merge").value||0, minw:+$("#h-minw").value||0, mode:$("#h-mode").value }; }
 function importAtas(text){
   const msg=t=>{ $("#b-imsg").textContent=t; };
   let J; try{ J=JSON.parse(String(text||"").trim()); }catch(e){ msg("JSON không hợp lệ. Kiểm tra lại nội dung đã dán."); return; }
   if(!J || !J.prth || !J.ovn || J.price==null){ msg("JSON thiếu prth, ovn hoặc price."); return; }
-  store.set("ofs.tp.builder.json", String(text));
+  store.set("cb-builder-json", String(text));
   const set=(id,v)=>{ $("#"+id).value = (v==null||isNaN(v))?"":v; };
   $("#b-date").value = J.date||""; set("b-px",J.price);
   set("b-rvah",J.prth.vah); set("b-rval",J.prth.val); set("b-rpoc",J.prth.poc); set("b-rhi",J.prth.high); set("b-rlo",J.prth.low); set("b-rcl",J.prth.close);
@@ -199,8 +185,72 @@ function importAtas(text){
 }
 
 
+/* ---------- 06 · Log ---------- */
+function wil(k,n){ if(!n) return ""; const z=1.96,p=k/n,d=1+z*z/n,c=(p+z*z/(2*n))/d,h=z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n))/d; return `${Math.round(Math.max(0,c-h)*100)}–${Math.round(Math.min(1,c+h)*100)}%`; }
+const pct=(a,b)=> b?Math.round(a/b*100)+"%":"—";
+const ci=(k,n)=> n?`<div class="small muted">khoảng tin cậy ${wil(k,n)}${n<30?" · mẫu nhỏ":""}</div>`:"";
+function initLog(){
+  fillSel($("#l-p"),P_OPTS); fillSel($("#l-b"),B_OPTS); fillSel($("#l-o"),O_OPTS);
+  let rows=store.get("cb-log",[]);
+  const save=()=>store.set("cb-log",rows);
+  const nm=(arr,k)=>{ const o=byK(arr,k); return o?o.n:k; };
+  const draw=()=>{
+    const n=rows.length;
+    const bOk=rows.filter(r=>r.biasok==="Đúng").length, bKnown=rows.filter(r=>r.biasok!=="Không rõ").length;
+    const acc=rows.filter(r=>r.edge==="Chấp nhận ra ngoài"), reach=acc.filter(r=>r.reach==="Có").length;
+    const touched=rows.filter(r=>r.edge!=="Không chạm mép"), held=touched.filter(r=>r.edge==="Giữ (fade đúng)").length;
+    const traded=rows.filter(r=>r.setup!=="Không trade" && r.r!==""&&r.r!=null);
+    const sumR=traded.reduce((a,r)=>a+(+r.r||0),0);
+    const bySetup=["F · Fade","C · Continuation","V · VWAP"].map(sname=>{ const t=traded.filter(r=>r.setup===sname); const w=t.filter(r=>+r.r>0).length; const avg=t.length?t.reduce((a,r)=>a+(+r.r||0),0)/t.length:null; return `<div class="tile"><div class="k">${sname}</div><div class="v">${t.length?(avg>=0?"+":"")+avg.toFixed(2)+"R":"—"}</div><div class="small muted">${t.length} lệnh · thắng ${pct(w,t.length)}</div>${ci(w,t.length)}</div>`; }).join("");
+    $("#l-stats").innerHTML =
+      `<div class="tile"><div class="k">Số phiên</div><div class="v">${n}</div><div class="small muted">${n<30?"đang tập xếp loại (mốc 30)":n<100?"xem xu hướng, chưa đủ kết luận":"đủ để so tỉ lệ"}</div></div>`+
+      `<div class="tile"><div class="k">Bias đúng</div><div class="v">${pct(bOk,bKnown)}</div>${ci(bOk,bKnown)}</div>`+
+      `<div class="tile"><div class="k">Mép HVN giữ được</div><div class="v">${pct(held,touched.length)}</div>${ci(held,touched.length)}</div>`+
+      `<div class="tile"><div class="k">Ra ngoài mép → tới HVN kế</div><div class="v">${pct(reach,acc.length)}</div>${ci(reach,acc.length)}</div>`+
+      `<div class="tile"><div class="k">Tổng R</div><div class="v">${(sumR>=0?"+":"")+sumR.toFixed(1)}</div><div class="small muted">${traded.length} lệnh</div></div>`+ bySetup;
+    $("#l-rows").innerHTML = rows.map((r,i)=>`<tr><td class="mono">${esc(r.date)}</td><td class="small">${esc(nm(P_OPTS,r.p))}</td><td class="small">${esc(nm(B_OPTS,r.b))}</td><td class="small">${esc(nm(O_OPTS,r.o))}</td><td>${esc(r.bias)}</td><td>${esc(r.ot)}</td><td>${esc(r.ib)}</td><td class="small">${esc(r.edge)}</td><td>${esc(r.reach)}</td><td class="small">${esc(r.setup)}</td><td class="num mono">${esc(r.r)}</td><td>${esc(r.biasok)}</td><td class="small">${esc(r.note)}</td><td><button class="mx" data-del="${i}" aria-label="Xoá dòng">Xoá</button></td></tr>`).join("") || `<tr><td colspan="14" class="muted small">Chưa có phiên nào.</td></tr>`;
+  };
+  $("#l-rows").addEventListener("click",e=>{ const b=e.target.closest("[data-del]"); if(!b) return; rows.splice(+b.dataset.del,1); save(); draw(); });
+  $("#l-add").addEventListener("click",()=>{
+    if(!$("#l-date").value){ $("#l-msg").textContent="Chọn ngày trước."; return; }
+    rows.push({date:$("#l-date").value,p:$("#l-p").value,b:$("#l-b").value,o:$("#l-o").value,bias:$("#l-bias").value,ot:$("#l-ot").value,ib:$("#l-ib").value,edge:$("#l-edge").value,reach:$("#l-reach").value,setup:$("#l-setup").value,r:$("#l-r").value,biasok:$("#l-bias-ok").value,note:$("#l-note").value});
+    rows.sort((a,b)=>a.date<b.date?-1:1); save(); draw(); $("#l-msg").textContent="Đã thêm phiên."; $("#l-note").value=""; $("#l-r").value="";
+  });
+  const toCSV=(head,list)=>[head.join(",")].concat(list.map(r=>head.map(k=>`"${String(r[k]==null?"":r[k]).replace(/"/g,'""')}"`).join(","))).join("\n");
+  $("#l-csv").addEventListener("click",async()=>{ const head=["date","p","b","o","bias","ot","ib","edge","reach","setup","r","biasok","note"]; const csv=toCSV(head,rows.map(r=>({...r,p:nm(P_OPTS,r.p),b:nm(B_OPTS,r.b),o:nm(O_OPTS,r.o)}))); try{ await navigator.clipboard.writeText(csv); $("#l-msg").textContent="Đã copy CSV."; }catch(e){ $("#l-msg").textContent="Trình duyệt chặn copy."; } });
+  $("#l-clear").addEventListener("click",()=>{ if(!rows.length) return; if(!confirm("Xoá toàn bộ log?")) return; rows=[]; save(); draw(); });
+  const old=store.get("ov-log",[]);
+  if(old.length){ const b=$("#l-old"); b.hidden=false; b.textContent=`Copy log khung cũ (${old.length} phiên)`; b.addEventListener("click",async()=>{ const head=Object.keys(old[0]); try{ await navigator.clipboard.writeText(toCSV(head,old)); $("#l-msg").textContent="Đã copy log khung cũ."; }catch(e){ $("#l-msg").textContent="Trình duyệt chặn copy."; } }); }
+  draw();
+}
 
-/* ---------- 06 · Quiz ---------- */
+/* ---------- 07 · Màu ---------- */
+const COLORS = [
+ ["RTH TPO · trong VA","#FFE0A458","Vàng cát, đặc. Giữ quy ước RTH = vàng."],
+ ["RTH TPO · ngoài VA","#73E0A458","Cùng màu, 45%. Phần ngoài value nhạt đi."],
+ ["RTH POC","#FFFF9F1A","Cam đậm, nét 2px."],
+ ["RTH VAH / VAL (kéo dài)","#CCE0A458","Nét đứt."],
+ ["OVN TPO · trong VA","#FF6F9BD9","Xanh dương, đặc."],
+ ["OVN TPO · ngoài VA","#736F9BD9","Cùng màu, 45%."],
+ ["OVN POC","#FFE87BA4","Hồng, khác hẳn POC RTH để không nhầm."],
+ ["OVN VAH / VAL (kéo dài)","#CC6F9BD9","Nét đứt."],
+ ["Single print / tail","#FFEF5350","Đánh dấu đỏ."],
+ ["Composite · trong VA","#6626A69A","Teal 40%."],
+ ["Composite · ngoài VA","#40888780","Xám 25%."],
+ ["Composite POC","#FFFFFFFF","Trắng, nét mảnh."],
+ ["Vùng HVN (rectangle fill)","#1F26A69A","Teal 12%, không che TPO."],
+ ["Viền vùng HVN","#9926A69A","Nét đứt 1px."],
+ ["Vùng LVN (tuỳ chọn)","#14FFFFFF","Trắng 8%, hoặc để trống."],
+ ["VWAP RTH","#FF26C6DA","Cyan."],
+ ["Nhãn chữ","#FFE6E8EB","Chữ sáng, đọc được trên nền tối."]
+];
+function argbToCss(a){ const h=a.replace("#",""); const al=parseInt(h.slice(0,2),16)/255; const r=parseInt(h.slice(2,4),16),g=parseInt(h.slice(4,6),16),b=parseInt(h.slice(6,8),16); return `rgba(${r},${g},${b},${al.toFixed(2)})`; }
+function initMau(){
+  $("#c-rows").innerHTML = COLORS.map(([n,c,d])=>`<tr><td>${esc(n)}</td><td><span class="swatch"><i style="background:${argbToCss(c)}"></i></span></td><td><button class="mx mono" data-c="${c}" aria-label="Copy ${c}">${c}</button></td><td class="small">${esc(d)}</td></tr>`).join("");
+  $("#c-rows").addEventListener("click", async e=>{ const b=e.target.closest("[data-c]"); if(!b) return; try{ await navigator.clipboard.writeText(b.dataset.c); const t=b.textContent; b.textContent="Đã copy"; setTimeout(()=>b.textContent=t,900); }catch(err){} });
+}
+
+/* ---------- 08 · Quiz ---------- */
 const QZ = [
  {q:"Trong khung này, HVN của composite đại diện cho gì?",o:["Vùng giá đi nhanh","Vùng balance: giá đã ở lâu qua nhiều phiên","Vùng có nhiều stop","Mức giá có volume lớn trong 1 phút"],a:1,e:"HVN = nơi hai phe đã đồng ý giá qua nhiều phiên, tức là vùng balance."},
  {q:"Giá đang ở giữa LVN, bias lên. Nên làm gì?",o:["Long ngay vì bias lên","Short vì giá ở vùng ít giao dịch","Không vào giữa LVN; vào ở retest mép HVN dưới hoặc pullback VWAP, target mép dưới HVN trên","Chờ tới ngày mai"],a:2,e:"LVN là đường đi. Vào lệnh ở mép có trigger, không ở giữa đường."},
@@ -226,5 +276,6 @@ function initQuiz(){
 }
 
 /* ---------- boot ---------- */
-initHVN(); initX(); initB(); initQuiz();
+route();
+initHVN(); initX(); initB(); initLog(); initMau(); initQuiz();
 })();

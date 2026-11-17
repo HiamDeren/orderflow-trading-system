@@ -23,7 +23,8 @@ Không deploy lên site (đã chặn trong `.vercelignore`). Không chứa bí m
 Tài liệu khác trong repo:
 - `CLAUDE.md` (gốc repo): quy tắc ngắn gọn bắt buộc.
 - `.claude/`: hook, subagent, lệnh tắt của Claude Code (xem 10).
-- `scripts/check-plan-core.mjs`: kiểm hồi quy engine plan.
+- `scripts/check-plan-core.mjs`: kiểm hồi quy engine plan; `scripts/build-artifact.mjs`: build artifact.
+- `artifact/`: nguồn artifact claude.ai "NQ Trade Plan".
 - `docs/plan-sender/`: indicator ATAS Plan Sender (C#), prompt build, SQL Supabase, hướng dẫn setup từng bước.
 
 ## Quy ước giữ thư mục này

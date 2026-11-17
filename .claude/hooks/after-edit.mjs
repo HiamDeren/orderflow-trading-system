@@ -26,7 +26,7 @@ if (/\.(m?js)$/.test(r) && fs.existsSync(abs)) {
 if (r === "assets/js/plan-core.js") {
   const c = run("node scripts/check-plan-core.mjs");
   if (!c.ok) block(`plan-core khác snapshot sau khi sửa:\n${c.out.trim().split("\n").slice(0, 14).join("\n")}\nNếu đổi luật / chữ là cố ý: chạy node scripts/check-plan-core.mjs --update và ghi lý do vào claude/09-nhat-ky.md.`);
-  if (firstTime(input, "plancore")) notes.push("plan-core.js đổi: tăng ?v= của plan-core.js trong testing.html, chạy build_en, cập nhật artifact \"Composite × pRTH × OVN Playbook\" và claude/05-nghiep-vu-trading.md nếu luật đổi. Ảnh server (api/plan.js) dùng chung file này.");
+  if (firstTime(input, "plancore")) notes.push("plan-core.js đổi: tăng ?v= của plan-core.js trong plan.html, chạy build_en, build lại artifact (node scripts/build-artifact.mjs) rồi publish, cập nhật claude/05-nghiep-vu-trading.md nếu luật đổi. Ảnh server (api/plan.js) dùng chung file này.");
 }
 
 // 3. API

@@ -20,7 +20,7 @@ flowchart LR
   B -- upsert --> C[(Supabase<br/>trade_plans)]
   B -- "plan-core.js → SVG → PNG (resvg)" --> D[(Storage<br/>trade-plans/YYYY/MM)]
   B -- "embed + ảnh" --> E[Discord #trade-plan]
-  W[Trang Testing · Plan Builder] -- "GET /api/plan<br/>Bearer token" --> B
+  W[Trang Trade Plan · Plan Builder] -- "GET /api/plan<br/>Bearer token" --> B
   W -- "plan-core.js (cùng code)" --> W
 ```
 
@@ -29,31 +29,31 @@ flowchart LR
 index.html / index.en.html        Tổng quan (dashboard học)
 levels.html / .en                 Khoá TPO Level (9 chương)
 tools.html / .en                  Khoá Orderflow Tools (9 chương)
-plan.html / .en                   Plan Builder cổ điển + bản đồ level
-testing.html / .en                Testing plan Composite × pRTH × OVN (7 chương)
+plan.html / .en                   Trade Plan · Composite × pRTH × OVN (7 chương) · system chính
 quiz.html / .en                   Trung tâm trắc nghiệm
 manifest.webmanifest              PWA manifest (icon 192/512)
 api/plan.js                       Vercel Function: lưu / đọc plan, vẽ ảnh, gửi Discord
 api/_fonts/                       Be Vietnam Pro (đã ghép glyph DejaVu), JetBrains Mono, cho resvg
 assets/css/app.css                Design system, shell, quiz engine
-assets/css/{tools,levels,ema,tape,testing}.css   Style theo trang (scope .pg-*)
+assets/css/{tools,levels,ema,tape,plan}.css   Style theo trang (scope .pg-*)
 assets/js/core.js                 Shell: sidebar, topbar, bottom nav, router chương, đồng hồ phiên, nút VI/EN; window.OFS
 assets/js/quiz.js                 Quiz engine: luyện tập, thi thử, ôn câu sai
 assets/js/bank-*.js               Ngân hàng câu hỏi (tools, levels, ema)
 assets/js/fp.js                   Renderer footprint kiểu ATAS, helper DOM / tape, 13 kịch bản
 assets/js/tools-page.js, tape-pats.js   Widget khoá Tools
 assets/js/levels-data.js, levels-page.js, ema-page.js   Dữ liệu + widget khoá Level
-assets/js/plan-chart.js           Bản đồ level dạng SVG cho plan.html
 assets/js/plan-core.js            Engine plan thuần (UMD): dùng chung trình duyệt + server
-assets/js/testing-page.js         UI trang Testing
+assets/js/plan-page.js            UI trang Trade Plan (khoá localStorage giữ tên cũ ofs.tp.*)
 assets/js/en/                     Bản EN sinh tự động của các file JS trên (không sửa tay)
 assets/sample_plan_20261112.json  Payload mẫu để test API
 docs/plan-sender/                 PlanSender.cs, prompt build, supabase.sql, hướng dẫn (không deploy)
 i18n/                             build_en.py, extract.py, en.tsv, en_extra.tsv, keys.tsv (không deploy)
 claude/                           Bộ nhớ dự án + prompts/ (không deploy)
+artifact/                         Nguồn artifact claude.ai: index.html, app.src.js, va_lines.txt → app.js (không deploy)
 CLAUDE.md                         Quy tắc cho Claude Code (không deploy)
 .claude/                          settings.json (hook, quyền), hooks/*.mjs, agents/*.md, commands/*.md (không deploy)
 scripts/check-plan-core.mjs       Kiểm hồi quy plan-core với scripts/plan-core.snapshot.json (không deploy)
+scripts/build-artifact.mjs        Ghép plan-core.js + artifact/app.src.js → artifact/app.js (không deploy)
 ```
 
 ## Script mỗi trang nạp
@@ -64,10 +64,9 @@ Mọi trang đều nạp `core.js`, `quiz.js`, `fp.js`, `bank-tools.js`, `bank-l
 | index | `home.js` |
 | levels | `levels-data.js`, `levels-page.js`, `ema-page.js` |
 | tools | `tools-page.js`, `tape-pats.js` |
-| plan | `levels-data.js`, `levels-page.js`, `plan-chart.js` |
-| testing | `plan-core.js`, `testing-page.js` |
+| plan | `plan-core.js`, `plan-page.js` |
 
-Phiên bản cache hiện tại: phần lớn `?v=18`, `core.js?v=19`, `plan-core.js?v=2`, `testing-page.js?v=24`, `testing.css?v=20`.
+Phiên bản cache hiện tại: phần lớn `?v=18`, `core.js?v=20`, `levels-page.js?v=19`, `plan-core.js?v=3`, `plan-page.js?v=25`, `plan.css?v=21`.
 
 ## Shell và router (core.js)
 - Mảng `NAV` khai báo trang, nhãn, màu, icon và danh sách chương `[slug, số, tiêu đề]`. Thêm trang / chương: sửa ở đây.
@@ -84,8 +83,8 @@ Phiên bản cache hiện tại: phần lớn `?v=18`, `core.js?v=19`, `plan-cor
 ## Deploy
 - Push `main` → Vercel build. Framework preset "Other", không có build command; `package.json` chỉ để cài `@resvg/resvg-js` cho Function.
 - `vercel.json`: `functions."api/plan.js"` có `includeFiles: "api/_fonts/**"`, `maxDuration: 30` (không đặt `memory` vì gói Hobby).
-- `.vercelignore`: `i18n/`, `docs/`, `claude/`, `CLAUDE.md`, `.claude/`, `scripts/`.
-- Redirect `/overlap` → `/testing` (tên cũ của trang Testing).
+- `.vercelignore`: `i18n/`, `docs/`, `claude/`, `CLAUDE.md`, `.claude/`, `scripts/`, `artifact/`.
+- Redirect `/testing`, `/overlap` (và bản `.en`) → `/plan` (tên cũ của trang Trade Plan).
 
 ## Giới hạn của kiến trúc hiện tại
 - Không có đăng nhập; trạng thái nằm ở `localStorage` nên mỗi thiết bị một kiểu, phải sao lưu tay.

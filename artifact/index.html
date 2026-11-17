@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NQ Trade Plan · Composite × pRTH × OVN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: sticky header + tab rail, one column (max 1120px). Single dark theme mirroring ATAS. */
+  --bg:#111214; --panel:#18191c; --panel-2:#1f2125; --line:#2c2f35; --text:#e6e8eb; --muted:#9aa0a8;
+  --rth:#E0A458; --ovn:#6F9BD9; --poc:#FF9F1A; --ov:#EF9F27; --hvn:#26A69A; --good:#3fbf7f; --bad:#ef5350; --warn:#e3a33a; --vwap:#26c6da;
+  --font-body:"Be Vietnam Pro","Segoe UI",system-ui,sans-serif; --font-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box} html,body{margin:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15.5px;line-height:1.6}
+h1,h2,h3,h4{margin:0;line-height:1.25;text-wrap:balance}
+h2{font-size:1.5rem;font-weight:800} h3{font-size:1.1rem;font-weight:700} h4{font-size:.98rem;font-weight:700}
+p{margin:0} a{color:var(--vwap)}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+header.top{position:sticky;top:0;z-index:20;background:rgba(17,18,20,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.top-inner{max-width:1120px;margin:0 auto;padding:12px 18px 0;display:flex;flex-direction:column;gap:8px}
+.brand{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.brand h1{font-size:1.12rem;font-weight:800}
+.brand .tag{font-family:var(--font-mono);font-size:.76rem;color:var(--muted)}
+nav.tabs{display:flex;gap:2px;overflow-x:auto}
+nav.tabs a{flex:none;text-decoration:none;color:var(--muted);font-size:.86rem;font-weight:600;padding:8px 12px 10px;border-bottom:2px solid transparent;white-space:nowrap}
+nav.tabs a .n{font-family:var(--font-mono);font-size:.72rem;opacity:.7;margin-right:6px}
+nav.tabs a[aria-current="page"]{color:var(--text);border-bottom-color:var(--hvn)}
+nav.tabs a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--vwap);outline-offset:2px}
+main{max-width:1120px;margin:0 auto;padding:24px 18px 80px}
+section.tab{display:none;flex-direction:column;gap:20px} section.tab.active{display:flex}
+.head{display:flex;flex-direction:column;gap:8px}
+.eyebrow{font-family:var(--font-mono);font-size:.74rem;color:var(--poc);letter-spacing:.08em;text-transform:uppercase}
+.lead{color:#c9cdd3;max-width:74ch}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.grid{display:grid;gap:12px} .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))} .g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.k{font-family:var(--font-mono);font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.small{font-size:.88rem} .muted{color:var(--muted)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+ul.clean,ol.clean{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:5px}
+.chip{display:inline-flex;align-items:center;font-family:var(--font-mono);font-size:.72rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:#25282d;color:#d9dce0;white-space:nowrap}
+.chip.rth{background:#3a2a14;border-color:#8a6630;color:#f6dcb2} .chip.ovn{background:#16263f;border-color:#3d6699;color:#cfe0f7} .chip.hvn{background:#0f302c;border-color:#1f7a70;color:#bff0e8} .chip.lvn{background:#26272b;border-color:#4a4d55;color:#c9cdd3}
+.chip.ov{background:#3d2d10;border-color:#7a5618;color:#fac775} .chip.good{background:#123a27;border-color:#24704a;color:#c8f2da}
+.chip.bad{background:#401617;border-color:#7d2a2c;color:#ffd0cf} .chip.liq{background:#2a2a2a;border-color:#555;color:#e6e8eb}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:#1c1e22;font-weight:600}
+td.num,th.num{text-align:right}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+.svgwrap{overflow-x:auto;background:#141518;border:1px solid var(--line);border-radius:8px;padding:6px}
+.svgwrap svg{display:block;margin:0 auto;width:100%;max-width:820px;height:auto}
+#b-svg svg{max-width:1300px}
+button{font-family:var(--font-body);font-size:.86rem;font-weight:600;color:var(--text);background:#262a30;border:1px solid #3a3f47;border-radius:7px;padding:7px 12px;cursor:pointer}
+button:hover{background:#2e333a} button.on{background:#0f302c;border-color:#26A69A;color:#d8fbf5}
+button.mx{background:transparent;border:1px solid transparent;padding:2px 4px}
+button.mx.on{border-color:#9b2a58;background:#2a1520} button.primary{background:#145049;border-color:#26A69A}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;align-content:start}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:.74rem;color:var(--muted);font-family:var(--font-mono)}
+input,select,textarea{background:#121316;color:var(--text);border:1px solid #363a41;border-radius:6px;padding:7px 9px;font-family:var(--font-mono);font-size:.88rem;width:100%}
+fieldset{border:1px solid var(--line);border-radius:8px;padding:12px 14px 14px;margin:0}
+legend{font-size:.8rem;font-weight:700;color:var(--poc);padding:0 6px}
+.out{background:#0f1012;border:1px solid var(--line);border-radius:8px;padding:14px;white-space:pre-wrap;font-family:var(--font-mono);font-size:.84rem;line-height:1.6}
+.callout{border-left:3px solid var(--poc);background:#1d1a14;padding:12px 14px;border-radius:0 8px 8px 0;display:flex;flex-direction:column;gap:6px}
+.callout.red{border-left-color:var(--rth);background:#1f1418} .callout.purple{border-left-color:var(--ovn);background:#18162a}
+.ab{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.ab .card.a{border-left:3px solid var(--good)} .ab .card.b{border-left:3px solid var(--bad)}
+.dl{display:grid;grid-template-columns:96px 1fr;gap:4px 10px;font-size:.9rem} .dl dt{color:var(--muted);font-family:var(--font-mono);font-size:.76rem;padding-top:2px} .dl dd{margin:0}
+.flow{display:flex;flex-direction:column;gap:8px}
+.step{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}
+.step .dot{width:26px;height:26px;border-radius:50%;background:#3b2d12;border:1px solid #6b5220;color:#ffe2ad;display:grid;place-items:center;font-family:var(--font-mono);font-size:.78rem;font-weight:700}
+.q{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.opts{display:flex;flex-direction:column;gap:6px} .opts button{text-align:left;font-weight:500;background:#1a1c20}
+.opts button.right{background:#123a27;border-color:#2c8a5a;color:#d7f7e5} .opts button.wrong{background:#401617;border-color:#8c2f31;color:#ffd7d6}
+.expl{font-size:.88rem;color:#cfd3d8;border-top:1px dashed var(--line);padding-top:6px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tile{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.tile .v{font-family:var(--font-mono);font-size:1.3rem;font-weight:700}
+@media (max-width:620px){.dl{grid-template-columns:1fr}}
+footer{max-width:1120px;margin:0 auto;padding:0 18px 40px;color:var(--muted);font-size:.8rem}
+.callout.teal{border-left-color:var(--hvn);background:#132220}
+.swatch{display:inline-block;width:34px;height:18px;border-radius:4px;border:1px solid #3a3f47;vertical-align:middle;background-image:linear-gradient(45deg,#2a2a2a 25%,transparent 25%,transparent 75%,#2a2a2a 75%),linear-gradient(45deg,#2a2a2a 25%,transparent 25%,transparent 75%,#2a2a2a 75%);background-size:8px 8px;background-position:0 0,4px 4px;position:relative;overflow:hidden}
+.swatch i{position:absolute;inset:0}
+.pill{display:inline-block;font-family:var(--font-mono);font-size:.8rem;font-weight:700;padding:3px 10px;border-radius:6px}
+.pill.up{background:#123a27;color:#c8f2da;border:1px solid #2c8a5a} .pill.dn{background:#401617;color:#ffd0cf;border:1px solid #8c2f31} .pill.nt{background:#2a2c31;color:#e6e8eb;border:1px solid #4a4d55}
+textarea{min-height:180px;resize:vertical;line-height:1.5}
+.chip.vw{background:#0f2e33;color:#bdf2f8;border-color:#26c6da}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-inner">
+  <div class="brand"><h1>NQ Trade Plan · Composite × pRTH × OVN</h1><span class="tag">NQ · Composite 30D · RTH 9:30–16:14 · OVN 18:00–9:29</span></div>
+  <nav class="tabs" aria-label="Các phần">
+    <a href="#khung"><span class="n">00</span>Khung plan</a>
+    <a href="#hvn"><span class="n">01</span>Xác định HVN</a>
+    <a href="#bias"><span class="n">02</span>Đọc bias</a>
+    <a href="#vwap"><span class="n">03</span>VWAP RTH</a>
+    <a href="#builder"><span class="n">04</span>Plan Builder</a>
+    <a href="#quy-trinh"><span class="n">05</span>Quy trình trade</a>
+    <a href="#log"><span class="n">06</span>Log phiên</a>
+    <a href="#mau"><span class="n">07</span>Màu ATAS</a>
+    <a href="#quiz"><span class="n">08</span>Quiz</a>
+    <a href="#backtest"><span class="n">09</span>Lưu trữ</a>
+  </nav>
+</div></header>
+
+<main>
+<!-- 00 -->
+<section class="tab" id="t-khung">
+  <div class="head">
+    <span class="eyebrow">00 · Khung plan mỗi ngày</span>
+    <h2>Composite cho bản đồ, pRTH và OVN cho hướng</h2>
+    <p class="lead">Thị trường đi từ vùng balance này sang vùng balance khác. Composite 30 ngày cho biết các vùng balance (HVN) và đường đi giữa chúng (LVN). RTH hôm qua (pRTH) và phiên qua đêm (OVN) cho biết hai phe đang chấp nhận giá ở đâu trong bản đồ đó, từ đó ra bias cho phiên NY AM.</p>
+  </div>
+  <div class="callout teal"><p class="small"><b>System trade plan chính từ 17/11/2026.</b> Mỗi ngày lập plan theo khung này: indicator ATAS gửi số lúc 9:29 ET, Plan Builder (tab 04) ra bias, setup, target và ảnh plan. Bản web cùng engine: orderflow-trading-system.vercel.app/plan (có nút lấy plan đã gửi từ ATAS). Khung chưa có backtest dài hạn, nên ghi kết quả từng phiên ở tab 06.</p></div>
+
+  <div class="svgwrap"><svg viewBox="0 0 820 250" role="img" aria-label="Ba lớp trước phiên: Composite, pRTH, OVN dẫn tới bias; VWAP RTH lọc trong phiên">
+    <g font-family="Be Vietnam Pro, sans-serif">
+      <rect x="10" y="20" width="230" height="120" rx="8" fill="#0f302c" stroke="#26A69A"/>
+      <text x="125" y="50" fill="#d8fbf5" font-size="15" font-weight="700" text-anchor="middle">1 · Composite 30D</text>
+      <text x="125" y="76" fill="#bff0e8" font-size="13" text-anchor="middle">HVN = vùng balance</text>
+      <text x="125" y="98" fill="#bff0e8" font-size="13" text-anchor="middle">LVN = đường đi nhanh</text>
+      <text x="125" y="122" fill="#9fd8cf" font-size="12" text-anchor="middle">Giá đang ở đâu trên bản đồ?</text>
+      <rect x="295" y="20" width="230" height="120" rx="8" fill="#3a2a14" stroke="#E0A458"/>
+      <text x="410" y="50" fill="#fbe9cf" font-size="15" font-weight="700" text-anchor="middle">2 · pRTH</text>
+      <text x="410" y="76" fill="#f6dcb2" font-size="13" text-anchor="middle">Hôm qua build value ở đâu?</text>
+      <text x="410" y="98" fill="#f6dcb2" font-size="13" text-anchor="middle">Chấp nhận hay từ chối mép?</text>
+      <text x="410" y="122" fill="#e3c393" font-size="12" text-anchor="middle">Hướng chính (dB)</text>
+      <rect x="580" y="20" width="230" height="120" rx="8" fill="#16263f" stroke="#6F9BD9"/>
+      <text x="695" y="50" fill="#e4eefb" font-size="15" font-weight="700" text-anchor="middle">3 · OVN</text>
+      <text x="695" y="76" fill="#cfe0f7" font-size="13" text-anchor="middle">Qua đêm chấp nhận tiếp</text>
+      <text x="695" y="98" fill="#cfe0f7" font-size="13" text-anchor="middle">hay đẩy ngược lại?</text>
+      <text x="695" y="122" fill="#a9c4ea" font-size="12" text-anchor="middle">Xác nhận hướng (dO)</text>
+      <path d="M240 80 H290" stroke="#9aa0a8" stroke-width="2" marker-end="url(#ah0)"/>
+      <path d="M525 80 H575" stroke="#9aa0a8" stroke-width="2" marker-end="url(#ah0)"/>
+      <path d="M695 140 V170 H410 V182" stroke="#9aa0a8" stroke-width="2" fill="none" marker-end="url(#ah0)"/>
+      <path d="M125 140 V170 H410" stroke="#9aa0a8" stroke-width="2" fill="none"/>
+      <rect x="250" y="186" width="320" height="56" rx="8" fill="#2a2c31" stroke="#6b6f78"/>
+      <text x="410" y="210" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">Vị trí + bias → Fade hay Continuation</text>
+      <text x="410" y="230" fill="#c9cdd3" font-size="12" text-anchor="middle">Chốt 10:00: open type + EMA 9/34 + VWAP RTH · vào lệnh M1</text>
+      <defs><marker id="ah0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#9aa0a8"/></marker></defs>
+    </g>
+  </svg></div>
+
+  <div class="ab">
+    <div class="card a"><span class="k">Giá ở trong HVN</span><p><b>Fade range.</b> Hai phe đã đồng ý giá ở đây. Bán mép trên, mua mép dưới khi có trigger, target giữa vùng (POC của HVN).</p></div>
+    <div class="card b"><span class="k">Giá được chấp nhận ngoài mép HVN</span><p><b>Continuation.</b> Balance bị phá. Giá đi qua LVN khá nhanh tới mép của HVN kế tiếp. Vào ở lần retest mép vừa phá, trên M1.</p></div>
+  </div>
+
+  <div class="callout">
+    <h4>Quy tắc nền</h4>
+    <ul class="clean small">
+      <li><b>TPO 30' chỉ để đổi bias.</b> Một period đóng ngoài mép HVN = bias chuyển từ fade sang continuation. Hai period = chắc chắn hơn.</li>
+      <li><b>Vào và ra lệnh trên M1 + footprint.</b> Stop theo cấu trúc M1 ngoài level. Không chờ period đóng mới thoát lệnh.</li>
+      <li><b>Không vào lệnh ở giữa LVN.</b> LVN là đường đi, không phải nơi để đứng chờ.</li>
+      <li><b>Target = mép HVN kế tiếp</b> theo hướng lệnh. Nếu khoảng cách tới đó dưới 1.5R thì bỏ qua lệnh.</li>
+      <li><b>Hướng cuối cùng chốt lúc 10:00 ET</b> bằng open type và EMA 9/34 (nến 5'). Bias từ pRTH + OVN chỉ là giả thuyết trước phiên.</li>
+      <li><b>VWAP RTH là cổng lọc trong phiên.</b> VWAP phẳng thì được fade mép HVN. VWAP dốc và giá chạy dọc band thì chỉ continuation hoặc pullback, không fade (tab 03).</li>
+      <li>Tối đa 2–3 lệnh, dừng 11:30 ET, giữ đúng giới hạn rủi ro của tài khoản prop.</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h3>Bốn thứ cần có trên chart</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Thành phần</th><th>Thời gian</th><th>Giờ VN (mùa đông)</th><th>Lấy gì</th></tr></thead>
+      <tbody>
+        <tr><td><span class="chip hvn">Composite</span></td><td class="mono">30 ngày gần nhất (ETH)</td><td class="mono">cập nhật mỗi sáng</td><td>HVN (vùng balance), LVN (đường đi), POC composite</td></tr>
+        <tr><td><span class="chip rth">pRTH</span></td><td class="mono">9:30 – 16:14 ET hôm qua</td><td class="mono">21:30 – 04:14</td><td>VAH, VAL, POC, high/low, close, tail, single print</td></tr>
+        <tr><td><span class="chip ovn">OVN</span></td><td class="mono">18:00 – 9:29 ET</td><td class="mono">06:00 – 21:29</td><td>VAH, VAL, POC, ONH, ONL</td></tr>
+        <tr><td><span class="chip vw">VWAP RTH</span></td><td class="mono">anchor 9:30 ET, chạy trong phiên</td><td class="mono">từ 21:30</td><td>VWAP, band ±1σ / ±2σ / ±3σ, độ dốc (chart M1)</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small muted">pRTH và OVN dùng VA của TPO (70% thời gian) vì khung này đánh balance–imbalance: acceptance được đo bằng thời gian giá ở lại một vùng.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Lịch mỗi ngày</h3>
+    <div class="flow">
+      <div class="step"><span class="dot">1</span><div><b>Sáng (giờ VN):</b> cập nhật composite, kẻ lại HVN/LVN nếu có phiên mới làm đổi hình dạng profile (tab 01).</div></div>
+      <div class="step"><span class="dot">2</span><div><b>Trước 21:29 VN:</b> nhập pRTH và OVN vào Plan Builder (tab 04). Ghi vị trí, bias, setup ưu tiên, target, level đổi bias.</div></div>
+      <div class="step"><span class="dot">3</span><div><b>21:30–22:00 (A period):</b> không vào lệnh. Xem open type và phản ứng đầu tiên ở mép gần nhất.</div></div>
+      <div class="step"><span class="dot">4</span><div><b>22:00:</b> chốt hướng bằng open type + EMA 9/34, đọc trạng thái VWAP RTH. Chọn Fade hay Continuation theo vị trí, VWAP quyết định có được làm hay không.</div></div>
+      <div class="step"><span class="dot">5</span><div><b>22:00–23:30:</b> vào lệnh trên M1 khi có trigger. Dừng 23:30 hoặc sau 2–3 lệnh.</div></div>
+      <div class="step"><span class="dot">6</span><div><b>Sau phiên:</b> ghi 1 dòng vào Log (tab 07).</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 01 -->
+<section class="tab" id="t-hvn">
+  <div class="head">
+    <span class="eyebrow">01 · Xác định vùng balance</span>
+    <h2>HVN là nơi giá ở lâu qua nhiều phiên. LVN là nơi giá chỉ đi ngang qua.</h2>
+    <p class="lead">Có hai cách. Cách 1 nhìn thẳng composite trong ATAS. Cách 2 chồng VA của từng phiên RTH và OVN lên nhau: chỗ nhiều VA chồng nhau là HVN. Cách 2 khách quan, không phụ thuộc mắt, và đúng với ý tưởng tham chiếu RTH + OVN của bạn. HVN tốt nhất là chỗ cả hai cách cùng đồng ý.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Cách 1 · Nhìn composite (5 bước)</h3>
+      <ol class="clean small">
+        <li><b>Làm mượt profile:</b> composite 30D, row lớn hơn chart ngày (khoảng 10–20 điểm với NQ) để thấy hình dạng thay vì răng cưa.</li>
+        <li><b>Tìm "bụng":</b> đoạn profile phình ra liên tục, dày gần bằng phần dày nhất xung quanh. Mỗi bụng là một HVN.</li>
+        <li><b>Tìm "eo":</b> chỗ profile thắt lại giữa hai bụng, còn khoảng 1/3 độ dày của bụng trở xuống. Đó là LVN.</li>
+        <li><b>Kẻ mép HVN</b> ở chỗ profile bắt đầu co lại rõ, không kẻ ở đỉnh nhọn lẻ. Vẽ vùng (box), không vẽ một đường.</li>
+        <li><b>Gộp hoặc bỏ:</b> hai bụng cách nhau một eo dưới khoảng 40 điểm thì gộp. Bụng hẹp dưới khoảng 100 điểm thì coi là level, không phải vùng balance.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Cách 2 · Chồng VA RTH + OVN</h3>
+      <ol class="clean small">
+        <li>Lấy VA (VAL–VAH) của mỗi phiên RTH và mỗi phiên OVN trong 10–20 ngày gần nhất.</li>
+        <li>Ở mỗi mức giá, đếm có bao nhiêu VA chứa mức giá đó.</li>
+        <li><b>HVN</b> = đoạn giá có từ <b>3 VA</b> chồng nhau trở lên.</li>
+        <li><b>LVN</b> = khoảng giữa hai HVN. LVN rõ khi không có VA nào phủ.</li>
+        <li>Chế độ <b>RTH ∩ OVN</b>: chỉ giữ chỗ mà cả VA RTH lẫn VA OVN đều chồng nhiều. Đây là balance được cả hai nhóm chấp nhận.</li>
+      </ol>
+      <p class="small muted">Thử trên data 21/10 → 12/11: công cụ bên dưới tìm ra lõi LVN trống khoảng 27360–27650 (vạch đỏ bên trái), gần trùng vùng LVN 27370–27620 mà bạn của bạn kẻ bằng mắt.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Công cụ: tìm HVN bằng cách chồng VA</h3>
+    <p class="small muted">Mỗi dòng: <span class="mono">ngày  RTH|OVN  VAL  VAH</span>. Dữ liệu mẫu là VA tính từ data M1 bạn đã export. Thay bằng số trên ATAS để dùng hằng ngày.</p>
+    <div class="grid g2">
+      <div class="field"><label for="h-text">VA từng phiên</label><textarea id="h-text" spellcheck="false"></textarea></div>
+      <div class="form">
+        <div class="field"><label for="h-n">Số ngày gần nhất</label><input id="h-n" type="number" min="3" max="60" value="16"></div>
+        <div class="field"><label for="h-k">Số VA tối thiểu (HVN)</label><input id="h-k" type="number" min="1" max="20" value="3"></div>
+        <div class="field"><label for="h-merge">Gộp nếu khe dưới (điểm)</label><input id="h-merge" type="number" min="0" value="40"></div>
+        <div class="field"><label for="h-minw">HVN rộng tối thiểu (điểm)</label><input id="h-minw" type="number" min="0" value="100"></div>
+        <div class="field"><label for="h-mode">Chế độ</label><select id="h-mode"><option value="both">Cả RTH và OVN</option><option value="inter">RTH ∩ OVN</option><option value="rth">Chỉ RTH</option><option value="ovn">Chỉ OVN</option></select></div>
+        <div class="field"><label>&nbsp;</label><button class="primary" id="h-run">Tìm HVN</button></div>
+        <div class="field"><label>&nbsp;</label><button id="h-to-builder">Đưa vùng sang Plan Builder</button></div>
+        <div class="field"><label>&nbsp;</label><button id="h-reset">Nạp lại dữ liệu mẫu</button></div>
+      </div>
+    </div>
+    <div class="svgwrap" id="h-svg"></div>
+    <div class="tablewrap"><table><thead><tr><th>Vùng</th><th>Từ</th><th>Đến</th><th class="num">Rộng</th><th>Ghi chú</th></tr></thead><tbody id="h-rows"></tbody></table></div>
+    <p class="small muted" id="h-msg"></p>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Kiểm tra một HVN có "thật" không</h3>
+      <ul class="clean small">
+        <li>Có ít nhất 2–3 TPOC phiên (RTH hoặc OVN) nằm trong vùng.</li>
+        <li>Giá đã quay lại vùng này nhiều lần, không chỉ một lần đi qua.</li>
+        <li>Cả composite (cách 1) và chồng VA (cách 2) đều thấy vùng này.</li>
+        <li>Rộng ít nhất khoảng nửa biên độ RTH trung bình. Hiện tại biên độ RTH khoảng 250–350 điểm, nên HVN hẹp hơn khoảng 120 điểm chỉ nên coi là level.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Lỗi hay gặp</h3>
+      <ul class="clean small">
+        <li>Coi mọi đỉnh nhọn của profile là HVN. Kết quả là giá ở đâu cũng "gần HVN" và vùng mất ý nghĩa.</li>
+        <li>Dùng composite quá dài khi thị trường chạy mạnh. 30 ngày gần đây range khoảng 5000 điểm, vùng cũ có thể đã hết tác dụng. Khi đó ưu tiên 10–20 ngày.</li>
+        <li>Kẻ mép HVN bằng một đường mảnh rồi vào lệnh đúng đường đó. Mép là một vùng; vào lệnh khi có trigger, không phải khi chạm.</li>
+        <li>Quên cập nhật: khi giá build value mới trong LVN 2–3 phiên, LVN đó đang thành HVN.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="tab" id="t-bias">
+  <div class="head">
+    <span class="eyebrow">02 · Đọc bias</span>
+    <h2>Vị trí trên composite chọn kiểu lệnh. pRTH và OVN chọn hướng.</h2>
+    <p class="lead">Chọn ba thứ bên dưới để xem cách trade. Plan Builder (tab 04) tự xếp loại từ số bạn nhập.</p>
+  </div>
+
+  <div class="panel">
+    <div class="grid g3">
+      <div class="field"><label for="x-p">1 · Giá trước open ở đâu trên composite</label><select id="x-p"></select></div>
+      <div class="field"><label for="x-b">2 · pRTH đã build gì</label><select id="x-b"></select></div>
+      <div class="field"><label for="x-o">3 · OVN so với VA pRTH</label><select id="x-o"></select></div>
+    </div>
+    <div id="x-out" class="flow"></div>
+  </div>
+
+  <div class="grid g3">
+    <div class="panel">
+      <h3><span class="chip hvn">1</span> Vị trí</h3>
+      <dl class="dl" id="d-p"></dl>
+    </div>
+    <div class="panel">
+      <h3><span class="chip rth">2</span> pRTH build</h3>
+      <dl class="dl" id="d-b"></dl>
+    </div>
+    <div class="panel">
+      <h3><span class="chip ovn">3</span> OVN build</h3>
+      <dl class="dl" id="d-o"></dl>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Ghép pRTH và OVN thành bias</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>pRTH (dB)</th><th>OVN (dO)</th><th>Bias</th><th>Cần gì lúc 10:00</th></tr></thead>
+      <tbody>
+        <tr><td>Lên / xuống</td><td>Cùng hướng</td><td><span class="pill up">A củng cố</span></td><td>Open type không ngược hướng là được</td></tr>
+        <tr><td>Lên / xuống</td><td>Trong VA pRTH hoặc bao trùm</td><td><span class="pill nt">A cần xác nhận</span></td><td>OD/OTD cùng hướng + EMA 9/34 cùng hướng</td></tr>
+        <tr><td>Balance</td><td>Lên / xuống</td><td><span class="pill nt">A cần xác nhận</span></td><td>OD/OTD cùng hướng OVN</td></tr>
+        <tr><td>Lên / xuống</td><td>Ngược hướng</td><td><span class="pill dn">Xung đột</span></td><td>Chờ IB, đi theo phía IB được chấp nhận</td></tr>
+        <tr><td>Balance</td><td>Trong / bao trùm</td><td><span class="pill nt">Balance</span></td><td>Fade trong HVN, chờ mép</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section class="tab" id="t-vwap">
+  <div class="head">
+    <span class="eyebrow">03 · VWAP RTH</span>
+    <h2>VWAP RTH: la bàn trong phiên, đặt lên bản đồ HVN</h2>
+    <p class="lead">Composite, pRTH và OVN trả lời câu hỏi trước phiên: giá ở đâu trên bản đồ và nên nghiêng về phía nào. VWAP RTH trả lời câu hỏi trong phiên: từ 9:30 hôm nay, phe nào đang kiểm soát. Vị trí chọn kiểu lệnh (Fade hay Continuation), VWAP quyết định kiểu lệnh đó có được làm hay không.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Định nghĩa và cách cài</h3>
+      <ul class="clean small">
+        <li><b>VWAP</b> = Σ(giá × volume) / Σ volume, tính từ <b>9:30 ET</b> (21:30 VN). Cùng mốc với RTH và IB nên ba công cụ nói cùng một ngôn ngữ thời gian.</li>
+        <li><b>Band ±1σ / ±2σ / ±3σ</b> = độ lệch chuẩn có trọng số volume quanh VWAP. ±1σ là vùng xoay bình thường, ±2σ và ±3σ là vùng giãn.</li>
+        <li>Đặt trên chart <b>M1 execution</b>. VWAP ETH (anchor 18:00) chỉ để tham chiếu khi volume qua đêm bất thường, không dùng làm cổng lọc.</li>
+        <li>Giá trên VWAP: người mua trung bình hôm nay đang lãi, buyers kiểm soát trong phiên. Dưới VWAP thì ngược lại.</li>
+        <li>15–20 phút đầu σ còn nhỏ và nhảy liên tục, band rất hẹp. <b>Không fade band trước 10:00 ET.</b></li>
+      </ul>
+    </div>
+    <div class="svgwrap"><svg viewBox="0 0 520 260" role="img" aria-label="Hai trạng thái VWAP: phẳng trong HVN thì fade, dốc thì đi theo">
+      <g font-family="Be Vietnam Pro, sans-serif">
+        <rect x="10" y="10" width="240" height="240" rx="8" fill="#16181c" stroke="#2c2f35"/>
+        <rect x="18" y="70" width="224" height="120" fill="rgba(38,166,154,0.14)" stroke="#26A69A" stroke-dasharray="5 4"/>
+        <text x="26" y="86" fill="#bff0e8" font-size="11">HVN</text>
+        <path d="M24 130 H236" stroke="#26c6da" stroke-width="2.5"/>
+        <path d="M24 104 H236 M24 156 H236" stroke="#26c6da" stroke-width="1" stroke-dasharray="4 4" opacity=".7"/>
+        <path d="M24 82 H236 M24 178 H236" stroke="#b388ff" stroke-width="1" stroke-dasharray="2 4"/>
+        <path d="M30 128 L50 110 L70 138 L92 160 L112 132 L132 100 L150 86 L170 118 L192 150 L212 176 L232 140" stroke="#e6e8eb" stroke-width="1.6" fill="none"/>
+        <text x="130" y="32" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">VWAP phẳng</text>
+        <text x="130" y="50" fill="#c9cdd3" font-size="11" text-anchor="middle">fade mép HVN / ±2σ về VWAP</text>
+        <text x="130" y="218" fill="#9fe3d9" font-size="11" text-anchor="middle">Setup F</text>
+        <rect x="270" y="10" width="240" height="240" rx="8" fill="#16181c" stroke="#2c2f35"/>
+        <rect x="278" y="150" width="224" height="80" fill="rgba(38,166,154,0.14)" stroke="#26A69A" stroke-dasharray="5 4"/>
+        <text x="286" y="224" fill="#bff0e8" font-size="11">HVN</text>
+        <path d="M284 206 L500 96" stroke="#26c6da" stroke-width="2.5"/>
+        <path d="M284 184 L500 74" stroke="#26c6da" stroke-width="1" stroke-dasharray="4 4" opacity=".7"/>
+        <path d="M290 196 L310 176 L326 186 L350 160 L372 150 L388 160 L412 132 L436 118 L452 128 L476 100 L498 86" stroke="#e6e8eb" stroke-width="1.6" fill="none"/>
+        <circle cx="388" cy="160" r="5" fill="none" stroke="#3fbf7f" stroke-width="2"/>
+        <circle cx="452" cy="128" r="5" fill="none" stroke="#3fbf7f" stroke-width="2"/>
+        <text x="390" y="32" fill="#ffffff" font-size="13" font-weight="700" text-anchor="middle">VWAP dốc</text>
+        <text x="390" y="50" fill="#c9cdd3" font-size="11" text-anchor="middle">giá chạy dọc +1σ, mua pullback</text>
+        <text x="390" y="246" fill="#c8f2da" font-size="11" text-anchor="middle">Setup C / V · cấm fade</text>
+      </g></svg></div>
+  </div>
+
+  <div class="panel">
+    <h3>Bốn trạng thái VWAP và setup được phép</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Trạng thái</th><th>Nhận diện</th><th>Trong khung này</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill nt">Balance</span></td><td>VWAP phẳng, giá cắt qua lại nhiều lần, chủ yếu trong ±1σ</td><td><b>F · Fade trong HVN.</b> Fade mép HVN hoặc band ±2/±3σ về VWAP / POC HVN.</td></tr>
+        <tr><td><span class="pill up">Trend lên</span></td><td>VWAP dốc lên, giá giữ trên VWAP, chạy dọc +1σ / +2σ</td><td><b>C hoặc V.</b> Mua retest mép HVN vừa phá hoặc pullback về VWAP / +1σ. Cấm short ở +2σ.</td></tr>
+        <tr><td><span class="pill dn">Trend xuống</span></td><td>Đối xứng</td><td><b>C hoặc V</b> phía bán. Cấm long ở −2σ.</td></tr>
+        <tr><td><span class="pill nt">Chuyển pha</span></td><td>Giá reclaim hoặc mất VWAP sau IB, VWAP bắt đầu đổi độ dốc</td><td><b>V.</b> Trade retest VWAP theo hướng mới, cần delta / CVD xác nhận.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel">
+    <h3>VWAP × bản đồ HVN</h3>
+    <div class="grid g2">
+      <div class="card a"><span class="k">VWAP phẳng nằm trong HVN</span><p class="small">Balance ở cả khung lớn lẫn trong phiên. Fade hai mép, target VWAP hoặc POC của HVN.</p></div>
+      <div class="card a"><span class="k">Band ±2 SD trùng mép HVN (trong 10–15 điểm)</span><p class="small">Mép mạnh hơn. Nếu VWAP phẳng, đây là chỗ fade ưu tiên nhất trong ngày.</p></div>
+      <div class="card b"><span class="k">Phá mép HVN, VWAP dốc theo hướng phá</span><p class="small">Continuation đáng tin. Pullback về VWAP / ±1σ hoặc retest mép là điểm vào, target mép HVN kế tiếp.</p></div>
+      <div class="card b"><span class="k">Ra ngoài mép nhưng VWAP phẳng</span><p class="small">Breakout yếu. Giá hay quay lại VWAP và period đóng lại trong HVN. Đừng đuổi, chờ xem có fade ngược không.</p></div>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Cổng VWAP cho ba setup</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Setup</th><th>Được làm khi</th><th>Bỏ khi</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip hvn">F</span></td><td>VWAP phẳng; giá chạm mép HVN hoặc ±2σ</td><td>VWAP dốc ra phía mép đang fade</td></tr>
+          <tr><td><span class="chip ov">C</span></td><td>VWAP dốc theo hướng phá, giá giữ phía đó</td><td>Giá quay lại cắt VWAP</td></tr>
+          <tr><td><span class="chip">V</span></td><td>Sau 10:00, giá giữ một phía VWAP ≥ 15 phút, đúng hướng bias</td><td>Lần chạm thứ 3, hoặc 2 nến M1 đóng xuyên VWAP ngược hướng</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">Dù setup nào, khoảng tới target đầu tiên vẫn phải ≥ 1.5R.</p>
+    </div>
+    <div class="panel">
+      <h3>Lỗi hay gặp</h3>
+      <ul class="clean small">
+        <li>Fade ±2σ trong ngày Open Drive khi VWAP đang dốc. Đó là ngày trend, band là chỗ thêm lệnh chứ không phải chỗ đảo.</li>
+        <li>Coi chạm VWAP là tín hiệu. Chạm chỉ là location, vẫn cần trigger delta / footprint trên M1.</li>
+        <li>Nhầm VWAP ETH với VWAP RTH trên chart M1.</li>
+        <li>Fade band trước 10:00 ET khi σ còn quá hẹp.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="tab" id="t-builder">
+  <div class="head">
+    <span class="eyebrow">04 · Plan Builder</span>
+    <h2>Nhập số trước 21:29 VN, nhận plan và bản đồ</h2>
+    <p class="lead">Nhập các vùng HVN của composite, VA pRTH và VA OVN. Builder tự xếp vị trí, hướng OVN, gợi ý pRTH build, rồi vẽ bản đồ với target là mép HVN kế tiếp.</p>
+  </div>
+  <div class="panel">
+    <h3>Nhập từ ATAS (indicator Plan Sender)</h3>
+    <p class="small muted">Lúc 9:29 ET bấm "Gửi plan" trong indicator: JSON được copy vào clipboard và lưu file <span class="mono">latest_plan.json</span>. Dán vào ô dưới (hoặc chọn file) rồi bấm Nhập. Vùng HVN được tính từ VA các phiên trong JSON, theo tham số đang đặt ở tab 01.</p>
+    <div class="field"><label for="b-json">JSON từ ATAS</label><textarea id="b-json" spellcheck="false" style="min-height:90px" placeholder='{"v":1,"date":"2026-11-17","price":...,"prth":{...},"ovn":{...},"sessions":[...]}'></textarea></div>
+    <div class="row"><button class="primary" id="b-import">Nhập và lập plan</button><button id="b-paste">Dán từ clipboard</button><label class="small muted" for="b-file">hoặc chọn file:</label><input id="b-file" type="file" accept=".json,application/json" style="width:auto"></div>
+    <p class="small" id="b-imsg"></p>
+  </div>
+  <div class="row"><button id="b-example2">Nạp ví dụ 12/11 (data thật, có TPO)</button><button id="b-clear">Xoá trắng</button><span class="small muted" id="b-msg"></span></div>
+  <div class="grid g2">
+    <fieldset><legend>Composite · HVN (từ thấp đến cao)</legend>
+      <div class="form" id="b-zones"></div>
+      <div class="form"><div class="field"><label for="b-tol">Sát mép nếu cách (điểm)</label><input id="b-tol" type="number" value="30"></div></div>
+    </fieldset>
+    <fieldset><legend>pRTH</legend>
+      <div class="form">
+        <div class="field"><label for="b-rvah">VAH</label><input id="b-rvah" type="number" step="0.25"></div>
+        <div class="field"><label for="b-rval">VAL</label><input id="b-rval" type="number" step="0.25"></div>
+        <div class="field"><label for="b-rpoc">POC</label><input id="b-rpoc" type="number" step="0.25"></div>
+        <div class="field"><label for="b-rhi">High</label><input id="b-rhi" type="number" step="0.25"></div>
+        <div class="field"><label for="b-rlo">Low</label><input id="b-rlo" type="number" step="0.25"></div>
+        <div class="field"><label for="b-rcl">Close</label><input id="b-rcl" type="number" step="0.25"></div>
+        <div class="field" style="grid-column:1/-1"><label for="b-b">pRTH build (tự gợi ý, sửa nếu cần)</label><select id="b-b"></select></div>
+      </div>
+    </fieldset>
+    <fieldset><legend>OVN</legend>
+      <div class="form">
+        <div class="field"><label for="b-ovah">VAH</label><input id="b-ovah" type="number" step="0.25"></div>
+        <div class="field"><label for="b-oval">VAL</label><input id="b-oval" type="number" step="0.25"></div>
+        <div class="field"><label for="b-opoc">POC</label><input id="b-opoc" type="number" step="0.25"></div>
+        <div class="field"><label for="b-onh">ONH</label><input id="b-onh" type="number" step="0.25"></div>
+        <div class="field"><label for="b-onl">ONL</label><input id="b-onl" type="number" step="0.25"></div>
+        <div class="field"><label for="b-px">Giá lúc 9:25 ET</label><input id="b-px" type="number" step="0.25"></div>
+      </div>
+    </fieldset>
+    <fieldset><legend>Ngày</legend>
+      <div class="form">
+        <div class="field"><label for="b-date">Ngày trade</label><input id="b-date" type="date"></div>
+        <div class="field"><label>&nbsp;</label><button class="primary" id="b-build">Lập plan</button></div>
+        <div class="field"><label>&nbsp;</label><button id="b-copy">Copy plan</button></div>
+        <div class="field"><label>&nbsp;</label><button id="b-tolog">Đưa vào Log</button></div>
+      </div>
+    </fieldset>
+  </div>
+  <div class="row"><div class="field" style="width:auto"><label for="b-view">Kiểu vẽ pRTH / OVN</label><select id="b-view" style="width:auto"><option value="tpo">TPO (khi có dữ liệu từ indicator)</option><option value="box">Box VA</option></select></div><button class="primary" id="b-copyimg">Copy ảnh plan</button><span class="small muted">Ảnh gồm bản đồ và plan chữ bên phải. Trình duyệt chặn copy thì ảnh PNG được tải về.</span></div>
+  <div class="svgwrap" id="b-svg"></div>
+  <div class="out" id="b-out">Nhập số rồi bấm "Lập plan".</div>
+</section>
+
+<!-- 04 -->
+<section class="tab" id="t-quy-trinh">
+  <div class="head">
+    <span class="eyebrow">05 · Quy trình trade</span>
+    <h2>Ba setup, một hướng, vào lệnh trên M1</h2>
+    <p class="lead">Bias trước phiên là giả thuyết. Lúc 10:00 ET chốt hướng bằng open type và EMA 9/34. Sau đó chỉ có ba setup được phép.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Chốt hướng lúc 10:00 ET (22:00 VN)</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Open type</th><th>EMA 9/34 (5')</th><th>VWAP RTH</th><th>Kết luận</th></tr></thead>
+      <tbody>
+        <tr><td>OD / OTD / ORR có hướng</td><td>Cùng hướng</td><td>Giá giữ phía open type, VWAP bắt đầu dốc theo</td><td>Trade theo hướng open type. Nếu ngược bias trước phiên thì <b>open type thắng</b>.</td></tr>
+        <tr><td>OD / OTD / ORR có hướng</td><td>Ngược hướng</td><td>Bất kỳ</td><td>Không trade theo hướng. Chỉ fade trong HVN nếu có trigger.</td></tr>
+        <tr><td>OA</td><td>Bất kỳ</td><td>Phẳng, giá cắt qua lại</td><td>Balance trong ngày. Fade mép HVN / mép IB, hoặc chờ IB xong (10:30).</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="grid g3">
+    <div class="panel">
+      <h3><span class="chip hvn">F</span> Fade trong HVN</h3>
+      <dl class="dl">
+        <dt>Khi nào</dt><dd>Giá trong HVN, open type OA hoặc bias hướng vào trong vùng, VWAP RTH phẳng. Mép HVN trùng band ±2σ là chỗ fade tốt nhất.</dd>
+        <dt>Vào</dt><dd>Giá tới mép HVN (hoặc mép VA pRTH nằm trong HVN). Trong 5 nến M1 có nến đóng lại vào trong với delta ngược hướng chạm, hoặc absorption.</dd>
+        <dt>Stop</dt><dd>Ngoài cực trị vừa tạo, theo M1.</dd>
+        <dt>Target</dt><dd>POC của HVN, sau đó mép bên kia.</dd>
+        <dt>Bỏ khi</dt><dd>Open type OD ra phía mép, VWAP dốc ra ngoài, hoặc giá đã chạm mép lần thứ 3.</dd>
+      </dl>
+    </div>
+    <div class="panel">
+      <h3><span class="chip ov">C</span> Continuation qua LVN</h3>
+      <dl class="dl">
+        <dt>Khi nào</dt><dd>Một period 30' đóng ngoài mép HVN theo hướng bias (bias đổi sang continuation), VWAP RTH dốc theo hướng phá.</dd>
+        <dt>Vào</dt><dd>Retest mép vừa phá trên M1: nến đóng giữ được phía ngoài, delta cùng hướng, EMA 9 &gt; 34 (long).</dd>
+        <dt>Stop</dt><dd>Quay lại trong HVN theo M1.</dd>
+        <dt>Target</dt><dd>Mép gần của HVN kế tiếp. Dưới 1.5R thì bỏ.</dd>
+        <dt>Bỏ khi</dt><dd>Period kế tiếp đóng lại trong HVN, hoặc giá quay lại cắt VWAP: breakout thất bại, quay về fade.</dd>
+      </dl>
+    </div>
+    <div class="panel">
+      <h3><span class="chip">V</span> Pullback về VWAP</h3>
+      <dl class="dl">
+        <dt>Khi nào</dt><dd>Sau 10:00, giá đã ở một phía VWAP ít nhất 15 phút, đúng hướng bias.</dd>
+        <dt>Vào</dt><dd>Lần chạm VWAP đầu tiên, có trigger delta, EMA 9/34 cùng hướng.</dd>
+        <dt>Target</dt><dd>High/low phiên, hoặc mép HVN kế tiếp.</dd>
+        <dt>Bỏ khi</dt><dd>Lần chạm VWAP thứ 3, hoặc 2 nến M1 đóng xuyên VWAP ngược hướng.</dd>
+        <dt>Ghi chú</dt><dd>Setup tốt nhất của backtest khung cũ (45%, chưa đủ mẫu).</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Quản lý lệnh và rủi ro</h3>
+    <ul class="clean small">
+      <li>Stop nằm trên M1. Không dời stop để chờ period 30' đóng.</li>
+      <li>Thoát theo target, stop, hoặc 11:30 ET, cái nào đến trước. Không giữ lệnh qua 11:30 nếu không có rule riêng viết trước phiên.</li>
+      <li>Lệnh bị stop ở một mép thì không vào lại mép đó, trừ khi bias đã đổi và giá retest từ phía bên kia.</li>
+      <li>Tối đa 3 lệnh. Thua 2 lệnh liên tiếp thì dừng. Không vào lệnh trong LVN giữa đường.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 06 -->
+<section class="tab" id="t-log">
+  <div class="head">
+    <span class="eyebrow">06 · Log phiên</span>
+    <h2>Log phiên: theo dõi system qua từng phiên</h2>
+    <p class="lead">Mỗi phiên một dòng. Dữ liệu chỉ lưu trên trình duyệt này; dùng Copy CSV để chuyển sang Notion hoặc máy khác.</p>
+  </div>
+  <div class="callout red"><p class="small"><b>30 phiên là quá ít để kết luận.</b> Dùng 30 phiên đầu để tập xếp loại cho nhất quán. Muốn so tỉ lệ thì cần khoảng 100 lần cho mỗi setup. Các ô thống kê có kèm khoảng tin cậy 95%.</p></div>
+  <div class="panel">
+    <div class="form">
+      <div class="field"><label for="l-date">Ngày</label><input id="l-date" type="date"></div>
+      <div class="field"><label for="l-p">Vị trí composite</label><select id="l-p"></select></div>
+      <div class="field"><label for="l-b">pRTH build</label><select id="l-b"></select></div>
+      <div class="field"><label for="l-o">OVN</label><select id="l-o"></select></div>
+      <div class="field"><label for="l-bias">Bias trước phiên</label><select id="l-bias"><option>Lên</option><option>Xuống</option><option>Balance</option><option>Xung đột</option></select></div>
+      <div class="field"><label for="l-ot">Open type</label><select id="l-ot"><option>OD ↑</option><option>OD ↓</option><option>OTD ↑</option><option>OTD ↓</option><option>ORR ↑</option><option>ORR ↓</option><option>OA</option></select></div>
+      <div class="field"><label for="l-ib">IB</label><select id="l-ib"><option>Hẹp</option><option>Bình thường</option><option>Rộng</option></select></div>
+      <div class="field"><label for="l-edge">Phản ứng ở mép HVN</label><select id="l-edge"><option>Giữ (fade đúng)</option><option>Chấp nhận ra ngoài</option><option>Ra ngoài rồi quay lại</option><option>Không chạm mép</option></select></div>
+      <div class="field"><label for="l-reach">Tới HVN kế tiếp?</label><select id="l-reach"><option>Có</option><option>Không</option><option>Không áp dụng</option></select></div>
+      <div class="field"><label for="l-setup">Setup đã trade</label><select id="l-setup"><option>Không trade</option><option>F · Fade</option><option>C · Continuation</option><option>V · VWAP</option></select></div>
+      <div class="field"><label for="l-r">Kết quả (R)</label><input id="l-r" type="number" step="0.1" placeholder="vd 1.5 hoặc -1"></div>
+      <div class="field"><label for="l-bias-ok">Bias đúng?</label><select id="l-bias-ok"><option>Đúng</option><option>Sai</option><option>Không rõ</option></select></div>
+      <div class="field" style="grid-column:1/-1"><label for="l-note">Ghi chú</label><input id="l-note" type="text" placeholder="vd: period C đóng dưới mép, retest có absorption"></div>
+    </div>
+    <div class="row"><button class="primary" id="l-add">Thêm phiên</button><button id="l-csv">Copy CSV</button><button id="l-clear">Xoá toàn bộ log</button><button id="l-old" hidden>Copy log khung cũ</button><span class="small muted" id="l-msg"></span></div>
+    <div class="tiles" id="l-stats"></div>
+    <div class="tablewrap"><table><thead><tr><th>Ngày</th><th>Vị trí</th><th>pRTH</th><th>OVN</th><th>Bias</th><th>Open</th><th>IB</th><th>Mép HVN</th><th>Tới HVN kế</th><th>Setup</th><th class="num">R</th><th>Bias đúng</th><th>Ghi chú</th><th></th></tr></thead><tbody id="l-rows"></tbody></table></div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section class="tab" id="t-mau">
+  <div class="head">
+    <span class="eyebrow">07 · Màu cho ATAS X</span>
+    <h2>Bảng màu ARGB (#AARRGGBB) cho TPO RTH, OVN và composite</h2>
+    <p class="lead">Giữ quy ước bạn đang dùng: RTH màu vàng cát, OVN màu xanh dương. Phần trong VA đậm hơn phần ngoài VA để mắt đọc value nhanh. POC hai phiên khác màu nhau để không nhầm. Bấm vào mã để copy.</p>
+  </div>
+  <div class="panel">
+    <div class="tablewrap"><table><thead><tr><th>Thành phần</th><th>Màu</th><th>ARGB</th><th>Ghi chú</th></tr></thead><tbody id="c-rows"></tbody></table></div>
+    <p class="small muted">Alpha (2 ký tự đầu): FF = đặc, CC = 80%, 99 = 60%, 66 = 40%, 33 = 20%, 1F = 12%. Nền chart gợi ý <span class="mono">#FF141518</span>.</p>
+  </div>
+</section>
+
+<!-- 08 -->
+<section class="tab" id="t-quiz">
+  <div class="head">
+    <span class="eyebrow">08 · Kiểm tra</span>
+    <h2>Quiz khung Composite × pRTH × OVN</h2>
+  </div>
+  <div class="row"><button id="q-reset">Làm lại</button><span class="small muted" id="q-score"></span></div>
+  <div class="flow" id="q-list"></div>
+</section>
+
+
+<section class="tab" id="t-backtest">
+  <div class="head">
+    <span class="eyebrow">09 · Lưu trữ · Backtest khung cũ (RTH × OVN overlap)</span>
+    <h2>47 phiên NQ (08/09 → 11/11/2026): chưa thấy edge, nhưng biết được nên sửa gì</h2>
+    <p class="lead">Dữ liệu M1 từ ATAS X (Rithmic), phiên đã gán đúng qua ngày đổi giờ. TPO row 1 điểm, VA 70% (mở rộng 2 dòng). Mỗi phiên D so RTH của D−1 với OVN của D. Bỏ Labor Day (07/09) và phiên 12/11 chưa xong. Đây là lần chạy đầu tiên, mẫu nhỏ: khoảng tin cậy rất rộng, chỉ nên đọc như tín hiệu định hướng.</p>
+  </div>
+
+  <div class="callout teal"><p class="small"><b>Phần này là kết quả của khung cũ</b> (overlap VA RTH hôm qua × VA OVN, chưa có composite). Giữ lại vì các kết luận vẫn dùng được: hướng lấy từ open type + EMA 9/34, không vào lệnh chỉ vì chạm level, trigger delta quan trọng. <b>Khung Composite × pRTH × OVN chưa được backtest.</b></p></div>
+  <div class="callout red">
+    <h4>Kết luận ngắn</h4>
+    <ul class="clean small">
+      <li><b>Mép overlap không phản ứng tốt hơn một mức giá ngẫu nhiên</b> cùng khoảng cách tới open (38% vs 35% ở thử nghiệm 30/15 điểm). Giả thuyết "overlap là zone mạnh nhất" chưa được ủng hộ.</li>
+      <li><b>Hướng của kịch bản (value qua đêm trôi lên/xuống) không dự báo được hướng RTH</b>: chỉ 13/34 phiên (38%) giá lúc 11:30 đi theo hướng đó.</li>
+      <li><b>Open type mang nhiều thông tin hơn</b>: 19/30 phiên (63%) giá từ 10:00 đến 11:30 đi theo hướng open type. Lệnh theo hướng open type: +0.12R/lệnh, còn lệnh theo hướng kịch bản: -0.09R.</li>
+      <li><b>Overlap quá hẹp so với biên độ phiên sáng</b>: overlap trung vị ~104 điểm, range 9:30–11:30 trung vị ~242 điểm. Kịch bản 1 và 6 có 0/13 phiên giá ở yên trong overlap đến 11:30; fade mép overlap ở kịch bản 1 chỉ thắng 2/10.</li>
+      <li><b>Kịch bản 4/5 (không overlap)</b>: chỉ 2/12 phiên giá quay lại VA hôm qua trước 11:30. Kịch bản B "imbalance thất bại, về value cũ" hiếm xảy ra trong cửa sổ của bạn.</li>
+      <li>Không kết luận nào ở trên có ý nghĩa thống kê với 47 phiên. Cần thêm dữ liệu trước khi chốt.</li>
+    </ul>
+  </div>
+
+
+  <div class="panel" id="bt-charts">
+    <h3>Biểu đồ tóm tắt</h3>
+    <p class="small muted">Chấm = tỉ lệ đo được, vạch ngang = khoảng tin cậy 95%. Vạch càng dài càng ít chắc chắn. Vạch còn cắt qua đường đỏ = chưa phân biệt được với hòa vốn.</p>
+    <h4>1 · Level nào phản ứng tốt (thắng 30 điểm trước khi ngược 15 điểm)</h4>
+    <svg viewBox="0 0 680 318" width="100%" style="max-width:760px;display:block" xmlns="http://www.w3.org/2000/svg" role="img" font-family="inherit"><title>Tỉ lệ thắng 30/15 theo loại level</title>
+<line x1="230.0" y1="28" x2="230.0" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="230.0" y="302" text-anchor="middle" font-size="12">0%</text>
+<line x1="287.1" y1="28" x2="287.1" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="287.1" y="302" text-anchor="middle" font-size="12">10%</text>
+<line x1="344.3" y1="28" x2="344.3" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="344.3" y="302" text-anchor="middle" font-size="12">20%</text>
+<line x1="401.4" y1="28" x2="401.4" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="401.4" y="302" text-anchor="middle" font-size="12">30%</text>
+<line x1="458.6" y1="28" x2="458.6" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="458.6" y="302" text-anchor="middle" font-size="12">40%</text>
+<line x1="515.7" y1="28" x2="515.7" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="515.7" y="302" text-anchor="middle" font-size="12">50%</text>
+<line x1="572.9" y1="28" x2="572.9" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="572.9" y="302" text-anchor="middle" font-size="12">60%</text>
+<line x1="630.0" y1="28" x2="630.0" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="630.0" y="302" text-anchor="middle" font-size="12">70%</text>
+<line x1="420.5" y1="20" x2="420.5" y2="284" stroke="#F09595" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="426.5" y="18" font-size="12" fill="#F09595">hòa vốn 33%</text>
+<text fill="#E8E6DF" x="216" y="52.0" text-anchor="end" font-size="14">Mép overlap</text>
+<text fill="#A9A79E" x="216" y="68.0" text-anchor="end" font-size="12">11/29 lần chạm</text>
+<line x1="359.6" y1="54.0" x2="550.0" y2="54.0" stroke="#F0997B" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="446.7" cy="54.0" r="7" fill="#F0997B" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="560.0" y="59.0" font-size="13" font-weight="500">38%</text>
+<text fill="#E8E6DF" x="216" y="92.0" text-anchor="end" font-size="14">Level ngẫu nhiên</text>
+<text fill="#A9A79E" x="216" y="108.0" text-anchor="end" font-size="12">33/93 lần chạm</text>
+<line x1="381.5" y1="94.0" x2="490.6" y2="94.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="432.8" cy="94.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="500.6" y="99.0" font-size="13" font-weight="500">35%</text>
+<text fill="#E8E6DF" x="216" y="132.0" text-anchor="end" font-size="14">VA RTH hôm qua</text>
+<text fill="#A9A79E" x="216" y="148.0" text-anchor="end" font-size="12">11/27 lần chạm</text>
+<line x1="370.1" y1="134.0" x2="568.7" y2="134.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="462.8" cy="134.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="578.7" y="139.0" font-size="13" font-weight="500">41%</text>
+<text fill="#E8E6DF" x="216" y="172.0" text-anchor="end" font-size="14">ONH/ONL</text>
+<text fill="#A9A79E" x="216" y="188.0" text-anchor="end" font-size="12">15/37 lần chạm</text>
+<line x1="380.6" y1="174.0" x2="552.9" y2="174.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="461.7" cy="174.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="562.9" y="179.0" font-size="13" font-weight="500">41%</text>
+<text fill="#E8E6DF" x="216" y="212.0" text-anchor="end" font-size="14">VA OVN</text>
+<text fill="#A9A79E" x="216" y="228.0" text-anchor="end" font-size="12">15/44 lần chạm</text>
+<line x1="355.0" y1="214.0" x2="509.2" y2="214.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="424.8" cy="214.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="519.2" y="219.0" font-size="13" font-weight="500">34%</text>
+<text fill="#E8E6DF" x="216" y="252.0" text-anchor="end" font-size="14">TPOC RTH hôm qua</text>
+<text fill="#A9A79E" x="216" y="268.0" text-anchor="end" font-size="12">3/14 lần chạm</text>
+<line x1="273.3" y1="254.0" x2="501.9" y2="254.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="352.4" cy="254.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="511.9" y="259.0" font-size="13" font-weight="500">21%</text>
+</svg>
+    <h4>2 · Đoán hướng phiên sáng: kịch bản vs open type</h4>
+    <svg viewBox="0 0 680 318" width="100%" style="max-width:760px;display:block" xmlns="http://www.w3.org/2000/svg" role="img" font-family="inherit"><title>Tỉ lệ đoán đúng hướng lúc 11:30</title>
+<line x1="230.0" y1="28" x2="230.0" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="230.0" y="302" text-anchor="middle" font-size="12">0%</text>
+<line x1="310.0" y1="28" x2="310.0" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="310.0" y="302" text-anchor="middle" font-size="12">20%</text>
+<line x1="390.0" y1="28" x2="390.0" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="390.0" y="302" text-anchor="middle" font-size="12">40%</text>
+<line x1="470.0" y1="28" x2="470.0" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="470.0" y="302" text-anchor="middle" font-size="12">60%</text>
+<line x1="550.0" y1="28" x2="550.0" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="550.0" y="302" text-anchor="middle" font-size="12">80%</text>
+<line x1="630.0" y1="28" x2="630.0" y2="284" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="630.0" y="302" text-anchor="middle" font-size="12">100%</text>
+<line x1="430.0" y1="20" x2="430.0" y2="284" stroke="#F09595" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="436.0" y="18" font-size="12" fill="#F09595">tung đồng xu 50%</text>
+<text fill="#E8E6DF" x="216" y="52.0" text-anchor="end" font-size="14">Hướng theo kịch bản</text>
+<text fill="#A9A79E" x="216" y="68.0" text-anchor="end" font-size="12">13/34 phiên</text>
+<line x1="325.6" y1="54.0" x2="449.8" y2="54.0" stroke="#F0997B" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="382.9" cy="54.0" r="7" fill="#F0997B" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="459.8" y="59.0" font-size="13" font-weight="500">38%</text>
+<text fill="#E8E6DF" x="216" y="92.0" text-anchor="end" font-size="14">  · Kịch bản 2</text>
+<text fill="#A9A79E" x="216" y="108.0" text-anchor="end" font-size="12">5/12 phiên</text>
+<line x1="307.3" y1="94.0" x2="502.2" y2="94.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="396.7" cy="94.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="512.2" y="99.0" font-size="13" font-weight="500">42%</text>
+<text fill="#E8E6DF" x="216" y="132.0" text-anchor="end" font-size="14">  · Kịch bản 3</text>
+<text fill="#A9A79E" x="216" y="148.0" text-anchor="end" font-size="12">2/10 phiên</text>
+<line x1="252.7" y1="134.0" x2="433.9" y2="134.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="310.0" cy="134.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="443.9" y="139.0" font-size="13" font-weight="500">20%</text>
+<text fill="#E8E6DF" x="216" y="172.0" text-anchor="end" font-size="14">  · Kịch bản 4</text>
+<text fill="#A9A79E" x="216" y="188.0" text-anchor="end" font-size="12">2/3 phiên</text>
+<line x1="313.1" y1="174.0" x2="605.4" y2="174.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="496.7" cy="174.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="615.4" y="179.0" font-size="13" font-weight="500">67%</text>
+<text fill="#E8E6DF" x="216" y="212.0" text-anchor="end" font-size="14">  · Kịch bản 5</text>
+<text fill="#A9A79E" x="216" y="228.0" text-anchor="end" font-size="12">4/9 phiên</text>
+<line x1="305.5" y1="214.0" x2="523.3" y2="214.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="407.8" cy="214.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="533.3" y="219.0" font-size="13" font-weight="500">44%</text>
+<text fill="#E8E6DF" x="216" y="252.0" text-anchor="end" font-size="14">Hướng theo open type</text>
+<text fill="#A9A79E" x="216" y="268.0" text-anchor="end" font-size="12">19/30 phiên</text>
+<line x1="412.1" y1="254.0" x2="542.5" y2="254.0" stroke="#5DCAA5" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="483.3" cy="254.0" r="7" fill="#5DCAA5" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="552.5" y="259.0" font-size="13" font-weight="500">63%</text>
+</svg>
+    <h4>3 · Kỳ vọng mỗi lệnh mô phỏng (R)</h4>
+    <svg viewBox="0 0 680 278" width="100%" style="max-width:760px;display:block" xmlns="http://www.w3.org/2000/svg" role="img" font-family="inherit"><title>Kỳ vọng R mỗi lệnh</title>
+<line x1="230.0" y1="28" x2="230.0" y2="244" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="230.0" y="262" text-anchor="middle" font-size="12">−1R</text>
+<line x1="317.0" y1="28" x2="317.0" y2="244" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="317.0" y="262" text-anchor="middle" font-size="12">−0.5R</text>
+<line x1="403.9" y1="28" x2="403.9" y2="244" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="403.9" y="262" text-anchor="middle" font-size="12">0R</text>
+<line x1="490.9" y1="28" x2="490.9" y2="244" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="490.9" y="262" text-anchor="middle" font-size="12">+0.5R</text>
+<line x1="577.8" y1="28" x2="577.8" y2="244" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="577.8" y="262" text-anchor="middle" font-size="12">+1R</text>
+<line x1="403.9" y1="20" x2="403.9" y2="244" stroke="#F09595" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="409.9" y="18" font-size="12" fill="#F09595">hòa vốn 0R</text>
+<text fill="#E8E6DF" x="216" y="52.0" text-anchor="end" font-size="14">Theo hướng kịch bản</text>
+<text fill="#A9A79E" x="216" y="68.0" text-anchor="end" font-size="12">34 lệnh · 12 thắng</text>
+<line x1="320.8" y1="54.0" x2="459.5" y2="54.0" stroke="#F0997B" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="388.8" cy="54.0" r="7" fill="#F0997B" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="469.5" y="59.0" font-size="13" font-weight="500">−0.09R</text>
+<text fill="#E8E6DF" x="216" y="92.0" text-anchor="end" font-size="14">Theo open type</text>
+<text fill="#A9A79E" x="216" y="108.0" text-anchor="end" font-size="12">30 lệnh · 15 thắng</text>
+<line x1="354.7" y1="94.0" x2="496.2" y2="94.0" stroke="#5DCAA5" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="424.6" cy="94.0" r="7" fill="#5DCAA5" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="506.2" y="99.0" font-size="13" font-weight="500">+0.12R</text>
+<text fill="#E8E6DF" x="216" y="132.0" text-anchor="end" font-size="14">Ma trận hạng A</text>
+<text fill="#A9A79E" x="216" y="148.0" text-anchor="end" font-size="12">8 lệnh · 4 thắng</text>
+<line x1="295.2" y1="134.0" x2="605.3" y2="134.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="443.3" cy="134.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="615.3" y="139.0" font-size="13" font-weight="500">+0.23R</text>
+<text fill="#E8E6DF" x="216" y="172.0" text-anchor="end" font-size="14">Ma trận hạng B</text>
+<text fill="#A9A79E" x="216" y="188.0" text-anchor="end" font-size="12">12 lệnh · 7 thắng</text>
+<line x1="323.5" y1="174.0" x2="527.2" y2="174.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="425.4" cy="174.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="537.2" y="179.0" font-size="13" font-weight="500">+0.12R</text>
+<text fill="#E8E6DF" x="216" y="212.0" text-anchor="end" font-size="14">Breakout khi balance</text>
+<text fill="#A9A79E" x="216" y="228.0" text-anchor="end" font-size="12">6 lệnh · 2 thắng</text>
+<line x1="258.7" y1="214.0" x2="479.9" y2="214.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="354.0" cy="214.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="489.9" y="219.0" font-size="13" font-weight="500">−0.29R</text>
+</svg>
+  </div>
+
+
+  <div class="panel" id="bt-confluence">
+    <h3>Thêm confluence: VWAP RTH · EMA 9/34 · delta (footprint gần đúng)</h3>
+    <p class="small muted">Cùng 47 phiên, cùng thước đo 30/15 (hòa vốn 33%). Màu cam = mép overlap có thêm filter, xanh = setup pullback về VWAP, xám = đối chứng.</p>
+    <svg viewBox="0 0 680 398" width="100%" style="max-width:760px;display:block" xmlns="http://www.w3.org/2000/svg" role="img" font-family="inherit"><title>Confluence 30/15</title>
+<line x1="230.0" y1="28" x2="230.0" y2="364" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="230.0" y="382" text-anchor="middle" font-size="12">0%</text>
+<line x1="330.0" y1="28" x2="330.0" y2="364" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="330.0" y="382" text-anchor="middle" font-size="12">20%</text>
+<line x1="430.0" y1="28" x2="430.0" y2="364" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="430.0" y="382" text-anchor="middle" font-size="12">40%</text>
+<line x1="530.0" y1="28" x2="530.0" y2="364" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="530.0" y="382" text-anchor="middle" font-size="12">60%</text>
+<line x1="630.0" y1="28" x2="630.0" y2="364" stroke="#5F5E5A" stroke-opacity="0.5" stroke-width="1"/>
+<text fill="#A9A79E" x="630.0" y="382" text-anchor="middle" font-size="12">80%</text>
+<line x1="396.7" y1="20" x2="396.7" y2="364" stroke="#F09595" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="402.7" y="18" font-size="12" fill="#F09595">hòa vốn 33%</text>
+<text fill="#E8E6DF" x="216" y="52.0" text-anchor="end" font-size="14">Mép overlap · chạm là vào</text>
+<text fill="#A9A79E" x="216" y="68.0" text-anchor="end" font-size="12">11/29 lần</text>
+<line x1="343.4" y1="54.0" x2="510.0" y2="54.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="419.7" cy="54.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="520.0" y="59.0" font-size="13" font-weight="500">38%</text>
+<text fill="#E8E6DF" x="216" y="92.0" text-anchor="end" font-size="14">Ngẫu nhiên · chạm là vào</text>
+<text fill="#A9A79E" x="216" y="108.0" text-anchor="end" font-size="12">33/94 lần</text>
+<line x1="361.1" y1="94.0" x2="455.8" y2="94.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="405.5" cy="94.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="465.8" y="99.0" font-size="13" font-weight="500">35%</text>
+<text fill="#E8E6DF" x="216" y="132.0" text-anchor="end" font-size="14">Mép overlap + EMA 9/34</text>
+<text fill="#A9A79E" x="216" y="148.0" text-anchor="end" font-size="12">6/12 lần</text>
+<line x1="356.9" y1="134.0" x2="603.1" y2="134.0" stroke="#F0997B" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="480.0" cy="134.0" r="7" fill="#F0997B" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="613.1" y="139.0" font-size="13" font-weight="500">50%</text>
+<text fill="#E8E6DF" x="216" y="172.0" text-anchor="end" font-size="14">Ngẫu nhiên + EMA 9/34</text>
+<text fill="#A9A79E" x="216" y="188.0" text-anchor="end" font-size="12">8/32 lần</text>
+<line x1="296.3" y1="174.0" x2="440.5" y2="174.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="355.0" cy="174.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="450.5" y="179.0" font-size="13" font-weight="500">25%</text>
+<text fill="#E8E6DF" x="216" y="212.0" text-anchor="end" font-size="14">Mép overlap + trigger delta</text>
+<text fill="#A9A79E" x="216" y="228.0" text-anchor="end" font-size="12">5/10 lần</text>
+<line x1="348.3" y1="214.0" x2="611.7" y2="214.0" stroke="#F0997B" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="480.0" cy="214.0" r="7" fill="#F0997B" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="621.7" y="219.0" font-size="13" font-weight="500">50%</text>
+<text fill="#E8E6DF" x="216" y="252.0" text-anchor="end" font-size="14">Ngẫu nhiên + trigger delta</text>
+<text fill="#A9A79E" x="216" y="268.0" text-anchor="end" font-size="12">8/33 lần</text>
+<line x1="294.2" y1="254.0" x2="435.1" y2="254.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="351.2" cy="254.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="445.1" y="259.0" font-size="13" font-weight="500">24%</text>
+<text fill="#E8E6DF" x="216" y="292.0" text-anchor="end" font-size="14">Level khác + trigger delta</text>
+<text fill="#A9A79E" x="216" y="308.0" text-anchor="end" font-size="12">10/32 lần</text>
+<line x1="319.8" y1="294.0" x2="472.8" y2="294.0" stroke="#B4B2A9" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="386.2" cy="294.0" r="7" fill="#B4B2A9" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="482.8" y="299.0" font-size="13" font-weight="500">31%</text>
+<text fill="#E8E6DF" x="216" y="332.0" text-anchor="end" font-size="14">Pullback về VWAP</text>
+<text fill="#A9A79E" x="216" y="348.0" text-anchor="end" font-size="12">15/33 lần</text>
+<line x1="379.2" y1="334.0" x2="540.1" y2="334.0" stroke="#5DCAA5" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+<circle cx="457.3" cy="334.0" r="7" fill="#5DCAA5" stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.5"/>
+<text fill="#E8E6DF" x="550.1" y="339.0" font-size="13" font-weight="500">45%</text>
+</svg>
+    <ul class="clean small">
+      <li><b>VWAP như filter "cùng phía" là thừa:</b> lần chạm đầu một level dưới open luôn xảy ra khi giá đang dưới VWAP, nên fade lần chạm đầu luôn là trade ngược VWAP. Lúc 10:00 giá luôn cùng phía VWAP với hướng open type (30/30).</li>
+      <li><b>VWAP như level:</b> sau 10:00, giá ở một phía VWAP ít nhất 15 phút rồi pullback chạm VWAP lần đầu → 45% (15/33), tốt nhất trong lần test, khoảng tin cậy 30–62%.</li>
+      <li><b>EMA 9/34 (5m):</b> mép overlap + EMA cùng hướng 50% (6/12) so với ngẫu nhiên + EMA 25%. Lệnh open type + EMA cùng hướng +0.24R (27 lệnh); 3 lệnh ngược EMA đều −1R.</li>
+      <li><b>Trigger delta:</b> trong 5 nến sau khi chạm, nến đóng về phía phản ứng với delta cùng hướng → mép overlap 50% (5/10), ngẫu nhiên 24%, level khác 31%. Đây chỉ là delta tổng mỗi phút, chưa phải footprint theo từng mức giá.</li>
+      <li><b>Cẩn thận:</b> đã thử khoảng 30 tổ hợp, mỗi tổ hợp chỉ 10–12 lần chạm. Coi là giả thuyết cần kiểm chứng, chưa phải edge.</li>
+    </ul>
+    <div class="callout"><p class="small"><b>Rule chốt để test tiếp (out-of-sample):</b> (1) vào ở mép overlap chỉ khi có trigger delta và EMA 9/34 cùng hướng; (2) thêm setup pullback về VWAP sau 10:00; (3) không trade ngược EMA 9/34 lúc 10:00.</p></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel">
+      <h3>Phân bố kịch bản và kết quả theo kịch bản</h3>
+      <div class="tablewrap"><table><thead><tr><th>Kịch bản</th><th class="num">Phiên</th><th class="num">Mép overlap thắng (30/15)</th><th class="num">Giá 11:30 theo hướng kịch bản</th></tr></thead><tbody><tr><td><b>1</b> · OVN trong VA RTH</td><td class="num mono">8</td><td class="num mono">2/10</td><td class="num mono">—</td></tr><tr><td><b>2</b> · Overlap lệch lên</td><td class="num mono">12</td><td class="num mono">3/8</td><td class="num mono">5/12</td></tr><tr><td><b>3</b> · Overlap lệch xuống</td><td class="num mono">10</td><td class="num mono">4/8</td><td class="num mono">2/10</td></tr><tr><td><b>4</b> · OVN trên RTH</td><td class="num mono">3</td><td class="num mono">—</td><td class="num mono">2/3</td></tr><tr><td><b>5</b> · OVN dưới RTH</td><td class="num mono">9</td><td class="num mono">—</td><td class="num mono">4/9</td></tr><tr><td><b>6</b> · OVN bao trùm RTH</td><td class="num mono">5</td><td class="num mono">2/3</td><td class="num mono">—</td></tr></tbody></table></div>
+      <p class="small muted">Độ nhạy theo row TPO: đổi row 1 → 4 điểm, 44/48 phiên giữ nguyên kịch bản; row 8 điểm: 46/48. Xếp loại khá ổn định.</p>
+    </div>
+    <div class="panel">
+      <h3>Cách đo</h3>
+      <ul class="clean small">
+        <li><b>Phản ứng ở level:</b> lần chạm đầu tiên trong 9:30–11:30. "Thắng" = giá đi X điểm theo hướng phản ứng trước khi đi ngược Y điểm, trong 60 phút. Hai bộ: 30/15 (hoà vốn 33%) và 20/20 (hoà vốn 50%).</li>
+        <li><b>Mức ngẫu nhiên:</b> 3 mức cho mỗi mép overlap, cùng khoảng cách tới open (±20%), phía ngẫu nhiên. Đây là nhóm đối chứng.</li>
+        <li><b>Lệnh mô phỏng:</b> vào ở giá đóng nến 9:59 (sau khi biết open type), stop = ½ range của A period (tối thiểu 10 điểm), target 2R, thoát lúc 11:30. Chưa có trigger orderflow, chưa trừ phí.</li>
+        <li><b>Open type tự động:</b> rule đơn giản trên A period (OD, OTD, ORR, OA), chỉ gần đúng so với đọc bằng mắt.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="grid g2">
+    <div class="panel"><h3>Phản ứng ở level · 30/15 điểm</h3><div class="tablewrap"><table><thead><tr><th>Loại level</th><th class="num">Lần chạm</th><th class="num">Thắng</th><th class="num">Tỉ lệ</th><th class="num">Khoảng tin cậy 95%</th></tr></thead><tbody><tr><td>Mép overlap</td><td class="num mono">29</td><td class="num mono">11</td><td class="num mono"><b>38%</b></td><td class="num mono">23% – 56%</td></tr><tr><td>VA RTH hôm qua</td><td class="num mono">27</td><td class="num mono">11</td><td class="num mono"><b>41%</b></td><td class="num mono">25% – 59%</td></tr><tr><td>VA OVN</td><td class="num mono">44</td><td class="num mono">15</td><td class="num mono"><b>34%</b></td><td class="num mono">22% – 49%</td></tr><tr><td>ONH/ONL</td><td class="num mono">37</td><td class="num mono">15</td><td class="num mono"><b>41%</b></td><td class="num mono">26% – 57%</td></tr><tr><td>TPOC RTH hôm qua</td><td class="num mono">14</td><td class="num mono">3</td><td class="num mono"><b>21%</b></td><td class="num mono">8% – 48%</td></tr><tr><td>Ngẫu nhiên (cùng khoảng cách)</td><td class="num mono">93</td><td class="num mono">33</td><td class="num mono"><b>35%</b></td><td class="num mono">27% – 46%</td></tr></tbody></table></div><p class="small muted">Hoà vốn ở tỉ lệ 33%.</p></div>
+    <div class="panel"><h3>Phản ứng ở level · 20/20 điểm</h3><div class="tablewrap"><table><thead><tr><th>Loại level</th><th class="num">Lần chạm</th><th class="num">Thắng</th><th class="num">Tỉ lệ</th><th class="num">Khoảng tin cậy 95%</th></tr></thead><tbody><tr><td>Mép overlap</td><td class="num mono">29</td><td class="num mono">17</td><td class="num mono"><b>59%</b></td><td class="num mono">41% – 74%</td></tr><tr><td>VA RTH hôm qua</td><td class="num mono">27</td><td class="num mono">17</td><td class="num mono"><b>63%</b></td><td class="num mono">44% – 78%</td></tr><tr><td>VA OVN</td><td class="num mono">44</td><td class="num mono">21</td><td class="num mono"><b>48%</b></td><td class="num mono">34% – 62%</td></tr><tr><td>ONH/ONL</td><td class="num mono">37</td><td class="num mono">22</td><td class="num mono"><b>59%</b></td><td class="num mono">43% – 74%</td></tr><tr><td>TPOC RTH hôm qua</td><td class="num mono">14</td><td class="num mono">9</td><td class="num mono"><b>64%</b></td><td class="num mono">39% – 84%</td></tr><tr><td>Ngẫu nhiên (cùng khoảng cách)</td><td class="num mono">93</td><td class="num mono">56</td><td class="num mono"><b>60%</b></td><td class="num mono">50% – 70%</td></tr></tbody></table></div><p class="small muted">Hoà vốn ở tỉ lệ 50%.</p></div>
+  </div>
+
+  <div class="panel">
+    <h3>Lệnh mô phỏng (R mỗi lệnh)</h3>
+    <div class="tablewrap"><table><thead><tr><th>Quy tắc</th><th class="num">Lệnh</th><th class="num">Thắng</th><th class="num">TB / lệnh</th><th class="num">Khoảng tin cậy 95% (bootstrap)</th><th class="num">Tổng</th></tr></thead><tbody><tr><td>Luôn đánh theo hướng kịch bản (2–5)</td><td class="num mono">34</td><td class="num mono">12</td><td class="num mono"><b>-0.09R</b></td><td class="num mono">-0.48 → +0.32</td><td class="num mono">-3.0R</td></tr><tr><td>Luôn đánh theo hướng open type</td><td class="num mono">30</td><td class="num mono">15</td><td class="num mono"><b>+0.12R</b></td><td class="num mono">-0.28 → +0.53</td><td class="num mono">+3.6R</td></tr><tr><td>Ma trận: A (open type cùng hướng kịch bản)</td><td class="num mono">8</td><td class="num mono">4</td><td class="num mono"><b>+0.23R</b></td><td class="num mono">-0.62 → +1.16</td><td class="num mono">+1.8R</td></tr><tr><td>Ma trận: B (open type ngược hướng → theo open type)</td><td class="num mono">12</td><td class="num mono">7</td><td class="num mono"><b>+0.12R</b></td><td class="num mono">-0.46 → +0.71</td><td class="num mono">+1.5R</td></tr><tr><td>Kịch bản 1/6 + OD/OTD: đi theo breakout</td><td class="num mono">6</td><td class="num mono">2</td><td class="num mono"><b>-0.29R</b></td><td class="num mono">-0.84 → +0.44</td><td class="num mono">-1.7R</td></tr></tbody></table></div>
+    <p class="small muted">Mọi khoảng tin cậy đều chứa 0: chưa quy tắc nào chứng minh được là có lời. Điều đọc được là thứ tự: theo open type tốt hơn theo hướng kịch bản, và khi hai thứ cùng hướng thì tốt nhất (n rất nhỏ).</p>
+  </div>
+
+  <div class="panel">
+    <h3>Nên sửa playbook thế nào (tạm thời, chờ thêm dữ liệu)</h3>
+    <ol class="clean small">
+      <li><b>Kịch bản lúc 9:25 chỉ là context, không cho hướng.</b> Hướng do open type lúc 10:00 quyết định. Ma trận vẫn dùng được: A khi open type cùng hướng kịch bản, B khi ngược (B ở đây chính là "đi theo open type").</li>
+      <li><b>Không fade mép overlap chỉ vì nó là mép overlap.</b> Cần trigger orderflow tại đó; riêng kịch bản 1, fade đơn thuần đang thua.</li>
+      <li><b>Overlap là zone, không phải biên của phiên.</b> NQ thường đi xa gấp đôi độ dày overlap trong 2 giờ đầu; target nên là level kế tiếp (VA, ONH/ONL), không phải mép đối diện của overlap.</li>
+      <li><b>Kịch bản 4/5:</b> bỏ kỳ vọng "quay về value hôm qua" trong cửa sổ 9:30–11:30, trừ khi open type xác nhận rõ.</li>
+    </ol>
+  </div>
+
+  <div class="panel">
+    <h3>Lần test tiếp theo</h3>
+    <ol class="clean small">
+      <li><b>Thêm dữ liệu:</b> export thêm NQU6 (khoảng 06/2026 → 09/2026) để lên ~110 phiên. Giữ nguyên rule hiện tại, không chỉnh theo kết quả lần này, để phần dữ liệu mới là out-of-sample thật.</li>
+      <li><b>Test trigger orderflow:</b> dữ liệu đã có bid/ask volume. Lần tới thêm điều kiện CVD divergence / delta flip tại level để xem location + trigger có tốt hơn location đơn thuần.</li>
+      <li><b>Test riêng open type:</b> vì đây là biến mạnh nhất lần này, đo OD/OTD từng loại và kết hợp IB width.</li>
+      <li>Đối chiếu VA với ATAS (row, cách mở rộng VA) để chắc số trong backtest khớp số bạn vẽ trên chart.</li>
+    </ol>
+  </div>
+</section>
+
+</main>
+<footer>NQ Trade Plan · Composite × pRTH × OVN · System chính từ 17/11/2026. Engine plan dùng chung với web và server (plan-core.js). Data thị trường dùng cá nhân.</footer>
+<script src="app.js"></script>
+</body>
+</html>

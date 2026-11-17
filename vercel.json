@@ -27,13 +27,23 @@
   ],
   "redirects": [
     {
+      "source": "/testing",
+      "destination": "/plan",
+      "permanent": false
+    },
+    {
+      "source": "/testing.en",
+      "destination": "/plan.en",
+      "permanent": false
+    },
+    {
       "source": "/overlap",
-      "destination": "/testing",
+      "destination": "/plan",
       "permanent": false
     },
     {
       "source": "/overlap.en",
-      "destination": "/testing.en",
+      "destination": "/plan.en",
       "permanent": false
     }
   ],

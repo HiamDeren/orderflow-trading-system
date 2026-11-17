@@ -7,7 +7,7 @@ Mọi file liên quan nằm trong thư mục này và trong `api/plan.js` ở g�
 ATAS X (chart M30, 30 ngày)
   └─ Deren · Plan Sender, bấm lúc 9:29 ET
        ├─ Bước 1: copy JSON vào clipboard + lưu latest_plan.json
-       │          → dán vào trang Testing plan · chương 04 Plan Builder
+       │          → dán vào trang Trade Plan · chương 04 Plan Builder
        └─ Bước 2: POST /api/plan (token) → Vercel → Supabase (bảng trade_plans)
                   → trang plan đọc GET /api/plan
 ```
@@ -29,7 +29,7 @@ Thư mục `docs/` không được deploy lên site (khai báo trong `.vercelign
 2. Mở Claude Code trên máy có ATAS, đưa file `PlanSender.cs` và nội dung `PROMPT_PlanSender.md`. Claude Code sẽ build, cài, rồi kiểm số với 2 ngày chuẩn (11/11 và 12/11).
 3. Mỗi sáng phiên Mỹ, lúc 9:29 ET (21:29 VN mùa đông), trong indicator bật **"Bấm để gửi plan"**.
    - JSON được copy vào clipboard và lưu `Documents\ATAS_Export\plans\latest_plan.json`.
-4. Mở site → **Testing plan → 04 · Plan Builder** → ô "Nhập từ ATAS" → bấm **"Dán từ clipboard"** (hoặc Ctrl+V vào ô rồi "Nhập và lập plan", hoặc chọn file).
+4. Mở site → **Trade Plan → 04 · Plan Builder** → ô "Nhập từ ATAS" → bấm **"Dán từ clipboard"** (hoặc Ctrl+V vào ô rồi "Nhập và lập plan", hoặc chọn file).
 5. Builder tự điền pRTH / OVN / giá, tìm HVN từ VA các phiên (theo tham số ở chương 01), vẽ plan dạng **TPO** kèm plan chữ bên phải trong cùng một ảnh. Bấm **"Copy ảnh plan"** rồi dán vào journal, Discord hoặc Notion.
 
 Kiểm tra nhanh không cần ATAS: nút **"Nạp ví dụ 12/11 (data thật, có TPO)"**.
@@ -106,7 +106,7 @@ Tạo chuỗi ngẫu nhiên từ 32 ký tự (chữ + số) bằng trình tạo 
 ## Bước 3 · Ảnh plan tự động + Discord (đã có trong code)
 
 Mỗi lần indicator gửi plan (`POST /api/plan`), server tự làm thêm:
-1. Lập plan bằng `assets/js/plan-core.js`, **cùng code với trang Testing plan**, nên ảnh giống hệt ảnh trên web.
+1. Lập plan bằng `assets/js/plan-core.js`, **cùng code với trang Trade Plan**, nên ảnh giống hệt ảnh trên web.
 2. Vẽ ảnh **tiếng Việt** (font Be Vietnam Pro + JetBrains Mono trong `api/_fonts/`), xuất PNG 2600 px.
 3. Lưu PNG vào Supabase Storage, bucket **private** `trade-plans`, đường dẫn `YYYY/MM/plan_YYYY-MM-DD_SYMBOL.png`.
    Bảng `trade_plans` có thêm cột `image_path`, `plan_text`, `summary` (bias, setup, target...).
@@ -126,7 +126,7 @@ Gửi lại cùng ngày thì ghi đè ảnh và Discord nhận thêm một tin. 
 Webhook chỉ **gửi** tin. Khi cần gõ lệnh trong Discord (ví dụ `/plan` để xem lại plan) mới phải làm bot riêng: xem `claude/08-roadmap.md`.
 
 ### Xem lại ảnh đã lưu
-- Trên web: Testing plan → 04 · Plan Builder → **"Lấy plan mới nhất từ web"** (lần đầu dán `PLAN_TOKEN`, chỉ lưu trên trình duyệt đó). Builder nạp plan và hiện link ảnh đã lưu (link ký tạm 1 giờ).
+- Trên web: Trade Plan → 04 · Plan Builder → **"Lấy plan mới nhất từ web"** (lần đầu dán `PLAN_TOKEN`, chỉ lưu trên trình duyệt đó). Builder nạp plan và hiện link ảnh đã lưu (link ký tạm 1 giờ).
 - Trên Supabase: **Storage → trade-plans**.
 - Trên Discord: kênh `#trade-plan`.
 

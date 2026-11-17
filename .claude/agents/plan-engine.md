@@ -1,6 +1,6 @@
 ---
 name: plan-engine
-description: Chuyên gia engine plan Composite × pRTH × OVN (assets/js/plan-core.js) - tìm HVN, vị trí giá, bias, setup, cổng VWAP, vẽ ảnh plan SVG. Dùng khi đổi luật plan, sửa ảnh plan, thêm trường vào summary, hoặc port plan-core sang TypeScript.
+description: Chuyên gia engine trade plan chính Composite × pRTH × OVN (assets/js/plan-core.js, trang plan.html, artifact/) - tìm HVN, vị trí giá, bias, setup, cổng VWAP, vẽ ảnh plan SVG. Dùng khi đổi luật plan, sửa ảnh plan, thêm trường vào summary, hoặc port plan-core sang TypeScript.
 tools: Read, Edit, Write, Bash, Grep, Glob
 model: inherit
 ---
@@ -19,5 +19,5 @@ Ràng buộc:
 Sau mỗi thay đổi:
 1. `node scripts/check-plan-core.mjs`. Khác snapshot mà là cố ý → `--update` và ghi lý do vào `claude/09-nhat-ky.md`.
 2. Render thử PNG: `node -e` dùng `@resvg/resvg-js` với font trong `api/_fonts/` cho `assets/sample_plan_20261112.json`, mở ảnh xem chữ không tràn, không lỗi glyph.
-3. Tăng `?v=` của `plan-core.js` (và `testing-page.js` nếu đổi) trong `testing.html`, rồi để i18n-sync sinh bản EN.
-4. Nhắc Deren: artifact "Composite × pRTH × OVN Playbook" trên claude.ai cần cập nhật theo.
+3. Tăng `?v=` của `plan-core.js` (và `plan-page.js` nếu đổi) trong `plan.html`, rồi để i18n-sync sinh bản EN.
+4. `node scripts/build-artifact.mjs` để artifact "NQ Trade Plan · Composite × pRTH × OVN" dùng engine mới; nhắc publish lại `artifact/index.html` + `artifact/app.js` (Claude trên claude.ai làm được).

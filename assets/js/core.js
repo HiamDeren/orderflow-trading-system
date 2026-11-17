@@ -20,8 +20,7 @@ const NAV=[
     ['tong-quan','00','Tổng quan'],['nen-tang','01','Nền tảng'],['thuat-ngu','02','Thuật ngữ'],['footprint','03','Footprint'],
     ['delta','04','Delta & CVD'],['dom','05','DOM'],['tape','06','Tape'],['kich-ban','07','13 kịch bản'],
     ['ket-hop','08','Kết hợp tại level']]},
-  {k:'plan',href:'plan.html',label:'Plan Builder',short:'Plan',sub:'Plan + bản đồ level',c:'var(--warn)',icon:'map'},
-  {k:'testing',href:'testing.html',label:'Composite × pRTH × OVN',short:'Testing',sub:'Testing plan · HVN · VWAP RTH',c:'#26A69A',icon:'overlap',chapters:[
+  {k:'plan',href:'plan.html',label:'Trade Plan',short:'Plan',sub:'Composite × pRTH × OVN',c:'#26A69A',icon:'overlap',chapters:[
     ['khung','00','Khung plan'],['hvn','01','Xác định HVN'],['bias','02','Đọc bias'],['vwap','03','VWAP RTH'],
     ['builder','04','Plan Builder'],['quy-trinh','05','Quy trình trade'],['quiz','06','Quiz']]},
   {k:'quiz',href:'quiz.html',label:'Trắc nghiệm',short:'Quiz',sub:'Luyện tập · Thi thử',c:'var(--c-quiz)',icon:'quiz',chapters:[
@@ -48,7 +47,7 @@ const cur=NAV.find(n=>n.k===page)||NAV[0];
 document.body.style.setProperty('--c',cur.c);
 /* ---------- ngôn ngữ: trang VI = x.html, trang EN = x.en.html ---------- */
 const LANG=document.documentElement.lang==='en'?'en':'vi';
-const FILE={home:'index',tools:'tools',levels:'levels',plan:'plan',testing:'testing',quiz:'quiz'}[page]||'index';
+const FILE={home:'index',tools:'tools',levels:'levels',plan:'plan',quiz:'quiz'}[page]||'index';
 const langHref=to=>FILE+(to==='en'?'.en':'')+'.html'+location.hash;
 (function(){const pref=store.get('ofs.lang',null);if(pref&&pref!==LANG&&!/[?&]stay/.test(location.search))location.replace(langHref(pref));})();
 
@@ -60,8 +59,7 @@ function buildShell(){
   let h=`<a class="ui-logo" href="index.html">${LOGO}<span><b>Orderflow System</b><small>NQ · ATAS · Rithmic</small></span></a><nav class="ui-nav">`;
   NAV.forEach((n,i)=>{
     if(i===1) h+=`<div class="ui-sec-label">Khoá học</div>`;
-    if(n.k==='plan') h+=`<div class="ui-sec-label">Công cụ</div>`;
-    if(n.k==='testing') h+=`<div class="ui-sec-label">Testing plan</div>`;
+    if(n.k==='plan') h+=`<div class="ui-sec-label">Trade plan</div>`;
     if(n.k==='quiz') h+=`<div class="ui-sec-label">Ôn luyện</div>`;
     const on=n.k===page;
     h+=`<a class="ui-item${on?' on':''}" href="${n.href}" style="--c:${n.c}"${on?' aria-current="page"':''}><span class="ico">${svg(n.icon)}</span><span class="lbl">${n.label}<small>${n.sub}</small></span></a>`;

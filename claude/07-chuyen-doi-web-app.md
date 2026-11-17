@@ -28,8 +28,7 @@ app/
   (public)/            trang học công khai: levels, tools, quiz (nếu muốn công khai)
   (app)/               cần đăng nhập
     dashboard/         trang chủ dashboard
-    plan/              Plan Builder + lịch sử plan
-    testing/           Composite × pRTH × OVN
+    plan/              Trade Plan (Composite × pRTH × OVN) + lịch sử plan
     calendar/          economic calendar
     options/           GEX / DEX / OI
     heatmap/           heatmap cổ phiếu
@@ -74,10 +73,10 @@ Mọi bảng: RLS bật, policy `to authenticated using ((select auth.uid()) = u
 Prompt dùng cho từng giai đoạn: [prompts/chuyen-doi-web-app.md](prompts/chuyen-doi-web-app.md). Subagent dẫn dắt: `migration-architect`.
 
 0. **Chuẩn bị (xong 2026-11-17):** ghi bối cảnh vào `CLAUDE.md` + `claude/`; luồng plan tự động chạy ổn.
-1. **Khung Next.js trong cùng repo:** tạo app, chuyển HTML hiện tại vào `public/legacy/`, thêm rewrites để `/levels`, `/tools`, `/plan`, `/testing`, `/quiz`, `.en`, `/overlap` vẫn chạy. Chuyển `api/plan.js` sang `app/api/plan/route.ts` giữ đúng request / response. Deploy, kiểm tra không có gì gãy.
+1. **Khung Next.js trong cùng repo:** tạo app, chuyển HTML hiện tại vào `public/legacy/`, thêm rewrites để `/levels`, `/tools`, `/plan`, `/quiz`, `.en` vẫn chạy và `/testing`, `/overlap` vẫn chuyển về `/plan`. Chuyển `api/plan.js` sang `app/api/plan/route.ts` giữ đúng request / response. Deploy, kiểm tra không có gì gãy.
 2. **Đăng nhập + dữ liệu người dùng:** Supabase Auth, middleware bảo vệ `(app)/`, bảng `profiles` + `user_state`, trang nhập file sao lưu cũ để chuyển tiến độ lên DB.
 3. **Shell + dashboard:** component hoá sidebar / topbar / đồng hồ phiên; trang dashboard: plan hôm nay + ảnh, đồng hồ phiên, lịch tin trong ngày.
-4. **Port dần từng trang cũ:** Testing (dùng `lib/plan-core.ts`), Plan, Quiz, rồi hai khoá học (nội dung sang `content/`). Xong trang nào thì bỏ bản legacy của trang đó.
+4. **Port dần từng trang cũ:** Trade Plan (dùng `lib/plan-core.ts`), Quiz, rồi hai khoá học (nội dung sang `content/`). Xong trang nào thì bỏ bản legacy của trang đó.
 5. **Module mới:** calendar → options (gộp Gex-Dashboard) → earnings → news → heatmap (thứ tự Deren quyết).
 
 Mỗi giai đoạn deploy được độc lập; không có bước "viết lại toàn bộ rồi mới chạy".

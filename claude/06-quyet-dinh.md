@@ -24,3 +24,6 @@ Mỗi mục: đã chọn gì, vì sao, và khi nào nên xem lại. Muốn đổ
 | D18 | 2026-11-17 | Bối cảnh dự án ghi trong `CLAUDE.md` + `claude/` | Chuẩn bị chuyển sang web app dài hạn | — |
 | D19 | 2026-11-17 | Hook Claude Code viết bằng Node (`.mjs`), không dùng bash + jq | Chạy được cả Windows (máy trade) lẫn Linux; Node đã có sẵn cho dự án | — |
 | D20 | 2026-11-17 | Snapshot `scripts/plan-core.snapshot.json` là chuẩn nghiệm thu engine plan | Port sang TypeScript / web app phải ra đúng kết quả cũ | Khi đổi luật cố ý (`--update` + ghi nhật ký) |
+| D21 | 2026-11-17 | Gộp Plan Builder cổ điển + Testing plan thành một trang **Trade Plan** (`plan.html`), bỏ builder cổ điển; `/testing`, `/overlap` redirect về `/plan` | Deren chốt Composite × pRTH × OVN là system trade plan chính | — |
+| D22 | 2026-11-17 | Artifact dùng chung `plan-core.js` (ghép lúc build), nguồn artifact lưu trong repo `artifact/` | Một engine cho web, server, artifact; artifact sửa được ở phiên sau | — |
+| D23 | 2026-11-17 | Giữ tên khoá localStorage `ofs.tp.*` dù đổi tên trang | Không mất dữ liệu đã lưu trên trình duyệt | Khi chuyển dữ liệu lên DB |

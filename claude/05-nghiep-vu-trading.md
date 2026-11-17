@@ -21,8 +21,8 @@ Tài liệu để người code hiểu đúng thuật ngữ và luật trong eng
 | CVD, delta, footprint, DOM, tape | Lớp trigger orderflow |
 | Period 30' | Đơn vị đổi bias. Vào lệnh trên M1 |
 
-## Khung Composite × pRTH × OVN (trang Testing)
-Ý tưởng của Deren:
+## Khung Composite × pRTH × OVN · system trade plan chính (trang Trade Plan)
+Deren chốt khung này làm system trade plan chính ngày 2026-11-17. Ý tưởng:
 - HVN trên composite là vùng balance. Giá vào HVN thì fade hai mép. Giá ra khỏi HVN thì đi continuation tới HVN kế tiếp.
 - HVN xác định bằng cách chồng VA các phiên RTH và OVN.
 - pRTH đã build gì và OVN đã build gì quyết định hướng của ngày.
@@ -84,7 +84,7 @@ Ba nhóm setup: **Fade** (mép HVN, VWAP phải phẳng), **Continuation / Đi t
 - 47 phiên thử khung RTH × OVN overlap: **chưa có edge**, các mép overlap gần như ngẫu nhiên. Open type + EMA cho nhiều thông tin hơn.
 - Bộ lọc VWAP cho lần chạm đầu ra 0/0 vì lần chạm đầu một level dưới giá mở cửa luôn nằm dưới VWAP (đặc tính, không phải lỗi).
 - Luật đã đóng băng để kiểm tra out-of-sample. Cần thêm data M30 6–12 tháng trước khi kết luận.
-- Khung Composite × pRTH × OVN vẫn là **testing plan**: ghi log đủ mẫu rồi mới đưa vào hệ thống chính.
+- Khung Composite × pRTH × OVN là **system chính từ 2026-11-17** nhưng chưa có backtest dài hạn: ghi log từng phiên (tab Log phiên của artifact, sau này bảng `session_logs`) để kiểm tra bias / setup theo thời gian.
 
 ## Bảng màu (ARGB `#AARRGGBB`)
 | Thành phần | Trong VA | Ngoài VA | POC |
