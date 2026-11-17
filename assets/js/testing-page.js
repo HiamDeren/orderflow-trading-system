@@ -395,7 +395,7 @@ LÚC 10:00: open type + EMA 9/34 (5') + VWAP RTH chốt hướng; open type ngư
     {k:"Target", v: S.target!=null?`${fmt(S.target)} (cách giá 9:29 ${fmt(dist)} điểm)`:"Theo mô tả setup"},
     {k:"Đổi bias (TPO 30')", v:S.flip, c:"#EF9F27"},
     {k:"VWAP RTH", v:vwapGate(S.type,B.dir), c:"#26C6DA"},
-    {k:"pRTH", v:`${Bo.n} · VA ${fmt(r.val)}–${fmt(r.vah)} · POC ${fmt(D.rpoc)}`, c:"#E3C393"},
+    {k:"Prev RTH", v:`${Bo.n} · VA ${fmt(r.val)}–${fmt(r.vah)} · POC ${fmt(D.rpoc)}`, c:"#E3C393"},
     {k:"OVN", v:`${Oo.n} · VA ${fmt(o.val)}–${fmt(o.vah)} · POC ${fmt(D.opoc)} · ONH ${fmt(D.onh)} / ONL ${fmt(D.onl)}`, c:"#A9C4EA"},
     {k:"Vào lệnh", v:"Trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Lúc 10:00 open type + EMA 9/34 (5') + VWAP RTH chốt hướng. Dừng 11:30 ET."}
   ];

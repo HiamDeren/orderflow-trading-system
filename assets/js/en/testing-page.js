@@ -395,7 +395,7 @@ AT 10:00: open type + EMA 9/34 (5') + VWAP RTH set the direction; if the open ty
     {k:"Target", v: S.target!=null?`${fmt(S.target)} (from the 9:29 price ${fmt(dist)} pts)`:"As described in the setup"},
     {k:"Bias flip (TPO 30')", v:S.flip, c:"#EF9F27"},
     {k:"VWAP RTH", v:vwapGate(S.type,B.dir), c:"#26C6DA"},
-    {k:"pRTH", v:`${Bo.n} · VA ${fmt(r.val)}–${fmt(r.vah)} · POC ${fmt(D.rpoc)}`, c:"#E3C393"},
+    {k:"Prev RTH", v:`${Bo.n} · VA ${fmt(r.val)}–${fmt(r.vah)} · POC ${fmt(D.rpoc)}`, c:"#E3C393"},
     {k:"OVN", v:`${Oo.n} · VA ${fmt(o.val)}–${fmt(o.vah)} · POC ${fmt(D.opoc)} · ONH ${fmt(D.onh)} / ONL ${fmt(D.onl)}`, c:"#A9C4EA"},
     {k:"Entry", v:"On M1 + footprint, stop on M1 structure. No entries in the middle of an LVN. At 10:00 open type + EMA 9/34 (5') + VWAP RTH lock the direction. Stop at 11:30 ET."}
   ];
