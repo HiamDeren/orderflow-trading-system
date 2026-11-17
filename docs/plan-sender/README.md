@@ -123,7 +123,7 @@ Gửi lại cùng ngày thì ghi đè ảnh và Discord nhận thêm một tin. 
 4. Vercel → project → Environments → **Production** → Environment Variables → thêm `DISCORD_WEBHOOK_TRADE_PLAN` (Secret) = URL vừa copy (quy ước tên: `DISCORD_WEBHOOK_<MỤC_ĐÍCH>`, ví dụ sau này `DISCORD_WEBHOOK_SESSION_LOG`) → Save → **Redeploy**.
 5. Ai có URL webhook đều gửi được tin vào kênh: giữ kín như token; lộ thì xoá webhook và tạo cái mới.
 
-Webhook chỉ **gửi** tin. Khi cần gõ lệnh trong Discord (ví dụ `/plan` để xem lại plan) mới phải làm bot riêng: xem `docs/ROADMAP.md`.
+Webhook chỉ **gửi** tin. Khi cần gõ lệnh trong Discord (ví dụ `/plan` để xem lại plan) mới phải làm bot riêng: xem `claude/08-roadmap.md`.
 
 ### Xem lại ảnh đã lưu
 - Trên web: Testing plan → 04 · Plan Builder → **"Lấy plan mới nhất từ web"** (lần đầu dán `PLAN_TOKEN`, chỉ lưu trên trình duyệt đó). Builder nạp plan và hiện link ảnh đã lưu (link ký tạm 1 giờ).

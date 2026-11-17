@@ -57,3 +57,6 @@ Indicator `Deren · Plan Sender` gửi số liệu pRTH / OVN / VA từng phiên
 Hướng dẫn đầy đủ, mã indicator, prompt Claude Code và SQL: `docs/plan-sender/README.md`.
 `api/plan.js` là Vercel Function lưu / đọc plan trên Supabase (cần biến môi trường `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `PLAN_TOKEN`).
 Thư mục `docs/` không được deploy lên site.
+
+## Bối cảnh cho Claude / người mới
+`CLAUDE.md` (quy tắc bắt buộc) và thư mục `claude/` (tổng quan, kiến trúc, tính năng, dữ liệu & API, nghiệp vụ, quyết định, kế hoạch chuyển sang web app, roadmap, nhật ký). Hai mục này không được deploy.
