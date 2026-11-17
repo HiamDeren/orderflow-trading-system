@@ -27,3 +27,4 @@ Mỗi mục: đã chọn gì, vì sao, và khi nào nên xem lại. Muốn đổ
 | D21 | 2026-11-17 | Gộp Plan Builder cổ điển + Testing plan thành một trang **Trade Plan** (`plan.html`), bỏ builder cổ điển; `/testing`, `/overlap` redirect về `/plan` | Deren chốt Composite × pRTH × OVN là system trade plan chính | — |
 | D22 | 2026-11-17 | Artifact dùng chung `plan-core.js` (ghép lúc build), nguồn artifact lưu trong repo `artifact/` | Một engine cho web, server, artifact; artifact sửa được ở phiên sau | — |
 | D23 | 2026-11-17 | Giữ tên khoá localStorage `ofs.tp.*` dù đổi tên trang | Không mất dữ liệu đã lưu trên trình duyệt | Khi chuyển dữ liệu lên DB |
+| D24 | 2026-11-17 | Tạo lại `trade_plans`: bỏ cột `price` (trùng `payload.price`, `summary.price`), sắp cột theo nhóm (khoá + thời gian → định danh → kết quả server → dữ liệu gốc), comment từng cột, thu quyền `anon` / `authenticated` | Bảng dễ đọc, không lưu trùng; chỉ server truy cập | Khi thêm Auth (cần thêm `user_id` + policy) |

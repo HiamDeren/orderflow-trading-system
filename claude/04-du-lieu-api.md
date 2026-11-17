@@ -3,24 +3,27 @@
 ## Supabase
 - Project: **HiamDeren's Project**, ref `njbeaswlwqweblvgvrlx`, region `ap-southeast-2`.
 - Truy cập chỉ từ server (Vercel Function) bằng **secret key** (tên key trên Supabase: `vercel_server`, dùng chung cho mọi tính năng backend sau này). Không có client nào dùng publishable / anon key.
-- SQL gốc: `docs/plan-sender/supabase.sql`. Thay đổi đã áp bằng migration: `trade_plans_image_and_storage` (cột ảnh, bucket, sửa `search_path`).
+- SQL chuẩn: `docs/plan-sender/supabase.sql`. Migration đã áp: `trade_plans_image_and_storage` (cột ảnh, bucket, sửa `search_path`), `trade_plans_recreate_ordered_no_price` (tạo lại bảng, bỏ `price`, thu quyền anon/authenticated).
 
 ### Bảng `public.trade_plans`
-| Cột | Kiểu | Ghi chú |
-|---|---|---|
-| `id` | bigint identity PK | |
-| `trade_date` | date not null | ngày phiên trade (ET) |
-| `symbol` | text not null, mặc định `'NQ'` | ví dụ `NQZ6` |
-| `price` | numeric | giá lúc gửi (9:29 ET) |
-| `payload` | jsonb not null | JSON v1 nguyên bản từ indicator |
-| `image_path` | text | đường dẫn ảnh trong bucket |
-| `plan_text` | text | plan chữ như khối bên phải ảnh |
-| `summary` | jsonb | `{date, location, prth, ovn, bias, conf, setup, target, distance, flip, price, zone}` để lọc / thống kê |
-| `created_at`, `updated_at` | timestamptz | trigger `trade_plans_touch` → hàm `public.touch_updated_at()` (`search_path=''`) |
+Tạo lại 2026-11-17 (migration `trade_plans_recreate_ordered_no_price`): bỏ cột `price`, sắp cột theo nhóm. Mỗi cột có `comment` trong database. SQL chuẩn: `docs/plan-sender/supabase.sql`.
 
-- Ràng buộc `unique (trade_date, symbol)`: gửi lại cùng ngày thì ghi đè (upsert).
-- RLS bật, **không có policy** → chỉ secret key đọc / ghi.
-- Bảng hiện trống (dòng test đã xoá 2026-11-17).
+| # | Cột | Kiểu | Ghi chú |
+|---|---|---|---|
+| 1 | `id` | bigint identity PK | khoá tự tăng |
+| 2 | `created_at` | timestamptz, mặc định `now()` | lần gửi đầu tiên của ngày |
+| 3 | `updated_at` | timestamptz, mặc định `now()` | lần gửi gần nhất; trigger `trade_plans_touch` → `public.touch_updated_at()` (`search_path=''`) |
+| 4 | `trade_date` | date not null | ngày phiên trade (ET) |
+| 5 | `symbol` | text not null, mặc định `'NQ'` | ví dụ `NQZ6` |
+| 6 | `summary` | jsonb | server tính: `{date, location, prth, ovn, bias, conf, setup, target, distance, flip, price, zone}` để lọc / thống kê |
+| 7 | `plan_text` | text | plan chữ như khối bên phải ảnh |
+| 8 | `image_path` | text | đường dẫn ảnh trong bucket |
+| 9 | `payload` | jsonb not null | JSON v1 nguyên bản từ indicator |
+
+- Giá lúc 9:29 ET không có cột riêng: lấy ở `payload->>'price'` hoặc `summary->>'price'`.
+- Ràng buộc `trade_plans_trade_date_symbol_key unique (trade_date, symbol)`: gửi lại cùng ngày thì ghi đè (upsert).
+- RLS bật, **không có policy**; `anon` / `authenticated` đã bị thu hết quyền trên bảng; chỉ `service_role` (secret key) có `select, insert, update, delete`.
+- Thêm cột mới: Postgres luôn thêm vào cuối. Muốn giữ thứ tự nhóm thì tạo lại bảng khi bảng còn trống, hoặc chấp nhận cột mới ở cuối.
 
 ### Storage
 - Bucket `trade-plans`: private, tối đa 5 MB / file, chỉ `image/png`, không có storage policy.
@@ -50,7 +53,7 @@ Xác thực: `Authorization: Bearer <PLAN_TOKEN>` (so sánh thời gian hằng).
 Body: JSON v1 (bên dưới). Bắt buộc `date` dạng `YYYY-MM-DD`, `prth`, `ovn`. Thêm `"notify": false` để không gửi Discord.
 
 Các bước:
-1. Upsert `{trade_date, symbol, price, payload}` (`on_conflict=trade_date,symbol`). Lỗi ở đây → `502`.
+1. Upsert `{trade_date, symbol, payload}` (`on_conflict=trade_date,symbol`). Lỗi ở đây → `502`.
 2. `planFromJson(payload)` (plan-core.js) → SVG → PNG bằng resvg với font trong `api/_fonts/`.
 3. Upload PNG (`x-upsert: true`), PATCH dòng với `image_path`, `plan_text`, `summary`.
 4. Gửi Discord nếu có webhook.
@@ -64,7 +67,7 @@ Bước 2–4 lỗi thì plan vẫn được lưu. Response:
 `image` / `discord` có thể là `{ "error": "..." }`; `discord` là `null` khi không gửi.
 
 ### `GET /api/plan[?date=YYYY-MM-DD]`
-Trả plan của ngày đó, hoặc mới nhất: `trade_date, symbol, price, payload, image_path, plan_text, summary, updated_at` + `image_url` (link ký tạm 1 giờ). Không có → `404`.
+Trả plan của ngày đó, hoặc mới nhất: `trade_date, symbol, created_at, updated_at, summary, plan_text, image_path, payload` + `image_url` (link ký tạm 1 giờ). Không có → `404`.
 
 ## JSON v1 từ indicator ATAS (`Deren · Plan Sender`)
 Chỉ ký tự ASCII. Tên trường cố định, không đổi.

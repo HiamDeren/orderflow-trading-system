@@ -107,7 +107,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: "Payload thiếu date (yyyy-MM-dd), prth hoặc ovn" });
       }
       const symbol = String(p.symbol || "NQ").slice(0, 20);
-      const row = { trade_date: p.date, symbol, price: p.price ?? null, payload: p };
+      const row = { trade_date: p.date, symbol, payload: p };
       const r = await fetch(rest + "?on_conflict=trade_date,symbol", {
         method: "POST",
         headers: { ...hj, Prefer: "resolution=merge-duplicates,return=minimal" },
@@ -158,7 +158,7 @@ export default async function handler(req, res) {
       const date = String((req.query && req.query.date) || "");
       if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) return res.status(400).json({ error: "date phải dạng yyyy-MM-dd" });
       const filter = date ? `&trade_date=eq.${date}` : "";
-      const r = await fetch(`${rest}?select=trade_date,symbol,price,payload,image_path,plan_text,summary,updated_at${filter}&order=trade_date.desc,updated_at.desc&limit=1`, { headers: h });
+      const r = await fetch(`${rest}?select=trade_date,symbol,created_at,updated_at,summary,plan_text,image_path,payload${filter}&order=trade_date.desc,updated_at.desc&limit=1`, { headers: h });
       if (!r.ok) return res.status(502).json({ error: "supabase", status: r.status, detail: (await r.text()).slice(0, 300) });
       const rows = await r.json();
       if (!rows.length) return res.status(404).json({ error: "Chưa có plan" });

@@ -3,6 +3,7 @@
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
 ## 2026-11-17 · Plan tự động và chuẩn bị chuyển web app
+- Tạo lại bảng `trade_plans` (đang trống): bỏ cột `price`, thứ tự cột `id, created_at, updated_at, trade_date, symbol, summary, plan_text, image_path, payload`, comment từng cột, thu quyền anon/authenticated; `api/plan.js` không ghi / đọc `price` nữa.
 - **Composite × pRTH × OVN thành system trade plan chính.** Gộp Plan Builder cổ điển và Testing plan thành trang **Trade Plan** (`plan.html`, chương 00–06); bỏ builder cổ điển (`plan-chart.js`, code builder trong `levels-page.js`); `testing.*` → `plan.*` (`plan-page.js`, `plan.css`, scope `.pg-plan`); `/testing`, `/overlap` redirect về `/plan`; sidebar nhóm "Trade plan"; trang chủ một thẻ Trade Plan; chương 08 khoá Level có callout trỏ sang Trade Plan.
 - Artifact đổi tên "NQ Trade Plan · Composite × pRTH × OVN", engine lấy từ `plan-core.js` (bỏ bản engine riêng), nguồn đưa vào `artifact/` + `scripts/build-artifact.mjs`.
 - Claude Code: `.claude/settings.json` + 5 hook Node, 7 subagent, 3 lệnh tắt; `scripts/check-plan-core.mjs` + snapshot; `claude/10-claude-code.md`, `claude/prompts/chuyen-doi-web-app.md`.

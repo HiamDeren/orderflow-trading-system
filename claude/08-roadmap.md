@@ -24,7 +24,7 @@ Cập nhật: 2026-11-17.
 
 ## Việc còn lại · dọn dẹp và an toàn
 - [ ] Supabase: thu quyền `EXECUTE` của `anon` / `authenticated` trên `public.rls_auto_enable()` (advisor cảnh báo).
-- [ ] Supabase: cân nhắc thu quyền `anon` / `authenticated` trên `trade_plans` (RLS đã chặn, đây là lớp phòng thêm).
+- [x] Supabase: thu quyền `anon` / `authenticated` trên `trade_plans` (làm khi tạo lại bảng 2026-11-17).
 - [ ] Khi có nhiều API: đổi `PLAN_TOKEN` thành token chung (ví dụ `API_TOKEN`) hoặc chuyển sang đăng nhập.
 - [x] Artifact đổi tên "NQ Trade Plan · Composite × pRTH × OVN", dùng chung `plan-core.js`, nguồn trong `artifact/`.
 - [x] Gỡ `i18n/__pycache__/` khỏi git (đã thêm vào `.gitignore`).
