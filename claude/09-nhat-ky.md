@@ -2,6 +2,10 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-18 · Thiết kế dashboard mới (Deren Desk)
+- Canvas thiết kế 7 màn hình: Login (chỉ Discord, hình nền riêng), Profile, Dashboard, Plan Studio (có lịch sử theo ngày), Journal (có các ô recap chữ), PnL Calendar, Knowledge (AMT → Context → Entry). Link và việc cần làm ghi ở [08-roadmap.md](08-roadmap.md) mục "Dashboard mới".
+- Chốt hướng: chỉ một tài khoản Discord của Deren được đăng nhập; lịch sử plan theo ngày cần thêm query danh sách ngày phía server (ghi vào roadmap, làm sau).
+
 ## 2026-11-18 · Nút gửi plan + log API
 - Test production thành công: database + Storage (WebP 118 KB) + Discord. Hai lỗi gặp trên đường: secret key trên Vercel không hợp lệ (401 REST + 400 Storage thiếu authorization) → tạo key mới + redeploy; schema `trading` chưa expose (406 PGRST106) → thêm vào Data API (Dashboard: Integrations → Data API → Settings).
 - Plan Builder có nút **Gửi plan lên web** (tuỳ chọn kèm Discord), hiện kết quả từng bước (database / ảnh / Discord) và lý do lỗi (401 token theo domain, 500 thiếu biến môi trường ở preview, 502 Supabase).

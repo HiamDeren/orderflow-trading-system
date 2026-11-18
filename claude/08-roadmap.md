@@ -3,7 +3,7 @@
 Danh sách việc còn lại. Khi Deren nhắn "liệt kê các việc còn lại", trả lời từ file này.
 Hướng dài hạn: **web app cá nhân / dashboard** (xem [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md)).
 
-Cập nhật: 2026-11-18.
+Cập nhật: 2026-11-18 (thêm mục Dashboard mới).
 
 ## Đã xong
 - [x] Trade Plan · Composite × pRTH × OVN là system chính (2026-11-17): gộp Plan Builder cổ điển + Testing plan thành trang `plan.html`, Plan Builder vẽ ảnh TPO kèm plan chữ, copy ảnh.
@@ -51,6 +51,21 @@ Chi tiết: [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md).
 - [ ] Giai đoạn 4: port dần Trade Plan, Quiz, hai khoá học.
 - [ ] Giai đoạn 5: module mới: economic calendar, options (GEX / DEX / OI, gộp repo Gex-Dashboard), earnings, news, heatmap.
 - [ ] Các module khác Deren tự quyết: journal, tài chính cá nhân, học tiếng Anh, tập luyện...
+
+## Dashboard mới · Deren Desk (design 2026-11-18)
+Bản thiết kế (canvas, 7 màn hình): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. Màu graphite trầm + nhấn cát `#D4B483`, Long `#8CC2A4`, Short `#E0947C`; font Inter + JetBrains Mono. Làm trên `development` khi Deren duyệt bản cuối.
+- [ ] **Đăng nhập chỉ Discord, một người:** Supabase Auth provider Discord; server so Discord ID với biến `OWNER_DISCORD_ID` (Vercel), khác ID → từ chối + đăng xuất, không tạo tài khoản. Middleware chặn mọi trang dashboard. Trang login có hình nền riêng.
+- [ ] **Profile:** avatar, tên, ID lấy từ Discord (`user_metadata` chỉ để hiển thị, không dùng để phân quyền); thiết lập giao dịch (mã, phiên, giới hạn lệnh, 1R); trạng thái kết nối (ATAS, Discord webhook, Supabase, lịch kinh tế); đăng xuất mọi thiết bị.
+- [ ] **Dashboard** (trang mặc định): đồng hồ ET / VN, timeline phiên 04:00–16:00 ET có chấm tin, card plan hôm nay, lịch kinh tế (API, cache ~15 phút, không lưu DB), nhắc journal, ô Options sắp có.
+- [ ] **Plan Studio** (đổi tên từ Plan Builder / Plan Desk): gửi plan bằng ATAS X hoặc dán JSON (cùng `/api/plan`), hiện 5 bước kết quả.
+- [ ] **Plan Studio · lịch sử theo ngày (làm sau):** lịch tháng đánh dấu ngày có plan (chấm màu theo bias), bấm ngày → xem lại plan + ảnh của ngày đó.
+  - Server: thêm query danh sách ngày theo tháng, ví dụ `GET /api/plan?month=YYYY-MM` → `trade_date, symbol, summary->bias, image_path, updated_at` (không trả `payload` cho nhẹ).
+  - `GET /api/plan?date=YYYY-MM-DD` đã có (trả plan + signed URL ảnh 1 giờ), dùng lại cho phần xem chi tiết.
+  - Đổi xác thực các route đọc từ `PLAN_TOKEN` sang session đăng nhập (token chỉ còn cho ATAS gửi POST), để trình duyệt không cần giữ token.
+- [ ] **Journal:** migration `trading.journal_days` (1 dòng / ngày: day type, kết quả, open type, bias đúng?, các ô recap chữ: diễn biến phiên, plan so với thực tế, chấm từng lệnh, footprint / DOM / tape, điểm quy trình, tâm lý & kỷ luật, level ngày mai, bài học) + `trading.journal_trades` (giờ, hướng, level, trigger, R, PnL $, theo plan, tag lỗi). Ảnh vào `YYYY/MM/DD/journal/`. Gắn với plan cùng ngày. Thống kê: win rate, R TB, % theo plan, R theo day type, lỗi lặp lại.
+- [ ] **PnL Calendar:** lịch tháng Thứ 2–6 + cột tổng tuần, đổi đơn vị $ / R, ô tô màu theo lãi lỗ, bấm ngày mở journal. Số liệu tính từ `journal_trades`.
+- [ ] **Knowledge:** 3 phần AMT → Context (TPO / VPO) → Entry (Orderflow tools); Deren tổng hợp nội dung, port dần từ `levels.html` / `tools.html` / quiz.
+- [ ] Menu "Sắp có": News · Earnings, Options (GEX / DEX / OI khi có API).
 
 ## Quy ước
 - Mỗi thay đổi: sửa artifact (nếu liên quan) + push repo, Vercel tự deploy; cập nhật file này và [09-nhat-ky.md](09-nhat-ky.md).
