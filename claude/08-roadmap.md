@@ -53,18 +53,22 @@ Chi tiết: [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md).
 - [ ] Các module khác Deren tự quyết: journal, tài chính cá nhân, học tiếng Anh, tập luyện...
 
 ## Dashboard mới · Deren Desk (design 2026-11-18)
-Bản thiết kế (canvas, 7 màn hình): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. Màu graphite trầm + nhấn cát `#D4B483`, Long `#8CC2A4`, Short `#E0947C`; font Inter + JetBrains Mono. Làm trên `development` khi Deren duyệt bản cuối.
+Bản thiết kế (canvas, 8 màn hình + 1 bảng trạng thái): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. Màu graphite trầm + nhấn cát `#D4B483`, Long `#8CC2A4`, Short `#E0947C`; font Inter + JetBrains Mono. Làm trên `development` khi Deren duyệt bản cuối.
 - [ ] **Đăng nhập chỉ Discord, một người:** Supabase Auth provider Discord; server so Discord ID với biến `OWNER_DISCORD_ID` (Vercel), khác ID → từ chối + đăng xuất, không tạo tài khoản. Middleware chặn mọi trang dashboard. Trang login có hình nền riêng.
 - [ ] **Profile:** avatar, tên, ID lấy từ Discord (`user_metadata` chỉ để hiển thị, không dùng để phân quyền); thiết lập giao dịch (mã, phiên, giới hạn lệnh, 1R); trạng thái kết nối (ATAS, Discord webhook, Supabase, lịch kinh tế); đăng xuất mọi thiết bị.
-- [ ] **Dashboard** (trang mặc định): đồng hồ ET / VN, timeline phiên 04:00–16:00 ET có chấm tin, card plan hôm nay, lịch kinh tế (API, cache ~15 phút, không lưu DB), nhắc journal, ô Options sắp có.
+- [ ] **Dashboard** (trang mặc định, một màn hình không phải cuộn): đồng hồ ET / VN, timeline phiên 04:00–16:00 ET, card plan hôm nay, tin USD hôm nay + dải 5 ngày trong tuần, nhắc journal, ô Options sắp có.
+  - Chấm tin trên timeline lấy từ cùng dữ liệu lịch, ô "Chỉ tin tác động cao" lọc cả timeline (không vẽ cố định).
+- [ ] **Calendar** (trang riêng): lịch tháng (chấm màu theo tin mạnh nhất trong ngày, ngày chưa có dữ liệu để xám) + danh sách tin của ngày chọn (giờ ET / VN, mức tác động, Thực tế / Dự báo / Trước, đánh dấu tin trong NY AM).
+  - **Chờ Deren chọn:** (1) không lưu, chỉ có tuần hiện tại; hoặc (2) bảng `trading.econ_events` + cron Vercel lưu mỗi tuần để xem lại tuần cũ và đối chiếu với journal / PnL.
+- [ ] **Trạng thái trống / lỗi** (artboard "Trạng thái trống / lỗi" trên canvas): chưa có plan trước / sau 09:29 ET, lịch tin lỗi có / không có cache, gửi plan lỗi một phần (502), ngày không có plan, journal ngày No Trade, đăng nhập bị từ chối.
 - [ ] **Plan Studio** (đổi tên từ Plan Builder / Plan Desk): gửi plan bằng ATAS X hoặc dán JSON (cùng `/api/plan`), hiện 5 bước kết quả.
 - [ ] **Plan Studio · lịch sử theo ngày (làm sau):** lịch tháng đánh dấu ngày có plan (chấm màu theo bias), bấm ngày → xem lại plan + ảnh của ngày đó.
   - Server: thêm query danh sách ngày theo tháng, ví dụ `GET /api/plan?month=YYYY-MM` → `trade_date, symbol, summary->bias, image_path, updated_at` (không trả `payload` cho nhẹ).
   - `GET /api/plan?date=YYYY-MM-DD` đã có (trả plan + signed URL ảnh 1 giờ), dùng lại cho phần xem chi tiết.
   - Đổi xác thực các route đọc từ `PLAN_TOKEN` sang session đăng nhập (token chỉ còn cho ATAS gửi POST), để trình duyệt không cần giữ token.
-- [ ] **Journal:** migration `trading.journal_days` (1 dòng / ngày: day type, kết quả, open type, bias đúng?, các ô recap chữ: diễn biến phiên, plan so với thực tế, chấm từng lệnh, footprint / DOM / tape, điểm quy trình, tâm lý & kỷ luật, level ngày mai, bài học) + `trading.journal_trades` (giờ, hướng, level, trigger, R, PnL $, theo plan, tag lỗi). Ảnh vào `YYYY/MM/DD/journal/`. Gắn với plan cùng ngày. Thống kê: win rate, R TB, % theo plan, R theo day type, lỗi lặp lại.
+- [ ] **Journal:** migration `trading.journal_days` (1 dòng / ngày: day type, kết quả, open type, bias đúng?, các ô recap chữ: diễn biến phiên, plan so với thực tế, chấm từng lệnh, footprint / DOM / tape, điểm quy trình, tâm lý & kỷ luật, level ngày mai, bài học) + `trading.journal_trades` (giờ, hướng, số hợp đồng, level, trigger, R, PnL $, phí, theo plan, tag lỗi; net = PnL $ − phí). Ảnh vào `YYYY/MM/DD/journal/`. Gắn với plan cùng ngày. Thống kê: win rate, R TB, % theo plan, R theo day type, lỗi lặp lại.
 - [ ] **PnL Calendar:** lịch tháng Thứ 2–6 + cột tổng tuần, đổi đơn vị $ / R, ô tô màu theo lãi lỗ, bấm ngày mở journal. Số liệu tính từ `journal_trades`.
-- [ ] **Knowledge:** 3 phần AMT → Context (TPO / VPO) → Entry (Orderflow tools); Deren tổng hợp nội dung, port dần từ `levels.html` / `tools.html` / quiz.
+- [ ] **Knowledge:** một mục trong menu, trong trang có 3 tab AMT → Context (TPO / VPO) → Entry (Orderflow tools); Deren tổng hợp nội dung, port dần từ `levels.html` / `tools.html` / quiz.
 - [ ] Menu "Sắp có": News · Earnings, Options (GEX / DEX / OI khi có API).
 
 ## Quy ước

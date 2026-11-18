@@ -4,6 +4,7 @@ Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
 ## 2026-11-18 · Thiết kế dashboard mới (Deren Desk)
 - Canvas thiết kế 7 màn hình: Login (chỉ Discord, hình nền riêng), Profile, Dashboard, Plan Studio (có lịch sử theo ngày), Journal (có các ô recap chữ), PnL Calendar, Knowledge (AMT → Context → Entry). Link và việc cần làm ghi ở [08-roadmap.md](08-roadmap.md) mục "Dashboard mới".
+- Chỉnh tiếp: lịch tháng tách sang trang Calendar (Dashboard còn tin hôm nay + dải tuần), menu Knowledge gộp một mục có 3 tab, bảng lệnh journal thêm số hợp đồng / PnL $ / phí / net, thêm bảng mẫu trạng thái trống và lỗi.
 - Chốt hướng: chỉ một tài khoản Discord của Deren được đăng nhập; lịch sử plan theo ngày cần thêm query danh sách ngày phía server (ghi vào roadmap, làm sau).
 
 ## 2026-11-18 · Nút gửi plan + log API
