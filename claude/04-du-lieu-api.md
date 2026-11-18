@@ -5,7 +5,7 @@
 - Truy cập chỉ từ server (Vercel Function, region `sin1`) bằng **secret key**. Không có client nào dùng publishable / anon key.
 - **Mỗi nghiệp vụ một schema, không dùng `public`:** `trading` (trade plan; sau này journal, recap), `util` (hàm dùng chung, không expose). Nghiệp vụ mới (calendar, options, news...) tạo schema riêng theo cùng mẫu quyền.
 - Schema mới phải thêm vào **Project Settings → Data API → Exposed schemas** thì PostgREST mới thấy. Gọi REST: header `Accept-Profile: <schema>` khi đọc, `Content-Profile: <schema>` khi ghi.
-- SQL chuẩn: `docs/plan-sender/supabase.sql`. Migration đã áp trên project Singapore: `trading_schema_trade_plans`, `revoke_rls_auto_enable_execute` (thu quyền gọi `public.rls_auto_enable()` của anon / authenticated), `trade_plans_timestamp_utc_defaults` (Deren đổi cột thời gian sang `timestamp`; đặt lại default giờ UTC, trigger ghi giờ UTC).
+- Nguồn chuẩn schema: `supabase/migrations/` (version trùng lịch sử trên production); bản gộp để đọc: `docs/plan-sender/supabase.sql`. Migration đã áp trên project Singapore: `trading_schema_trade_plans`, `revoke_rls_auto_enable_execute` (thu quyền gọi `public.rls_auto_enable()` của anon / authenticated), `trade_plans_timestamp_utc_defaults` (Deren đổi cột thời gian sang `timestamp`; đặt lại default giờ UTC, trigger ghi giờ UTC).
 
 ### Bảng `trading.trade_plans`
 Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp md5). Mỗi cột có `comment` trong database.
@@ -54,7 +54,7 @@ Body: JSON v1 (bên dưới). Bắt buộc `date` dạng `YYYY-MM-DD`, `prth`, `
 
 Các bước:
 1. Upsert `{trade_date, symbol, payload}` (`on_conflict=trade_date,symbol`). Lỗi ở đây → `502`.
-2. `planFromJson(payload)` (plan-core.js) → SVG → PNG bằng resvg với font trong `api/_fonts/`.
+2. `planFromJson(payload)` (plan-core.js) → SVG → PNG bằng resvg với font trong `apps/web/fonts/`.
 3. Upload PNG (`x-upsert: true`), PATCH dòng với `image_path`, `plan_text`, `summary`.
 4. Gửi Discord nếu có webhook.
 

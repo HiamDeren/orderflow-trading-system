@@ -58,7 +58,9 @@ export function findSecret(text) {
 // Thuật ngữ ICT không được đưa vào nội dung trading (CLAUDE.md quy tắc 3).
 export const ICT_RE = /\bFVG\b|fair value gap|\border ?blocks?\b|\bOTE\b|\bPD arrays?\b|\bSIBI\b|\bBISI\b|breaker block|silver bullet|judas swing|\bkill ?zones?\b|\bICT\b|draw on liquidity/i;
 
+// Site tĩnh (HTML + assets) nằm trong apps/web/public (monorepo, Next.js).
+export const PUB = "apps/web/public/";
 // File sinh tự động từ bản VI.
-export const isGeneratedEn = r => r.startsWith("assets/js/en/") || /\.en\.html$/.test(r);
+export const isGeneratedEn = r => r.startsWith(PUB + "assets/js/en/") || /\.en\.html$/.test(r);
 // Nội dung trading hiển thị cho người học (kiểm ICT).
-export const isContent = r => /\.html$/.test(r) || (r.startsWith("assets/js/") && r.endsWith(".js"));
+export const isContent = r => /\.html$/.test(r) || (r.startsWith(PUB + "assets/js/") && r.endsWith(".js"));

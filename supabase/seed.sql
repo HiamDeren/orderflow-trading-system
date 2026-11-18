@@ -1,0 +1,1 @@
+-- Dữ liệu mẫu cho database local (supabase start / db reset). Không đưa dữ liệu thật hay data Rithmic / CME vào đây.

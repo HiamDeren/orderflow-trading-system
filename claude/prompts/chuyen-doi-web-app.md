@@ -14,7 +14,7 @@ Mình đang chuyển repo orderflow-trading-system từ site tĩnh (HTML + vanil
 
 Trước khi làm gì:
 1. Đọc CLAUDE.md, rồi claude/README.md và lần lượt claude/01 → 09. Đọc claude/prompts/chuyen-doi-web-app.md.
-2. Đối chiếu tài liệu với code thật (cấu trúc thư mục, api/plan.js, assets/js/plan-core.js, vercel.json). Có chỗ tài liệu sai thì liệt kê ra.
+2. Đối chiếu tài liệu với code thật (cấu trúc thư mục, api/plan.js, apps/web/public/assets/js/plan-core.js, vercel.json). Có chỗ tài liệu sai thì liệt kê ra.
 3. Cho mình biết: giai đoạn nào đã xong, giai đoạn tiếp theo là gì, và các quyết định mình cần chốt.
 
 Quy tắc trong suốt quá trình:
@@ -47,8 +47,8 @@ Dùng subagent migration-architect:
 Giai đoạn 1: dựng khung Next.js trong cùng repo, nhánh webapp/g1.
 Yêu cầu:
 - Tạo app Next.js (App Router, TypeScript) ở gốc repo. Chuyển các trang HTML cũ + assets vào public/legacy/ (hoặc cách tương đương) và thêm rewrites để mọi URL cũ vẫn chạy y như hiện tại: /, /levels, /tools, /plan, /quiz, các bản .en, /testing và /overlap → /plan, hash chương (#ema, #builder...).
-- Chuyển api/plan.js sang app/api/plan/route.ts, giữ nguyên request/response, xác thực PLAN_TOKEN, render PNG bằng @resvg/resvg-js với font api/_fonts (đảm bảo font được đóng gói vào function).
-- Port assets/js/plan-core.js sang lib/plan-core.ts nhưng trang legacy vẫn dùng bản JS cũ; viết test chạy cả hai trên assets/sample_plan_20261112.json, kết quả phải khớp scripts/plan-core.snapshot.json.
+- Chuyển api/plan.js sang app/api/plan/route.ts, giữ nguyên request/response, xác thực PLAN_TOKEN, render PNG bằng @resvg/resvg-js với font apps/web/fonts (đảm bảo font được đóng gói vào function).
+- Port apps/web/public/assets/js/plan-core.js sang lib/plan-core.ts nhưng trang legacy vẫn dùng bản JS cũ; viết test chạy cả hai trên apps/web/public/assets/sample_plan_20261112.json, kết quả phải khớp scripts/plan-core.snapshot.json.
 - Cập nhật hook trong .claude/ nếu đường dẫn đổi (guard bản EN, check plan-core).
 - Kiểm tra: build pass, mở từng URL cũ trên Preview Deployment, POST/GET /api/plan bằng JSON mẫu (rồi xoá dòng + ảnh test).
 - Cuối giai đoạn: docs-keeper cập nhật claude/02, 04, 07, 08, 09. Mở PR, chưa merge.
@@ -72,7 +72,7 @@ Yêu cầu:
 ```
 Giai đoạn 3: shell component và trang dashboard, nhánh webapp/g3.
 Yêu cầu:
-- Component hoá shell từ assets/js/core.js: sidebar, topbar, bottom nav mobile, mục lục chương, đồng hồ phiên (giờ VN, đếm tới RTH 9:30 ET, cửa sổ 9:30–11:30 ET, tự đổi giờ mùa hè/đông của Mỹ), nút VI/EN. Giữ design system trong assets/css/app.css (giao diện tối).
+- Component hoá shell từ apps/web/public/assets/js/core.js: sidebar, topbar, bottom nav mobile, mục lục chương, đồng hồ phiên (giờ VN, đếm tới RTH 9:30 ET, cửa sổ 9:30–11:30 ET, tự đổi giờ mùa hè/đông của Mỹ), nút VI/EN. Giữ design system trong apps/web/public/assets/css/app.css (giao diện tối).
 - Cấu hình điều hướng theo module để thêm module mới chỉ cần khai báo một chỗ.
 - Trang /dashboard: plan hôm nay (ảnh + plan chữ từ trade_plans), đồng hồ phiên, ô trống cho lịch tin / options sẽ làm sau.
 - i18n: VI mặc định, EN dùng dữ liệu dịch từ i18n/en.tsv + i18n/en_extra.tsv.
@@ -114,7 +114,7 @@ Khi làm:
 Nghiệm thu giai đoạn <n>. Không code thêm, chỉ kiểm:
 1. Build và deploy Preview thành công.
 2. node scripts/check-plan-core.mjs pass; test lib/plan-core.ts (nếu đã có) khớp snapshot.
-3. POST + GET /api/plan với assets/sample_plan_20261112.json: image.path có, discord.sent true (hoặc notify:false), rồi xoá dòng và ảnh test.
+3. POST + GET /api/plan với apps/web/public/assets/sample_plan_20261112.json: image.path có, discord.sent true (hoặc notify:false), rồi xoá dòng và ảnh test.
 4. Mở lần lượt mọi URL cũ (cả bản .en) và hash chương; liệt kê cái nào hỏng.
 5. Đối chiếu bảng "Phải giữ khi chuyển" trong claude/07.
 6. Supabase advisors không còn cảnh báo security mới.

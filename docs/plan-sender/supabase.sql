@@ -1,4 +1,5 @@
 -- Schema Supabase cho trade plan (indicator "Deren · Plan Sender" → /api/plan).
+-- BẢN GỘP ĐỂ ĐỌC. Nguồn chuẩn: supabase/migrations/ (đổi schema = thêm file migration mới, không sửa file này trước).
 -- Bản hiện hành (2026-11-18, project Singapore ap-southeast-1, migration trading_schema_trade_plans).
 -- Mỗi nghiệp vụ một schema riêng, không dùng public: trading (plan, sau này journal / recap), util (hàm dùng chung).
 -- Chạy trong Supabase: SQL Editor → New query → dán → Run (trên project trống).

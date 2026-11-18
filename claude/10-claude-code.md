@@ -7,7 +7,7 @@ Thư mục `.claude/` được commit cùng repo, nên mở Claude Code ở gố
 |---|---|---|
 | SessionStart (startup, resume, clear, compact) | `session-start.mjs` | Đưa vào đầu phiên: nhánh, 5 commit gần nhất, số file chưa commit, 5 việc đầu roadmap, nhắc quy tắc, danh sách subagent |
 | PreToolUse · Bash | `guard-bash.mjs` | Chặn force push; chặn `rm -r` vào gốc repo / thư mục chính; khi `git commit` thì quét phần sắp commit: chặn `.env*`, `*.csv`, `settings.local.json`, và chuỗi giống secret key / JWT / webhook Discord / giá trị biến bí mật |
-| PreToolUse · Write/Edit/MultiEdit | `guard-write.mjs` | Chặn sửa tay bản EN sinh tự động (`*.en.html`, `assets/js/en/`); chặn ghi `.env*`, file data `*.csv`; chặn nội dung chứa bí mật; chặn thuật ngữ ICT trong nội dung site (`*.html`, `assets/js/`) |
+| PreToolUse · Write/Edit/MultiEdit | `guard-write.mjs` | Chặn sửa tay bản EN sinh tự động (`*.en.html`, `apps/web/public/assets/js/en/`); chặn ghi `.env*`, file data `*.csv`; chặn nội dung chứa bí mật; chặn thuật ngữ ICT trong nội dung site (`*.html`, `apps/web/public/assets/js/`) |
 | PostToolUse · Write/Edit/MultiEdit | `after-edit.mjs` | `node --check` file JS vừa sửa; sửa `plan-core.js` thì chạy `scripts/check-plan-core.mjs` (khác snapshot → báo Claude); sửa `PlanSender.cs` thì kiểm còn đủ trường JSON v1; nhắc (mỗi loại một lần / phiên): chạy build EN, tăng `?v=`, cập nhật artifact, cập nhật `claude/` |
 | Stop | `stop-check.mjs` | Không cho kết thúc lượt khi đã sửa bản VI mà bản EN tương ứng chưa sinh lại (nhắc một lần mỗi lượt) |
 
@@ -20,8 +20,8 @@ Cài đặt riêng từng máy (không commit): `.claude/settings.local.json`.
 ### Thử hook bằng tay
 ```bash
 export CLAUDE_PROJECT_DIR=$PWD
-echo '{"tool_input":{"command":"git push --force origin main"}}' | node .claude/hooks/guard-bash.mjs; echo $?   # 2
-echo '{"tool_input":{"file_path":"assets/js/en/core.js","content":"x"}}' | node .claude/hooks/guard-write.mjs; echo $?   # 2
+echo '{"tool_input":{"command":"git push --force origin production"}}' | node .claude/hooks/guard-bash.mjs; echo $?   # 2
+echo '{"tool_input":{"file_path":"apps/web/public/assets/js/en/core.js","content":"x"}}' | node .claude/hooks/guard-write.mjs; echo $?   # 2
 echo '{"source":"startup"}' | node .claude/hooks/session-start.mjs
 ```
 Trong Claude Code: lệnh `/hooks` xem hook đang nạp. Sửa `settings.json` thì mở phiên mới để có hiệu lực.
@@ -44,7 +44,7 @@ Gọi trực tiếp: "dùng subagent plan-engine để ...". Claude cũng tự c
 |---|---|
 | `/viec-con-lai` | Liệt kê việc còn lại từ `claude/08-roadmap.md` |
 | `/kiem-tra` | `node --check` toàn bộ JS, snapshot plan-core, build EN, kiểm `?v=`, duyệt nội dung |
-| `/ship <mô tả>` | Kiểm tra → cập nhật `claude/` → commit → push main |
+| `/ship <mô tả>` | Kiểm tra → cập nhật `claude/` → commit → push `development` (PR sang `production` khi Deren duyệt) |
 
 ## Script kiểm tra
 - `node scripts/check-plan-core.mjs` (hoặc `npm run check`): chạy `plan-core` trên payload mẫu, so `summary`, vùng HVN và plan chữ với `scripts/plan-core.snapshot.json`. Đổi luật cố ý thì `--update`.
