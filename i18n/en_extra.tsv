@@ -2014,3 +2014,5 @@ SYSTEM CHÍNH	MAIN SYSTEM
 Trade plan NQ mỗi ngày: composite 30 ngày cho bản đồ HVN/LVN, pRTH và OVN cho hướng, Plan Builder nhận số từ ATAS và quy trình trade NY AM.	Daily NQ trade plan: 30-day composite for the HVN/LVN map, pRTH and OVN for direction, a Plan Builder fed by ATAS and the NY AM trading routine.
 Tối đa 2–3 lệnh, dừng 11:30 ET, giữ đúng giới hạn rủi ro của tài khoản prop.	At most 2–3 trades, stop at 11:30 ET, and keep to the prop account's risk limits.
 Khung plan	Plan framework
+// updated_at là timestamp (không tz) lưu giờ UTC: thêm	// updated_at is a timestamp (no tz) stored in UTC: append
+để trình duyệt không hiểu nhầm thành giờ máy.	so the browser does not read it as local time.

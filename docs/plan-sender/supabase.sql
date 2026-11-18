@@ -12,7 +12,7 @@ grant usage on schema util to service_role;
 create or replace function util.touch_updated_at()
 returns trigger language plpgsql set search_path = '' as $$
 begin
-  new.updated_at = now();
+  new.updated_at = now() at time zone 'utc';
   return new;
 end $$;
 revoke execute on function util.touch_updated_at() from public, anon, authenticated;
@@ -29,10 +29,11 @@ alter default privileges in schema trading revoke execute on functions from publ
 
 -- ---------- Bảng trading.trade_plans ----------
 -- Thứ tự cột: khoá + thời gian → định danh plan → kết quả server tính → dữ liệu gốc từ ATAS.
+-- Cột thời gian: timestamp (không tz), quy ước lưu giờ UTC. Client tự thêm "Z" khi đọc.
 create table trading.trade_plans (
   id          uuid        not null default gen_random_uuid() primary key,
-  created_at  timestamptz not null default now(),   -- lần gửi đầu tiên của ngày
-  updated_at  timestamptz not null default now(),   -- lần gửi gần nhất (trigger)
+  created_at  timestamp   not null default (now() at time zone 'utc'),   -- lần gửi đầu tiên của ngày (UTC)
+  updated_at  timestamp   not null default (now() at time zone 'utc'),   -- lần gửi gần nhất (UTC, trigger)
   trade_date  date        not null,                 -- ngày phiên trade (ET)
   symbol      text        not null default 'NQ',    -- ví dụ NQZ6
   summary     jsonb,                                -- bias, conf, setup, target, flip, price (9:29 ET), zone...
@@ -44,8 +45,8 @@ create table trading.trade_plans (
 
 comment on table  trading.trade_plans is 'Trade plan mỗi ngày (khung Composite × pRTH × OVN). Một dòng / ngày / symbol; gửi lại cùng ngày thì ghi đè. Chỉ server (secret key) đọc ghi.';
 comment on column trading.trade_plans.id         is 'Khoá chính uuid (gen_random_uuid)';
-comment on column trading.trade_plans.created_at is 'Lần gửi đầu tiên của ngày đó';
-comment on column trading.trade_plans.updated_at is 'Lần gửi gần nhất (trigger trade_plans_touch)';
+comment on column trading.trade_plans.created_at is 'Lần gửi đầu tiên của ngày đó (timestamp, giờ UTC)';
+comment on column trading.trade_plans.updated_at is 'Lần gửi gần nhất, giờ UTC (trigger trade_plans_touch)';
 comment on column trading.trade_plans.trade_date is 'Ngày phiên trade (giờ ET), ví dụ 2026-11-17';
 comment on column trading.trade_plans.symbol     is 'Mã hợp đồng, ví dụ NQZ6';
 comment on column trading.trade_plans.summary    is 'Tóm tắt plan do server tính: bias, conf, setup, target, flip, price (giá 9:29 ET), zone...';

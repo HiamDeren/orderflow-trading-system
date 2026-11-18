@@ -7,6 +7,7 @@ Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 - Bỏ `public`: bảng chuyển thành `trading.trade_plans`, hàm trigger thành `util.touch_updated_at()`; `id` đổi từ bigint identity sang `uuid`. Chép dòng plan 2026-11-17 sang (khớp md5).
 - `api/plan.js` gửi `Accept-Profile` / `Content-Profile: trading`; `vercel.json` đặt function ở region `sin1` (Singapore) cho gần database.
 - Vercel: cập nhật `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` sang project mới.
+- Deren đổi `created_at` / `updated_at` sang `timestamp` (không tz). Đặt lại default `now() at time zone 'utc'` (đổi kiểu làm mất default trong khi cột NOT NULL), trigger ghi giờ UTC; trang plan thêm `Z` khi hiển thị `updated_at`.
 
 ## 2026-11-17 · Plan tự động và chuẩn bị chuyển web app
 - Tạo lại bảng `trade_plans` (đang trống): bỏ cột `price`, thứ tự cột `id, created_at, updated_at, trade_date, symbol, summary, plan_text, image_path, payload`, comment từng cột, thu quyền anon/authenticated; `api/plan.js` không ghi / đọc `price` nữa.

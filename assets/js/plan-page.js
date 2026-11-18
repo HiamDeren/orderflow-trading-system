@@ -165,7 +165,8 @@ async function fetchLatest(){
     if(r.status===404){ msg("Chưa có plan nào trên web. Bấm gửi trong indicator trước."); return; }
     if(!r.ok || !j.payload){ msg("Không lấy được plan: "+esc(j.error||r.status)); return; }
     const txt=JSON.stringify(j.payload); $("#b-json").value=txt; importAtas(txt);
-    const when=j.updated_at?new Date(j.updated_at).toLocaleString("vi-VN"):"";
+    // updated_at là timestamp (không tz) lưu giờ UTC: thêm "Z" để trình duyệt không hiểu nhầm thành giờ máy.
+    const ts=String(j.updated_at||""), when=ts?new Date(/(Z|[+-]\d\d:?\d\d)$/i.test(ts)?ts:ts+"Z").toLocaleString("vi-VN"):"";
     msg(`Đã lấy plan ${esc(j.trade_date)} · ${esc(j.symbol)} (gửi lúc ${esc(when)}).`+(j.image_url?` <a href="${esc(j.image_url)}" target="_blank" rel="noopener">Mở ảnh plan đã lưu</a> (link hết hạn sau 1 giờ).`:""));
   }catch(e){ msg("Lỗi mạng khi gọi /api/plan. Trang này phải mở trên site, không chạy được trong file tải về."); }
 }

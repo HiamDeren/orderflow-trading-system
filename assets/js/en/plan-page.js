@@ -165,7 +165,8 @@ async function fetchLatest(){
     if(r.status===404){ msg("No plan on the web yet. Press send in the indicator first."); return; }
     if(!r.ok || !j.payload){ msg("Could not load the plan: "+esc(j.error||r.status)); return; }
     const txt=JSON.stringify(j.payload); $("#b-json").value=txt; importAtas(txt);
-    const when=j.updated_at?new Date(j.updated_at).toLocaleString("en-GB"):"";
+    // updated_at is a timestamp (no tz) stored in UTC: append "Z" so the browser does not read it as local time.
+    const ts=String(j.updated_at||""), when=ts?new Date(/(Z|[+-]\d\d:?\d\d)$/i.test(ts)?ts:ts+"Z").toLocaleString("en-GB"):"";
     msg(`Loaded plan ${esc(j.trade_date)} · ${esc(j.symbol)} (sent at ${esc(when)}).`+(j.image_url?` <a href="${esc(j.image_url)}" target="_blank" rel="noopener">Open the saved plan image</a> (link expires in 1 hour).`:""));
   }catch(e){ msg("Network error calling /api/plan. This page must be opened on the site, not from a downloaded file."); }
 }
