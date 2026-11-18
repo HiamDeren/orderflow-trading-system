@@ -59,7 +59,7 @@ Bản thiết kế (canvas, 8 màn hình + 1 bảng trạng thái): https://clau
 - [ ] **Dashboard** (trang mặc định, một màn hình không phải cuộn): đồng hồ ET / VN, timeline phiên 04:00–16:00 ET, card plan hôm nay, tin USD hôm nay + dải 5 ngày trong tuần, nhắc journal, ô Options sắp có.
   - Chấm tin trên timeline lấy từ cùng dữ liệu lịch, ô "Chỉ tin tác động cao" lọc cả timeline (không vẽ cố định).
 - [ ] **Calendar** (trang riêng): lịch tháng (chấm màu theo tin mạnh nhất trong ngày, ngày chưa có dữ liệu để xám) + danh sách tin của ngày chọn (giờ ET / VN, mức tác động, Thực tế / Dự báo / Trước, đánh dấu tin trong NY AM).
-  - **Chờ Deren chọn:** (1) không lưu, chỉ có tuần hiện tại; hoặc (2) bảng `trading.econ_events` + cron Vercel lưu mỗi tuần để xem lại tuần cũ và đối chiếu với journal / PnL.
+  - Chốt (D37): chỉ gọi API phía server, cache ngắn (~15 phút), **không lưu database**. Lịch chỉ có tuần hiện tại, tuần đã qua để xám.
 - [ ] **Trạng thái trống / lỗi** (artboard "Trạng thái trống / lỗi" trên canvas): chưa có plan trước / sau 09:29 ET, lịch tin lỗi có / không có cache, gửi plan lỗi một phần (502), ngày không có plan, journal ngày No Trade, đăng nhập bị từ chối.
 - [ ] **Plan Studio** (đổi tên từ Plan Builder / Plan Desk): gửi plan bằng ATAS X hoặc dán JSON (cùng `/api/plan`), hiện 5 bước kết quả.
 - [ ] **Plan Studio · lịch sử theo ngày (làm sau):** lịch tháng đánh dấu ngày có plan (chấm màu theo bias), bấm ngày → xem lại plan + ảnh của ngày đó.
