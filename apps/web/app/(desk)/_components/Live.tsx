@@ -79,7 +79,7 @@ export function Timeline({ initial, events, today }: { initial: number; events: 
         <div className="tl-win" style={{ left: pos(SESSION_START), width: `${(120 / SPAN) * 100}%` }} />
         {showNow && <div className="tl-now" style={{ left: pos(et.minutes) }} suppressHydrationWarning />}
         {events.map((e) => (
-          <div key={e.id} className={"tl-ev imp-" + e.impact} style={{ left: pos(e.minutes) }} title={e.title} />
+          <div key={e.id} className={"tl-ev imp-" + e.impact} style={{ left: pos(e.minutes), zIndex: e.impact === "High" ? 3 : e.impact === "Medium" ? 2 : 1 }} title={e.title} />
         ))}
       </div>
       <div className="tl-ticks">
@@ -90,8 +90,9 @@ export function Timeline({ initial, events, today }: { initial: number; events: 
       <div className="legend">
         <span><span aria-hidden="true" style={{ width: 10, height: 10, borderRadius: 2, background: "#232a33" }} />OVN / pre-market</span>
         <span><span aria-hidden="true" style={{ width: 10, height: 10, borderRadius: 2, background: "var(--accent-bg)", boxShadow: "inset 0 0 0 1px var(--accent)" }} />NY AM</span>
-        <span><span aria-hidden="true" className="dot imp-Cao" />Tin tác động cao</span>
-        <span><span aria-hidden="true" className="dot imp-Vừa" />Tin vừa</span>
+        <span><span aria-hidden="true" className="dot imp-High" />Tin cao</span>
+        <span><span aria-hidden="true" className="dot imp-Medium" />Tin vừa</span>
+        <span><span aria-hidden="true" className="dot imp-Low" />Tin thấp</span>
         <span><span aria-hidden="true" style={{ width: 2, height: 12, background: "var(--text)" }} />Bây giờ</span>
       </div>
     </section>

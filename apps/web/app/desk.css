@@ -155,10 +155,26 @@ table.t td .input { min-height: 32px; width: 100%; min-width: 64px; padding: 0 8
 .ev .bar { width: 4px; align-self: stretch; border-radius: 2px; flex: none; }
 .ev .name { flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .ev .nums { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
-.imp-Cao { background: var(--short); }
-.imp-Vừa { background: var(--muted); }
-.imp-Thấp { background: #6f7885; }
-.imp-Nghỉ { background: var(--ghost); }
+/* Màu mức tác động theo kiểu ForexFactory: đỏ / cam / vàng / xám (khác cả độ sáng) */
+:root { --imp-high: #e5534b; --imp-medium: #f0883e; --imp-low: #e3c14d; --imp-holiday: #8a94a1; }
+.imp-High { background: var(--imp-high); }
+.imp-Medium { background: var(--imp-medium); }
+.imp-Low { background: var(--imp-low); }
+.imp-Holiday { background: var(--imp-holiday); }
+.imp-text { font-size: 11px; }
+.imp-t-High { color: var(--imp-high); }
+.imp-t-Medium { color: var(--imp-medium); }
+.imp-t-Low { color: #c9ab4a; }
+.imp-t-Holiday { color: var(--dim); }
+.imp-sq { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.ev .cur { font-size: 11px; font-weight: 600; color: var(--text-2); background: var(--panel-3); border-radius: 4px; padding: 2px 6px; flex: none; }
+.filter { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.filter legend { display: flex; align-items: center; gap: 10px; padding: 0; margin-bottom: 10px; }
+.link { background: none; border: 0; padding: 0; color: var(--accent); font-size: 12px; cursor: pointer; }
+.link:hover { color: var(--accent-hi); text-decoration: underline; }
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 0; border-radius: 8px; background: var(--panel-2); color: var(--muted); box-shadow: inset 0 0 0 1px var(--line); font-size: 13px; font-weight: 600; cursor: pointer; }
+.chip:hover { color: var(--text); }
+.chip.on { background: var(--accent-bg); color: #f1e4cc; box-shadow: inset 0 0 0 1px var(--accent); }
 
 /* ---------- lịch ---------- */
 .cal-head, .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
@@ -207,6 +223,13 @@ table.t td .input { min-height: 32px; width: 100%; min-width: 64px; padding: 0 8
 .login-card { flex: 1 1 340px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 32px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 24px 60px rgba(0, 0, 0, .45); }
 .facts > div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line-2); font-size: 14px; }
 .facts > div:last-child { border-bottom: 0; }
+
+/* Desktop: sidebar đứng yên, chỉ vùng nội dung cuộn */
+@media (min-width: 721px) {
+  .shell { height: 100vh; height: 100dvh; overflow: hidden; flex-wrap: nowrap; }
+  .side { flex: 0 0 232px; height: 100%; overflow-y: auto; }
+  .main { height: 100%; overflow-y: auto; overscroll-behavior: contain; }
+}
 
 @media (max-width: 720px) {
   .main { padding: 20px 16px 32px; }

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { PREFS_COOKIE, matches, parsePrefs } from "@/lib/econ-prefs";
 import { errText } from "@/lib/db";
 import { ECON_SOURCE_PAGE, getEconWeek, topImpact, type EconEvent } from "@/lib/econ";
 import { getDay } from "@/lib/journal";
@@ -41,16 +43,18 @@ export default async function DashboardPage() {
   const prevJournal = prevPlan ? await safe(getDay(prevPlan.trade_date)) : null;
   const needRecap = !!prevPlan && !!prevJournal?.ok && !prevJournal.v;
 
-  const todayEvents = econ.events.filter((e) => e.dateEt === today);
+  const prefs = parsePrefs((await cookies()).get(PREFS_COOKIE)?.value);
+  const shown = econ.events.filter((e) => matches(prefs, e));
+  const todayEvents = shown.filter((e) => e.dateEt === today);
   const week = weekDates(today).map((d) => {
-    const list = econ.events.filter((e) => e.dateEt === d);
+    const list = shown.filter((e) => e.dateEt === d);
     return { d, list, top: topImpact(list) };
   });
   const tl = todayEvents
-    .filter((e) => !e.allDay && e.impact !== "Thấp")
+    .filter((e) => !e.allDay)
     .map((e) => {
       const [h, m] = e.timeEt.split(":").map(Number);
-      return { id: e.id, minutes: h * 60 + m, impact: e.impact, title: `${e.timeEt} · ${e.title}` };
+      return { id: e.id, minutes: h * 60 + m, impact: e.impact, title: `${e.timeEt} · ${e.country} · ${e.title}` };
     });
 
   return (
@@ -87,7 +91,7 @@ export default async function DashboardPage() {
 
         <section className="card" aria-label="Tin hôm nay" style={{ flex: "1 1 340px" }}>
           <div className="row">
-            <span className="lbl">Tin USD hôm nay</span>
+            <span className="lbl">Tin hôm nay · {prefs.cur.length === 9 ? "mọi currency" : prefs.cur.join(", ") || "chưa chọn currency"}</span>
             <Link href="/calendar" className="small" style={{ fontWeight: 600 }}>Mở Calendar</Link>
           </div>
           {!econ.ok ? (
@@ -100,7 +104,7 @@ export default async function DashboardPage() {
               {todayEvents.map((e: EconEvent) => <EventRow key={e.id} e={e} showNums={false} />)}
             </div>
           ) : (
-            <p className="small dim">{isWeekday(today) ? "Không có tin USD hôm nay." : "Cuối tuần, không có tin."}</p>
+            <p className="small dim">{isWeekday(today) ? "Không có tin khớp bộ lọc hôm nay (đổi bộ lọc ở Calendar)." : "Cuối tuần, không có tin."}</p>
           )}
           <div className="stack" style={{ gap: 8, borderTop: "1px solid var(--line)", paddingTop: 12 }}>
             <span className="lbl">Tuần này</span>

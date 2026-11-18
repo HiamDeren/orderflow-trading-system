@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
+import { PREFS_COOKIE, parsePrefs } from "@/lib/econ-prefs";
 import { ECON_SOURCE_PAGE, getEconWeek } from "@/lib/econ";
 import { DATE_RE, etNow } from "@/lib/time";
 import CalendarView from "./CalendarView";
@@ -10,6 +12,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
   const { day } = await searchParams;
   const today = etNow().date;
   const econ = await getEconWeek();
+  const prefs = parsePrefs((await cookies()).get(PREFS_COOKIE)?.value);
   const dates = [...new Set(econ.events.map((e) => e.dateEt))];
   const initialDay = day && DATE_RE.test(day) && dates.includes(day) ? day : dates.includes(today) ? today : dates[0] || today;
   const fetched = econ.fetchedAt ? new Date(econ.fetchedAt) : null;
@@ -31,7 +34,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
         </span>
       </header>
       {econ.ok ? (
-        <CalendarView events={econ.events} today={today} initialDay={initialDay} />
+        <CalendarView events={econ.events} today={today} initialDay={initialDay} initialPrefs={prefs} />
       ) : (
         <section className="card" style={{ maxWidth: 640 }}>
           <span className="lbl">Calendar · API lỗi</span>

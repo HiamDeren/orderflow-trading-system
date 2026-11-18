@@ -3,6 +3,7 @@
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
 ## 2026-11-18 · Code dashboard Deren Desk
+- Chỉnh sau test preview: sidebar đứng yên, chỉ vùng nội dung cuộn (desktop); lịch kinh tế màu theo ForexFactory (đỏ / cam / vàng / xám), lấy mọi currency, bộ lọc Mức tác động + Currencies lưu trong cookie `desk_econ` dùng chung Calendar và Dashboard (mặc định USD, mọi mức).
 - Next.js: `app/(desk)/` (dashboard, calendar, studio, journal, pnl, knowledge, profile), `app/login`, `app/auth/*`, `proxy.ts` (Next 16), `app/desk.css`. Thư viện mới: `@supabase/ssr` 0.12.7, `@supabase/supabase-js` 2.119.0.
 - Đăng nhập Discord một người (D38). `/api/plan` nhận thêm phiên đăng nhập (ngoài `PLAN_TOKEN`) và `?month=`; token sai vẫn 401.
 - Migration `20261118075449_journal_days_trades`, test trên Postgres 16 local (check constraint, cascade, anon bị chặn) rồi áp lên Supabase production; advisor chỉ còn INFO "RLS bật, không policy" (cố ý, chỉ server đọc ghi).

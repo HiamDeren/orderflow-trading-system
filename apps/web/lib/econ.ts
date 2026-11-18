@@ -1,13 +1,15 @@
 // Lịch kinh tế: chỉ gọi API phía server, cache ~15 phút, không lưu database (D37).
 // Nguồn mặc định: feed JSON tuần hiện tại của ForexFactory (faireconomy). Đổi nguồn bằng biến ECON_CALENDAR_URL.
-// Mỗi phần tử feed: { title, country, date: "2026-11-18T08:30:00-05:00", impact: High|Medium|Low|Holiday, forecast, previous, actual? }
+// Mỗi phần tử feed: { title, country: "USD", date: "2026-11-18T08:30:00-05:00", impact: High|Medium|Low|Holiday, forecast, previous }
+// Lấy đủ mọi currency; lọc currency / mức tác động ở giao diện (cookie desk_econ, lib/econ-prefs.ts).
+import { IMPACT_RANK, type Impact } from "@/lib/econ-prefs";
 import { TZ_ET, TZ_VN, etDateOf, hhmm, inSession } from "@/lib/time";
 
+export type { Impact } from "@/lib/econ-prefs";
 export const ECON_SOURCE_PAGE = "https://www.forexfactory.com/calendar";
 const DEFAULT_URL = "https://nfs.faireconomy.media/ff_calendar_thisweek.json";
 const REVALIDATE = 900;
 
-export type Impact = "Cao" | "Vừa" | "Thấp" | "Nghỉ";
 export type EconEvent = {
   id: string;
   title: string;
@@ -25,14 +27,12 @@ export type EconEvent = {
 };
 export type EconWeek = { ok: boolean; events: EconEvent[]; fetchedAt: string | null; error?: string };
 
-const IMPACT: Record<string, Impact> = { high: "Cao", medium: "Vừa", low: "Thấp", holiday: "Nghỉ" };
-export const IMPACT_RANK: Record<Impact, number> = { Cao: 3, Vừa: 2, Thấp: 1, Nghỉ: 0 };
+const IMPACT: Record<string, Impact> = { high: "High", medium: "Medium", low: "Low", holiday: "Holiday" };
 
 type Raw = { title?: string; country?: string; date?: string; impact?: string; forecast?: string; previous?: string; actual?: string };
 
 export async function getEconWeek(): Promise<EconWeek> {
   const src = process.env.ECON_CALENDAR_URL || DEFAULT_URL;
-  const countries = (process.env.ECON_COUNTRIES || "USD").split(",").map((s) => s.trim().toUpperCase()).filter(Boolean);
   try {
     const r = await fetch(src, { next: { revalidate: REVALIDATE }, headers: { Accept: "application/json" } });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
@@ -40,18 +40,16 @@ export async function getEconWeek(): Promise<EconWeek> {
     if (!Array.isArray(raw)) throw new Error("dữ liệu không phải danh sách");
     const events: EconEvent[] = [];
     raw.forEach((e, i) => {
-      const country = String(e.country || "").toUpperCase();
-      if (countries.length && !countries.includes(country)) return;
       const ts = Date.parse(String(e.date || ""));
       if (!Number.isFinite(ts)) return;
-      const impact = IMPACT[String(e.impact || "").toLowerCase()] || "Thấp";
+      const impact = IMPACT[String(e.impact || "").toLowerCase()] || "Low";
       const timeEt = hhmm(ts, TZ_ET);
-      const allDay = impact === "Nghỉ" || timeEt === "00:00";
+      const allDay = impact === "Holiday" || timeEt === "00:00";
       const [h, m] = timeEt.split(":").map(Number);
       events.push({
         id: `${ts}-${i}`,
         title: String(e.title || "").trim() || "(không tên)",
-        country,
+        country: String(e.country || "").toUpperCase(),
         impact,
         ts,
         dateEt: etDateOf(ts),
@@ -72,7 +70,7 @@ export async function getEconWeek(): Promise<EconWeek> {
   }
 }
 
-export function topImpact(list: EconEvent[]): Impact | null {
+export function topImpact(list: { impact: Impact }[]): Impact | null {
   let best: Impact | null = null;
   for (const e of list) if (!best || IMPACT_RANK[e.impact] > IMPACT_RANK[best]) best = e.impact;
   return best;

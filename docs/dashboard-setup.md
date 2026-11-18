@@ -32,7 +32,6 @@ Chỉ **một** tài khoản Discord (ID trong `OWNER_DISCORD_ID`) vào được
 | `OWNER_DISCORD_ID` | Discord User ID của Deren | như trên |
 | `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `PLAN_TOKEN`, `DISCORD_WEBHOOK_TRADE_PLAN` | đã có | giữ nguyên |
 | `ECON_CALENDAR_URL` | (tuỳ chọn) nguồn lịch khác | mặc định feed tuần hiện tại của ForexFactory |
-| `ECON_COUNTRIES` | (tuỳ chọn) `USD` | mặc định `USD` |
 
 Biến `NEXT_PUBLIC_*` được nhúng lúc build: đổi xong phải **Redeploy**.
 
