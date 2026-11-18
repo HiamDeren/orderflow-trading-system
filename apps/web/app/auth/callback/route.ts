@@ -1,4 +1,5 @@
 // GET /auth/callback?code=... → đổi code lấy phiên, chỉ giữ lại nếu là tài khoản Discord của chủ sở hữu.
+import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 import { OWNER_FLAG, deleteUser, isOwnerUser, markOwner } from "@/lib/auth";
 import { ownerDiscordId } from "@/lib/env";
@@ -13,7 +14,9 @@ function safeNext(v: string | null) {
 export async function GET(req: NextRequest) {
   const origin = req.nextUrl.origin;
   const code = req.nextUrl.searchParams.get("code");
-  const next = safeNext(req.nextUrl.searchParams.get("next"));
+  const jar = await cookies();
+  const next = safeNext(jar.get("desk_next")?.value ?? null);
+  jar.delete({ name: "desk_next", path: "/auth" });
   if (!code) return NextResponse.redirect(`${origin}/login?e=code`);
 
   const sb = await supabaseServer();

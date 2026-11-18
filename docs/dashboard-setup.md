@@ -17,10 +17,10 @@ Chỉ **một** tài khoản Discord (ID trong `OWNER_DISCORD_ID`) vào được
 1. Supabase → project **Personal Trading Dashboard** → **Authentication → Sign In / Providers → Discord**: bật, dán Client ID + Client Secret, lưu.
 2. **Authentication → URL Configuration**:
    - **Site URL**: `https://orderflow-trading-system.vercel.app`
-   - **Redirect URLs** thêm:
+   - **Redirect URLs** thêm (Supabase so khớp cả chuỗi, app gọi đúng `<origin>/auth/callback` không kèm query):
      - `https://orderflow-trading-system.vercel.app/auth/callback`
-     - `https://orderflow-trading-system-*-derenluus-projects.vercel.app/auth/callback` (preview)
-     - `http://localhost:3000/auth/callback` (chạy local)
+     - `https://orderflow-trading-system-git-development-derenluus-projects.vercel.app/auth/callback` (link cố định của nhánh `development`; không dùng `*` cho chặt hơn, nên test preview qua link này)
+     - `http://localhost:3000/auth/callback` (chỉ khi chạy local)
 3. **Project Settings → API Keys**: copy **Publishable key** (`sb_publishable_...`). Key này an toàn cho trình duyệt.
 
 ## 3. Biến môi trường trên Vercel
