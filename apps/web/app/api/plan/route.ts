@@ -39,6 +39,11 @@ function json(body: unknown, status = 200, extra: Record<string, string> = {}) {
   return Response.json(body, { status, headers: { "Cache-Control": "no-store", ...extra } });
 }
 
+// Log từng bước cho Vercel Runtime Logs (không ghi token, key, webhook).
+function log(level: "info" | "warn" | "error", msg: string, data: Record<string, unknown> = {}) {
+  console[level](`[api/plan] ${msg}`, JSON.stringify(data));
+}
+
 function errMsg(e: unknown) {
   return String((e as Error)?.message ?? e);
 }
@@ -103,10 +108,14 @@ function setup(req: Request) {
   const key = env.SUPABASE_SERVICE_KEY || env.SUPABASE_SECRET_KEY || env.SUPABASE_SERVICE_ROLE_KEY;
   const planToken = env.PLAN_TOKEN;
   if (!url || !key || !planToken) {
+    log("error", "thiếu biến môi trường", { url: !!url, key: !!key, planToken: !!planToken, env: process.env.VERCEL_ENV });
     return { error: json({ error: "Thiếu biến môi trường SUPABASE_URL / SUPABASE_SERVICE_KEY / PLAN_TOKEN" }, 500) };
   }
   const token = String(req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "").trim();
-  if (!safeEqual(token, planToken)) return { error: json({ error: "unauthorized" }, 401) };
+  if (!safeEqual(token, planToken)) {
+    log("warn", "401 token sai", { method: req.method, hasToken: !!token, tokenLen: token.length });
+    return { error: json({ error: "unauthorized" }, 401) };
+  }
 
   const h = supaHeaders(key);
   const hj = { ...h, "Content-Type": "application/json" };
@@ -130,6 +139,7 @@ export async function POST(req: Request) {
     let p: Payload | null = null;
     try { p = JSON.parse(await req.text()); } catch { p = null; }
     if (!p || typeof p !== "object" || !DATE_RE.test(p.date || "") || !p.prth || !p.ovn) {
+      log("warn", "400 payload thiếu trường", { date: p && p.date, prth: !!(p && p.prth), ovn: !!(p && p.ovn) });
       return json({ error: "Payload thiếu date (yyyy-MM-dd), prth hoặc ovn" }, 400);
     }
     const date = p.date as string;
@@ -183,9 +193,11 @@ export async function POST(req: Request) {
         out.discord = { error: errMsg(e) };
       }
     }
+    log(dbError ? "error" : "info", "POST xong", { date, symbol, db: dbError || "ok", image: out.image, discord: out.discord, notify: p.notify !== false, hook: !!c.hook });
     if (dbError) return json({ ...dbError, ...out }, 502);
     return json(out);
   } catch (e) {
+    log("error", "POST lỗi không bắt được", { error: errMsg(e) });
     return json({ error: errMsg(e) }, 500);
   }
 }
@@ -201,7 +213,11 @@ export async function GET(req: Request) {
       `${c.rest}?select=trade_date,symbol,created_at,updated_at,summary,plan_text,image_path,payload${filter}&order=trade_date.desc,updated_at.desc&limit=1`,
       { headers: c.hr, cache: "no-store" },
     );
-    if (!r.ok) return json({ error: "supabase", status: r.status, detail: (await r.text()).slice(0, 300) }, 502);
+    if (!r.ok) {
+      const detail = (await r.text()).slice(0, 300);
+      log("error", "GET supabase lỗi", { status: r.status, detail });
+      return json({ error: "supabase", status: r.status, detail }, 502);
+    }
     const rows = (await r.json()) as Json[];
     if (!rows.length) return json({ error: "Chưa có plan" }, 404);
     const row = rows[0];

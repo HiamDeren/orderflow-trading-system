@@ -131,6 +131,7 @@ function initB(){
   ["b-rvah","b-rval","b-rpoc","b-rhi","b-rlo","b-rcl"].forEach(id=>$("#"+id).addEventListener("change", ()=>{ bTouched=false; }));
   $("#b-import").addEventListener("click", ()=>importAtas($("#b-json").value));
   $("#b-fetch").addEventListener("click", fetchLatest);
+  $("#b-send").addEventListener("click", sendPlan);
   $("#b-token").addEventListener("click", ()=>{ const t=prompt("Paste PLAN_TOKEN (stored in this browser only, leave empty to clear)"); if(t===null) return; store.set("ofs.api.token", t.trim()||null); $("#b-imsg").textContent = t.trim()?"Token saved.":"Token cleared."; });
   $("#b-view").addEventListener("change", build);
   $("#b-example2").addEventListener("click", ()=>{ const t=JSON.stringify(SAMPLE_PLAN); $("#b-json").value=t; importAtas(t); });
@@ -152,6 +153,25 @@ async function copyPlanImage(){
   }catch(e){
     try{ download(await p, `plan_${$("#b-date").value||"nq"}.png`); msg("The browser blocked image copy, so the PNG was downloaded instead."); }catch(e2){ msg("Could not create the plan image."); }
   }
+}
+
+async function sendPlan(){
+  const msg=t=>{ $("#b-imsg").innerHTML=t; };
+  let J; try{ J=JSON.parse(String($("#b-json").value||"").trim()); }catch(e){ msg("Invalid JSON. Paste the ATAS JSON into the box above first."); return; }
+  if(!J || !J.date || !J.prth || !J.ovn){ msg("JSON is missing date, prth or ovn."); return; }
+  let t=store.get("ofs.api.token",null);
+  if(!t){ t=(prompt("Paste PLAN_TOKEN (stored in this browser only)")||"").trim(); if(!t) return; store.set("ofs.api.token",t); }
+  J.notify = $("#b-send-dc").checked;
+  msg("Sending plan "+esc(J.date)+"…");
+  let r, j={};
+  try{ r=await fetch("/api/plan",{method:"POST",headers:{Authorization:"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify(J)}); j=await r.json().catch(()=>({})); }
+  catch(e){ msg("Network error calling /api/plan. This page must be opened on the site."); return; }
+  if(r.status===401){ store.set("ofs.api.token",null); msg("401: wrong token, or no token entered on this domain. Click again and paste the correct PLAN_TOKEN."); return; }
+  if(r.status===400){ msg("400: "+esc(j.error||"invalid payload")); return; }
+  if(r.status===500){ msg("500: "+esc(j.error||"server error")+(/SUPABASE_URL/.test(String(j.error||""))?" (this preview build has no Supabase environment variables; use the production site).":"")); return; }
+  const part=(name,o)=>{ if(o==null) return `<li>${name}: not run</li>`; if(o.error) return `<li>${name}: <b>error</b> ${esc(o.error)}</li>`; return `<li>${name}: OK${o.path?` · ${esc(o.path)} (${Math.round((o.bytes||0)/1024)} KB)`:""}</li>`; };
+  const db = r.status===502 ? `<li>Database: <b>error</b> ${esc(j.status)} ${esc(j.detail||"")}</li>` : `<li>Database: OK</li>`;
+  msg(`HTTP ${r.status} · plan ${esc(j.date||J.date)} · ${esc(j.symbol||"")}<ul class="clean small">${db}${part("Image (Storage)", j.image)}${J.notify?part("Discord", j.discord):"<li>Discord: not sent (box not ticked)</li>"}</ul>`);
 }
 async function fetchLatest(){
   const msg=t=>{ $("#b-imsg").innerHTML=t; };

@@ -131,6 +131,7 @@ function initB(){
   ["b-rvah","b-rval","b-rpoc","b-rhi","b-rlo","b-rcl"].forEach(id=>$("#"+id).addEventListener("change", ()=>{ bTouched=false; }));
   $("#b-import").addEventListener("click", ()=>importAtas($("#b-json").value));
   $("#b-fetch").addEventListener("click", fetchLatest);
+  $("#b-send").addEventListener("click", sendPlan);
   $("#b-token").addEventListener("click", ()=>{ const t=prompt("Dán PLAN_TOKEN (chỉ lưu trên trình duyệt này, để trống = xoá)"); if(t===null) return; store.set("ofs.api.token", t.trim()||null); $("#b-imsg").textContent = t.trim()?"Đã lưu token.":"Đã xoá token."; });
   $("#b-view").addEventListener("change", build);
   $("#b-example2").addEventListener("click", ()=>{ const t=JSON.stringify(SAMPLE_PLAN); $("#b-json").value=t; importAtas(t); });
@@ -152,6 +153,25 @@ async function copyPlanImage(){
   }catch(e){
     try{ download(await p, `plan_${$("#b-date").value||"nq"}.png`); msg("Trình duyệt chặn copy ảnh nên ảnh PNG đã được tải về."); }catch(e2){ msg("Không tạo được ảnh plan."); }
   }
+}
+/* Gửi JSON đang có trong ô "JSON từ ATAS" lên /api/plan (giống indicator ATAS gửi), hiện kết quả từng bước. */
+async function sendPlan(){
+  const msg=t=>{ $("#b-imsg").innerHTML=t; };
+  let J; try{ J=JSON.parse(String($("#b-json").value||"").trim()); }catch(e){ msg("JSON không hợp lệ. Dán JSON từ ATAS vào ô trên trước."); return; }
+  if(!J || !J.date || !J.prth || !J.ovn){ msg("JSON thiếu date, prth hoặc ovn."); return; }
+  let t=store.get("ofs.api.token",null);
+  if(!t){ t=(prompt("Dán PLAN_TOKEN (chỉ lưu trên trình duyệt này)")||"").trim(); if(!t) return; store.set("ofs.api.token",t); }
+  J.notify = $("#b-send-dc").checked;
+  msg("Đang gửi plan "+esc(J.date)+"…");
+  let r, j={};
+  try{ r=await fetch("/api/plan",{method:"POST",headers:{Authorization:"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify(J)}); j=await r.json().catch(()=>({})); }
+  catch(e){ msg("Lỗi mạng khi gọi /api/plan. Trang này phải mở trên site."); return; }
+  if(r.status===401){ store.set("ofs.api.token",null); msg("401: token sai hoặc chưa nhập trên domain này. Bấm lại và dán PLAN_TOKEN đúng."); return; }
+  if(r.status===400){ msg("400: "+esc(j.error||"payload không hợp lệ")); return; }
+  if(r.status===500){ msg("500: "+esc(j.error||"lỗi server")+(/SUPABASE_URL/.test(String(j.error||""))?" (bản preview chưa có biến môi trường Supabase; dùng site production).":"")); return; }
+  const part=(name,o)=>{ if(o==null) return `<li>${name}: không chạy</li>`; if(o.error) return `<li>${name}: <b>lỗi</b> ${esc(o.error)}</li>`; return `<li>${name}: OK${o.path?` · ${esc(o.path)} (${Math.round((o.bytes||0)/1024)} KB)`:""}</li>`; };
+  const db = r.status===502 ? `<li>Database: <b>lỗi</b> ${esc(j.status)} ${esc(j.detail||"")}</li>` : `<li>Database: OK</li>`;
+  msg(`HTTP ${r.status} · plan ${esc(j.date||J.date)} · ${esc(j.symbol||"")}<ul class="clean small">${db}${part("Ảnh (Storage)", j.image)}${J.notify?part("Discord", j.discord):"<li>Discord: không gửi (chưa tick)</li>"}</ul>`);
 }
 async function fetchLatest(){
   const msg=t=>{ $("#b-imsg").innerHTML=t; };
