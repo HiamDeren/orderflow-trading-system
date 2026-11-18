@@ -49,10 +49,9 @@ function errMsg(e: unknown) {
 }
 
 function supaHeaders(key: string): Record<string, string> {
-  const h: Record<string, string> = { apikey: key };
-  // Key dạng JWT cũ (service_role, bắt đầu "eyJ") gửi thêm Authorization. Key mới "sb_secret_..." chỉ cần apikey.
-  if (key.startsWith("eyJ")) h.Authorization = "Bearer " + key;
-  return h;
+  // Gửi key ở cả apikey lẫn Authorization như supabase-js. Với key mới "sb_secret_...", cổng API của Supabase
+  // thay "Bearer sb_..." bằng JWT service_role nội bộ trước khi tới PostgREST / Storage; key JWT cũ thì dùng thẳng.
+  return { apikey: key, Authorization: "Bearer " + key };
 }
 
 function safeEqual(a: string, b: string | undefined) {

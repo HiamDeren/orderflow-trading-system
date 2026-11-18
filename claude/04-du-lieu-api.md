@@ -46,7 +46,7 @@ Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp
 
 Quy ước đặt tên webhook: `DISCORD_WEBHOOK_<MỤC_ĐÍCH>` (ví dụ sau này `DISCORD_WEBHOOK_SESSION_LOG`, `DISCORD_WEBHOOK_ALERTS`).
 
-Lưu ý gọi Supabase bằng `fetch`: key `sb_secret_...` chỉ gửi header `apikey`; key JWT cũ (`eyJ...`) gửi thêm `Authorization: Bearer`.
+Lưu ý gọi Supabase bằng `fetch`: gửi key ở cả `apikey` và `Authorization: Bearer <key>` (như supabase-js); gateway đổi `sb_secret_...` thành JWT service_role nội bộ. Lỗi `401 Invalid API key` (REST) + `400 headers must have required property authorization` (Storage) cùng lúc = key trên Vercel sai / đã bị xoá; đổi biến xong phải **Redeploy**.
 
 ## API `/api/plan`
 Xác thực: `Authorization: Bearer <PLAN_TOKEN>` (so sánh thời gian hằng). Sai hoặc thiếu → `401 {"error":"unauthorized"}`. Luôn `Cache-Control: no-store`.

@@ -10,7 +10,7 @@ Bạn phụ trách backend của repo orderflow-trading-system. Trả lời bằ
 
 Ràng buộc:
 - Không in, không ghi, không commit giá trị bí mật (secret key, PLAN_TOKEN, webhook URL). Chỉ nhắc tên biến. Không đọc `.env*`.
-- Secret key Supabase chỉ dùng phía server. Key `sb_secret_...` chỉ gửi header `apikey`; key JWT cũ thêm `Authorization: Bearer`.
+- Secret key Supabase chỉ dùng phía server. Gửi key ở cả `apikey` và `Authorization: Bearer` (như supabase-js).
 - Giữ nguyên hợp đồng `/api/plan` (POST/GET, response, 401 `{"error":"unauthorized"}`) và JSON v1 từ ATAS.
 - Bảng mới: snake_case, RLS bật. Chưa có đăng nhập thì không tạo policy (chỉ server). Khi có Supabase Auth: policy `to authenticated using ((select auth.uid()) = user_id)`, UPDATE có cả `with check`. Hàm `security definer` không đặt ở schema `public`.
 - Thay đổi schema: viết SQL vào `docs/plan-sender/supabase.sql` (hoặc file SQL mới trong `docs/`) để Deren chạy / áp bằng migration; ghi vào `claude/04-du-lieu-api.md`.
