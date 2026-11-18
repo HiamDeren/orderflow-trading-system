@@ -36,3 +36,4 @@ Mỗi mục: đã chọn gì, vì sao, và khi nào nên xem lại. Muốn đổ
 | D30 | 2026-11-18 | Schema chỉ đổi qua file `supabase/migrations/`, không sửa tay trên dashboard | Repo và database luôn khớp; sửa tay từng làm mất default cột | — |
 | D31 | 2026-11-18 | Nhánh `production` (Vercel production) và `development` (nhánh mặc định, Vercel preview) thay cho `main`; production chỉ nhận merge qua PR | Deren muốn tên nhánh nói rõ môi trường | Khi cần thêm staging |
 | D32 | 2026-11-18 | Trang cũ đặt trong `apps/web/public/` (không phải `public/legacy/`), URL sạch bằng rewrites; plan-core JS nạp vào route handler qua `lib/plan-core.ts` | Giữ nguyên URL, đường dẫn tương đối `assets/...`, engine một nguồn | Khi port plan-core sang `packages/plan-core` |
+| D33 | 2026-11-18 | Cột thời gian quay lại `timestamptz` (thay D29) | Supabase / Postgres khuyến nghị; tránh lệch giờ khi client đọc | — |

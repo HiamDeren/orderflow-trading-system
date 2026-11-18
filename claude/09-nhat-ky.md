@@ -2,6 +2,10 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-18 · Timestamptz
+- Deren đổi lại cột thời gian sang `timestamptz` trên dashboard (theo khuyến nghị Supabase); việc đổi kiểu lại làm mất default `NOT NULL` → migration `trade_plans_timestamptz_defaults` đặt lại default `now()`, trigger `now()`. Bảng đang trống (dòng 17/11 chép từ Sydney không còn); project Sydney đã xoá.
+- Bài học: đổi schema trên dashboard dễ làm mất default; luôn đổi bằng file migration (D30).
+
 ## 2026-11-18 · Monorepo Next.js + nhánh production / development
 - Chốt stack (D26–D30). Monorepo pnpm: `apps/web` (Next.js 16, TypeScript), `supabase/` (config + 3 migration khớp version trên production, kiểm bằng Postgres local).
 - Site tĩnh chuyển vào `apps/web/public/`; `next.config.ts` giữ URL sạch, redirect `.html`, `/testing`, `/overlap`, header cache. `vercel.json` gốc bỏ, `apps/web/vercel.json` chỉ còn region `sin1`.

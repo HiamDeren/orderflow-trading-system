@@ -5,7 +5,7 @@
 - Truy cập chỉ từ server (Vercel Function, region `sin1`) bằng **secret key**. Không có client nào dùng publishable / anon key.
 - **Mỗi nghiệp vụ một schema, không dùng `public`:** `trading` (trade plan; sau này journal, recap), `util` (hàm dùng chung, không expose). Nghiệp vụ mới (calendar, options, news...) tạo schema riêng theo cùng mẫu quyền.
 - Schema mới phải thêm vào **Project Settings → Data API → Exposed schemas** thì PostgREST mới thấy. Gọi REST: header `Accept-Profile: <schema>` khi đọc, `Content-Profile: <schema>` khi ghi.
-- Nguồn chuẩn schema: `supabase/migrations/` (version trùng lịch sử trên production); bản gộp để đọc: `docs/plan-sender/supabase.sql`. Migration đã áp trên project Singapore: `trading_schema_trade_plans`, `revoke_rls_auto_enable_execute` (thu quyền gọi `public.rls_auto_enable()` của anon / authenticated), `trade_plans_timestamp_utc_defaults` (Deren đổi cột thời gian sang `timestamp`; đặt lại default giờ UTC, trigger ghi giờ UTC).
+- Nguồn chuẩn schema: `supabase/migrations/` (version trùng lịch sử trên production); bản gộp để đọc: `docs/plan-sender/supabase.sql`. Migration đã áp trên project Singapore: `trading_schema_trade_plans`, `revoke_rls_auto_enable_execute` (thu quyền gọi `public.rls_auto_enable()` của anon / authenticated), `trade_plans_timestamp_utc_defaults` (tạm dùng `timestamp` UTC), `trade_plans_timestamptz_defaults` (đổi lại `timestamptz`, default `now()`, trigger `now()`).
 
 ### Bảng `trading.trade_plans`
 Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp md5). Mỗi cột có `comment` trong database.
@@ -13,8 +13,8 @@ Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp
 | # | Cột | Kiểu | Ghi chú |
 |---|---|---|---|
 | 1 | `id` | uuid PK, mặc định `gen_random_uuid()` | |
-| 2 | `created_at` | timestamp (UTC), mặc định `now() at time zone 'utc'` | lần gửi đầu tiên của ngày |
-| 3 | `updated_at` | timestamp (UTC), mặc định như trên | lần gửi gần nhất; trigger `trade_plans_touch` → `util.touch_updated_at()` (`search_path=''`) |
+| 2 | `created_at` | timestamptz, mặc định `now()` | lần gửi đầu tiên của ngày |
+| 3 | `updated_at` | timestamptz, mặc định `now()` | lần gửi gần nhất; trigger `trade_plans_touch` → `util.touch_updated_at()` (`search_path=''`) |
 | 4 | `trade_date` | date not null | ngày phiên trade (ET) |
 | 5 | `symbol` | text not null, mặc định `'NQ'` | ví dụ `NQZ6` |
 | 6 | `summary` | jsonb | server tính: `{date, location, prth, ovn, bias, conf, setup, target, distance, flip, price, zone}` để lọc / thống kê |
@@ -22,7 +22,7 @@ Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp
 | 8 | `image_path` | text | đường dẫn ảnh trong bucket |
 | 9 | `payload` | jsonb not null | JSON v1 nguyên bản từ indicator |
 
-- **Thời gian:** cột dùng `timestamp` không tz (Deren chọn 2026-11-18), quy ước luôn là giờ UTC. API trả chuỗi không có `Z`, client phải coi là UTC (trang plan thêm `Z` trước khi `new Date`). Ngày phiên vẫn là `trade_date` (giờ ET).
+- **Thời gian:** cột dùng `timestamptz` (D33, theo khuyến nghị Supabase). API trả chuỗi có offset (`+00:00`). Trang plan vẫn thêm `Z` nếu chuỗi thiếu offset (an toàn cho cả hai kiểu). Ngày phiên vẫn là `trade_date` (giờ ET).
 - Giá lúc 9:29 ET không có cột riêng: lấy ở `payload->>'price'` hoặc `summary->>'price'`.
 - Ràng buộc `trade_plans_trade_date_symbol_key unique (trade_date, symbol)`: gửi lại cùng ngày thì ghi đè (upsert).
 - RLS bật, **không có policy**; `anon` / `authenticated` không có quyền trên schema `trading` lẫn bảng; chỉ `service_role` (secret key) có `usage` + `select, insert, update, delete`. Default privileges của schema `trading` đã đặt sẵn để bảng mới tự theo mẫu này.

@@ -24,7 +24,7 @@ Cập nhật: 2026-11-18.
 
 ## Việc còn lại · dọn dẹp và an toàn
 - [x] Supabase: chuyển sang project Singapore, tách schema `trading` / `util`, `id` uuid (2026-11-18).
-- [ ] Supabase: xoá project Sydney (`njbeaswlwqweblvgvrlx`) sau khi API chạy ổn trên Singapore.
+- [x] Supabase: xoá project Sydney (Deren xoá 2026-11-18).
 - [x] Supabase: thu quyền `anon` / `authenticated` trên `trade_plans` (làm khi tạo lại bảng 2026-11-17).
 - [ ] Khi có nhiều API: đổi `PLAN_TOKEN` thành token chung (ví dụ `API_TOKEN`) hoặc chuyển sang đăng nhập.
 - [x] Artifact đổi tên "NQ Trade Plan · Composite × pRTH × OVN", dùng chung `plan-core.js`, nguồn trong `artifact/`.
