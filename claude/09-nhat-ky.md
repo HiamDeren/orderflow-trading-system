@@ -6,7 +6,7 @@ Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 - Giao diện: scrollbar mảnh, sidebar ghim / thu gọn (cookie `desk_side`), mobile có thanh trên + ngăn kéo, lưới Dashboard co về 1 cột dưới 1100 px.
 - VI / EN (cookie `desk_lang`, từ điển `lib/i18n-en.ts`), múi giờ hiển thị (cookie `desk_tz`); Calendar nhóm ngày theo múi giờ chọn. Giải thích lệch ngày FOMC: feed ForexFactory là giờ ET (14:00 ET Thứ 4), trang forexfactory.com xem ở VN hiện 02:00 Thứ 5.
 - Trade Plan (đổi tên), `/api/plan/image` + nút Copy ảnh; Journal có tab PnL Calendar; News / Earnings (Finnhub); bỏ thẻ Journal ở Dashboard.
-- Migration `20261118090014_trade_days_hub` (D39) test trên Postgres 16 local: backfill, trigger `day_id`, upsert kiểu production cũ, `save_journal`, tag n:n, anon bị chặn. Đã áp lên Supabase (version `20261118090014`). News / Earnings tạm ẩn theo ý Deren, làm sau.
+- Migration `20261118090014_trade_days_hub` (D39) test trên Postgres 16 local: backfill, trigger `day_id`, upsert kiểu production cũ, `save_journal`, tag n:n, anon bị chặn. Đã áp lên Supabase (version `20261118090014`). News / Earnings bật lại sau khi Deren thêm `FINNHUB_API_KEY`.
 
 ## 2026-11-18 · Code dashboard Deren Desk
 - Chỉnh sau test preview: sidebar đứng yên, chỉ vùng nội dung cuộn (desktop); lịch kinh tế màu theo ForexFactory (đỏ / cam / vàng / xám), lấy mọi currency, bộ lọc Mức tác động + Currencies lưu trong cookie `desk_econ` dùng chung Calendar và Dashboard (mặc định USD, mọi mức).
