@@ -139,7 +139,7 @@ export default async function DashboardPage() {
           ) : !news.ok ? (
             <p className="small short">{news.error}</p>
           ) : news.items.length ? (
-            <div className="news-list">{news.items.slice(0, 5).map((n) => <NewsRow key={n.id} n={n} now={nowMs} compact />)}</div>
+            <div className="news-list">{news.items.slice(0, 5).map((n) => <NewsRow key={n.id} n={n} now={nowMs} compact href={`/news?cat=general&id=${encodeURIComponent(n.id)}`} />)}</div>
           ) : (
             <p className="small dim">{t("Chưa có tin.")}</p>
           )}

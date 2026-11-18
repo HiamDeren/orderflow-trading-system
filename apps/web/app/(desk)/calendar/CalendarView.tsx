@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import type { EconEvent } from "@/lib/econ";
 import { CURRENCIES, IMPACTS, IMPACT_LABEL, IMPACT_RANK, matches, prefsCookie, type EconPrefs, type Impact } from "@/lib/econ-prefs";
 import { DOW, MON_HEAD } from "@/lib/i18n";
-import { addDays, dowOf, monthRange, viDayMonth } from "@/lib/time";
+import { addDays, dowOf, isWeekday as i5, monthRange, viDayMonth } from "@/lib/time";
 import EventRow, { TzHead } from "../_components/EventRow";
 import { useUi } from "../_components/Ui";
 
@@ -11,6 +11,7 @@ export default function CalendarView({ events, today, initialDay, initialPrefs }
   const { t, lang } = useUi();
   const [day, setDay] = useState(initialDay);
   const [prefs, setPrefsState] = useState<EconPrefs>(initialPrefs);
+  const [mode, setMode] = useState<"day" | "week">("day");
   const month = day.slice(0, 7);
 
   const setPrefs = (p: EconPrefs) => {
@@ -41,6 +42,12 @@ export default function CalendarView({ events, today, initialDay, initialPrefs }
   const cells = [...Array.from({ length: lead }, () => null), ...Array.from({ length: days }, (_, i) => addDays(start, i))];
   const list = byDay.get(day) || [];
   const [y, mo] = month.split("-");
+  // Tuần của ngày đang chọn (Thứ 2 → Chủ nhật); cuối tuần chỉ hiện khi có tin
+  const wkStart = addDays(day, -((dowOf(day) + 6) % 7));
+  const week = Array.from({ length: 7 }, (_, i) => addDays(wkStart, i)).filter((d) => i5(d) || (byDay.get(d) || []).length);
+  const weekSet = new Set(Array.from({ length: 7 }, (_, i) => addDays(wkStart, i)));
+  const weekCount = week.reduce((n, d) => n + (byDay.get(d) || []).length, 0);
+  const empty = prefs.cur.length && prefs.imp.length ? t("Không có tin khớp bộ lọc trong ngày này.") : t("Chưa chọn currency hoặc mức tác động nào.");
 
   return (
     <>
@@ -82,9 +89,15 @@ export default function CalendarView({ events, today, initialDay, initialPrefs }
       </section>
 
       <section className="card" aria-label={t("Lịch kinh tế")} style={{ gap: 16 }}>
-        <div className="split" style={{ gap: 24 }}>
-          <div style={{ flex: "1 1 360px", maxWidth: 480, minWidth: 0, display: "flex", flexDirection: "column", gap: 12 }}>
-            <span style={{ fontSize: 16, fontWeight: 600 }}>{t("Tháng {m} · {y}", { m: Number(mo), y })}</span>
+        <div className="cal-split">
+          <div className="stack" style={{ minWidth: 0 }}>
+            <div className="row">
+              <span style={{ fontSize: 16, fontWeight: 600 }}>{t("Tháng {m} · {y}", { m: Number(mo), y })}</span>
+              <div className="seg seg-xs" role="group" aria-label={t("Kiểu xem")}>
+                <button aria-pressed={mode === "day"} onClick={() => setMode("day")}>{t("Ngày")}</button>
+                <button aria-pressed={mode === "week"} onClick={() => setMode("week")}>{t("Tuần")}</button>
+              </div>
+            </div>
             <div className="cal-head" aria-hidden="true">
               {MON_HEAD[lang].map((d) => <span key={d}>{d}</span>)}
             </div>
@@ -95,9 +108,10 @@ export default function CalendarView({ events, today, initialDay, initialPrefs }
                 const top = evs.reduce<Impact | null>((a, e) => (!a || IMPACT_RANK[e.impact] > IMPACT_RANK[a] ? e.impact : a), null);
                 const dd = d.slice(8).replace(/^0/, "");
                 if (!hasData.has(d)) return <span key={d} className="cal-day off">{dd}</span>;
-                const cls = "cal-day" + (d === day ? " sel" : "") + (d === today ? " today" : "");
+                const sel = mode === "day" ? d === day : weekSet.has(d);
+                const cls = "cal-day" + (sel ? " sel" : "") + (d === today ? " today" : "");
                 return (
-                  <button key={d} className={cls} onClick={() => setDay(d)} aria-pressed={d === day} aria-label={`${DOW[lang][dowOf(d)]} ${viDayMonth(d)}, ${evs.length}`}>
+                  <button key={d} className={cls} onClick={() => setDay(d)} aria-pressed={sel} aria-label={`${DOW[lang][dowOf(d)]} ${viDayMonth(d)}, ${evs.length}`}>
                     {dd}
                     <span className={"dot" + (top ? " imp-" + top : "")} style={top ? undefined : { background: "transparent" }} aria-hidden="true" />
                   </button>
@@ -111,22 +125,40 @@ export default function CalendarView({ events, today, initialDay, initialPrefs }
             <p className="small faint">{t("Chấm màu là tin mạnh nhất trong ngày (theo bộ lọc). Ngày nhóm theo múi giờ hiển thị (đổi ở Profile). Chỉ có tuần hiện tại: lịch gọi API trực tiếp, không lưu lại. Bộ lọc dùng chung với Dashboard.")}</p>
           </div>
 
-          <div style={{ flex: "1.5 1 420px", minWidth: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-            <div className="row" style={{ paddingBottom: 8, borderBottom: "1px solid var(--line)" }}>
-              <span style={{ fontSize: 15, fontWeight: 600 }}>
-                {DOW[lang][dowOf(day)]} · {viDayMonth(day)}{day === today ? ` · ${t("hôm nay")}` : ""}
-                <span className="dim" style={{ fontWeight: 400, fontSize: 13 }}> · {t("{n} tin", { n: list.length })}</span>
-              </span>
-              <span className="mono small dim"><TzHead /> · {t("Thực tế / Dự báo / Trước")}</span>
+          {mode === "day" ? (
+            <div className="stack" style={{ gap: 8, minWidth: 0 }}>
+              <div className="row cal-list-head">
+                <span style={{ fontSize: 15, fontWeight: 600 }}>
+                  {DOW[lang][dowOf(day)]} · {viDayMonth(day)}{day === today ? ` · ${t("hôm nay")}` : ""}
+                  <span className="dim" style={{ fontWeight: 400, fontSize: 13 }}> · {t("{n} tin", { n: list.length })}</span>
+                </span>
+                <span className="mono small dim"><TzHead /> · {t("Thực tế / Dự báo / Trước")}</span>
+              </div>
+              {list.length ? list.map((e) => <EventRow key={e.id} e={e} />) : <p className="small dim" style={{ padding: "16px 12px" }}>{empty}</p>}
             </div>
-            {list.length ? (
-              list.map((e) => <EventRow key={e.id} e={e} />)
-            ) : (
-              <p className="small dim" style={{ padding: "16px 12px" }}>
-                {prefs.cur.length && prefs.imp.length ? t("Không có tin khớp bộ lọc trong ngày này.") : t("Chưa chọn currency hoặc mức tác động nào.")}
-              </p>
-            )}
-          </div>
+          ) : (
+            <div className="stack" style={{ gap: 8, minWidth: 0 }}>
+              <div className="row cal-list-head">
+                <span style={{ fontSize: 15, fontWeight: 600 }}>
+                  {t("Tuần {a} – {b}", { a: viDayMonth(wkStart), b: viDayMonth(addDays(wkStart, 6)) })}
+                  <span className="dim" style={{ fontWeight: 400, fontSize: 13 }}> · {t("{n} tin", { n: weekCount })}</span>
+                </span>
+                <span className="mono small dim"><TzHead /> · {t("Thực tế / Dự báo / Trước")}</span>
+              </div>
+              {week.map((d) => {
+                const evs = byDay.get(d) || [];
+                return (
+                  <section key={d} className={"wk-day" + (d === today ? " today" : "")} aria-label={`${DOW[lang][dowOf(d)]} ${viDayMonth(d)}`}>
+                    <button className="wk-day-head" onClick={() => { setDay(d); setMode("day"); }} title={t("Xem riêng ngày này")}>
+                      <span>{DOW[lang][dowOf(d)]} · {viDayMonth(d)}{d === today ? ` · ${t("hôm nay")}` : ""}</span>
+                      <span className="dim small">{t("{n} tin", { n: evs.length })}</span>
+                    </button>
+                    {evs.length ? evs.map((e) => <EventRow key={e.id} e={e} />) : <p className="small faint" style={{ padding: "6px 12px" }}>{hasData.has(d) ? t("Không có tin khớp bộ lọc.") : t("Ngoài tuần dữ liệu.")}</p>}
+                  </section>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
     </>

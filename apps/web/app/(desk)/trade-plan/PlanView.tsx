@@ -138,8 +138,8 @@ export default function PlanView({ today, initialDate }: { today: string; initia
 
   return (
     <>
-      <div className="split">
-        <section className="card" aria-label={t("Gửi plan")} style={{ flex: "1 1 440px" }}>
+      <div className="plan-split">
+        <section className="card" aria-label={t("Gửi plan")}>
           <div className="row wrap">
             <span className="lbl">{t("Gửi plan")}</span>
             <div className="seg" role="tablist" aria-label={t("Nguồn plan")}>
@@ -182,7 +182,7 @@ export default function PlanView({ today, initialDate }: { today: string; initia
           )}
         </section>
 
-        <section className="card" aria-label={t("Plan đang xem")} style={{ flex: "1.3 1 480px" }}>
+        <section className="card" aria-label={t("Plan đang xem")}>
           {!sel ? (
             <div className="placeholder" style={{ minHeight: 300 }}>{t("Chọn một ngày trong lịch sử để xem plan.")}</div>
           ) : loadingDetail ? (

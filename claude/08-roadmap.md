@@ -80,12 +80,20 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [x] Áp migration `20261118090014_trade_days_hub` lên Supabase (2026-11-18): 6 bảng `trading.*` đều RLS bật, anon không có quyền, `save_journal` chỉ service_role chạy được.
 - [x] News / Earnings bật lại (2026-11-18): Deren đã thêm `FINNHUB_API_KEY` (Production + Preview); 2 mục về lại menu Tổng quan, thẻ hiện trên Dashboard.
 
+**Đợt 3 (2026-11-18):**
+- [x] Calendar: nút **Ngày | Tuần**, chế độ tuần liệt kê tin từng ngày (Thứ 2 → 6, cuối tuần khi có tin), bấm tên ngày quay về xem ngày đó.
+- [x] Sidebar thu gọn: rê chuột không còn đẩy nội dung (chữ mờ dần thay vì ẩn / hiện).
+- [x] Earnings dạng lịch tháng (Thứ 2 → 6), ô ngày có số mã + chip mã lớn, bên phải chi tiết ngày chia Trước mở cửa / Trong phiên / Sau đóng cửa.
+- [x] News: 20 bài / lần (nút tải thêm, tối đa 100) + đọc bài ngay trong app (`lib/reader.ts`, D42); trang nguồn chặn thì hiện tóm tắt + link gốc. Tin trên Dashboard mở thẳng vào trình đọc.
+- [x] Journal: ảnh lệnh (tải lên, dán Ctrl+V, kéo thả, ghi chú, gắn Lệnh n, xem lớn) — bảng `trading.journal_images` + `/api/journal/image` (D43).
+- [x] Lưới trang đều hơn: nội dung tối đa 1360 px giữa màn hình, Journal 3 cột cố định, Calendar / Earnings / News / Trade Plan chia 2 cột cùng kiểu.
+- [ ] Áp migration `20261118120000_journal_images` lên Supabase (chờ Deren "ok áp migration"; chưa áp thì Journal báo ảnh chưa dùng được, phần còn lại vẫn chạy).
+
 **Còn lại:**
-- [ ] Journal: tải ảnh (context / footprint) vào `YYYY/MM/DD/journal/` (WebP q85 qua `lib/image.ts`).
 - [ ] Knowledge: Deren tổng hợp nội dung AMT / Context / Entry; port dần `levels.html`, `tools.html`, quiz vào Next.js.
 - [x] `/` chuyển hướng vào dashboard (đã đăng nhập) hoặc `/login`; trang chủ học cũ ở `/learn` (2026-11-18).
 - [ ] Test tự động (Vitest cho `lib/journal.ts`, `lib/econ.ts`; Playwright cho luồng đăng nhập bằng mock).
-- [ ] Menu "Sắp có": News · Earnings, Options (GEX / DEX / OI khi có API).
+- [ ] Menu "Sắp có": Options (GEX / DEX / OI khi có API).
 
 ## Quy ước
 - Mỗi thay đổi: sửa artifact (nếu liên quan) + push repo, Vercel tự deploy; cập nhật file này và [09-nhat-ky.md](09-nhat-ky.md).

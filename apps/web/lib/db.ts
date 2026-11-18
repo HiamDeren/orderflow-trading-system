@@ -57,6 +57,9 @@ export const db = {
   insert<T>(table: string, rows: unknown) {
     return call<T[]>("POST", table, "", rows, "return=representation");
   },
+  update<T>(table: string, query: string, patch: unknown) {
+    return call<T[]>("PATCH", table, query, patch, "return=representation");
+  },
   rpc<T>(fn: string, args: unknown) {
     return call<T>("POST", `rpc/${fn}`, "", args);
   },
@@ -84,6 +87,34 @@ export async function signedUrl(path: string, expiresIn = 3600): Promise<string 
     return null;
   }
 }
+
+// Storage (bucket private "trading"), chỉ server gọi bằng secret key.
+export const storage = {
+  async put(path: string, body: Buffer | Uint8Array, contentType: string) {
+    const { url, h } = cfg();
+    const r = await fetch(`${url}/storage/v1/object/${TRADING_BUCKET}/${path}`, {
+      method: "POST",
+      headers: { ...h, "Content-Type": contentType, "x-upsert": "false", "Cache-Control": "max-age=31536000" },
+      body: body as BodyInit,
+      cache: "no-store",
+    });
+    if (!r.ok) throw new DbError(`storage ${r.status}: ${(await r.text()).slice(0, 200)}`, r.status);
+  },
+  async get(path: string) {
+    const { url, h } = cfg();
+    return fetch(`${url}/storage/v1/object/authenticated/${TRADING_BUCKET}/${path}`, { headers: h, cache: "no-store" });
+  },
+  async remove(paths: string[]) {
+    const { url, h } = cfg();
+    const r = await fetch(`${url}/storage/v1/object/${TRADING_BUCKET}`, {
+      method: "DELETE",
+      headers: { ...h, "Content-Type": "application/json" },
+      body: JSON.stringify({ prefixes: paths }),
+      cache: "no-store",
+    });
+    if (!r.ok) throw new DbError(`storage ${r.status}: ${(await r.text()).slice(0, 200)}`, r.status);
+  },
+};
 
 export function errText(e: unknown) {
   return String((e as Error)?.message ?? e);

@@ -6,7 +6,9 @@ import { TEXT_FIELDS, dayNet, getDay, getMonth, getRecentDays, statsOf, type Day
 import { biasTone, getPlan, type PlanRow } from "@/lib/plans";
 import { getT } from "@/lib/prefs-server";
 import { DATE_RE, addDays, dowOf, etNow, isWeekday, monthRange, viDayMonth } from "@/lib/time";
+import { listImages, type JournalImage } from "@/lib/journal-images";
 import JournalEditor from "./JournalEditor";
+import JournalImages from "./JournalImages";
 import JournalTabs from "./JournalTabs";
 
 export const metadata: Metadata = { title: "Journal" };
@@ -34,6 +36,8 @@ export default async function JournalPage({ searchParams }: { searchParams: Prom
   let monthDays: DayWithTrades[] = [];
   let stats: Stats | null = null;
   let plan: PlanRow | null = null;
+  let images: JournalImage[] = [];
+  let imgError = "";
   try {
     const [d, m, recent, p] = await Promise.all([getDay(date), getMonth(month), getRecentDays(20), getPlan(date).catch(() => null)]);
     day = d;
@@ -42,6 +46,14 @@ export default async function JournalPage({ searchParams }: { searchParams: Prom
     plan = p;
   } catch (e) {
     error = errText(e);
+  }
+  if (!error) {
+    try {
+      images = await listImages(date);
+    } catch (e) {
+      // Bảng journal_images chưa có (chưa áp migration) → phần còn lại của Journal vẫn chạy
+      imgError = /journal_images|PGRST205|42P01/.test(errText(e)) ? "chưa áp migration journal_images" : errText(e);
+    }
   }
 
   const { start, days } = monthRange(month);
@@ -69,8 +81,8 @@ export default async function JournalPage({ searchParams }: { searchParams: Prom
 
       {error && <div className="notice">{t("Không đọc được journal")}: {error}</div>}
 
-      <div className="split">
-        <nav className="card tight journal-days" aria-label={t("Danh sách ngày")} style={{ flex: "1 1 220px", padding: 10, maxWidth: 300 }}>
+      <div className="journal-grid">
+        <nav className="card tight journal-days" aria-label={t("Danh sách ngày")} style={{ padding: 10 }}>
           <div className="row" style={{ padding: "8px 10px" }}>
             <span className="lbl">{t("Tháng {m} · {y}", { m: Number(month.slice(5)), y: month.slice(0, 4) })}</span>
             <Link className="small" href={`/journal?date=${lastWeekday(addDays(start, -1))}`}>‹ {t("tháng trước")}</Link>
@@ -95,7 +107,7 @@ export default async function JournalPage({ searchParams }: { searchParams: Prom
           {!list.length && <p className="small dim" style={{ padding: 10 }}>{t("Chưa có ngày nào trong tháng.")}</p>}
         </nav>
 
-        <article aria-label={`Journal ${date}`} style={{ flex: "3 1 520px", minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+        <article aria-label={`Journal ${date}`} style={{ minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
           <div className="row wrap">
             <h2 className="h2">{DOW[ui.lang][dowOf(date)]} · {viDayMonth(date)}/{date.slice(0, 4)}</h2>
             {plan ? (
@@ -107,10 +119,11 @@ export default async function JournalPage({ searchParams }: { searchParams: Prom
               <span className="small dim">{t("Ngày này chưa có plan")}</span>
             )}
           </div>
+          {!error && <JournalImages key={"img" + date} date={date} initial={images} tradeCount={day?.journal_trades?.length || 0} error={imgError || undefined} />}
           {!error && <JournalEditor key={date + (day?.updated_at || "")} date={date} initial={day} textFields={TEXT_FIELDS} />}
         </article>
 
-        <aside className="card" aria-label={t("Thống kê")} style={{ flex: "1 1 260px", maxWidth: 340 }}>
+        <aside className="card" aria-label={t("Thống kê")}>
           <span className="lbl">{t("Thống kê · {n} ngày gần nhất", { n: stats?.days || 0 })}</span>
           {stats && stats.days ? (
             <>

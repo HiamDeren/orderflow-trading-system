@@ -1,5 +1,6 @@
 "use client";
 // Thành phần nhỏ dùng chung cho News / Earnings (cần ngôn ngữ + múi giờ của người dùng).
+import Link from "next/link";
 import type { Earning, NewsItem } from "@/lib/market";
 import { fmtMoney } from "@/lib/market";
 import { tzShort } from "@/lib/prefs";
@@ -15,10 +16,11 @@ export function ago(ts: number, now: number, t: (s: string, v?: Record<string, s
   return t("{n} ngày trước", { n: Math.round(h / 24) });
 }
 
-export function NewsRow({ n, now, compact }: { n: NewsItem; now: number; compact?: boolean }) {
+// href: đường dẫn đọc trong app (/news?id=…). Không có href thì mở bài gốc ở tab mới.
+export function NewsRow({ n, now, compact, href, active }: { n: NewsItem; now: number; compact?: boolean; href?: string; active?: boolean }) {
   const { t, tz } = useUi();
-  return (
-    <a className={"news" + (compact ? " compact" : "")} href={n.url} target="_blank" rel="noreferrer noopener">
+  const body = (
+    <>
       <span className="news-meta">
         <span className="mono">{fmtTime(n.ts, tz, !compact)} {compact ? "" : tzShort(tz)}</span>
         <span>· {n.source}</span>
@@ -26,9 +28,19 @@ export function NewsRow({ n, now, compact }: { n: NewsItem; now: number; compact
       </span>
       <span className="news-h">{n.headline}</span>
       {!compact && n.summary && <span className="news-s">{n.summary}</span>}
-      {!compact && (
-        <span className="news-go small"><Icon name="external" size={14} /> {t("Mở bài gốc")}</span>
-      )}
+    </>
+  );
+  const cls = "news" + (compact ? " compact" : "") + (active ? " on" : "");
+  if (href)
+    return (
+      <Link className={cls} href={href} scroll={false} aria-current={active ? "true" : undefined}>
+        {body}
+      </Link>
+    );
+  return (
+    <a className={cls} href={n.url} target="_blank" rel="noreferrer noopener">
+      {body}
+      {!compact && <span className="news-go small"><Icon name="external" size={14} /> {t("Mở bài gốc")}</span>}
     </a>
   );
 }

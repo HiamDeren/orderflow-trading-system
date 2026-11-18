@@ -16,6 +16,9 @@ const P: Record<string, string[]> = {
   check: ["M5 12l5 5 9-10"],
   logout: ["M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4", "M10 17l5-5-5-5", "M15 12H3"],
   external: ["M14 4h6v6", "M20 4l-9 9", "M18 14v6H4V6h6"],
+  plus: ["M12 5v14", "M5 12h14"],
+  trash: ["M4 7h16", "M10 11v6", "M14 11v6", "M6 7l1 13h10l1-13", "M9 7V4h6v3"],
+  image: ["M3 5h18v14H3z", "M3 16l5-5 4 4 3-3 6 6", "M15.5 9.5h.01"],
 };
 
 export default function Icon({ name, size = 20 }: { name: string; size?: number }) {

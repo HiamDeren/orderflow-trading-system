@@ -2,6 +2,11 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-18 · Dashboard đợt 3 (6 góp ý)
+- Calendar xem cả tuần; Earnings thành lịch tháng; News 20 bài + trình đọc trong app (D42, thư viện mới `@mozilla/readability` 0.6.0, `linkedom` 0.18.15, `sanitize-html` 2.18.2); Journal có ảnh lệnh (D43); sidebar thu gọn hết giật khi rê chuột; lưới các trang đều hơn.
+- Migration `20261118120000_journal_images` test trên Postgres 16 local (trigger `day_id`, anon bị chặn); chưa áp lên Supabase.
+- Test local với mock: tải ảnh 3000×1600 PNG → WebP 2560 px, sửa ghi chú / gắn lệnh, xoá (cả file Storage), khách 401; trình đọc lọc `<script>` / `onerror`, link tuyệt đối mở tab mới, redirect về 127.0.0.1 bị chặn; không tràn ngang ở 1440 px và 390 px.
+
 ## 2026-11-18 · Dashboard đợt 2 (13 góp ý sau test preview)
 - Giao diện: scrollbar mảnh, sidebar ghim / thu gọn (cookie `desk_side`), mobile có thanh trên + ngăn kéo, lưới Dashboard co về 1 cột dưới 1100 px.
 - VI / EN (cookie `desk_lang`, từ điển `lib/i18n-en.ts`), múi giờ hiển thị (cookie `desk_tz`); Calendar nhóm ngày theo múi giờ chọn. Giải thích lệch ngày FOMC: feed ForexFactory là giờ ET (14:00 ET Thứ 4), trang forexfactory.com xem ở VN hiện 02:00 Thứ 5.
