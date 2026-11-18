@@ -1,4 +1,4 @@
--- 20261118090000 · trade_days_hub
+-- 20261118090014 · trade_days_hub (đã áp trên production Singapore 2026-11-18)
 -- Tổ chức lại quanh bảng ngày trade:
 --   trading.trade_days (1 dòng / ngày, id là khoá) ──1:n── trade_plans (1 / symbol)
 --                                                 ──1:n── journal_entries (1 / symbol)  ──1:n── journal_trades ──n:n── tags (qua trade_tags)

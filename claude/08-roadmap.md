@@ -77,8 +77,8 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [x] Plan Studio đổi tên **Trade Plan** (`/trade-plan`); ảnh plan qua `/api/plan/image` cùng origin + nút **Copy ảnh** (PNG vào clipboard).
 - [x] PnL Calendar thành tab con của Journal (`/journal/pnl`); bỏ thẻ Journal khỏi Dashboard.
 - [x] **News** và **Earnings** tách 2 trang + thẻ trên Dashboard (Finnhub, D40). Lịch trên Dashboard thu gọn (tối đa 6 tin, một dòng / tin).
-- [ ] **Deren duyệt rồi áp migration `trade_days_hub`** (D39). Chưa áp thì Journal / PnL trên preview báo lỗi bảng.
-- [ ] Deren tạo `FINNHUB_API_KEY` (Secret, Production + Preview) rồi Redeploy.
+- [x] Áp migration `20261118090014_trade_days_hub` lên Supabase (2026-11-18): 6 bảng `trading.*` đều RLS bật, anon không có quyền, `save_journal` chỉ service_role chạy được.
+- [ ] **News / Earnings tạm hoãn** (Deren 2026-11-18): code và trang `/news`, `/earnings` đã có, đang ẩn trong menu "Sắp có" và không hiện trên Dashboard. Khi làm tiếp: tạo `FINNHUB_API_KEY` (Secret, Production + Preview), Redeploy, đưa 2 mục ra lại menu (`_components/Sidebar.tsx`).
 
 **Còn lại:**
 - [ ] Journal: tải ảnh (context / footprint) vào `YYYY/MM/DD/journal/` (WebP q85 qua `lib/image.ts`).

@@ -127,6 +127,7 @@ export default async function DashboardPage() {
         </section>
       </div>
 
+      {marketConfigured() && (
       <div className="dash-grid two">
         <section className="card" aria-label="News">
           <div className="row">
@@ -170,10 +171,11 @@ export default async function DashboardPage() {
           )}
         </section>
       </div>
+      )}
 
       <section className="card dashed" aria-label={t("Options sắp có")} style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
-        <span className="lbl">{t("Options · sắp có")}</span>
-        <span className="small dim">{t("Chỗ cho GEX / DEX / OI khi có API.")}</span>
+        <span className="lbl">{t("Sắp có")}</span>
+        <span className="small dim">{t("News · Earnings · Options (GEX / DEX / OI) sẽ hiện ở đây.")}</span>
       </section>
     </>
   );

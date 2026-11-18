@@ -117,6 +117,7 @@ const EN: Record<string, string> = {
   "Options sắp có": "Options coming soon",
   "Options · sắp có": "Options · coming soon",
   "Chỗ cho GEX / DEX / OI khi có API.": "Space for GEX / DEX / OI once the API is ready.",
+  "News · Earnings · Options (GEX / DEX / OI) sẽ hiện ở đây.": "News · Earnings · Options (GEX / DEX / OI) will show here.",
   "Copy ảnh": "Copy image",
   "Đã copy ảnh": "Image copied",
   "Đang copy…": "Copying…",

@@ -14,8 +14,6 @@ const GROUPS: { name: string; items: Item[] }[] = [
     items: [
       { label: "Dashboard", href: "/dashboard", icon: "dashboard" },
       { label: "Calendar", href: "/calendar", icon: "calendar" },
-      { label: "News", href: "/news", icon: "news" },
-      { label: "Earnings", href: "/earnings", icon: "earnings" },
     ],
   },
   {
@@ -26,7 +24,15 @@ const GROUPS: { name: string; items: Item[] }[] = [
     ],
   },
   { name: "Kiến thức", items: [{ label: "Knowledge", href: "/knowledge", icon: "knowledge" }] },
-  { name: "Sắp có", items: [{ label: "Options", href: "", icon: "options", soon: true }] },
+  // News / Earnings đã có trang (/news, /earnings, Finnhub) nhưng tạm ẩn tới khi có FINNHUB_API_KEY
+  {
+    name: "Sắp có",
+    items: [
+      { label: "News", href: "", icon: "news", soon: true },
+      { label: "Earnings", href: "", icon: "earnings", soon: true },
+      { label: "Options", href: "", icon: "options", soon: true },
+    ],
+  },
 ];
 
 export function Avatar({ owner, large }: { owner: Owner; large?: boolean }) {
