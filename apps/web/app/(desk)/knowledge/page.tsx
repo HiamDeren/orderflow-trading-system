@@ -19,7 +19,10 @@ export default function KnowledgePage() {
           <span className="lbl">Knowledge</span>
           <h1 className="h1">AMT → Context → Entry</h1>
         </div>
-        <a className="small" href="/quiz" style={{ fontWeight: 600 }}>Làm quiz ôn tập</a>
+        <span className="hstack small" style={{ fontWeight: 600 }}>
+          <a href="/learn">Mở trang học cũ</a>
+          <a href="/quiz">Làm quiz ôn tập</a>
+        </span>
       </header>
       <section className="card" aria-label="Luồng mỗi ngày">
         <span className="lbl">Luồng mỗi ngày</span>

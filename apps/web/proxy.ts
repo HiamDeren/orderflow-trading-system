@@ -1,5 +1,6 @@
 // Proxy (Next.js 16, tên mới của middleware): làm mới phiên Supabase và chặn trang dashboard khi chưa đăng nhập.
 // Chỉ chạy ở các đường dẫn trong matcher; trang học tĩnh và /api/plan (ATAS gửi bằng token) không đi qua đây.
+// "/" luôn chuyển hướng: đã đăng nhập → /dashboard, chưa → /login.
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
@@ -13,7 +14,7 @@ export async function proxy(request: NextRequest) {
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
   if (!url || !key) {
-    if (isDesk) return NextResponse.redirect(new URL("/login?e=config", request.url));
+    if (isDesk || path === "/") return NextResponse.redirect(new URL("/login?e=config", request.url));
     return NextResponse.next();
   }
 
@@ -47,12 +48,14 @@ export async function proxy(request: NextRequest) {
     to.searchParams.set("next", path + request.nextUrl.search);
     return withCookies(NextResponse.redirect(to));
   }
+  if (path === "/") return withCookies(NextResponse.redirect(new URL(owner ? "/dashboard" : "/login", request.url)));
   if (path === "/login" && owner) return withCookies(NextResponse.redirect(new URL("/dashboard", request.url)));
   return response;
 }
 
 export const config = {
   matcher: [
+    "/",
     "/login",
     "/dashboard/:path*",
     "/calendar/:path*",

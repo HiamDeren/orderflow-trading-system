@@ -7,6 +7,7 @@ Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 - Đăng nhập Discord một người (D38). `/api/plan` nhận thêm phiên đăng nhập (ngoài `PLAN_TOKEN`) và `?month=`; token sai vẫn 401.
 - Migration `20261118075449_journal_days_trades`, test trên Postgres 16 local (check constraint, cascade, anon bị chặn) rồi áp lên Supabase production; advisor chỉ còn INFO "RLS bật, không policy" (cố ý, chỉ server đọc ghi).
 - Lịch kinh tế: feed tuần của ForexFactory, lọc USD, cache 15 phút (`lib/econ.ts`).
+- `/` thành cửa vào dashboard (proxy: có phiên chủ sở hữu → `/dashboard`, chưa → `/login`); trang chủ học cũ chuyển sang `/learn`, `/index.html` → `/learn` (redirect tạm, không permanent).
 - Test local với Supabase giả: chưa đăng nhập / tài khoản lạ bị chuyển về `/login`, các trang 200, lưu journal + PnL khớp (+$338.8), ATAS token vẫn dùng được.
 
 ## 2026-11-18 · Thiết kế dashboard mới (Deren Desk)

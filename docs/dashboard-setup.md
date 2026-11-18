@@ -1,6 +1,6 @@
 # Deren Desk · cấu hình đăng nhập Discord và biến môi trường
 
-Dashboard (Next.js trong `apps/web`) nằm ở các đường dẫn `/dashboard`, `/calendar`, `/studio`, `/journal`, `/pnl`, `/knowledge`, `/profile`. Trang học cũ (`/`, `/plan`, `/levels`, `/tools`, `/quiz`) giữ nguyên, không cần đăng nhập.
+Dashboard (Next.js trong `apps/web`) nằm ở các đường dẫn `/dashboard`, `/calendar`, `/studio`, `/journal`, `/pnl`, `/knowledge`, `/profile`. `/` là cửa vào: đã đăng nhập → `/dashboard`, chưa → `/login`. Trang học cũ không cần đăng nhập: trang chủ học chuyển sang `/learn` (`/index.html` tự về đây), `/plan`, `/levels`, `/tools`, `/quiz` giữ nguyên.
 
 Chỉ **một** tài khoản Discord (ID trong `OWNER_DISCORD_ID`) vào được. Tài khoản khác đăng nhập sẽ bị đăng xuất và xoá khỏi Supabase Auth ngay.
 

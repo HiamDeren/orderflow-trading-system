@@ -74,7 +74,7 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 **Còn lại:**
 - [ ] Journal: tải ảnh (context / footprint) vào `YYYY/MM/DD/journal/` (WebP q85 qua `lib/image.ts`).
 - [ ] Knowledge: Deren tổng hợp nội dung AMT / Context / Entry; port dần `levels.html`, `tools.html`, quiz vào Next.js.
-- [ ] Trang `/` có nên chuyển sang dashboard (hiện vẫn là trang học tĩnh).
+- [x] `/` chuyển hướng vào dashboard (đã đăng nhập) hoặc `/login`; trang chủ học cũ ở `/learn` (2026-11-18).
 - [ ] Test tự động (Vitest cho `lib/journal.ts`, `lib/econ.ts`; Playwright cho luồng đăng nhập bằng mock).
 - [ ] Menu "Sắp có": News · Earnings, Options (GEX / DEX / OI khi có API).
 

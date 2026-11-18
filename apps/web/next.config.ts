@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 // Trang cũ (HTML tĩnh) nằm trong public/. Giữ URL sạch như cleanUrls của Vercel trước đây:
 // /levels → public/levels.html, /levels.en → public/levels.en.html, /levels.html → 308 về /levels.
+// "/" là cửa vào dashboard (proxy.ts: đã đăng nhập → /dashboard, chưa → /login); trang chủ học cũ chuyển sang /learn.
 const PAGES = "index|tools|levels|plan|quiz";
 
 const nextConfig: NextConfig = {
@@ -13,7 +14,8 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return {
       beforeFiles: [
-        { source: "/", destination: "/index.html" },
+        { source: "/learn", destination: "/index.html" },
+        { source: "/learn.en", destination: "/index.en.html" },
         { source: `/:page(${PAGES})`, destination: "/:page.html" },
         { source: `/:page(${PAGES}).en`, destination: "/:page.en.html" },
       ],
@@ -23,10 +25,11 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      { source: "/index", destination: "/", permanent: true },
-      { source: "/index.html", destination: "/", permanent: true },
+      { source: "/index", destination: "/learn", permanent: false },
+      { source: "/index.html", destination: "/learn", permanent: false },
+      { source: "/index.en.html", destination: "/learn.en", permanent: false },
       { source: `/:page(tools|levels|plan|quiz).html`, destination: "/:page", permanent: true },
-      { source: `/:page(${PAGES}).en.html`, destination: "/:page.en", permanent: true },
+      { source: `/:page(tools|levels|plan|quiz).en.html`, destination: "/:page.en", permanent: true },
       { source: "/testing", destination: "/plan", permanent: false },
       { source: "/testing.en", destination: "/plan.en", permanent: false },
       { source: "/overlap", destination: "/plan", permanent: false },
