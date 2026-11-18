@@ -2016,3 +2016,17 @@ Tối đa 2–3 lệnh, dừng 11:30 ET, giữ đúng giới hạn rủi ro củ
 Khung plan	Plan framework
 // updated_at là timestamp (không tz) lưu giờ UTC: thêm	// updated_at is a timestamp (no tz) stored in UTC: append
 để trình duyệt không hiểu nhầm thành giờ máy.	so the browser does not read it as local time.
+(bản preview chưa có biến môi trường Supabase; dùng site production).	(this preview build has no Supabase environment variables; use the production site).
+401: token sai hoặc chưa nhập trên domain này. Bấm lại và dán PLAN_TOKEN đúng.	401: wrong token, or no token entered on this domain. Click again and paste the correct PLAN_TOKEN.
+: không chạy	: not run
+Discord: không gửi (chưa tick)	Discord: not sent (box not ticked)
+JSON không hợp lệ. Dán JSON từ ATAS vào ô trên trước.	Invalid JSON. Paste the ATAS JSON into the box above first.
+JSON thiếu date, prth hoặc ovn.	JSON is missing date, prth or ovn.
+Lỗi mạng khi gọi /api/plan. Trang này phải mở trên site.	Network error calling /api/plan. This page must be opened on the site.
+lỗi server	server error
+payload không hợp lệ	invalid payload
+Đang gửi plan	Sending plan
+Ảnh (Storage)	Image (Storage)
+Gửi plan lên web	Send plan to web
+kèm Discord	with Discord
+lỗi	error

@@ -2,6 +2,10 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-18 · Nút gửi plan + log API
+- Plan Builder có nút **Gửi plan lên web** (tuỳ chọn kèm Discord), hiện kết quả từng bước (database / ảnh / Discord) và lý do lỗi (401 token theo domain, 500 thiếu biến môi trường ở preview, 502 Supabase).
+- `/api/plan` ghi log từng bước vào Vercel Runtime Logs (`[api/plan] ...`, không ghi token / key / webhook).
+
 ## 2026-11-18 · Storage theo ngày + API bền hơn
 - Nén ảnh WebP (`lib/image.ts`, sharp): plan lossless 331 KB → 102 KB; journal q85 ≤ 2560 px. Discord nhận cùng file WebP.
 - Bucket `trading` (migration `storage_trading_bucket`), đường dẫn `YYYY/MM/DD/plan|journal/...` (`apps/web/lib/storage.ts`); recap gộp vào journal.
