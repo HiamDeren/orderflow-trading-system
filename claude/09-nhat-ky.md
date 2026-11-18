@@ -3,6 +3,7 @@
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
 ## 2026-11-18 · Nút gửi plan + log API
+- Test production thành công: database + Storage (WebP 118 KB) + Discord. Hai lỗi gặp trên đường: secret key trên Vercel không hợp lệ (401 REST + 400 Storage thiếu authorization) → tạo key mới + redeploy; schema `trading` chưa expose (406 PGRST106) → thêm vào Data API (Dashboard: Integrations → Data API → Settings).
 - Plan Builder có nút **Gửi plan lên web** (tuỳ chọn kèm Discord), hiện kết quả từng bước (database / ảnh / Discord) và lý do lỗi (401 token theo domain, 500 thiếu biến môi trường ở preview, 502 Supabase).
 - `/api/plan` ghi log từng bước vào Vercel Runtime Logs (`[api/plan] ...`, không ghi token / key / webhook).
 
