@@ -2,6 +2,13 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-18 · Code dashboard Deren Desk
+- Next.js: `app/(desk)/` (dashboard, calendar, studio, journal, pnl, knowledge, profile), `app/login`, `app/auth/*`, `proxy.ts` (Next 16), `app/desk.css`. Thư viện mới: `@supabase/ssr` 0.12.7, `@supabase/supabase-js` 2.119.0.
+- Đăng nhập Discord một người (D38). `/api/plan` nhận thêm phiên đăng nhập (ngoài `PLAN_TOKEN`) và `?month=`; token sai vẫn 401.
+- Migration `20261118080000_journal_days_trades` (chưa áp lên Supabase), test trên Postgres 16 local: check constraint, cascade, anon bị chặn.
+- Lịch kinh tế: feed tuần của ForexFactory, lọc USD, cache 15 phút (`lib/econ.ts`).
+- Test local với Supabase giả: chưa đăng nhập / tài khoản lạ bị chuyển về `/login`, các trang 200, lưu journal + PnL khớp (+$338.8), ATAS token vẫn dùng được.
+
 ## 2026-11-18 · Thiết kế dashboard mới (Deren Desk)
 - Canvas thiết kế 7 màn hình: Login (chỉ Discord, hình nền riêng), Profile, Dashboard, Plan Studio (có lịch sử theo ngày), Journal (có các ô recap chữ), PnL Calendar, Knowledge (AMT → Context → Entry). Link và việc cần làm ghi ở [08-roadmap.md](08-roadmap.md) mục "Dashboard mới".
 - Chỉnh tiếp: lịch tháng tách sang trang Calendar (Dashboard còn tin hôm nay + dải tuần), menu Knowledge gộp một mục có 3 tab, bảng lệnh journal thêm số hợp đồng / PnL $ / phí / net, thêm bảng mẫu trạng thái trống và lỗi.

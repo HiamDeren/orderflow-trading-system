@@ -52,23 +52,30 @@ Chi tiết: [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md).
 - [ ] Giai đoạn 5: module mới: economic calendar, options (GEX / DEX / OI, gộp repo Gex-Dashboard), earnings, news, heatmap.
 - [ ] Các module khác Deren tự quyết: journal, tài chính cá nhân, học tiếng Anh, tập luyện...
 
-## Dashboard mới · Deren Desk (design 2026-11-18)
-Bản thiết kế (canvas, 8 màn hình + 1 bảng trạng thái): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. Màu graphite trầm + nhấn cát `#D4B483`, Long `#8CC2A4`, Short `#E0947C`; font Inter + JetBrains Mono. Làm trên `development` khi Deren duyệt bản cuối.
-- [ ] **Đăng nhập chỉ Discord, một người:** Supabase Auth provider Discord; server so Discord ID với biến `OWNER_DISCORD_ID` (Vercel), khác ID → từ chối + đăng xuất, không tạo tài khoản. Middleware chặn mọi trang dashboard. Trang login có hình nền riêng.
-- [ ] **Profile:** avatar, tên, ID lấy từ Discord (`user_metadata` chỉ để hiển thị, không dùng để phân quyền); thiết lập giao dịch (mã, phiên, giới hạn lệnh, 1R); trạng thái kết nối (ATAS, Discord webhook, Supabase, lịch kinh tế); đăng xuất mọi thiết bị.
-- [ ] **Dashboard** (trang mặc định, một màn hình không phải cuộn): đồng hồ ET / VN, timeline phiên 04:00–16:00 ET, card plan hôm nay, tin USD hôm nay + dải 5 ngày trong tuần, nhắc journal, ô Options sắp có.
-  - Chấm tin trên timeline lấy từ cùng dữ liệu lịch, ô "Chỉ tin tác động cao" lọc cả timeline (không vẽ cố định).
-- [ ] **Calendar** (trang riêng): lịch tháng (chấm màu theo tin mạnh nhất trong ngày, ngày chưa có dữ liệu để xám) + danh sách tin của ngày chọn (giờ ET / VN, mức tác động, Thực tế / Dự báo / Trước, đánh dấu tin trong NY AM).
-  - Chốt (D37): chỉ gọi API phía server, cache ngắn (~15 phút), **không lưu database**. Lịch chỉ có tuần hiện tại, tuần đã qua để xám.
-- [ ] **Trạng thái trống / lỗi** (artboard "Trạng thái trống / lỗi" trên canvas): chưa có plan trước / sau 09:29 ET, lịch tin lỗi có / không có cache, gửi plan lỗi một phần (502), ngày không có plan, journal ngày No Trade, đăng nhập bị từ chối.
-- [ ] **Plan Studio** (đổi tên từ Plan Builder / Plan Desk): gửi plan bằng ATAS X hoặc dán JSON (cùng `/api/plan`), hiện 5 bước kết quả.
-- [ ] **Plan Studio · lịch sử theo ngày (làm sau):** lịch tháng đánh dấu ngày có plan (chấm màu theo bias), bấm ngày → xem lại plan + ảnh của ngày đó.
-  - Server: thêm query danh sách ngày theo tháng, ví dụ `GET /api/plan?month=YYYY-MM` → `trade_date, symbol, summary->bias, image_path, updated_at` (không trả `payload` cho nhẹ).
-  - `GET /api/plan?date=YYYY-MM-DD` đã có (trả plan + signed URL ảnh 1 giờ), dùng lại cho phần xem chi tiết.
-  - Đổi xác thực các route đọc từ `PLAN_TOKEN` sang session đăng nhập (token chỉ còn cho ATAS gửi POST), để trình duyệt không cần giữ token.
-- [ ] **Journal:** migration `trading.journal_days` (1 dòng / ngày: day type, kết quả, open type, bias đúng?, các ô recap chữ: diễn biến phiên, plan so với thực tế, chấm từng lệnh, footprint / DOM / tape, điểm quy trình, tâm lý & kỷ luật, level ngày mai, bài học) + `trading.journal_trades` (giờ, hướng, số hợp đồng, level, trigger, R, PnL $, phí, theo plan, tag lỗi; net = PnL $ − phí). Ảnh vào `YYYY/MM/DD/journal/`. Gắn với plan cùng ngày. Thống kê: win rate, R TB, % theo plan, R theo day type, lỗi lặp lại.
-- [ ] **PnL Calendar:** lịch tháng Thứ 2–6 + cột tổng tuần, đổi đơn vị $ / R, ô tô màu theo lãi lỗ, bấm ngày mở journal. Số liệu tính từ `journal_trades`.
-- [ ] **Knowledge:** một mục trong menu, trong trang có 3 tab AMT → Context (TPO / VPO) → Entry (Orderflow tools); Deren tổng hợp nội dung, port dần từ `levels.html` / `tools.html` / quiz.
+## Dashboard mới · Deren Desk (code 2026-11-18, nhánh `development`)
+Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. Màu graphite trầm + nhấn cát `#D4B483`, Long `#8CC2A4`, Short `#E0947C`; font Inter + JetBrains Mono. Code: `apps/web/app/(desk)/`, `apps/web/lib/`, `apps/web/proxy.ts`. Cấu hình: [docs/dashboard-setup.md](../docs/dashboard-setup.md).
+
+**Việc Deren cần làm để chạy được:**
+- [ ] Tạo Discord OAuth app, bật provider Discord trên Supabase, thêm Redirect URLs (docs/dashboard-setup.md bước 1–2).
+- [ ] Vercel: thêm `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `OWNER_DISCORD_ID` (Production + Preview), redeploy.
+- [ ] Áp migration `20261118080000_journal_days_trades` lên Supabase (Claude làm được qua MCP khi Deren đồng ý).
+- [ ] Test trên preview `development`, rồi PR `development` → `production`.
+
+**Đã code (2026-11-18):**
+- [x] Đăng nhập chỉ Discord, một người (D38): `/login`, `/auth/login`, `/auth/callback`, `/auth/logout`; `proxy.ts` chặn trang dashboard; tài khoản lạ bị đăng xuất + xoá.
+- [x] Profile: avatar / tên / ID Discord, thiết lập giao dịch (`lib/settings.ts`), trạng thái kết nối, đăng xuất mọi thiết bị.
+- [x] Dashboard: đồng hồ ET / VN + đếm ngược, timeline phiên có chấm tin lấy từ lịch, card plan hôm nay (level từ plan-core, ảnh ký tạm), tin USD hôm nay + dải tuần, nhắc journal, ô Options; trạng thái chưa có plan trước / sau 09:29, cuối tuần, lỗi database.
+- [x] Calendar: lịch tháng + danh sách tin ngày chọn, lọc tin cao; chỉ gọi API, cache 15 phút (D37); trạng thái lỗi nguồn.
+- [x] Plan Studio: dán JSON → `/api/plan` bằng phiên đăng nhập (không cần token), kết quả 4 bước; lịch sử theo tháng (`GET /api/plan?month=`), xem plan + ảnh từng ngày.
+- [x] Journal: bảng `journal_days` + `journal_trades`, form thuộc tính ngày + bảng lệnh (HĐ, R, PnL $, phí, theo plan, lỗi) + 9 ô recap; thống kê 20 ngày; `/api/journal`.
+- [x] PnL Calendar: Thứ 2–6 + tổng tuần, đổi $ / R, bấm ngày mở journal.
+- [x] Knowledge: 3 tab AMT / Context / Entry, link sang trang học cũ.
+
+**Còn lại:**
+- [ ] Journal: tải ảnh (context / footprint) vào `YYYY/MM/DD/journal/` (WebP q85 qua `lib/image.ts`).
+- [ ] Knowledge: Deren tổng hợp nội dung AMT / Context / Entry; port dần `levels.html`, `tools.html`, quiz vào Next.js.
+- [ ] Trang `/` có nên chuyển sang dashboard (hiện vẫn là trang học tĩnh).
+- [ ] Test tự động (Vitest cho `lib/journal.ts`, `lib/econ.ts`; Playwright cho luồng đăng nhập bằng mock).
 - [ ] Menu "Sắp có": News · Earnings, Options (GEX / DEX / OI khi có API).
 
 ## Quy ước

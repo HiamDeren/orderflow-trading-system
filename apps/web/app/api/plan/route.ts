@@ -8,6 +8,9 @@
 //
 // GET  /api/plan[?date=YYYY-MM-DD]   Header: Authorization: Bearer <PLAN_TOKEN>
 //   → plan của ngày đó (hoặc mới nhất) + image_url (link ký tạm 1 giờ) nếu đã có ảnh
+// GET  /api/plan?month=YYYY-MM        → { month, plans: [{ trade_date, symbol, summary, image_path, updated_at }] } (lịch sử Plan Studio)
+//
+// Xác thực: token PLAN_TOKEN (ATAS, trang Plan Builder cũ) HOẶC phiên đăng nhập Discord của chủ sở hữu (dashboard).
 //
 // Biến môi trường trên Vercel:
 //   SUPABASE_URL, SUPABASE_SERVICE_KEY (hoặc SUPABASE_SECRET_KEY / SUPABASE_SERVICE_ROLE_KEY), PLAN_TOKEN,
@@ -20,6 +23,7 @@ import { Resvg } from "@resvg/resvg-js";
 import core, { type Plan } from "@/lib/plan-core";
 import { TRADING_BUCKET, planImagePath } from "@/lib/storage";
 import { IMAGE_EXT, IMAGE_MIME, optimizeImage } from "@/lib/image";
+import { getOwner } from "@/lib/auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -31,6 +35,7 @@ const FONT_DIR = path.join(process.cwd(), "fonts");
 const FONT_FILES = ["BeVietnamPro-Regular.ttf", "BeVietnamPro-Bold.ttf", "JetBrainsMono-Regular.ttf", "JetBrainsMono-Bold.ttf"]
   .map(f => path.join(FONT_DIR, f));
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const MONTH_RE = /^\d{4}-\d{2}$/;
 
 type Json = Record<string, unknown>;
 type Payload = Json & { date?: string; symbol?: string; prth?: unknown; ovn?: unknown; notify?: boolean };
@@ -99,19 +104,26 @@ async function sendDiscord(webhook: string, plan: Plan, img: Buffer, fileName: s
   return { sent: true };
 }
 
-// Kiểm biến môi trường + token. Trả Response lỗi, hoặc cấu hình để gọi Supabase.
-function setup(req: Request) {
+// Kiểm biến môi trường + token (hoặc phiên chủ sở hữu). Trả Response lỗi, hoặc cấu hình để gọi Supabase.
+async function setup(req: Request) {
   const env = process.env;
   // Nhận cả tên biến do tích hợp Supabase ↔ Vercel tự tạo (SUPABASE_SECRET_KEY / SUPABASE_SERVICE_ROLE_KEY).
   const url = (env.SUPABASE_URL || env.NEXT_PUBLIC_SUPABASE_URL || "").replace(/\/$/, "");
   const key = env.SUPABASE_SERVICE_KEY || env.SUPABASE_SECRET_KEY || env.SUPABASE_SERVICE_ROLE_KEY;
   const planToken = env.PLAN_TOKEN;
-  if (!url || !key || !planToken) {
+  if (!url || !key) {
     log("error", "thiếu biến môi trường", { url: !!url, key: !!key, planToken: !!planToken, env: process.env.VERCEL_ENV });
     return { error: json({ error: "Thiếu biến môi trường SUPABASE_URL / SUPABASE_SERVICE_KEY / PLAN_TOKEN" }, 500) };
   }
   const token = String(req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "").trim();
-  if (!safeEqual(token, planToken)) {
+  const tokenOk = !!planToken && safeEqual(token, planToken);
+  // Không có token thì thử phiên đăng nhập dashboard (cookie). Có token mà sai thì từ chối luôn.
+  const via = tokenOk ? "token" : !token && (await getOwner()) ? "session" : null;
+  if (!via) {
+    if (!planToken) {
+      log("error", "thiếu PLAN_TOKEN và không có phiên đăng nhập", { method: req.method });
+      return { error: json({ error: "Thiếu biến môi trường SUPABASE_URL / SUPABASE_SERVICE_KEY / PLAN_TOKEN" }, 500) };
+    }
     log("warn", "401 token sai", { method: req.method, hasToken: !!token, tokenLen: token.length });
     return { error: json({ error: "unauthorized" }, 401) };
   }
@@ -119,6 +131,7 @@ function setup(req: Request) {
   const h = supaHeaders(key);
   const hj = { ...h, "Content-Type": "application/json" };
   return {
+    via,
     rest: `${url}/rest/v1/${TABLE}`,
     storage: `${url}/storage/v1`,
     bucket: env.PLAN_BUCKET || TRADING_BUCKET,
@@ -132,7 +145,7 @@ function setup(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const c = setup(req);
+  const c = await setup(req);
   if ("error" in c) return c.error;
   try {
     let p: Payload | null = null;
@@ -192,7 +205,7 @@ export async function POST(req: Request) {
         out.discord = { error: errMsg(e) };
       }
     }
-    log(dbError ? "error" : "info", "POST xong", { date, symbol, db: dbError || "ok", image: out.image, discord: out.discord, notify: p.notify !== false, hook: !!c.hook });
+    log(dbError ? "error" : "info", "POST xong", { via: c.via, date, symbol, db: dbError || "ok", image: out.image, discord: out.discord, notify: p.notify !== false, hook: !!c.hook });
     if (dbError) return json({ ...dbError, ...out }, 502);
     return json(out);
   } catch (e) {
@@ -202,10 +215,27 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request) {
-  const c = setup(req);
+  const c = await setup(req);
   if ("error" in c) return c.error;
   try {
-    const date = new URL(req.url).searchParams.get("date") || "";
+    const q = new URL(req.url).searchParams;
+    const month = q.get("month");
+    if (month) {
+      if (!MONTH_RE.test(month)) return json({ error: "month phải dạng yyyy-MM" }, 400);
+      const [y, m] = month.split("-").map(Number);
+      const next = m === 12 ? `${y + 1}-01-01` : `${y}-${String(m + 1).padStart(2, "0")}-01`;
+      const r = await fetch(
+        `${c.rest}?select=trade_date,symbol,summary,image_path,updated_at&trade_date=gte.${month}-01&trade_date=lt.${next}&order=trade_date.asc`,
+        { headers: c.hr, cache: "no-store" },
+      );
+      if (!r.ok) {
+        const detail = (await r.text()).slice(0, 300);
+        log("error", "GET month supabase lỗi", { status: r.status, detail });
+        return json({ error: "supabase", status: r.status, detail }, 502);
+      }
+      return json({ month, plans: await r.json() });
+    }
+    const date = q.get("date") || "";
     if (date && !DATE_RE.test(date)) return json({ error: "date phải dạng yyyy-MM-dd" }, 400);
     const filter = date ? `&trade_date=eq.${date}` : "";
     const r = await fetch(

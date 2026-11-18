@@ -4,6 +4,7 @@
 
 ## Repo này là gì
 - Hiện tại: **monorepo pnpm**. `apps/web` là app Next.js (Vercel) gồm site học tĩnh trong `apps/web/public/` (HTML + CSS + vanilla JS, học orderflow / TPO cho NQ intraday, lập trade plan mỗi ngày) và API `apps/web/app/api/plan/route.ts` nối Supabase + Discord. `supabase/` chứa migration. Stack đã chốt: [`claude/07`](claude/07-chuyen-doi-web-app.md), D26–D31.
+- **Dashboard Deren Desk** (Next.js, `apps/web/app/(desk)/`): `/dashboard`, `/calendar`, `/studio` (Plan Studio), `/journal`, `/pnl`, `/knowledge`, `/profile`; `/login` chỉ đăng nhập Discord của chủ sở hữu (`OWNER_DISCORD_ID`, D38). Cấu hình: [`docs/dashboard-setup.md`](docs/dashboard-setup.md). Màu / bố cục theo canvas thiết kế (link trong `claude/08-roadmap.md`).
 - Hướng đi: thành **web app cá nhân / dashboard** của Deren (đăng nhập, plan, economic calendar, options GEX/DEX/OI, heatmap, news, earnings...). Kế hoạch chuyển đổi: [`claude/07-chuyen-doi-web-app.md`](claude/07-chuyen-doi-web-app.md).
 - Chủ repo: Deren, fullstack dev, trader NQ PropFirm (ATAS + Rithmic, NY AM 9:30–11:30 ET).
 

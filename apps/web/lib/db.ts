@@ -1,0 +1,87 @@
+// Đọc ghi schema "trading" qua PostgREST bằng secret key (chỉ server, sau khi đã kiểm chủ sở hữu).
+// Bảng trading.* bật RLS, không có policy: chỉ service_role (secret key) vào được.
+import { secretKey, supabaseUrl } from "@/lib/env";
+import { TRADING_BUCKET } from "@/lib/storage";
+
+const SCHEMA = "trading";
+
+export class DbError extends Error {
+  status: number;
+  constructor(message: string, status = 0) {
+    super(message);
+    this.status = status;
+  }
+}
+
+function cfg() {
+  const url = supabaseUrl();
+  const key = secretKey();
+  if (!url || !key) throw new DbError("Thiếu SUPABASE_URL / secret key", 500);
+  const h = { apikey: key, Authorization: "Bearer " + key };
+  return { url, h };
+}
+
+export function dbReady() {
+  return !!(supabaseUrl() && secretKey());
+}
+
+async function call<T>(method: string, table: string, query: string, body?: unknown, prefer?: string): Promise<T> {
+  const { url, h } = cfg();
+  const headers: Record<string, string> = { ...h };
+  if (method === "GET") headers["Accept-Profile"] = SCHEMA;
+  else {
+    headers["Content-Profile"] = SCHEMA;
+    headers["Accept-Profile"] = SCHEMA;
+    headers["Content-Type"] = "application/json";
+  }
+  if (prefer) headers.Prefer = prefer;
+  const r = await fetch(`${url}/rest/v1/${table}${query ? "?" + query : ""}`, {
+    method,
+    headers,
+    body: body === undefined ? undefined : JSON.stringify(body),
+    cache: "no-store",
+  });
+  if (!r.ok) throw new DbError(`supabase ${r.status}: ${(await r.text()).slice(0, 300)}`, r.status);
+  if (r.status === 204) return [] as T;
+  const text = await r.text();
+  return (text ? JSON.parse(text) : []) as T;
+}
+
+export const db = {
+  select<T>(table: string, query: string) {
+    return call<T[]>("GET", table, query);
+  },
+  upsert<T>(table: string, rows: unknown, onConflict: string) {
+    return call<T[]>("POST", table, `on_conflict=${onConflict}`, rows, "resolution=merge-duplicates,return=representation");
+  },
+  insert<T>(table: string, rows: unknown) {
+    return call<T[]>("POST", table, "", rows, "return=representation");
+  },
+  remove(table: string, query: string) {
+    return call<unknown[]>("DELETE", table, query, undefined, "return=minimal");
+  },
+};
+
+// Link ký tạm để xem ảnh trong bucket private.
+export async function signedUrl(path: string, expiresIn = 3600): Promise<string | null> {
+  try {
+    const { url, h } = cfg();
+    const bucket = process.env.PLAN_BUCKET || TRADING_BUCKET;
+    const r = await fetch(`${url}/storage/v1/object/sign/${bucket}/${path}`, {
+      method: "POST",
+      headers: { ...h, "Content-Type": "application/json" },
+      body: JSON.stringify({ expiresIn }),
+      cache: "no-store",
+    });
+    if (!r.ok) return null;
+    const j = (await r.json()) as { signedURL?: string; signedUrl?: string };
+    const u = j.signedURL || j.signedUrl;
+    return u ? `${url}/storage/v1${u}` : null;
+  } catch {
+    return null;
+  }
+}
+
+export function errText(e: unknown) {
+  return String((e as Error)?.message ?? e);
+}
