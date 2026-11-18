@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Font cho ảnh plan đọc bằng fs lúc chạy: phải gói vào function /api/plan.
   outputFileTracingIncludes: { "/api/plan": ["./fonts/**"] },
-  serverExternalPackages: ["@resvg/resvg-js"],
+  serverExternalPackages: ["@resvg/resvg-js", "sharp"],
   async rewrites() {
     return {
       beforeFiles: [

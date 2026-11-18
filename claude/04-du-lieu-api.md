@@ -5,7 +5,7 @@
 - Truy cập chỉ từ server (Vercel Function, region `sin1`) bằng **secret key**. Không có client nào dùng publishable / anon key.
 - **Mỗi nghiệp vụ một schema, không dùng `public`:** `trading` (trade plan; sau này journal, recap), `util` (hàm dùng chung, không expose). Nghiệp vụ mới (calendar, options, news...) tạo schema riêng theo cùng mẫu quyền.
 - Schema mới phải thêm vào **Project Settings → Data API → Exposed schemas** thì PostgREST mới thấy. Gọi REST: header `Accept-Profile: <schema>` khi đọc, `Content-Profile: <schema>` khi ghi.
-- Nguồn chuẩn schema: `supabase/migrations/` (version trùng lịch sử trên production); bản gộp để đọc: `docs/plan-sender/supabase.sql`. Migration đã áp trên project Singapore: `trading_schema_trade_plans`, `revoke_rls_auto_enable_execute` (thu quyền gọi `public.rls_auto_enable()` của anon / authenticated), `trade_plans_timestamp_utc_defaults` (Deren đổi cột thời gian sang `timestamp`; đặt lại default giờ UTC, trigger ghi giờ UTC).
+- Nguồn chuẩn schema: `supabase/migrations/` (version trùng lịch sử trên production); bản gộp để đọc: `docs/plan-sender/supabase.sql`. Migration đã áp trên project Singapore: `trading_schema_trade_plans`, `revoke_rls_auto_enable_execute` (thu quyền gọi `public.rls_auto_enable()` của anon / authenticated), `trade_plans_timestamp_utc_defaults` (tạm dùng `timestamp` UTC), `trade_plans_timestamptz_defaults` (đổi lại `timestamptz`, default `now()`, trigger `now()`), `storage_trading_bucket` (bucket `trading`).
 
 ### Bảng `trading.trade_plans`
 Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp md5). Mỗi cột có `comment` trong database.
@@ -13,8 +13,8 @@ Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp
 | # | Cột | Kiểu | Ghi chú |
 |---|---|---|---|
 | 1 | `id` | uuid PK, mặc định `gen_random_uuid()` | |
-| 2 | `created_at` | timestamp (UTC), mặc định `now() at time zone 'utc'` | lần gửi đầu tiên của ngày |
-| 3 | `updated_at` | timestamp (UTC), mặc định như trên | lần gửi gần nhất; trigger `trade_plans_touch` → `util.touch_updated_at()` (`search_path=''`) |
+| 2 | `created_at` | timestamptz, mặc định `now()` | lần gửi đầu tiên của ngày |
+| 3 | `updated_at` | timestamptz, mặc định `now()` | lần gửi gần nhất; trigger `trade_plans_touch` → `util.touch_updated_at()` (`search_path=''`) |
 | 4 | `trade_date` | date not null | ngày phiên trade (ET) |
 | 5 | `symbol` | text not null, mặc định `'NQ'` | ví dụ `NQZ6` |
 | 6 | `summary` | jsonb | server tính: `{date, location, prth, ovn, bias, conf, setup, target, distance, flip, price, zone}` để lọc / thống kê |
@@ -22,16 +22,18 @@ Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp
 | 8 | `image_path` | text | đường dẫn ảnh trong bucket |
 | 9 | `payload` | jsonb not null | JSON v1 nguyên bản từ indicator |
 
-- **Thời gian:** cột dùng `timestamp` không tz (Deren chọn 2026-11-18), quy ước luôn là giờ UTC. API trả chuỗi không có `Z`, client phải coi là UTC (trang plan thêm `Z` trước khi `new Date`). Ngày phiên vẫn là `trade_date` (giờ ET).
+- **Thời gian:** cột dùng `timestamptz` (D33, theo khuyến nghị Supabase). API trả chuỗi có offset (`+00:00`). Trang plan vẫn thêm `Z` nếu chuỗi thiếu offset (an toàn cho cả hai kiểu). Ngày phiên vẫn là `trade_date` (giờ ET).
 - Giá lúc 9:29 ET không có cột riêng: lấy ở `payload->>'price'` hoặc `summary->>'price'`.
 - Ràng buộc `trade_plans_trade_date_symbol_key unique (trade_date, symbol)`: gửi lại cùng ngày thì ghi đè (upsert).
 - RLS bật, **không có policy**; `anon` / `authenticated` không có quyền trên schema `trading` lẫn bảng; chỉ `service_role` (secret key) có `usage` + `select, insert, update, delete`. Default privileges của schema `trading` đã đặt sẵn để bảng mới tự theo mẫu này.
 - Thêm cột mới: Postgres luôn thêm vào cuối. Muốn giữ thứ tự nhóm thì tạo lại bảng khi bảng còn trống, hoặc chấp nhận cột mới ở cuối.
 
 ### Storage
-- Bucket `trade-plans`: private, tối đa 5 MB / file, chỉ `image/png`, không có storage policy.
-- Đường dẫn: `YYYY/MM/plan_<date>_<symbol>.png` (ký tự lạ trong symbol đổi thành `_`). Ảnh khoảng 340 KB (PNG zoom ×2).
-- Xoá file: phải qua Storage API hoặc Dashboard (SQL `delete from storage.objects` bị chặn bởi `storage.protect_delete()`).
+- Bucket **`trading`** (cùng tên schema): private, tối đa 10 MB / file, `image/png`, `image/jpeg`, `image/webp`, không storage policy (chỉ secret key).
+- Đường dẫn theo **ngày rồi loại**: `YYYY/MM/DD/<loại>/<file>`, loại = `plan` | `journal` (journal gồm ảnh chụp lệnh và recap cuối phiên). Ví dụ `2026/11/17/plan/plan_2026-11-17_NQ.webp`. Helper: `apps/web/lib/storage.ts` (`dayPath`, `planImagePath`).
+- **Nén ảnh** (`apps/web/lib/image.ts`, sharp): plan = WebP lossless (2600 px, giống từng pixel PNG, ~100 KB thay vì ~330 KB); journal = xoay EXIF, tối đa 2560 px ngang, WebP q85 (ảnh chụp 4K ~1,1 MB → ~200 KB). `trade_plans.image_path` lưu đường dẫn trong bucket.
+- Hạn mức gói Free: 1 GB file storage, 5 GB egress. Ước tính: plan ~25 MB / năm; journal 5 ảnh / ngày ~250 MB / năm.
+- Bucket cũ `trade-plans` (trống) chờ xoá trên Dashboard. Xoá file / bucket phải qua Storage API hoặc Dashboard (SQL bị chặn bởi `storage.protect_delete()`).
 
 ## Biến môi trường Vercel (Production, kiểu Secret)
 | Biến | Bắt buộc | Ý nghĩa |
@@ -40,7 +42,7 @@ Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp
 | `SUPABASE_SERVICE_KEY` | có | secret key `sb_secret_...` (code nhận thêm `SUPABASE_SECRET_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) |
 | `PLAN_TOKEN` | có | token Bearer cho `/api/plan` (ATAS và trình duyệt chủ site dùng) |
 | `DISCORD_WEBHOOK_TRADE_PLAN` | không | webhook kênh `#trade-plan` (tên cũ `DISCORD_WEBHOOK_URL` vẫn nhận) |
-| `PLAN_BUCKET` | không | mặc định `trade-plans` |
+| `PLAN_BUCKET` | không | mặc định `trading` |
 
 Quy ước đặt tên webhook: `DISCORD_WEBHOOK_<MỤC_ĐÍCH>` (ví dụ sau này `DISCORD_WEBHOOK_SESSION_LOG`, `DISCORD_WEBHOOK_ALERTS`).
 
@@ -58,10 +60,10 @@ Các bước:
 3. Upload PNG (`x-upsert: true`), PATCH dòng với `image_path`, `plan_text`, `summary`.
 4. Gửi Discord nếu có webhook.
 
-Bước 2–4 lỗi thì plan vẫn được lưu. Response:
+Bước 2–4 lỗi thì plan vẫn được lưu. Bước 1 (database) lỗi thì API **vẫn vẽ ảnh, lưu Storage và gửi Discord** rồi trả `502 {"error":"supabase", status, detail, ok:false, image, discord}` (plan 9:29 không mất vì database). Response bình thường:
 ```json
 { "ok": true, "date": "2026-11-12", "symbol": "NQZ6",
-  "image": { "path": "2026/11/plan_2026-11-12_NQZ6.png", "bytes": 338930 },
+  "image": { "path": "2026/11/12/plan/plan_2026-11-12_NQZ6.webp", "bytes": 101834 },
   "discord": { "sent": true } }
 ```
 `image` / `discord` có thể là `{ "error": "..." }`; `discord` là `null` khi không gửi.

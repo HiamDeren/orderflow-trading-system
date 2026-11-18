@@ -2,12 +2,22 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-18 · Storage theo ngày + API bền hơn
+- Nén ảnh WebP (`lib/image.ts`, sharp): plan lossless 331 KB → 102 KB; journal q85 ≤ 2560 px. Discord nhận cùng file WebP.
+- Bucket `trading` (migration `storage_trading_bucket`), đường dẫn `YYYY/MM/DD/plan|journal/...` (`apps/web/lib/storage.ts`); recap gộp vào journal.
+- `/api/plan`: database lỗi vẫn vẽ ảnh + lưu Storage + gửi Discord, trả 502 kèm kết quả. Test mock 3 tình huống (bình thường / DB lỗi / Storage lỗi).
+
+## 2026-11-18 · Timestamptz
+- Deren đổi lại cột thời gian sang `timestamptz` trên dashboard (theo khuyến nghị Supabase); việc đổi kiểu lại làm mất default `NOT NULL` → migration `trade_plans_timestamptz_defaults` đặt lại default `now()`, trigger `now()`. Bảng đang trống (dòng 17/11 chép từ Sydney không còn); project Sydney đã xoá.
+- Bài học: đổi schema trên dashboard dễ làm mất default; luôn đổi bằng file migration (D30).
+
 ## 2026-11-18 · Monorepo Next.js + nhánh production / development
 - Chốt stack (D26–D30). Monorepo pnpm: `apps/web` (Next.js 16, TypeScript), `supabase/` (config + 3 migration khớp version trên production, kiểm bằng Postgres local).
 - Site tĩnh chuyển vào `apps/web/public/`; `next.config.ts` giữ URL sạch, redirect `.html`, `/testing`, `/overlap`, header cache. `vercel.json` gốc bỏ, `apps/web/vercel.json` chỉ còn region `sin1`.
 - `api/plan.js` → `apps/web/app/api/plan/route.ts`, giữ nguyên hợp đồng; test local với Supabase/Discord giả: 401/400/405, POST mẫu ra PNG 338.930 byte như cũ, header `Content-Profile`/`Accept-Profile: trading`.
 - Script i18n, check-plan-core, build-artifact, hook Claude Code đổi sang đường dẫn mới; snapshot plan-core khớp, bản EN và artifact không đổi.
 - Nhánh: `main` → `production`; `development` là nhánh mặc định (D31).
+- Cutover: ruleset GitHub cho `production`; Vercel Root Directory `apps/web` + Next.js + Production Branch `production`; PR #1 merge → production chạy Next.js. `main` còn giữ tới khi gửi plan thật ổn.
 
 ## 2026-11-18 · Chuyển Supabase sang Singapore, tách schema
 - Project mới **Personal Trading Dashboard** (`gpbypxuglcfmvarmferr`, `ap-southeast-1`); project Sydney giữ tạm.

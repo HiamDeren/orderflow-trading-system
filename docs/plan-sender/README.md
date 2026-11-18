@@ -109,7 +109,7 @@ Tạo chuỗi ngẫu nhiên từ 32 ký tự (chữ + số) bằng trình tạo 
 Mỗi lần indicator gửi plan (`POST /api/plan`), server tự làm thêm:
 1. Lập plan bằng `apps/web/public/assets/js/plan-core.js`, **cùng code với trang Trade Plan**, nên ảnh giống hệt ảnh trên web.
 2. Vẽ ảnh **tiếng Việt** (font Be Vietnam Pro + JetBrains Mono trong `apps/web/fonts/`), xuất PNG 2600 px.
-3. Lưu PNG vào Supabase Storage, bucket **private** `trade-plans`, đường dẫn `YYYY/MM/plan_YYYY-MM-DD_SYMBOL.png`.
+3. Lưu PNG vào Supabase Storage, bucket **private** `trading`, đường dẫn `YYYY/MM/DD/plan/plan_YYYY-MM-DD_SYMBOL.png`.
    Bảng `trade_plans` có thêm cột `image_path`, `plan_text`, `summary` (bias, setup, target...).
 4. Gửi ảnh + tóm tắt plan vào kênh Discord (nếu đã đặt `DISCORD_WEBHOOK_TRADE_PLAN`).
 
@@ -128,7 +128,7 @@ Webhook chỉ **gửi** tin. Khi cần gõ lệnh trong Discord (ví dụ `/plan
 
 ### Xem lại ảnh đã lưu
 - Trên web: Trade Plan → 04 · Plan Builder → **"Lấy plan mới nhất từ web"** (lần đầu dán `PLAN_TOKEN`, chỉ lưu trên trình duyệt đó). Builder nạp plan và hiện link ảnh đã lưu (link ký tạm 1 giờ).
-- Trên Supabase: **Storage → trade-plans**.
+- Trên Supabase: **Storage → trading → YYYY/MM/DD/plan**.
 - Trên Discord: kênh `#trade-plan`.
 
 ### Thử ngay không cần ATAS
