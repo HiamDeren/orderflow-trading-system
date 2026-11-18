@@ -1,4 +1,4 @@
--- 20261118080000 · journal_days_trades
+-- 20261118075449 · journal_days_trades (đã áp trên production Singapore 2026-11-18)
 -- Journal: một dòng / ngày trade (recap chữ + thuộc tính ngày) và các lệnh trong ngày.
 -- Chỉ server (secret key, sau khi kiểm đăng nhập chủ sở hữu) đọc ghi: RLS bật, không policy, không grant anon / authenticated.
 

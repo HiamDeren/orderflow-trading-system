@@ -58,7 +58,7 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 **Việc Deren cần làm để chạy được:**
 - [ ] Tạo Discord OAuth app, bật provider Discord trên Supabase, thêm Redirect URLs (docs/dashboard-setup.md bước 1–2).
 - [ ] Vercel: thêm `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `OWNER_DISCORD_ID` (Production + Preview), redeploy.
-- [ ] Áp migration `20261118080000_journal_days_trades` lên Supabase (Claude làm được qua MCP khi Deren đồng ý).
+- [x] Áp migration `20261118075449_journal_days_trades` lên Supabase (2026-11-18, RLS bật, anon / authenticated không có quyền).
 - [ ] Test trên preview `development`, rồi PR `development` → `production`.
 
 **Đã code (2026-11-18):**

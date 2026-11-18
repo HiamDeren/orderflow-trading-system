@@ -38,7 +38,7 @@ Biến `NEXT_PUBLIC_*` được nhúng lúc build: đổi xong phải **Redeploy
 
 ## 4. Database
 
-Migration mới: `supabase/migrations/20261118080000_journal_days_trades.sql` (bảng `trading.journal_days`, `trading.journal_trades`, RLS bật, chỉ `service_role`). Áp lên Supabase (MCP `apply_migration` hoặc `supabase db push`) trước khi dùng Journal / PnL Calendar.
+Migration mới: `supabase/migrations/20261118075449_journal_days_trades.sql` (bảng `trading.journal_days`, `trading.journal_trades`, RLS bật, chỉ `service_role`). Đã áp lên Supabase production ngày 2026-11-18.
 
 ## 5. Kiểm tra sau khi deploy
 

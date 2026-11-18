@@ -5,7 +5,7 @@ Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 ## 2026-11-18 · Code dashboard Deren Desk
 - Next.js: `app/(desk)/` (dashboard, calendar, studio, journal, pnl, knowledge, profile), `app/login`, `app/auth/*`, `proxy.ts` (Next 16), `app/desk.css`. Thư viện mới: `@supabase/ssr` 0.12.7, `@supabase/supabase-js` 2.119.0.
 - Đăng nhập Discord một người (D38). `/api/plan` nhận thêm phiên đăng nhập (ngoài `PLAN_TOKEN`) và `?month=`; token sai vẫn 401.
-- Migration `20261118080000_journal_days_trades` (chưa áp lên Supabase), test trên Postgres 16 local: check constraint, cascade, anon bị chặn.
+- Migration `20261118075449_journal_days_trades`, test trên Postgres 16 local (check constraint, cascade, anon bị chặn) rồi áp lên Supabase production; advisor chỉ còn INFO "RLS bật, không policy" (cố ý, chỉ server đọc ghi).
 - Lịch kinh tế: feed tuần của ForexFactory, lọc USD, cache 15 phút (`lib/econ.ts`).
 - Test local với Supabase giả: chưa đăng nhập / tài khoản lạ bị chuyển về `/login`, các trang 200, lưu journal + PnL khớp (+$338.8), ATAS token vẫn dùng được.
 
