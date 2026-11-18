@@ -57,6 +57,9 @@ export const db = {
   insert<T>(table: string, rows: unknown) {
     return call<T[]>("POST", table, "", rows, "return=representation");
   },
+  rpc<T>(fn: string, args: unknown) {
+    return call<T>("POST", `rpc/${fn}`, "", args);
+  },
   remove(table: string, query: string) {
     return call<unknown[]>("DELETE", table, query, undefined, "return=minimal");
   },

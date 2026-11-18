@@ -1,5 +1,6 @@
 // Layout gốc cho các trang Next.js (dashboard Deren Desk). Trang học tĩnh trong public/ không đi qua layout này.
 import type { Metadata, Viewport } from "next";
+import { getUi } from "@/lib/prefs-server";
 import "./desk.css";
 
 export const metadata: Metadata = {
@@ -11,9 +12,10 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = { themeColor: "#0f1115", colorScheme: "dark" };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { lang } = await getUi();
   return (
-    <html lang="vi">
+    <html lang={lang}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />

@@ -4,7 +4,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-const DESK = ["/dashboard", "/calendar", "/studio", "/journal", "/pnl", "/knowledge", "/profile"];
+const DESK = ["/dashboard", "/calendar", "/news", "/earnings", "/trade-plan", "/journal", "/knowledge", "/profile"];
 const OWNER_FLAG = "desk_owner";
 
 export async function proxy(request: NextRequest) {
@@ -59,9 +59,10 @@ export const config = {
     "/login",
     "/dashboard/:path*",
     "/calendar/:path*",
-    "/studio/:path*",
+    "/news/:path*",
+    "/earnings/:path*",
+    "/trade-plan/:path*",
     "/journal/:path*",
-    "/pnl/:path*",
     "/knowledge/:path*",
     "/profile/:path*",
     "/api/journal/:path*",

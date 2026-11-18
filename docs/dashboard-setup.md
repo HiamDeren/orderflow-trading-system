@@ -1,6 +1,6 @@
 # Deren Desk · cấu hình đăng nhập Discord và biến môi trường
 
-Dashboard (Next.js trong `apps/web`) nằm ở các đường dẫn `/dashboard`, `/calendar`, `/studio`, `/journal`, `/pnl`, `/knowledge`, `/profile`. `/` là cửa vào: đã đăng nhập → `/dashboard`, chưa → `/login`. Trang học cũ không cần đăng nhập: trang chủ học chuyển sang `/learn` (`/index.html` tự về đây), `/plan`, `/levels`, `/tools`, `/quiz` giữ nguyên.
+Dashboard (Next.js trong `apps/web`) nằm ở các đường dẫn `/dashboard`, `/calendar`, `/news`, `/earnings`, `/trade-plan`, `/journal` (+ `/journal/pnl`), `/knowledge`, `/profile`. `/studio` và `/pnl` cũ tự chuyển sang đường dẫn mới. `/` là cửa vào: đã đăng nhập → `/dashboard`, chưa → `/login`. Trang học cũ không cần đăng nhập: trang chủ học chuyển sang `/learn` (`/index.html` tự về đây), `/plan`, `/levels`, `/tools`, `/quiz` giữ nguyên.
 
 Chỉ **một** tài khoản Discord (ID trong `OWNER_DISCORD_ID`) vào được. Tài khoản khác đăng nhập sẽ bị đăng xuất và xoá khỏi Supabase Auth ngay.
 
@@ -32,6 +32,7 @@ Chỉ **một** tài khoản Discord (ID trong `OWNER_DISCORD_ID`) vào được
 | `OWNER_DISCORD_ID` | Discord User ID của Deren | như trên |
 | `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `PLAN_TOKEN`, `DISCORD_WEBHOOK_TRADE_PLAN` | đã có | giữ nguyên |
 | `ECON_CALENDAR_URL` | (tuỳ chọn) nguồn lịch khác | mặc định feed tuần hiện tại của ForexFactory |
+| `FINNHUB_API_KEY` | key miễn phí ở https://finnhub.io/register (loại **Secret**) | Production + Preview · cần cho News và Earnings |
 
 Biến `NEXT_PUBLIC_*` được nhúng lúc build: đổi xong phải **Redeploy**.
 

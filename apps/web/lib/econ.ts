@@ -3,7 +3,7 @@
 // Mỗi phần tử feed: { title, country: "USD", date: "2026-11-18T08:30:00-05:00", impact: High|Medium|Low|Holiday, forecast, previous }
 // Lấy đủ mọi currency; lọc currency / mức tác động ở giao diện (cookie desk_econ, lib/econ-prefs.ts).
 import { IMPACT_RANK, type Impact } from "@/lib/econ-prefs";
-import { TZ_ET, TZ_VN, etDateOf, hhmm, inSession } from "@/lib/time";
+import { TZ_ET, dateIn, etDateOf, hhmm, inSession } from "@/lib/time";
 
 export type { Impact } from "@/lib/econ-prefs";
 export const ECON_SOURCE_PAGE = "https://www.forexfactory.com/calendar";
@@ -18,7 +18,8 @@ export type EconEvent = {
   ts: number;
   dateEt: string;
   timeEt: string;
-  timeVn: string;
+  dateLocal: string;
+  timeLocal: string;
   allDay: boolean;
   forecast: string;
   previous: string;
@@ -54,7 +55,8 @@ export async function getEconWeek(): Promise<EconWeek> {
         ts,
         dateEt: etDateOf(ts),
         timeEt: allDay ? "Cả ngày" : timeEt,
-        timeVn: allDay ? "" : hhmm(ts, TZ_VN),
+        dateLocal: etDateOf(ts),
+        timeLocal: allDay ? "" : timeEt,
         allDay,
         forecast: String(e.forecast ?? "").trim(),
         previous: String(e.previous ?? "").trim(),
@@ -74,4 +76,13 @@ export function topImpact(list: { impact: Impact }[]): Impact | null {
   let best: Impact | null = null;
   for (const e of list) if (!best || IMPACT_RANK[e.impact] > IMPACT_RANK[best]) best = e.impact;
   return best;
+}
+
+// Đổi sang múi giờ hiển thị: nhóm ngày theo múi giờ này (giống forexfactory.com xem ở VN), giờ ET vẫn giữ để đối chiếu phiên.
+export function localize(events: EconEvent[], tz: string): EconEvent[] {
+  return events.map((e) => ({
+    ...e,
+    dateLocal: e.allDay ? e.dateEt : dateIn(e.ts, tz),
+    timeLocal: e.allDay ? "" : hhmm(e.ts, tz),
+  }));
 }

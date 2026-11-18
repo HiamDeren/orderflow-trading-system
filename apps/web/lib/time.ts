@@ -25,6 +25,14 @@ export function etDateOf(ts: number) {
   return parts(new Date(ts), TZ_ET).date;
 }
 
+export function dateIn(ts: number, timeZone: string) {
+  return parts(new Date(ts), timeZone).date;
+}
+
+export function nowIn(timeZone: string, d = new Date()) {
+  return parts(d, timeZone);
+}
+
 export function hhmm(ts: number, timeZone: string) {
   const p = parts(new Date(ts), timeZone);
   return `${String(p.hh).padStart(2, "0")}:${String(p.mm).padStart(2, "0")}`;
@@ -87,3 +95,15 @@ export function viDayMonth(date: string) {
 
 export const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 export const MONTH_RE = /^\d{4}-\d{2}$/;
+
+// Thứ 2 của tuần chứa ngày này (cuối tuần thì lấy tuần kế tiếp)
+export function mondayOf(date: string) {
+  const w = dowOf(date);
+  return addDays(date, w === 0 ? 1 : w === 6 ? 2 : 1 - w);
+}
+
+export function fmtTime(ts: number, timeZone: string, withDate = false) {
+  return new Date(ts).toLocaleString("en-GB", {
+    timeZone, hour: "2-digit", minute: "2-digit", hour12: false, ...(withDate ? { day: "2-digit", month: "2-digit" } : {}),
+  });
+}

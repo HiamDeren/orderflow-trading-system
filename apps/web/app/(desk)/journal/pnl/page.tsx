@@ -3,13 +3,16 @@ import Link from "next/link";
 import { errText } from "@/lib/db";
 import { dayNet, getDaysBetween, type DayWithTrades } from "@/lib/journal";
 import { MONTH_RE, addDays, dowOf, etNow, monthRange, shiftMonth } from "@/lib/time";
+import { getT } from "@/lib/prefs-server";
+import JournalTabs from "../JournalTabs";
 import PnlView, { type PnlDay, type PnlWeek } from "./PnlView";
 
-export const metadata: Metadata = { title: "PnL Calendar" };
+export const metadata: Metadata = { title: "PnL Calendar · Journal" };
 export const dynamic = "force-dynamic";
 
 export default async function PnlPage({ searchParams }: { searchParams: Promise<{ month?: string }> }) {
   const q = await searchParams;
+  const { t } = await getT();
   const today = etNow().date;
   const month = q.month && MONTH_RE.test(q.month) ? q.month : today.slice(0, 7);
   const { start, days } = monthRange(month);
@@ -56,21 +59,22 @@ export default async function PnlPage({ searchParams }: { searchParams: Promise<
     <>
       <header className="page-head">
         <div>
-          <span className="lbl">Giao dịch</span>
-          <h1 className="h1">PnL Calendar</h1>
+          <span className="lbl">{t("Giao dịch")}</span>
+          <h1 className="h1">Journal</h1>
         </div>
         <div className="hstack" style={{ gap: 6 }}>
-          <Link className="btn icon" aria-label="Tháng trước" href={`/pnl?month=${shiftMonth(month, -1)}`}>‹</Link>
-          <span style={{ fontSize: 14, fontWeight: 600, minWidth: 120, textAlign: "center" }}>Tháng {Number(m)} · {y}</span>
+          <JournalTabs />
+          <Link className="btn icon" aria-label={t("Tháng trước")} href={`/journal/pnl?month=${shiftMonth(month, -1)}`}>‹</Link>
+          <span style={{ fontSize: 14, fontWeight: 600, minWidth: 120, textAlign: "center" }}>{t("Tháng {m} · {y}", { m: Number(m), y })}</span>
           {month < today.slice(0, 7) ? (
-            <Link className="btn icon" aria-label="Tháng sau" href={`/pnl?month=${shiftMonth(month, 1)}`}>›</Link>
+            <Link className="btn icon" aria-label={t("Tháng sau")} href={`/journal/pnl?month=${shiftMonth(month, 1)}`}>›</Link>
           ) : (
             <span className="btn icon" aria-disabled="true" style={{ opacity: 0.4 }}>›</span>
           )}
         </div>
       </header>
       {error ? (
-        <div className="notice">Không đọc được journal: {error}</div>
+        <div className="notice">{t("Không đọc được journal")}: {error}</div>
       ) : (
         <PnlView weeks={weeks} today={today} />
       )}

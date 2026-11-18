@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useUi } from "../_components/Ui";
 
 type Lesson = { t: string; s: string; href?: string };
 type Track = { short: string; part: string; title: string; desc: string; color: string; lessons: Lesson[]; more?: { label: string; href: string } };
@@ -44,38 +45,39 @@ const TRACKS: Track[] = [
 ];
 
 export default function KnowledgeTabs() {
+  const { t } = useUi();
   const [tab, setTab] = useState(1);
   const cur = TRACKS[tab];
   return (
     <div className="stack" style={{ gap: 16 }}>
-      <div className="seg" role="tablist" aria-label="Phần kiến thức" style={{ alignSelf: "flex-start", padding: 4 }}>
-        {TRACKS.map((t, i) => (
-          <button key={t.short} role="tab" aria-selected={i === tab} onClick={() => setTab(i)} style={{ minHeight: 40, padding: "0 16px" }}>
-            <span className="mono" style={{ fontSize: 11, marginRight: 8, color: i === tab ? t.color : "var(--faint)" }}>0{i + 1}</span>
-            {t.short}
+      <div className="seg" role="tablist" aria-label={t("Phần kiến thức")} style={{ alignSelf: "flex-start", padding: 4 }}>
+        {TRACKS.map((x, i) => (
+          <button key={x.short} role="tab" aria-selected={i === tab} onClick={() => setTab(i)} style={{ minHeight: 40, padding: "0 16px" }}>
+            <span className="mono" style={{ fontSize: 11, marginRight: 8, color: i === tab ? x.color : "var(--faint)" }}>0{i + 1}</span>
+            {x.short}
           </button>
         ))}
       </div>
       <section className="card" role="tabpanel" aria-label={cur.title} style={{ padding: 22, gap: 16 }}>
         <div className="row wrap" style={{ alignItems: "flex-end", paddingBottom: 14, borderBottom: "1px solid var(--line)" }}>
           <div className="stack" style={{ gap: 6, maxWidth: 640 }}>
-            <span className="lbl" style={{ color: cur.color }}>{cur.part}</span>
+            <span className="lbl" style={{ color: cur.color }}>{t(cur.part)}</span>
             <h2 className="h2" style={{ fontSize: 22 }}>{cur.title}</h2>
-            <p className="muted" style={{ fontSize: 14 }}>{cur.desc}</p>
+            <p className="muted" style={{ fontSize: 14 }}>{t(cur.desc)}</p>
           </div>
-          {cur.more ? <a className="small" href={cur.more.href} style={{ fontWeight: 600 }}>{cur.more.label}</a> : <span className="small faint">Nội dung chi tiết Deren tổng hợp sau</span>}
+          {cur.more ? <a className="small" href={cur.more.href} style={{ fontWeight: 600 }}>{t(cur.more.label)}</a> : <span className="small faint">{t("Nội dung chi tiết Deren tổng hợp sau")}</span>}
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "6px 16px" }}>
           {cur.lessons.map((l, i) =>
             l.href ? (
               <a key={l.t} className="lesson" href={l.href}>
                 <span className="num" aria-hidden="true">{i + 1}</span>
-                <span style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}><span style={{ fontSize: 14, fontWeight: 500 }}>{l.t}</span><span className="small dim">{l.s}</span></span>
+                <span style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}><span style={{ fontSize: 14, fontWeight: 500 }}>{t(l.t)}</span><span className="small dim">{t(l.s)}</span></span>
               </a>
             ) : (
               <div key={l.t} className="lesson">
                 <span className="num" aria-hidden="true">{i + 1}</span>
-                <span style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}><span style={{ fontSize: 14, fontWeight: 500 }}>{l.t}</span><span className="small dim">{l.s}</span></span>
+                <span style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}><span style={{ fontSize: 14, fontWeight: 500 }}>{t(l.t)}</span><span className="small dim">{t(l.s)}</span></span>
               </div>
             ),
           )}

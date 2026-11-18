@@ -71,6 +71,15 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [x] PnL Calendar: Thứ 2–6 + tổng tuần, đổi $ / R, bấm ngày mở journal.
 - [x] Knowledge: 3 tab AMT / Context / Entry, link sang trang học cũ.
 
+**Đợt 2 (2026-11-18, sau test preview):**
+- [x] Scrollbar mảnh; sidebar ghim / thu gọn thành cột icon (rê chuột mở rộng); layout mobile (thanh trên + ngăn kéo).
+- [x] VI / EN (mặc định VI) ở sidebar, thanh trên mobile, trang login, Profile; múi giờ hiển thị chọn ở Profile (Calendar nhóm ngày theo múi giờ này, khớp forexfactory.com).
+- [x] Plan Studio đổi tên **Trade Plan** (`/trade-plan`); ảnh plan qua `/api/plan/image` cùng origin + nút **Copy ảnh** (PNG vào clipboard).
+- [x] PnL Calendar thành tab con của Journal (`/journal/pnl`); bỏ thẻ Journal khỏi Dashboard.
+- [x] **News** và **Earnings** tách 2 trang + thẻ trên Dashboard (Finnhub, D40). Lịch trên Dashboard thu gọn (tối đa 6 tin, một dòng / tin).
+- [ ] **Deren duyệt rồi áp migration `trade_days_hub`** (D39). Chưa áp thì Journal / PnL trên preview báo lỗi bảng.
+- [ ] Deren tạo `FINNHUB_API_KEY` (Secret, Production + Preview) rồi Redeploy.
+
 **Còn lại:**
 - [ ] Journal: tải ảnh (context / footprint) vào `YYYY/MM/DD/journal/` (WebP q85 qua `lib/image.ts`).
 - [ ] Knowledge: Deren tổng hợp nội dung AMT / Context / Entry; port dần `levels.html`, `tools.html`, quiz vào Next.js.

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getT } from "@/lib/prefs-server";
 import KnowledgeTabs from "./KnowledgeTabs";
 
 export const metadata: Metadata = { title: "Knowledge" };
@@ -11,7 +12,8 @@ const FLOW = [
   { n: "05", t: "Journal", s: "Recap, R, lỗi, bài học → thống kê", hi: false },
 ];
 
-export default function KnowledgePage() {
+export default async function KnowledgePage() {
+  const { t } = await getT();
   return (
     <>
       <header className="page-head">
@@ -20,18 +22,18 @@ export default function KnowledgePage() {
           <h1 className="h1">AMT → Context → Entry</h1>
         </div>
         <span className="hstack small" style={{ fontWeight: 600 }}>
-          <a href="/learn">Mở trang học cũ</a>
-          <a href="/quiz">Làm quiz ôn tập</a>
+          <a href="/learn">{t("Mở trang học cũ")}</a>
+          <a href="/quiz">{t("Làm quiz ôn tập")}</a>
         </span>
       </header>
-      <section className="card" aria-label="Luồng mỗi ngày">
-        <span className="lbl">Luồng mỗi ngày</span>
+      <section className="card" aria-label={t("Luồng mỗi ngày")}>
+        <span className="lbl">{t("Luồng mỗi ngày")}</span>
         <ol className="flow">
           {FLOW.map((f) => (
             <li key={f.n} className={f.hi ? "hi" : ""}>
               <span className="mono small" style={{ color: f.hi ? "var(--accent)" : "var(--dim)" }}>{f.n}</span>
               <span style={{ fontSize: 14, fontWeight: 600 }}>{f.t}</span>
-              <span className="small muted" style={{ lineHeight: 1.45 }}>{f.s}</span>
+              <span className="small muted" style={{ lineHeight: 1.45 }}>{t(f.s)}</span>
             </li>
           ))}
         </ol>

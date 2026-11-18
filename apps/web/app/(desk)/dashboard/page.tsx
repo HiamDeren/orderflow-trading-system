@@ -1,21 +1,28 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { cookies } from "next/headers";
-import { PREFS_COOKIE, matches, parsePrefs } from "@/lib/econ-prefs";
 import { errText } from "@/lib/db";
-import { ECON_SOURCE_PAGE, getEconWeek, topImpact, type EconEvent } from "@/lib/econ";
-import { getDay } from "@/lib/journal";
-import { fmtPx, getLatestPlanBefore, getPlan, planView, type PlanView } from "@/lib/plans";
-import { DOW_SHORT, DOW_VI, PLAN_SEND, addDays, dowOf, etNow, isWeekday, viDate, viDayMonth } from "@/lib/time";
-import EventRow from "../_components/EventRow";
+import { ECON_SOURCE_PAGE, getEconWeek, localize, topImpact, type EconEvent } from "@/lib/econ";
+import { IMPACT_RANK, PREFS_COOKIE, matches, parsePrefs } from "@/lib/econ-prefs";
+import { DOW, DOW_SHORT } from "@/lib/i18n";
+import { NQ_WATCH, getEarnings, getNews, marketConfigured } from "@/lib/market";
+import { planImageSrc } from "@/lib/plan-url";
+import { fmtPx, getPlan, planView, type PlanView } from "@/lib/plans";
+import { getT } from "@/lib/prefs-server";
+import { PLAN_SEND, addDays, dowOf, etNow, isWeekday, mondayOf, nowIn, viDate, viDayMonth } from "@/lib/time";
+import CopyImage from "../_components/CopyImage";
+import { EventLine } from "../_components/EventRow";
 import { Clock, Timeline } from "../_components/Live";
+import { EarningRow, NewsRow } from "../_components/MarketBits";
 
 export const metadata: Metadata = { title: "Dashboard" };
 export const dynamic = "force-dynamic";
 
+type T = (s: string, v?: Record<string, string | number>) => string;
 const BIAS_LABEL = { long: "Long", short: "Short", flat: "Trung tính" } as const;
+const MAX_LINES = 6;
 
-async function safe<T>(p: Promise<T>): Promise<{ ok: true; v: T } | { ok: false; error: string }> {
+async function safe<V>(p: Promise<V>): Promise<{ ok: true; v: V } | { ok: false; error: string }> {
   try {
     return { ok: true, v: await p };
   } catch (e) {
@@ -23,176 +30,203 @@ async function safe<T>(p: Promise<T>): Promise<{ ok: true; v: T } | { ok: false;
   }
 }
 
-function weekDates(today: string) {
-  const w = dowOf(today);
-  const monday = addDays(today, w === 0 ? 1 : w === 6 ? 2 : 1 - w);
-  return [0, 1, 2, 3, 4].map((i) => addDays(monday, i));
-}
-
 export default async function DashboardPage() {
   const nowMs = Date.now();
   const et = etNow(new Date(nowMs));
   const today = et.date;
+  const { t, ui } = await getT();
+  const localToday = nowIn(ui.tz, new Date(nowMs)).date;
+  const mon = mondayOf(today);
 
-  const [planRes, econ, prevRes] = await Promise.all([
+  const [planRes, econ, news, earn] = await Promise.all([
     safe(getPlan(today).then((r) => (r ? planView(r) : null))),
     getEconWeek(),
-    safe(getLatestPlanBefore(today)),
+    getNews("general", 6),
+    getEarnings(mon, addDays(mon, 4)),
   ]);
-  const prevPlan = prevRes.ok ? prevRes.v : null;
-  const prevJournal = prevPlan ? await safe(getDay(prevPlan.trade_date)) : null;
-  const needRecap = !!prevPlan && !!prevJournal?.ok && !prevJournal.v;
 
   const prefs = parsePrefs((await cookies()).get(PREFS_COOKIE)?.value);
-  const shown = econ.events.filter((e) => matches(prefs, e));
-  const todayEvents = shown.filter((e) => e.dateEt === today);
-  const week = weekDates(today).map((d) => {
-    const list = shown.filter((e) => e.dateEt === d);
-    return { d, list, top: topImpact(list) };
+  const events = localize(econ.events, ui.tz).filter((e) => matches(prefs, e));
+  const todayEvents = events.filter((e) => e.dateLocal === localToday);
+  // Gọn cho dashboard: ưu tiên tin mạnh, rồi theo giờ
+  const lines = [...todayEvents]
+    .sort((a, b) => IMPACT_RANK[b.impact] - IMPACT_RANK[a.impact] || a.ts - b.ts)
+    .slice(0, MAX_LINES)
+    .sort((a, b) => a.ts - b.ts);
+  const weekDays = [0, 1, 2, 3, 4].map((i) => addDays(mondayOf(localToday), i));
+  const week = weekDays.map((d) => {
+    const list = events.filter((e) => e.dateLocal === d);
+    return { d, n: list.length, top: topImpact(list) };
   });
-  const tl = todayEvents
-    .filter((e) => !e.allDay)
+  const tl = events
+    .filter((e) => e.dateEt === today && !e.allDay)
     .map((e) => {
       const [h, m] = e.timeEt.split(":").map(Number);
-      return { id: e.id, minutes: h * 60 + m, impact: e.impact, title: `${e.timeEt} · ${e.country} · ${e.title}` };
+      return { id: e.id, minutes: h * 60 + m, impact: e.impact, title: `${e.timeEt} ET · ${e.country} · ${e.title}` };
     });
+  const nqEarn = earn.items.filter((e) => NQ_WATCH.includes(e.symbol));
 
   return (
     <>
       <header className="page-head">
         <div>
-          <span className="lbl">{DOW_VI[et.dow]} · {viDate(today)}</span>
+          <span className="lbl">{DOW[ui.lang][et.dow]} · {viDate(today)}</span>
           <h1 className="h1">Dashboard</h1>
         </div>
         <div className="hstack">
           <Clock initial={nowMs} />
-          <Link className="btn primary" href="/studio">Mở Plan Studio</Link>
+          <Link className="btn primary" href="/trade-plan">{t("Mở Trade Plan")}</Link>
         </div>
       </header>
 
       <Timeline initial={nowMs} events={tl} today={today} />
 
-      <div className="split">
-        <div style={{ flex: "2 1 560px", minWidth: 0 }}>
+      <div className="dash-grid">
+        <div className="dash-plan">
           {planRes.ok ? (
-            planRes.v ? (
-              <PlanCard p={planRes.v} />
-            ) : (
-              <NoPlan weekday={isWeekday(today)} late={et.minutes >= PLAN_SEND + 5} />
-            )
+            planRes.v ? <PlanCard p={planRes.v} t={t} /> : <NoPlan t={t} weekday={isWeekday(today)} late={et.minutes >= PLAN_SEND + 5} />
           ) : (
             <section className="card warn">
-              <span className="lbl short">Plan hôm nay · lỗi đọc database</span>
+              <span className="lbl short">{t("Plan hôm nay · lỗi đọc database")}</span>
               <p className="small" style={{ color: "#d9cfc9" }}>{planRes.error}</p>
-              <Link className="btn sm" href="/studio" style={{ alignSelf: "flex-start" }}>Mở Plan Studio</Link>
             </section>
           )}
         </div>
 
-        <section className="card" aria-label="Tin hôm nay" style={{ flex: "1 1 340px" }}>
+        <section className="card dash-cal" aria-label={t("Lịch hôm nay")}>
           <div className="row">
-            <span className="lbl">Tin hôm nay · {prefs.cur.length === 9 ? "mọi currency" : prefs.cur.join(", ") || "chưa chọn currency"}</span>
-            <Link href="/calendar" className="small" style={{ fontWeight: 600 }}>Mở Calendar</Link>
+            <span className="lbl">{t("Lịch hôm nay")} · {prefs.cur.length === 9 ? t("mọi currency") : prefs.cur.join(", ") || "—"}</span>
+            <Link href="/calendar" className="small" style={{ fontWeight: 600 }}>Calendar</Link>
           </div>
           {!econ.ok ? (
-            <div className="stack" style={{ gap: 10 }}>
-              <div className="notice">Không tải được lịch tin ({econ.error}).</div>
-              <a className="btn sm ghost" href={ECON_SOURCE_PAGE} target="_blank" rel="noreferrer" style={{ alignSelf: "flex-start" }}>Mở trang nguồn</a>
-            </div>
-          ) : todayEvents.length ? (
             <div className="stack" style={{ gap: 8 }}>
-              {todayEvents.map((e: EconEvent) => <EventRow key={e.id} e={e} showNums={false} />)}
+              <div className="notice">{t("Không tải được lịch tin")}</div>
+              <a className="small" href={ECON_SOURCE_PAGE} target="_blank" rel="noreferrer">{t("Mở trang nguồn")}</a>
+            </div>
+          ) : lines.length ? (
+            <div className="evl-list">
+              {lines.map((e: EconEvent) => <EventLine key={e.id} e={e} />)}
+              {todayEvents.length > lines.length && (
+                <Link href={`/calendar?day=${localToday}`} className="small dim" style={{ paddingLeft: 4 }}>
+                  {t("+{n} tin khác", { n: todayEvents.length - lines.length })}
+                </Link>
+              )}
             </div>
           ) : (
-            <p className="small dim">{isWeekday(today) ? "Không có tin khớp bộ lọc hôm nay (đổi bộ lọc ở Calendar)." : "Cuối tuần, không có tin."}</p>
+            <p className="small dim">{isWeekday(localToday) ? t("Không có tin khớp bộ lọc hôm nay.") : t("Cuối tuần, không có tin.")}</p>
           )}
-          <div className="stack" style={{ gap: 8, borderTop: "1px solid var(--line)", paddingTop: 12 }}>
-            <span className="lbl">Tuần này</span>
-            <div className="week-strip">
-              {week.map((w) => (
-                <Link key={w.d} href={`/calendar?day=${w.d}`} className={w.d === today ? "today" : ""} aria-label={`${DOW_VI[dowOf(w.d)]} ${viDayMonth(w.d)}, ${w.list.length} tin`}>
-                  <span className="small dim">{DOW_SHORT[dowOf(w.d)]}</span>
-                  <span className="mono" style={{ fontSize: 14, fontWeight: 600 }}>{w.d.slice(8)}</span>
-                  <span className={"dot" + (w.top ? " imp-" + w.top : "")} style={w.top ? undefined : { background: "transparent" }} aria-hidden="true" />
-                </Link>
-              ))}
-            </div>
+          <div className="week-strip sm">
+            {week.map((w) => (
+              <Link key={w.d} href={`/calendar?day=${w.d}`} className={w.d === localToday ? "today" : ""} aria-label={`${DOW[ui.lang][dowOf(w.d)]} ${viDayMonth(w.d)}, ${w.n}`}>
+                <span className="small dim">{DOW_SHORT[ui.lang][dowOf(w.d)]}</span>
+                <span className="mono" style={{ fontSize: 13, fontWeight: 600 }}>{w.d.slice(8)}</span>
+                <span className={"dot" + (w.top ? " imp-" + w.top : "")} style={w.top ? undefined : { background: "transparent" }} aria-hidden="true" />
+              </Link>
+            ))}
           </div>
         </section>
       </div>
 
-      <div className="grid-auto">
-        <section className="card" aria-label="Journal">
-          <span className="lbl">Journal</span>
-          {needRecap && prevPlan ? (
-            <>
-              <h3 className="h3">{viDayMonth(prevPlan.trade_date)} chưa recap</h3>
-              <p className="small muted">Ghi day type, kết quả và bài học trong lúc còn nhớ rõ. Plan của ngày đó đã gắn sẵn vào trang journal.</p>
-              <Link className="btn" href={`/journal?date=${prevPlan.trade_date}`} style={{ alignSelf: "flex-start" }}>Recap {viDayMonth(prevPlan.trade_date)}</Link>
-            </>
+      <div className="dash-grid two">
+        <section className="card" aria-label="News">
+          <div className="row">
+            <span className="lbl">News</span>
+            <Link href="/news" className="small" style={{ fontWeight: 600 }}>{t("Xem tất cả")}</Link>
+          </div>
+          {!marketConfigured() ? (
+            <p className="small dim">{t("Chưa có FINNHUB_API_KEY trên Vercel.")}</p>
+          ) : !news.ok ? (
+            <p className="small short">{news.error}</p>
+          ) : news.items.length ? (
+            <div className="news-list">{news.items.slice(0, 5).map((n) => <NewsRow key={n.id} n={n} now={nowMs} compact />)}</div>
           ) : (
-            <>
-              <h3 className="h3">Journal đã cập nhật</h3>
-              <p className="small muted">Sau phiên, mở journal hôm nay để ghi lệnh và bài học.</p>
-              <Link className="btn" href={`/journal?date=${today}`} style={{ alignSelf: "flex-start" }}>Journal hôm nay</Link>
-            </>
+            <p className="small dim">{t("Chưa có tin.")}</p>
           )}
         </section>
-        <section className="card dashed" aria-label="Options sắp có" style={{ justifyContent: "center" }}>
-          <span className="lbl">Options · sắp có</span>
-          <p className="small dim">Chỗ cho GEX / DEX / OI khi có API. Widget sẽ nằm ở đây.</p>
+        <section className="card" aria-label="Earnings">
+          <div className="row">
+            <span className="lbl">{t("Earnings tuần này · NQ top")}</span>
+            <Link href="/earnings" className="small" style={{ fontWeight: 600 }}>{t("Xem tất cả")}</Link>
+          </div>
+          {!marketConfigured() ? (
+            <p className="small dim">{t("Chưa có FINNHUB_API_KEY trên Vercel.")}</p>
+          ) : !earn.ok ? (
+            <p className="small short">{earn.error}</p>
+          ) : nqEarn.length ? (
+            <div className="stack" style={{ gap: 10 }}>
+              {[0, 1, 2, 3, 4].map((i) => addDays(mon, i)).map((d) => {
+                const rows = nqEarn.filter((e) => e.date === d);
+                if (!rows.length) return null;
+                return (
+                  <div key={d} className="stack" style={{ gap: 4 }}>
+                    <span className="small dim">{DOW[ui.lang][dowOf(d)]} · {viDayMonth(d)}</span>
+                    {rows.slice(0, 4).map((e) => <EarningRow key={e.symbol} e={e} />)}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="small dim">{t("Tuần này không có mã NQ top báo cáo.")}</p>
+          )}
         </section>
       </div>
+
+      <section className="card dashed" aria-label={t("Options sắp có")} style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
+        <span className="lbl">{t("Options · sắp có")}</span>
+        <span className="small dim">{t("Chỗ cho GEX / DEX / OI khi có API.")}</span>
+      </section>
     </>
   );
 }
 
-function PlanCard({ p }: { p: PlanView }) {
+function PlanCard({ p, t }: { p: PlanView; t: T }) {
   const s = p.summary;
   const tone = p.bias;
+  const img = p.image_path ? planImageSrc(p.trade_date, p.updated_at) : null;
   return (
-    <section className="card" aria-label="Plan hôm nay" style={{ gap: 16 }}>
+    <section className="card" aria-label={t("Plan hôm nay")} style={{ gap: 16 }}>
       <div className="row wrap">
         <div className="stack" style={{ gap: 4 }}>
-          <span className="lbl">Plan hôm nay · Composite × pRTH × OVN</span>
+          <span className="lbl">{t("Plan hôm nay · Composite × pRTH × OVN")}</span>
           <h2 className="h2">{p.symbol} · {s?.setup || "Plan"}</h2>
         </div>
         <div className="hstack" style={{ gap: 8 }}>
-          <span className={"pill " + (tone === "flat" ? "" : tone)}>Bias {BIAS_LABEL[tone]}{s?.conf ? ` · ${s.conf}` : ""}</span>
+          <span className={"pill " + (tone === "flat" ? "" : tone)}>Bias {t(BIAS_LABEL[tone])}{s?.conf ? ` · ${s.conf}` : ""}</span>
           {s?.location && <span className="pill">{s.location}</span>}
           {s?.price != null && <span className="pill mono">9:29 · {fmtPx(s.price)}</span>}
         </div>
       </div>
       <div className="split" style={{ gap: 18 }}>
-        <div style={{ flex: "1 1 260px", display: "flex", flexDirection: "column", gap: 2 }} aria-label="Các level">
+        <div style={{ flex: "1 1 240px", display: "flex", flexDirection: "column", gap: 2 }} aria-label={t("Các level")}>
           {p.levels.length ? (
             p.levels.map((l, i) => (
               <div key={i} className={"lvl " + l.kind}>
-                <span>{l.name}</span>
+                <span>{t(l.name)}</span>
                 <span className="mono">{fmtPx(l.px)}</span>
               </div>
             ))
           ) : (
-            <p className="small dim">Không đọc được level từ payload.</p>
+            <p className="small dim">{t("Không đọc được level từ payload.")}</p>
           )}
         </div>
-        <div style={{ flex: "1 1 280px", display: "flex", flexDirection: "column", gap: 12, minWidth: 0 }}>
-          {p.imageUrl ? (
+        <div style={{ flex: "1 1 300px", display: "flex", flexDirection: "column", gap: 12, minWidth: 0 }}>
+          {img ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <a href={p.imageUrl} target="_blank" rel="noreferrer"><img className="plan-img" src={p.imageUrl} alt={`Ảnh plan ${p.trade_date}`} /></a>
+            <a href={img} target="_blank" rel="noreferrer"><img className="plan-img" src={img} alt={`Plan ${p.trade_date}`} /></a>
           ) : (
-            <div className="placeholder" style={{ height: 180 }}>Chưa có ảnh plan</div>
+            <div className="placeholder" style={{ height: 180 }}>{t("Chưa có ảnh plan")}</div>
           )}
+          {img && <div className="hstack"><CopyImage src={img} small /></div>}
           <div className="stack" style={{ gap: 8, fontSize: 13, color: "var(--text-2)" }}>
             {s?.target != null && (
               <div className="hstack" style={{ alignItems: "baseline", flexWrap: "nowrap" }}>
                 <span className="long" style={{ fontWeight: 600, minWidth: 64 }}>Target</span>
-                <span>{fmtPx(s.target)}{s.distance != null ? ` · cách giá 9:29 ${fmtPx(s.distance)} điểm` : ""}</span>
+                <span>{fmtPx(s.target)}{s.distance != null ? ` · ${t("cách giá 9:29 {n} điểm", { n: fmtPx(s.distance) })}` : ""}</span>
               </div>
             )}
             {s?.flip && (
               <div className="hstack" style={{ alignItems: "baseline", flexWrap: "nowrap" }}>
-                <span className="short" style={{ fontWeight: 600, minWidth: 64 }}>Đổi bias</span>
+                <span className="short" style={{ fontWeight: 600, minWidth: 64 }}>{t("Đổi bias")}</span>
                 <span>{s.flip}</span>
               </div>
             )}
@@ -201,47 +235,45 @@ function PlanCard({ p }: { p: PlanView }) {
       </div>
       <div className="row wrap" style={{ borderTop: "1px solid var(--line)", paddingTop: 14 }}>
         <div className="hstack small muted" style={{ gap: 16 }}>
-          <span>Cập nhật <span className="mono" style={{ color: "var(--text)" }}>{new Date(p.updated_at).toLocaleTimeString("vi-VN", { timeZone: "America/New_York", hour: "2-digit", minute: "2-digit" })} ET</span></span>
+          <span>{t("Cập nhật")} <span className="mono" style={{ color: "var(--text)" }}>{new Date(p.updated_at).toLocaleTimeString("en-GB", { timeZone: "America/New_York", hour: "2-digit", minute: "2-digit" })} ET</span></span>
           <span className="hstack" style={{ gap: 6 }}><span className="dot ok" aria-hidden="true" />Database</span>
           <span className="hstack" style={{ gap: 6 }}><span className={"dot " + (p.image_path ? "ok" : "err")} aria-hidden="true" />Storage</span>
         </div>
-        <Link href={`/studio?date=${p.trade_date}`} className="small" style={{ fontWeight: 600 }}>Xem chi tiết plan</Link>
+        <Link href={`/trade-plan?date=${p.trade_date}`} className="small" style={{ fontWeight: 600 }}>{t("Xem chi tiết plan")}</Link>
       </div>
     </section>
   );
 }
 
-function NoPlan({ weekday, late }: { weekday: boolean; late: boolean }) {
+function NoPlan({ t, weekday, late }: { t: T; weekday: boolean; late: boolean }) {
   if (!weekday)
     return (
       <section className="card">
-        <span className="lbl">Plan hôm nay</span>
-        <h2 className="h2">Cuối tuần, không có phiên</h2>
-        <p className="muted small">Dùng thời gian này để recap tuần trong Journal hoặc xem PnL Calendar.</p>
-        <div className="hstack"><Link className="btn" href="/journal">Mở Journal</Link><Link className="btn" href="/pnl">PnL Calendar</Link></div>
+        <span className="lbl">{t("Plan hôm nay")}</span>
+        <h2 className="h2">{t("Cuối tuần, không có phiên")}</h2>
+        <p className="muted small">{t("Dùng thời gian này để recap tuần trong Journal.")}</p>
+        <div className="hstack"><Link className="btn" href="/journal">Journal</Link></div>
       </section>
     );
   if (late)
     return (
-      <section className="card warn" aria-label="Chưa nhận plan">
-        <span className="lbl short">Quá giờ mà chưa nhận plan</span>
-        <h2 className="h2">Chưa nhận plan từ ATAS</h2>
+      <section className="card warn" aria-label={t("Chưa nhận plan")}>
+        <span className="lbl short">{t("Quá giờ mà chưa nhận plan")}</span>
+        <h2 className="h2">{t("Chưa nhận plan từ ATAS")}</h2>
         <ul className="small" style={{ margin: 0, paddingLeft: 18, color: "#d9cfc9", lineHeight: 1.6 }}>
-          <li>ATAS đang mở chart NQ M30 và indicator Plan Sender đang bật?</li>
-          <li>Tuỳ chọn gửi web trong indicator có bật, đúng API URL?</li>
-          <li>Xem log indicator: cần thấy <span className="mono">HTTP 200</span></li>
+          <li>{t("ATAS đang mở chart NQ M30 và indicator Plan Sender đang bật?")}</li>
+          <li>{t("Tuỳ chọn gửi web trong indicator có bật, đúng API URL?")}</li>
+          <li>{t("Xem log indicator: cần thấy HTTP 200")}</li>
         </ul>
-        <Link className="btn danger" href="/studio" style={{ alignSelf: "flex-start" }}>Gửi tay bằng JSON</Link>
+        <Link className="btn danger" href="/trade-plan" style={{ alignSelf: "flex-start" }}>{t("Gửi tay bằng JSON")}</Link>
       </section>
     );
   return (
-    <section className="card" aria-label="Chưa có plan">
-      <span className="lbl">Plan hôm nay</span>
-      <h2 className="h2">Chưa có plan hôm nay</h2>
-      <p className="muted" style={{ fontSize: 14 }}>
-        ATAS X thường gửi lúc <span className="mono" style={{ color: "var(--text)" }}>09:29 ET</span>. Có thể gửi tay trước nếu đã có JSON.
-      </p>
-      <div className="hstack"><Link className="btn primary" href="/studio">Mở Plan Studio</Link></div>
+    <section className="card" aria-label={t("Chưa có plan")}>
+      <span className="lbl">{t("Plan hôm nay")}</span>
+      <h2 className="h2">{t("Chưa có plan hôm nay")}</h2>
+      <p className="muted" style={{ fontSize: 14 }}>{t("ATAS X thường gửi lúc 09:29 ET. Có thể gửi tay trước nếu đã có JSON.")}</p>
+      <div className="hstack"><Link className="btn primary" href="/trade-plan">{t("Mở Trade Plan")}</Link></div>
     </section>
   );
 }

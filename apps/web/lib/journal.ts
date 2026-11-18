@@ -1,4 +1,5 @@
-// Journal: kiểu dữ liệu, đọc / ghi bảng trading.journal_days + journal_trades, thống kê.
+// Journal: kiểu dữ liệu, đọc / ghi bảng trading.journal_entries + journal_trades (+ tags n:n), thống kê.
+// Mọi bảng nối về trading.trade_days qua day_id (trigger điền từ trade_date). Lưu qua RPC trading.save_journal (một giao dịch).
 import { db } from "@/lib/db";
 import { BIAS_CHECK, DAY_TYPES, FOLLOWED, OPEN_TYPES, RESULTS, SIDES } from "@/lib/settings";
 import { monthRange } from "@/lib/time";
@@ -29,11 +30,13 @@ export type Trade = {
   pnl: number | null;
   fee: number;
   followed_plan: string | null;
-  mistake: string | null;
+  mistakes: string[];
+  tags?: { kind: string; name: string }[];
 };
 
 export type JournalDay = {
   id?: string;
+  day_id?: string;
   trade_date: string;
   symbol: string;
   day_type: string | null;
@@ -45,10 +48,24 @@ export type JournalDay = {
 
 export type DayWithTrades = JournalDay & { journal_trades?: Trade[] };
 
-const TABLE_DAYS = "journal_days";
-const TABLE_TRADES = "journal_trades";
+const TABLE_DAYS = "journal_entries";
+const EMBED = "select=*,journal_trades(*,tags(kind,name))";
 
 const num = (v: unknown) => (v === null || v === undefined || v === "" ? null : Number(v));
+
+// Lỗi của lệnh: mảng hoặc chuỗi cách nhau dấu phẩy → tag kind "mistake"
+export function mistakesOf(t: Partial<Trade> & { mistake?: unknown }): string[] {
+  const raw = Array.isArray(t.mistakes) ? t.mistakes : typeof t.mistake === "string" ? t.mistake.split(",") : [];
+  return [...new Set(raw.map((x) => String(x).trim().slice(0, 60)).filter(Boolean))].slice(0, 8);
+}
+
+// Đọc từ DB: tags (n:n) → mistakes
+function withMistakes(d: DayWithTrades): DayWithTrades {
+  return {
+    ...d,
+    journal_trades: (d.journal_trades || []).map((t) => ({ ...t, mistakes: (t.tags || []).filter((g) => g.kind === "mistake").map((g) => g.name) })),
+  };
+}
 
 export function normTrade(t: Partial<Trade>, i: number): Trade {
   return {
@@ -62,7 +79,7 @@ export function normTrade(t: Partial<Trade>, i: number): Trade {
     pnl: Number.isFinite(num(t.pnl)) ? (num(t.pnl) as number) : null,
     fee: Number.isFinite(num(t.fee)) ? (num(t.fee) as number) : 0,
     followed_plan: FOLLOWED.includes(t.followed_plan as never) ? (t.followed_plan as string) : null,
-    mistake: t.mistake ? String(t.mistake).slice(0, 120) : null,
+    mistakes: mistakesOf(t),
   };
 }
 
@@ -89,16 +106,17 @@ export function normDay(input: Record<string, unknown>): JournalDay {
 export async function getDay(date: string, symbol = "NQ"): Promise<DayWithTrades | null> {
   const rows = await db.select<DayWithTrades>(
     TABLE_DAYS,
-    `select=*,journal_trades(*)&trade_date=eq.${date}&symbol=eq.${encodeURIComponent(symbol)}&journal_trades.order=seq.asc`,
+    `${EMBED}&trade_date=eq.${date}&symbol=eq.${encodeURIComponent(symbol)}&journal_trades.order=seq.asc`,
   );
-  return rows[0] || null;
+  return rows[0] ? withMistakes(rows[0]) : null;
 }
 
 export async function getDaysBetween(start: string, endExclusive: string): Promise<DayWithTrades[]> {
-  return db.select<DayWithTrades>(
+  const rows = await db.select<DayWithTrades>(
     TABLE_DAYS,
-    `select=*,journal_trades(*)&trade_date=gte.${start}&trade_date=lt.${endExclusive}&order=trade_date.asc&journal_trades.order=seq.asc`,
+    `${EMBED}&trade_date=gte.${start}&trade_date=lt.${endExclusive}&order=trade_date.asc&journal_trades.order=seq.asc`,
   );
+  return rows.map(withMistakes);
 }
 
 export function getMonth(month: string) {
@@ -107,19 +125,17 @@ export function getMonth(month: string) {
 }
 
 export async function getRecentDays(limit = 20): Promise<DayWithTrades[]> {
-  return db.select<DayWithTrades>(
+  const rows = await db.select<DayWithTrades>(
     TABLE_DAYS,
-    `select=*,journal_trades(*)&order=trade_date.desc&limit=${limit}&journal_trades.order=seq.asc`,
+    `${EMBED}&order=trade_date.desc&limit=${limit}&journal_trades.order=seq.asc`,
   );
+  return rows.map(withMistakes);
 }
 
 export async function saveDay(dayIn: Record<string, unknown>, tradesIn: Partial<Trade>[]) {
   const day = normDay(dayIn);
-  const [row] = await db.upsert<JournalDay>(TABLE_DAYS, [day], "trade_date,symbol");
-  if (!row?.id) throw new Error("Không lưu được ngày journal");
-  await db.remove(TABLE_TRADES, `day_id=eq.${row.id}`);
-  const trades = tradesIn.slice(0, 20).map(normTrade).map((t) => ({ ...t, day_id: row.id }));
-  if (trades.length) await db.insert(TABLE_TRADES, trades);
+  const trades = tradesIn.slice(0, 20).map(normTrade);
+  await db.rpc<string>("save_journal", { p: { ...day, trades } });
   return getDay(day.trade_date, day.symbol);
 }
 
@@ -163,11 +179,11 @@ export function statsOf(days: DayWithTrades[]): Stats {
     byTypeMap.set(d.day_type, cur);
   }
   const mist = new Map<string, number>();
-  for (const t of trades) {
-    const m = (t.mistake || "").trim();
-    if (!m || /^không lỗi$/i.test(m)) continue;
-    mist.set(m, (mist.get(m) || 0) + 1);
-  }
+  for (const t of trades)
+    for (const m of t.mistakes || []) {
+      if (/^không lỗi$/i.test(m)) continue;
+      mist.set(m, (mist.get(m) || 0) + 1);
+    }
   return {
     days: days.length,
     winRate: pct(wins, decided.length),

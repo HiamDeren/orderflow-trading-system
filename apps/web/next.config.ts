@@ -30,6 +30,8 @@ const nextConfig: NextConfig = {
       { source: "/index.en.html", destination: "/learn.en", permanent: false },
       { source: `/:page(tools|levels|plan|quiz).html`, destination: "/:page", permanent: true },
       { source: `/:page(tools|levels|plan|quiz).en.html`, destination: "/:page.en", permanent: true },
+      { source: "/studio", destination: "/trade-plan", permanent: false },
+      { source: "/pnl", destination: "/journal/pnl", permanent: false },
       { source: "/testing", destination: "/plan", permanent: false },
       { source: "/testing.en", destination: "/plan.en", permanent: false },
       { source: "/overlap", destination: "/plan", permanent: false },
