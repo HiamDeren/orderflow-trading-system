@@ -30,8 +30,9 @@ Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp
 
 ### Storage
 - Bucket **`trading`** (cùng tên schema): private, tối đa 10 MB / file, `image/png`, `image/jpeg`, `image/webp`, không storage policy (chỉ secret key).
-- Đường dẫn theo **ngày rồi loại**: `YYYY/MM/DD/<loại>/<file>`, loại = `plan` | `journal` (journal gồm ảnh chụp lệnh và recap cuối phiên). Ví dụ `2026/11/17/plan/plan_2026-11-17_NQ.png`. Helper: `apps/web/lib/storage.ts` (`dayPath`, `planImagePath`).
-- Ảnh plan khoảng 340 KB (PNG zoom ×2). `trade_plans.image_path` lưu đường dẫn trong bucket.
+- Đường dẫn theo **ngày rồi loại**: `YYYY/MM/DD/<loại>/<file>`, loại = `plan` | `journal` (journal gồm ảnh chụp lệnh và recap cuối phiên). Ví dụ `2026/11/17/plan/plan_2026-11-17_NQ.webp`. Helper: `apps/web/lib/storage.ts` (`dayPath`, `planImagePath`).
+- **Nén ảnh** (`apps/web/lib/image.ts`, sharp): plan = WebP lossless (2600 px, giống từng pixel PNG, ~100 KB thay vì ~330 KB); journal = xoay EXIF, tối đa 2560 px ngang, WebP q85 (ảnh chụp 4K ~1,1 MB → ~200 KB). `trade_plans.image_path` lưu đường dẫn trong bucket.
+- Hạn mức gói Free: 1 GB file storage, 5 GB egress. Ước tính: plan ~25 MB / năm; journal 5 ảnh / ngày ~250 MB / năm.
 - Bucket cũ `trade-plans` (trống) chờ xoá trên Dashboard. Xoá file / bucket phải qua Storage API hoặc Dashboard (SQL bị chặn bởi `storage.protect_delete()`).
 
 ## Biến môi trường Vercel (Production, kiểu Secret)
@@ -62,7 +63,7 @@ Các bước:
 Bước 2–4 lỗi thì plan vẫn được lưu. Bước 1 (database) lỗi thì API **vẫn vẽ ảnh, lưu Storage và gửi Discord** rồi trả `502 {"error":"supabase", status, detail, ok:false, image, discord}` (plan 9:29 không mất vì database). Response bình thường:
 ```json
 { "ok": true, "date": "2026-11-12", "symbol": "NQZ6",
-  "image": { "path": "2026/11/12/plan/plan_2026-11-12_NQZ6.png", "bytes": 338930 },
+  "image": { "path": "2026/11/12/plan/plan_2026-11-12_NQZ6.webp", "bytes": 101834 },
   "discord": { "sent": true } }
 ```
 `image` / `discord` có thể là `{ "error": "..." }`; `discord` là `null` khi không gửi.

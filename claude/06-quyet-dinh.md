@@ -39,3 +39,4 @@ Mỗi mục: đã chọn gì, vì sao, và khi nào nên xem lại. Muốn đổ
 | D33 | 2026-11-18 | Cột thời gian quay lại `timestamptz` (thay D29) | Supabase / Postgres khuyến nghị; tránh lệch giờ khi client đọc | — |
 | D34 | 2026-11-18 | Storage: một bucket private `trading`, đường dẫn `YYYY/MM/DD/<plan|journal>/<file>` (thay bucket `trade-plans`, cập nhật D10); recap gộp vào journal | Mở một ngày thấy đủ plan + journal; bucket khớp schema; dễ viết policy theo folder khi có Auth | Khi có nhiều người dùng (thêm `<user_id>/` đầu đường dẫn) |
 | D35 | 2026-11-18 | `/api/plan`: database lỗi vẫn vẽ ảnh, lưu Storage, gửi Discord rồi mới trả 502 | Plan 9:29 quan trọng hơn bản ghi database; Discord luôn nhận plan | — |
+| D36 | 2026-11-18 | Ảnh lưu Storage dạng WebP qua sharp: plan lossless, journal q85 tối đa 2560 px | Gói Free 1 GB storage; plan giảm ~70% không mất chất lượng, ảnh chụp giảm ~80% | Khi cần ảnh gốc cho phân tích (lưu thêm bản gốc) |

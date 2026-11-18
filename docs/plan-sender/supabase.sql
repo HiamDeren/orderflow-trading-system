@@ -52,7 +52,7 @@ comment on column trading.trade_plans.trade_date is 'Ngày phiên trade (giờ E
 comment on column trading.trade_plans.symbol     is 'Mã hợp đồng, ví dụ NQZ6';
 comment on column trading.trade_plans.summary    is 'Tóm tắt plan do server tính: bias, conf, setup, target, flip, price (giá 9:29 ET), zone...';
 comment on column trading.trade_plans.plan_text  is 'Plan dạng chữ (giống khối chữ trên ảnh plan)';
-comment on column trading.trade_plans.image_path is 'Đường dẫn ảnh plan trong bucket trading: YYYY/MM/DD/plan/plan_<date>_<symbol>.png';
+comment on column trading.trade_plans.image_path is 'Đường dẫn ảnh plan trong bucket trading: YYYY/MM/DD/plan/plan_<date>_<symbol>.webp';
 comment on column trading.trade_plans.payload    is 'JSON v1 nguyên bản từ indicator ATAS Plan Sender (có price, prth, ovn, sessions, composite)';
 
 -- RLS bật, KHÔNG có policy; anon / authenticated không có quyền gì.

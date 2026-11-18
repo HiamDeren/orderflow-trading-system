@@ -1,7 +1,7 @@
 // Quy ước Supabase Storage cho nghiệp vụ trading.
 // Một bucket private "trading" (cùng tên schema), chia folder theo ngày rồi theo loại:
-//   YYYY/MM/DD/plan/plan_<date>_<symbol>.png   ảnh trade plan (server vẽ)
-//   YYYY/MM/DD/journal/<file>                   ảnh journal: chụp lệnh, recap cuối phiên
+//   YYYY/MM/DD/plan/plan_<date>_<symbol>.webp  ảnh trade plan (server vẽ, WebP lossless)
+//   YYYY/MM/DD/journal/<file>.webp              ảnh journal: chụp lệnh, recap cuối phiên (nén WebP, tối đa 2560 px)
 // Mở một ngày là thấy đủ plan + journal của ngày đó.
 
 export const TRADING_BUCKET = "trading";
@@ -23,7 +23,7 @@ export function dayPath(date: string, kind: StorageKind, file: string) {
   return `${m[1]}/${m[2]}/${m[3]}/${kind}/${safeName(file)}`;
 }
 
-/** Ảnh trade plan của một ngày + symbol. */
-export function planImagePath(date: string, symbol: string) {
-  return dayPath(date, "plan", `plan_${date}_${safeName(symbol)}.png`);
+/** Ảnh trade plan của một ngày + symbol (WebP lossless, xem lib/image.ts). */
+export function planImagePath(date: string, symbol: string, ext = "webp") {
+  return dayPath(date, "plan", `plan_${date}_${safeName(symbol)}.${ext}`);
 }

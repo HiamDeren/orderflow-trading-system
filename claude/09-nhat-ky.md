@@ -3,6 +3,7 @@
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
 ## 2026-11-18 · Storage theo ngày + API bền hơn
+- Nén ảnh WebP (`lib/image.ts`, sharp): plan lossless 331 KB → 102 KB; journal q85 ≤ 2560 px. Discord nhận cùng file WebP.
 - Bucket `trading` (migration `storage_trading_bucket`), đường dẫn `YYYY/MM/DD/plan|journal/...` (`apps/web/lib/storage.ts`); recap gộp vào journal.
 - `/api/plan`: database lỗi vẫn vẽ ảnh + lưu Storage + gửi Discord, trả 502 kèm kết quả. Test mock 3 tình huống (bình thường / DB lỗi / Storage lỗi).
 

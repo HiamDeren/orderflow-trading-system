@@ -6,4 +6,4 @@ insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_typ
 values ('trading', 'trading', false, 10485760, array['image/png', 'image/jpeg', 'image/webp'])
 on conflict (id) do update set public = false, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
 
-comment on column trading.trade_plans.image_path is 'Đường dẫn ảnh plan trong bucket trading: YYYY/MM/DD/plan/plan_<date>_<symbol>.png';
+comment on column trading.trade_plans.image_path is 'Đường dẫn ảnh plan trong bucket trading: YYYY/MM/DD/plan/plan_<date>_<symbol>.webp';
