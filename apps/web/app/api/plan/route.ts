@@ -1,22 +1,24 @@
 // POST /api/plan   Header: Authorization: Bearer <PLAN_TOKEN>   Body: JSON v1 từ indicator "Deren · Plan Sender"
 //   1. Lưu (upsert theo ngày + symbol) vào bảng trading.trade_plans trên Supabase (schema riêng, không dùng public)
 //   2. Lập plan bằng plan-core.js (cùng code với trang Trade Plan), vẽ ảnh tiếng Việt, đổi sang PNG
-//   3. Lưu PNG vào Supabase Storage (bucket private "trade-plans"), ghi đường dẫn + plan chữ vào bảng
+//   3. Lưu PNG vào Supabase Storage (bucket private "trading", YYYY/MM/DD/plan/...), ghi đường dẫn + plan chữ vào bảng
 //   4. Gửi ảnh + tóm tắt plan lên Discord (nếu có DISCORD_WEBHOOK_TRADE_PLAN và payload không có "notify": false)
 //   Bước 2–4 lỗi thì plan vẫn được lưu; kết quả từng bước nằm trong response.
+//   Bước 1 (database) lỗi thì vẫn vẽ ảnh, lưu Storage và gửi Discord để plan 9:29 không mất; response 502 kèm kết quả các bước.
 //
 // GET  /api/plan[?date=YYYY-MM-DD]   Header: Authorization: Bearer <PLAN_TOKEN>
 //   → plan của ngày đó (hoặc mới nhất) + image_url (link ký tạm 1 giờ) nếu đã có ảnh
 //
 // Biến môi trường trên Vercel:
 //   SUPABASE_URL, SUPABASE_SERVICE_KEY (hoặc SUPABASE_SECRET_KEY / SUPABASE_SERVICE_ROLE_KEY), PLAN_TOKEN,
-//   DISCORD_WEBHOOK_TRADE_PLAN (tuỳ chọn; tên cũ DISCORD_WEBHOOK_URL vẫn nhận), PLAN_BUCKET (tuỳ chọn, mặc định "trade-plans")
+//   DISCORD_WEBHOOK_TRADE_PLAN (tuỳ chọn; tên cũ DISCORD_WEBHOOK_URL vẫn nhận), PLAN_BUCKET (tuỳ chọn, mặc định "trading")
 //   Schema "trading" phải nằm trong Exposed schemas (Supabase → Project Settings → Data API).
 // Hợp đồng request / response giữ y như api/plan.js cũ (indicator ATAS đã code theo đó).
 
 import path from "path";
 import { Resvg } from "@resvg/resvg-js";
 import core, { type Plan } from "@/lib/plan-core";
+import { TRADING_BUCKET, planImagePath } from "@/lib/storage";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -60,11 +62,6 @@ function svgToPng(svg: string) {
     font: { fontFiles: FONT_FILES, loadSystemFonts: false, defaultFontFamily: "Be Vietnam Pro" },
   });
   return Buffer.from(r.render().asPng());
-}
-
-function imagePath(date: string, symbol: string) {
-  const safe = String(symbol).replace(/[^A-Za-z0-9_-]/g, "_");
-  return `${date.slice(0, 4)}/${date.slice(5, 7)}/plan_${date}_${safe}.png`;
 }
 
 async function sendDiscord(webhook: string, plan: Plan, png: Buffer, fileName: string, symbol: string) {
@@ -115,7 +112,7 @@ function setup(req: Request) {
   return {
     rest: `${url}/rest/v1/${TABLE}`,
     storage: `${url}/storage/v1`,
-    bucket: env.PLAN_BUCKET || "trade-plans",
+    bucket: env.PLAN_BUCKET || TRADING_BUCKET,
     hook: env.DISCORD_WEBHOOK_TRADE_PLAN || env.DISCORD_WEBHOOK_URL,
     h,
     hj,
@@ -136,14 +133,20 @@ export async function POST(req: Request) {
     }
     const date = p.date as string;
     const symbol = String(p.symbol || "NQ").slice(0, 20);
-    const r = await fetch(`${c.rest}?on_conflict=trade_date,symbol`, {
-      method: "POST",
-      headers: { ...c.hw, Prefer: "resolution=merge-duplicates,return=minimal" },
-      body: JSON.stringify({ trade_date: date, symbol, payload: p }),
-    });
-    if (!r.ok) return json({ error: "supabase", status: r.status, detail: (await r.text()).slice(0, 300) }, 502);
+    // 1. Lưu payload. Lỗi ở đây không dừng hẳn: vẫn vẽ ảnh + gửi Discord, cuối cùng trả 502.
+    let dbError: Json | null = null;
+    try {
+      const r = await fetch(`${c.rest}?on_conflict=trade_date,symbol`, {
+        method: "POST",
+        headers: { ...c.hw, Prefer: "resolution=merge-duplicates,return=minimal" },
+        body: JSON.stringify({ trade_date: date, symbol, payload: p }),
+      });
+      if (!r.ok) dbError = { error: "supabase", status: r.status, detail: (await r.text()).slice(0, 300) };
+    } catch (e) {
+      dbError = { error: "supabase", status: 0, detail: errMsg(e).slice(0, 300) };
+    }
 
-    const out: Json = { ok: true, date, symbol, image: null, discord: null };
+    const out: Json = { ok: !dbError, date, symbol, image: null, discord: null };
     let plan: Plan | null = null, png: Buffer | null = null, objPath: string | null = null;
 
     // 2–3. Lập plan, vẽ ảnh, lưu Storage
@@ -151,22 +154,23 @@ export async function POST(req: Request) {
       plan = core.planFromJson(p);
       if (plan.error) throw new Error(plan.error);
       png = svgToPng(plan.svg);
-      objPath = imagePath(date, symbol);
+      objPath = planImagePath(date, symbol);
       const up = await fetch(`${c.storage}/object/${c.bucket}/${objPath}`, {
         method: "POST",
         headers: { ...c.h, "Content-Type": "image/png", "x-upsert": "true", "cache-control": "no-cache" },
         body: new Uint8Array(png),
       });
       if (!up.ok) throw new Error(`storage ${up.status}: ${(await up.text()).slice(0, 200)}`);
+      out.image = { path: objPath, bytes: png.length };
+      if (dbError) throw new Error("database lỗi ở bước 1 nên chưa ghi đường dẫn ảnh vào bảng");
       const upd = await fetch(`${c.rest}?trade_date=eq.${date}&symbol=eq.${encodeURIComponent(symbol)}`, {
         method: "PATCH",
         headers: { ...c.hw, Prefer: "return=minimal" },
         body: JSON.stringify({ image_path: objPath, plan_text: plan.text, summary: plan.summary }),
       });
       if (!upd.ok) throw new Error(`update ${upd.status}: ${(await upd.text()).slice(0, 200)}`);
-      out.image = { path: objPath, bytes: png.length };
     } catch (e) {
-      out.image = { error: errMsg(e) };
+      out.image = { ...((out.image as Json) || {}), error: errMsg(e) };
     }
 
     // 4. Discord
@@ -178,6 +182,7 @@ export async function POST(req: Request) {
         out.discord = { error: errMsg(e) };
       }
     }
+    if (dbError) return json({ ...dbError, ...out }, 502);
     return json(out);
   } catch (e) {
     return json({ error: errMsg(e) }, 500);

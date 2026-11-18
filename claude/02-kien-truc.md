@@ -10,7 +10,7 @@ Từ 2026-11-18 repo là **monorepo pnpm**: `apps/web` (Next.js trên Vercel), `
 | API | Route handler `apps/web/app/api/plan/route.ts` | `@resvg/resvg-js` 2.6.2 (SVG → PNG); plan-core nạp qua `apps/web/lib/plan-core.ts` |
 | Migration | Supabase CLI, thư mục `supabase/` | `config.toml` expose schema `trading` |
 | Database | Supabase Postgres, gọi qua PostgREST bằng `fetch` | Không dùng `supabase-js` |
-| File | Supabase Storage, bucket private `trade-plans` | URL ký tạm 1 giờ |
+| File | Supabase Storage, bucket private `trading` (`YYYY/MM/DD/plan|journal/`) | URL ký tạm 1 giờ |
 | Thông báo | Discord webhook (multipart: `payload_json` + ảnh) | Không phải bot |
 | Nguồn dữ liệu | Indicator ATAS C# `Deren · Plan Sender` | Gửi JSON lúc 9:29 ET |
 | i18n | Python script sinh trang EN từ trang VI | `i18n/build_en.py` |
@@ -21,7 +21,7 @@ flowchart LR
   A[ATAS · Plan Sender<br/>chart NQ M30, 30 ngày] -- "POST /api/plan<br/>Bearer PLAN_TOKEN" --> B[Next.js route handler<br/>/api/plan]
   A -. "clipboard JSON" .-> W
   B -- upsert --> C[(Supabase<br/>trading.trade_plans)]
-  B -- "plan-core.js → SVG → PNG (resvg)" --> D[(Storage<br/>trade-plans/YYYY/MM)]
+  B -- "plan-core.js → SVG → PNG (resvg)" --> D[(Storage<br/>trading/YYYY/MM/DD/plan)]
   B -- "embed + ảnh" --> E[Discord #trade-plan]
   W[Trang Trade Plan · Plan Builder] -- "GET /api/plan<br/>Bearer token" --> B
   W -- "plan-core.js (cùng code)" --> W

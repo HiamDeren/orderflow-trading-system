@@ -5,7 +5,7 @@
 - Truy cập chỉ từ server (Vercel Function, region `sin1`) bằng **secret key**. Không có client nào dùng publishable / anon key.
 - **Mỗi nghiệp vụ một schema, không dùng `public`:** `trading` (trade plan; sau này journal, recap), `util` (hàm dùng chung, không expose). Nghiệp vụ mới (calendar, options, news...) tạo schema riêng theo cùng mẫu quyền.
 - Schema mới phải thêm vào **Project Settings → Data API → Exposed schemas** thì PostgREST mới thấy. Gọi REST: header `Accept-Profile: <schema>` khi đọc, `Content-Profile: <schema>` khi ghi.
-- Nguồn chuẩn schema: `supabase/migrations/` (version trùng lịch sử trên production); bản gộp để đọc: `docs/plan-sender/supabase.sql`. Migration đã áp trên project Singapore: `trading_schema_trade_plans`, `revoke_rls_auto_enable_execute` (thu quyền gọi `public.rls_auto_enable()` của anon / authenticated), `trade_plans_timestamp_utc_defaults` (tạm dùng `timestamp` UTC), `trade_plans_timestamptz_defaults` (đổi lại `timestamptz`, default `now()`, trigger `now()`).
+- Nguồn chuẩn schema: `supabase/migrations/` (version trùng lịch sử trên production); bản gộp để đọc: `docs/plan-sender/supabase.sql`. Migration đã áp trên project Singapore: `trading_schema_trade_plans`, `revoke_rls_auto_enable_execute` (thu quyền gọi `public.rls_auto_enable()` của anon / authenticated), `trade_plans_timestamp_utc_defaults` (tạm dùng `timestamp` UTC), `trade_plans_timestamptz_defaults` (đổi lại `timestamptz`, default `now()`, trigger `now()`), `storage_trading_bucket` (bucket `trading`).
 
 ### Bảng `trading.trade_plans`
 Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp md5). Mỗi cột có `comment` trong database.
@@ -29,9 +29,10 @@ Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp
 - Thêm cột mới: Postgres luôn thêm vào cuối. Muốn giữ thứ tự nhóm thì tạo lại bảng khi bảng còn trống, hoặc chấp nhận cột mới ở cuối.
 
 ### Storage
-- Bucket `trade-plans`: private, tối đa 5 MB / file, chỉ `image/png`, không có storage policy.
-- Đường dẫn: `YYYY/MM/plan_<date>_<symbol>.png` (ký tự lạ trong symbol đổi thành `_`). Ảnh khoảng 340 KB (PNG zoom ×2).
-- Xoá file: phải qua Storage API hoặc Dashboard (SQL `delete from storage.objects` bị chặn bởi `storage.protect_delete()`).
+- Bucket **`trading`** (cùng tên schema): private, tối đa 10 MB / file, `image/png`, `image/jpeg`, `image/webp`, không storage policy (chỉ secret key).
+- Đường dẫn theo **ngày rồi loại**: `YYYY/MM/DD/<loại>/<file>`, loại = `plan` | `journal` (journal gồm ảnh chụp lệnh và recap cuối phiên). Ví dụ `2026/11/17/plan/plan_2026-11-17_NQ.png`. Helper: `apps/web/lib/storage.ts` (`dayPath`, `planImagePath`).
+- Ảnh plan khoảng 340 KB (PNG zoom ×2). `trade_plans.image_path` lưu đường dẫn trong bucket.
+- Bucket cũ `trade-plans` (trống) chờ xoá trên Dashboard. Xoá file / bucket phải qua Storage API hoặc Dashboard (SQL bị chặn bởi `storage.protect_delete()`).
 
 ## Biến môi trường Vercel (Production, kiểu Secret)
 | Biến | Bắt buộc | Ý nghĩa |
@@ -40,7 +41,7 @@ Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp
 | `SUPABASE_SERVICE_KEY` | có | secret key `sb_secret_...` (code nhận thêm `SUPABASE_SECRET_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) |
 | `PLAN_TOKEN` | có | token Bearer cho `/api/plan` (ATAS và trình duyệt chủ site dùng) |
 | `DISCORD_WEBHOOK_TRADE_PLAN` | không | webhook kênh `#trade-plan` (tên cũ `DISCORD_WEBHOOK_URL` vẫn nhận) |
-| `PLAN_BUCKET` | không | mặc định `trade-plans` |
+| `PLAN_BUCKET` | không | mặc định `trading` |
 
 Quy ước đặt tên webhook: `DISCORD_WEBHOOK_<MỤC_ĐÍCH>` (ví dụ sau này `DISCORD_WEBHOOK_SESSION_LOG`, `DISCORD_WEBHOOK_ALERTS`).
 
@@ -58,10 +59,10 @@ Các bước:
 3. Upload PNG (`x-upsert: true`), PATCH dòng với `image_path`, `plan_text`, `summary`.
 4. Gửi Discord nếu có webhook.
 
-Bước 2–4 lỗi thì plan vẫn được lưu. Response:
+Bước 2–4 lỗi thì plan vẫn được lưu. Bước 1 (database) lỗi thì API **vẫn vẽ ảnh, lưu Storage và gửi Discord** rồi trả `502 {"error":"supabase", status, detail, ok:false, image, discord}` (plan 9:29 không mất vì database). Response bình thường:
 ```json
 { "ok": true, "date": "2026-11-12", "symbol": "NQZ6",
-  "image": { "path": "2026/11/plan_2026-11-12_NQZ6.png", "bytes": 338930 },
+  "image": { "path": "2026/11/12/plan/plan_2026-11-12_NQZ6.png", "bytes": 338930 },
   "discord": { "sent": true } }
 ```
 `image` / `discord` có thể là `{ "error": "..." }`; `discord` là `null` khi không gửi.

@@ -2,6 +2,10 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-18 · Storage theo ngày + API bền hơn
+- Bucket `trading` (migration `storage_trading_bucket`), đường dẫn `YYYY/MM/DD/plan|journal/...` (`apps/web/lib/storage.ts`); recap gộp vào journal.
+- `/api/plan`: database lỗi vẫn vẽ ảnh + lưu Storage + gửi Discord, trả 502 kèm kết quả. Test mock 3 tình huống (bình thường / DB lỗi / Storage lỗi).
+
 ## 2026-11-18 · Timestamptz
 - Deren đổi lại cột thời gian sang `timestamptz` trên dashboard (theo khuyến nghị Supabase); việc đổi kiểu lại làm mất default `NOT NULL` → migration `trade_plans_timestamptz_defaults` đặt lại default `now()`, trigger `now()`. Bảng đang trống (dòng 17/11 chép từ Sydney không còn); project Sydney đã xoá.
 - Bài học: đổi schema trên dashboard dễ làm mất default; luôn đổi bằng file migration (D30).

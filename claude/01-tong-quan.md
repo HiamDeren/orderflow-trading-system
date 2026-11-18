@@ -22,7 +22,7 @@ Hướng dài hạn (Deren chốt 2026-11-17): **web app cá nhân / dashboard**
 - **System trade plan chính** (Deren chốt 2026-11-17): khung Composite × pRTH × OVN. Plan Builder cổ điển (PD levels, kịch bản A/B, bản đồ level) đã bỏ; trang Testing gộp vào trang Trade Plan.
 - Ngân hàng câu hỏi: 188 câu (87 Tools + 101 Level).
 - Tiến độ học, nhập liệu, token: lưu `localStorage` từng trình duyệt; có sao lưu / khôi phục bằng JSON ở trang Tổng quan.
-- Backend: route handler Next.js `apps/web/app/api/plan/route.ts`. Dữ liệu: Supabase (bảng `trade_plans`, bucket `trade-plans`). Thông báo: Discord webhook.
+- Backend: route handler Next.js `apps/web/app/api/plan/route.ts`. Dữ liệu: Supabase (bảng `trade_plans`, bucket `trading`). Thông báo: Discord webhook.
 - Luồng plan tự động đã chạy thông từ web đến Discord (test 2026-11-17 bằng JSON mẫu). Còn thiếu: indicator ATAS Plan Sender build và gửi thật.
 
 ## Hệ thống trading phía sau

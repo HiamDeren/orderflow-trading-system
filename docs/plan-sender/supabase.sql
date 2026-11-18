@@ -39,7 +39,7 @@ create table trading.trade_plans (
   symbol      text        not null default 'NQ',    -- ví dụ NQZ6
   summary     jsonb,                                -- bias, conf, setup, target, flip, price (9:29 ET), zone...
   plan_text   text,                                 -- plan dạng chữ (giống khối chữ trên ảnh)
-  image_path  text,                                 -- đường dẫn ảnh trong bucket trade-plans
+  image_path  text,                                 -- đường dẫn ảnh trong bucket trading (YYYY/MM/DD/plan/...)
   payload     jsonb       not null,                 -- JSON v1 nguyên bản từ indicator (có price)
   constraint trade_plans_trade_date_symbol_key unique (trade_date, symbol)
 );
@@ -52,7 +52,7 @@ comment on column trading.trade_plans.trade_date is 'Ngày phiên trade (giờ E
 comment on column trading.trade_plans.symbol     is 'Mã hợp đồng, ví dụ NQZ6';
 comment on column trading.trade_plans.summary    is 'Tóm tắt plan do server tính: bias, conf, setup, target, flip, price (giá 9:29 ET), zone...';
 comment on column trading.trade_plans.plan_text  is 'Plan dạng chữ (giống khối chữ trên ảnh plan)';
-comment on column trading.trade_plans.image_path is 'Đường dẫn ảnh plan trong bucket trade-plans (YYYY/MM/plan_<date>_<symbol>.png)';
+comment on column trading.trade_plans.image_path is 'Đường dẫn ảnh plan trong bucket trading: YYYY/MM/DD/plan/plan_<date>_<symbol>.png';
 comment on column trading.trade_plans.payload    is 'JSON v1 nguyên bản từ indicator ATAS Plan Sender (có price, prth, ovn, sessions, composite)';
 
 -- RLS bật, KHÔNG có policy; anon / authenticated không có quyền gì.
@@ -63,10 +63,11 @@ grant select, insert, update, delete on table trading.trade_plans to service_rol
 create trigger trade_plans_touch before update on trading.trade_plans
 for each row execute function util.touch_updated_at();
 
--- ---------- Storage: ảnh plan ----------
--- Bucket private, chỉ PNG, tối đa 5 MB. Không tạo policy: chỉ secret key (Vercel) đọc / ghi.
+-- ---------- Storage: bucket trading ----------
+-- Private, tối đa 10 MB, png / jpeg / webp. Không policy: chỉ secret key (Vercel) đọc / ghi.
+-- Đường dẫn: YYYY/MM/DD/<loại>/<file>, loại = plan | journal.
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('trade-plans', 'trade-plans', false, 5242880, array['image/png'])
+values ('trading', 'trading', false, 10485760, array['image/png', 'image/jpeg', 'image/webp'])
 on conflict (id) do update set public = false, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
 
 -- ---------- Hàm Supabase tự tạo ----------
