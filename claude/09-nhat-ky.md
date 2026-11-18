@@ -8,6 +8,7 @@ Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 - `api/plan.js` → `apps/web/app/api/plan/route.ts`, giữ nguyên hợp đồng; test local với Supabase/Discord giả: 401/400/405, POST mẫu ra PNG 338.930 byte như cũ, header `Content-Profile`/`Accept-Profile: trading`.
 - Script i18n, check-plan-core, build-artifact, hook Claude Code đổi sang đường dẫn mới; snapshot plan-core khớp, bản EN và artifact không đổi.
 - Nhánh: `main` → `production`; `development` là nhánh mặc định (D31).
+- Cutover: ruleset GitHub cho `production`; Vercel Root Directory `apps/web` + Next.js + Production Branch `production`; PR #1 merge → production chạy Next.js. `main` còn giữ tới khi gửi plan thật ổn.
 
 ## 2026-11-18 · Chuyển Supabase sang Singapore, tách schema
 - Project mới **Personal Trading Dashboard** (`gpbypxuglcfmvarmferr`, `ap-southeast-1`); project Sydney giữ tạm.

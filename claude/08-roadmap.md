@@ -40,7 +40,8 @@ Cập nhật: 2026-11-18.
 Chi tiết: [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md).
 - [x] Giai đoạn 0: Deren chốt stack 2026-11-18 (D26–D30).
 - [x] Giai đoạn 1 (code, 2026-11-18): monorepo pnpm, `apps/web` Next.js, trang cũ trong `apps/web/public/`, `/api/plan` route handler, `supabase/` migration.
-- [ ] Giai đoạn 1 (cutover): Deren đổi nhánh mặc định GitHub → `development` và Production Branch Vercel → `production`; kiểm preview `development` (trang + `/api/plan` 401); PR `development` → `production`; test plan thật 9:29 ET; xoá nhánh `main`.
+- [x] Giai đoạn 1 (cutover, 2026-11-18): GitHub nhánh mặc định `development`, ruleset bảo vệ `production` (PR bắt buộc, chặn force push / xoá); Vercel Root Directory `apps/web`, Next.js, Production Branch `production`; PR #1 merge, production chạy Next.js (trang + `/api/plan` 401 không token).
+- [ ] Xoá nhánh `main` sau khi lần gửi plan thật 9:29 ET chạy ổn trên bản mới (Discord + dòng mới trong `trading.trade_plans`).
 - [ ] Supabase project dev cho Preview (dùng chỗ trống sau khi xoá project Sydney) + biến môi trường Preview trên Vercel.
 - [ ] GitHub Actions: `pnpm build` + `check` cho mọi PR; `supabase db push` khi merge vào `production`.
 - [ ] Biome (lint / format), Vitest cho plan-core, Playwright vào repo.
