@@ -1,6 +1,6 @@
 # 07 · Kế hoạch chuyển sang web app / personal dashboard
 
-Trạng thái: **đề xuất, chưa bắt đầu**. Deren chốt hướng 2026-11-17; stack và thứ tự bên dưới cần Deren duyệt trước khi làm.
+Trạng thái: **stack đã chốt 2026-11-18** (quyết định D26–D30 ở [06](06-quyet-dinh.md)). Giai đoạn 1 đang làm trên nhánh `feat/monorepo`.
 
 ## Mục tiêu
 - Có đăng nhập; trang riêng tư chỉ chủ site xem được.
@@ -8,46 +8,46 @@ Trạng thái: **đề xuất, chưa bắt đầu**. Deren chốt hướng 2026-
 - Thêm module mới mà không phải sửa shell: trade plan, economic calendar, options (GEX / DEX / OI...), heatmap cổ phiếu, news, earnings, và các module Deren nghĩ thêm.
 - Giữ nguyên mọi tính năng hiện có ([03-tinh-nang.md](03-tinh-nang.md)) và các URL đang dùng.
 
-## Stack đề xuất
-| Lớp | Đề xuất | Vì sao |
+## Stack đã chốt (2026-11-18)
+| Lớp | Chọn | Ghi chú |
 |---|---|---|
-| Framework | Next.js (App Router) + TypeScript | Deren đã dùng React / Next.js; chạy tốt nhất trên Vercel; có server components, route handlers, middleware |
-| UI | Giữ design system trong `app.css` (biến CSS, giao diện tối), chuyển dần thành component | Không phải vẽ lại giao diện; Tailwind là tuỳ chọn, không bắt buộc |
-| Auth | Supabase Auth qua `@supabase/ssr` (cookie session) | Đã có Supabase; chỉ cần một tài khoản chủ site |
-| Database | Supabase Postgres, RLS theo `auth.uid()` | Đã có; bảng `trade_plans` giữ nguyên, thêm `user_id` |
-| File | Supabase Storage (giữ bucket `trade-plans`) | Đã chạy |
-| Job định kỳ | Vercel Cron hoặc Supabase `pg_cron` + Edge Function | Kéo dữ liệu calendar / options / news theo lịch. Kiểm tra giới hạn gói Hobby trước khi chọn |
-| i18n | `next-intl` (hoặc tương tự), VI mặc định | Thay script `build_en.py`; dữ liệu dịch lấy từ `i18n/en.tsv` + `en_extra.tsv` |
-| Chart | SVG tự vẽ cho TPO / footprint (giữ code hiện có); thư viện chart cho module mới khi cần | Code vẽ hiện tại không phụ thuộc thư viện |
+| Runtime | Node.js 26 LTS | Mặc định của Vercel cho project mới |
+| Framework | Next.js (App Router) + React + TypeScript | Một app gồm UI + API (route handlers, server actions) |
+| Repo | pnpm workspaces; Turborepo khi có ≥ 2 app | `apps/web`, `packages/*`, `supabase/` |
+| Style | CSS Modules, giữ biến CSS trong `app.css` | Tailwind không bắt buộc |
+| Component | shadcn/ui (Radix) khi cần dialog, form, bảng | |
+| Dữ liệu | Supabase Postgres + Auth + Storage qua `@supabase/ssr` + `supabase-js`; kiểu sinh bằng `supabase gen types` | Không ORM (giữ RLS) |
+| Migration | Supabase CLI, GitHub Actions `supabase db push` | Không sửa schema tay |
+| Validation | Zod | JSON v1 từ ATAS, form |
+| Client data | TanStack Query | Widget polling / realtime |
+| Thời gian | date-fns + date-fns-tz | DB lưu `timestamp` UTC; đổi ET (DST) ở code |
+| Chart | SVG tự vẽ (TPO, footprint); lightweight-charts (giá); ECharts hoặc Recharts (dashboard) | |
+| i18n | next-intl | Dữ liệu dịch từ `i18n/*.tsv` |
+| Ảnh plan | `@resvg/resvg-js` + font gói kèm | |
+| Job | Vercel Cron, hoặc `pg_cron` + Edge Function | |
+| Test | Vitest, Playwright | Snapshot plan-core giữ làm chuẩn nghiệm thu |
+| Lint / format | Biome | |
+| Worker (sau này) | Node + Hono trên Railway / Fly.io | Chỉ khi cần chạy liên tục (stream options, Discord bot) |
 
-Phương án nhẹ hơn nếu không muốn React: giữ HTML tĩnh, thêm Supabase Auth bằng `supabase-js` phía trình duyệt và thêm Functions. Nhanh hơn ở bước đầu nhưng khó mở rộng thành dashboard nhiều module. Đề xuất chọn Next.js.
+Tổ chức code theo tính năng: `features/<x>/{queries.ts, actions.ts, service.ts, schema.ts, components/}` (tương ứng Model / Controller / View của MVC).
 
-## Cấu trúc thư mục đích (gợi ý)
+## Cấu trúc thư mục đích
 ```
-app/
-  (public)/            trang học công khai: levels, tools, quiz (nếu muốn công khai)
-  (app)/               cần đăng nhập
-    dashboard/         trang chủ dashboard
-    plan/              Trade Plan (Composite × pRTH × OVN) + lịch sử plan
-    calendar/          economic calendar
-    options/           GEX / DEX / OI
-    heatmap/           heatmap cổ phiếu
-    news/, earnings/
-  api/
-    plan/route.ts      thay api/plan.js (giữ đúng hợp đồng)
-    cron/*/route.ts    job kéo dữ liệu
-lib/
-  plan-core.ts         port từ assets/js/plan-core.js (giữ test số liệu 11/11, 12/11)
-  supabase/{server,client}.ts
-  render/png.ts        resvg + font (từ api/_fonts)
-components/
-  shell/               sidebar, topbar, bottom nav, đồng hồ phiên (từ core.js)
-  tpo/, footprint/, quiz/
-content/
-  levels/, tools/      nội dung bài học (MDX hoặc JSON) tách khỏi code
-  quiz/                ngân hàng câu hỏi (từ bank-*.js)
-public/legacy/         trang HTML cũ trong lúc chuyển dần
+apps/web/                     Next.js (Vercel, Root Directory = apps/web, region sin1)
+  app/
+    (public)/                 trang học: levels, tools, quiz
+    (app)/                    cần đăng nhập: dashboard, plan, calendar, options, heatmap, news, earnings
+    api/plan/route.ts         thay api/plan.js (giữ đúng hợp đồng)
+    api/cron/*/route.ts       job kéo dữ liệu
+  features/<x>/               queries, actions, service, schema (Zod), components
+  lib/supabase/               server.ts, client.ts, types.ts (sinh tự động)
+  fonts/                      font vẽ ảnh plan
+  public/                     site tĩnh cũ (HTML + assets) trong lúc chuyển dần
+packages/plan-core/           engine plan TypeScript (port từ public/assets/js/plan-core.js)
+supabase/                     config.toml, migrations/, seed.sql
+i18n/, scripts/, docs/, claude/, artifact/
 ```
+Ghi chú: trang cũ đặt thẳng trong `apps/web/public/` (không phải `public/legacy/`) để đường dẫn tương đối `assets/...` và URL cũ giữ nguyên; rewrites trong `next.config.ts` nối `/levels` → `/levels.html`.
 
 ## Mô hình dữ liệu thêm (gợi ý)
 | Bảng | Dùng cho | Ghi chú |
@@ -73,7 +73,7 @@ Mọi bảng: RLS bật, policy `to authenticated using ((select auth.uid()) = u
 Prompt dùng cho từng giai đoạn: [prompts/chuyen-doi-web-app.md](prompts/chuyen-doi-web-app.md). Subagent dẫn dắt: `migration-architect`.
 
 0. **Chuẩn bị (xong 2026-11-17):** ghi bối cảnh vào `CLAUDE.md` + `claude/`; luồng plan tự động chạy ổn.
-1. **Khung Next.js trong cùng repo:** tạo app, chuyển HTML hiện tại vào `public/legacy/`, thêm rewrites để `/levels`, `/tools`, `/plan`, `/quiz`, `.en` vẫn chạy và `/testing`, `/overlap` vẫn chuyển về `/plan`. Chuyển `api/plan.js` sang `app/api/plan/route.ts` giữ đúng request / response. Deploy, kiểm tra không có gì gãy.
+1. **Khung Next.js trong cùng repo:** tạo monorepo, chuyển HTML hiện tại vào `apps/web/public/`, thêm rewrites để `/levels`, `/tools`, `/plan`, `/quiz`, `.en` vẫn chạy và `/testing`, `/overlap` vẫn chuyển về `/plan`. Chuyển `api/plan.js` sang `app/api/plan/route.ts` giữ đúng request / response. Deploy, kiểm tra không có gì gãy.
 2. **Đăng nhập + dữ liệu người dùng:** Supabase Auth, middleware bảo vệ `(app)/`, bảng `profiles` + `user_state`, trang nhập file sao lưu cũ để chuyển tiến độ lên DB.
 3. **Shell + dashboard:** component hoá sidebar / topbar / đồng hồ phiên; trang dashboard: plan hôm nay + ảnh, đồng hồ phiên, lịch tin trong ngày.
 4. **Port dần từng trang cũ:** Trade Plan (dùng `lib/plan-core.ts`), Quiz, rồi hai khoá học (nội dung sang `content/`). Xong trang nào thì bỏ bản legacy của trang đó.
@@ -83,7 +83,7 @@ Mỗi giai đoạn deploy được độc lập; không có bước "viết lạ
 
 ## Phải giữ khi chuyển
 - Hợp đồng `/api/plan` và JSON v1 (indicator ATAS đã code theo đó).
-- Kết quả `plan-core`: `node scripts/check-plan-core.mjs` phải pass (snapshot từ `assets/sample_plan_20261112.json`); số indicator khớp bảng 11/11, 12/11 ở [04](04-du-lieu-api.md).
+- Kết quả `plan-core`: `node scripts/check-plan-core.mjs` phải pass (snapshot từ `apps/web/public/assets/sample_plan_20261112.json`); số indicator khớp bảng 11/11, 12/11 ở [04](04-du-lieu-api.md).
 - URL và hash chương đang dùng (bookmark, `ofs.last`).
 - Ngân hàng 188 câu giữ nguyên văn và id `T001…`, `L001…`.
 - Giao diện tối, chữ đọc được trên nền tối, tiếng Việt mặc định.

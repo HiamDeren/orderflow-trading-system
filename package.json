@@ -1,11 +1,14 @@
 {
   "name": "orderflow-trading-system",
   "private": true,
-  "description": "Site học orderflow + API lưu plan (Vercel Functions)",
-  "dependencies": {
-    "@resvg/resvg-js": "2.6.2"
-  },
+  "description": "Monorepo: apps/web (Next.js trên Vercel), packages/*, supabase/ (migration)",
+  "packageManager": "pnpm@10.34.9",
+  "engines": { "node": ">=22" },
   "scripts": {
-    "check": "node scripts/check-plan-core.mjs"
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "check": "node scripts/check-plan-core.mjs",
+    "build:artifact": "node scripts/build-artifact.mjs",
+    "i18n": "python3 i18n/build_en.py"
   }
 }

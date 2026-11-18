@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Kiểm tra hồi quy engine plan (assets/js/plan-core.js).
+// Kiểm tra hồi quy engine plan (apps/web/public/assets/js/plan-core.js).
 // Chạy plan-core trên các payload mẫu, so summary + plan chữ + vùng HVN với snapshot đã chốt.
 //   node scripts/check-plan-core.mjs            → so sánh, sai thì exit 1
 //   node scripts/check-plan-core.mjs --update   → ghi lại snapshot (chỉ khi cố ý đổi luật / chữ)
@@ -11,9 +11,9 @@ import { fileURLToPath } from "url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const require = createRequire(import.meta.url);
-const core = require(path.join(root, "assets/js/plan-core.js"));
+const core = require(path.join(root, "apps/web/public/assets/js/plan-core.js"));
 const SNAP = path.join(root, "scripts/plan-core.snapshot.json");
-const CASES = ["assets/sample_plan_20261112.json"];
+const CASES = ["apps/web/public/assets/sample_plan_20261112.json"];
 
 const pick = p => ({
   summary: p.summary,

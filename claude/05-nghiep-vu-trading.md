@@ -27,7 +27,7 @@ Deren chốt khung này làm system trade plan chính ngày 2026-11-17. Ý tư�
 - HVN xác định bằng cách chồng VA các phiên RTH và OVN.
 - pRTH đã build gì và OVN đã build gì quyết định hướng của ngày.
 
-Chi tiết quy tắc nằm trong `assets/js/plan-core.js`.
+Chi tiết quy tắc nằm trong `apps/web/public/assets/js/plan-core.js`.
 
 ### 1. Tìm HVN (`findZones`)
 - Đầu vào: danh sách VA từng phiên `{date, typ: RTH|OVN, lo, hi}`.

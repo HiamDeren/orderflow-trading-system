@@ -1,6 +1,6 @@
 import re,json,os,sys
 import pathlib
-ROOT=str(pathlib.Path(__file__).resolve().parent.parent)
+ROOT=str(pathlib.Path(__file__).resolve().parent.parent/'apps'/'web'/'public')  # trang tĩnh nằm trong apps/web/public
 FILES=['index.html','quiz.html','tools.html','levels.html','plan.html']+['assets/js/'+f for f in ['core.js','quiz.js','home.js','fp.js','tools-page.js','levels-page.js','ema-page.js','plan-page.js','plan-core.js','levels-data.js','bank-tools.js','bank-levels.js','bank-ema.js']]
 VN=re.compile(r'[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ]')
 DELIM=re.compile(r'[<>\'"`{}$\n]')

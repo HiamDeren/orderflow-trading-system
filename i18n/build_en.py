@@ -5,7 +5,7 @@ import pathlib
 HERE=pathlib.Path(__file__).resolve().parent
 sys.path.insert(0,str(HERE))
 from extract import FILES,VN,strip_comments,runs
-ROOT=str(HERE.parent)
+ROOT=str(HERE.parent/'apps'/'web'/'public')  # trang tĩnh nằm trong apps/web/public
 D=str(HERE)
 keys={int(i):k for i,k in (l.rstrip('\n').split('\t',1) for l in open(f'{D}/keys.tsv'))}
 tr={int(i):t for i,t in (l.rstrip('\n').split('\t',1) for l in open(f'{D}/en.tsv') if l.strip())}

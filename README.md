@@ -12,7 +12,7 @@ Website học tập gộp hai playbook **Orderflow Tools** và **TPO Level** cho
 | `plan.html` | **Trade Plan** (system chính từ 17/11/2026) · Composite × pRTH × OVN: khung plan, xác định HVN, đọc bias, VWAP RTH, Plan Builder (nhập JSON từ indicator ATAS hoặc lấy plan đã gửi từ web, ảnh plan TPO kèm plan chữ, copy ảnh), quy trình trade, quiz 10 câu riêng (không tính vào thi thử) |
 | `quiz.html` | Trung tâm trắc nghiệm: luyện tập, thi thử, ôn câu sai |
 
-**Ngân hàng câu hỏi: 188 câu, giữ nguyên văn** — 87 câu Orderflow Tools (`assets/js/bank-tools.js`, id `T001…T087`) và 101 câu TPO Level (chương EMA: `assets/js/bank-ema.js`, id `L094…L108`; `assets/js/bank-levels.js`, id `L001…L093`, bỏ 7 câu case study).
+**Ngân hàng câu hỏi: 188 câu, giữ nguyên văn** — 87 câu Orderflow Tools (`apps/web/public/assets/js/bank-tools.js`, id `T001…T087`) và 101 câu TPO Level (chương EMA: `apps/web/public/assets/js/bank-ema.js`, id `L094…L108`; `apps/web/public/assets/js/bank-levels.js`, id `L001…L093`, bỏ 7 câu case study).
 
 - Mỗi chương có bài kiểm tra nhanh theo đúng module.
 - Thi thử: đề Tools 50 câu, đề Level 50 câu, đề tổng 100 câu (50 + 50), rút ngẫu nhiên giữ tỉ lệ theo chương. Qua bài khi đạt ≥ 80% ba lần liên tiếp.
@@ -22,31 +22,31 @@ Tiến độ lưu `localStorage` theo từng trình duyệt. Dùng mục **Sao l
 
 ## Song ngữ VI / EN
 
-Nút **VI | EN** trên thanh trên cùng. Bản tiếng Việt là `x.html`, bản tiếng Anh là `x.en.html` (JS ở `assets/js/en/`). Lựa chọn ngôn ngữ được nhớ; tiến độ dùng chung cho cả hai bản.
+Nút **VI | EN** trên thanh trên cùng. Bản tiếng Việt là `x.html`, bản tiếng Anh là `x.en.html` (JS ở `apps/web/public/assets/js/en/`). Lựa chọn ngôn ngữ được nhớ; tiến độ dùng chung cho cả hai bản.
 
 Bản EN được sinh tự động từ bản VI: sửa nội dung tiếng Việt rồi chạy `python3 i18n/build_en.py`. Script báo các câu tiếng Việt mới chưa có bản dịch — thêm chúng vào `i18n/en_extra.tsv` (`câu VI<TAB>câu EN`) rồi chạy lại.
 
 ## Cấu trúc
 
 ```
-assets/css/app.css        design system + shell + quiz engine
-assets/css/tools.css      style component khoá Tools (scope .pg-tools)
-assets/css/levels.css     style component khoá Level (scope .pg-levels)
-assets/js/core.js         sidebar, topbar, bottom nav, router chương, đồng hồ phiên realtime, nút VI/EN
-assets/js/quiz.js         quiz engine (luyện tập / thi thử / ôn câu sai)
-assets/js/fp.js           renderer footprint kiểu cluster ATAS, DOM/Tape helpers, 13 kịch bản
-assets/js/tools-page.js   hình minh hoạ khoá Tools
-assets/js/levels-data.js  dữ liệu khoá Level
-assets/js/levels-page.js  widget khoá Level (TPO profile, Plan Builder, …)
-assets/js/home.js         trang tổng quan
+apps/web/public/assets/css/app.css        design system + shell + quiz engine
+apps/web/public/assets/css/tools.css      style component khoá Tools (scope .pg-tools)
+apps/web/public/assets/css/levels.css     style component khoá Level (scope .pg-levels)
+apps/web/public/assets/js/core.js         sidebar, topbar, bottom nav, router chương, đồng hồ phiên realtime, nút VI/EN
+apps/web/public/assets/js/quiz.js         quiz engine (luyện tập / thi thử / ôn câu sai)
+apps/web/public/assets/js/fp.js           renderer footprint kiểu cluster ATAS, DOM/Tape helpers, 13 kịch bản
+apps/web/public/assets/js/tools-page.js   hình minh hoạ khoá Tools
+apps/web/public/assets/js/levels-data.js  dữ liệu khoá Level
+apps/web/public/assets/js/levels-page.js  widget khoá Level (TPO profile, Plan Builder, …)
+apps/web/public/assets/js/home.js         trang tổng quan
 ```
 
 ## Chạy & deploy
 
-Site tĩnh, không cần build.
+Monorepo pnpm: app Next.js ở `apps/web` (trang học tĩnh trong `apps/web/public/` + API), migration Supabase ở `supabase/`.
 
-- Local: `python3 -m http.server` rồi mở `http://localhost:8000`.
-- Vercel: Import repo → Framework Preset **Other** → Build Command để trống → Output Directory để trống (root). `vercel.json` đã bật `cleanUrls`.
+- Local: `pnpm install` rồi `pnpm dev`, mở `http://localhost:3000`.
+- Vercel: Root Directory **apps/web**, framework Next.js. Nhánh `production` deploy production, `development` (nhánh mặc định) deploy preview.
 
 Không phải lời khuyên đầu tư. Các con số thống kê truyền thống cần tự kiểm chứng bằng backtest.
 
@@ -54,7 +54,7 @@ Không phải lời khuyên đầu tư. Các con số thống kê truyền thố
 
 Indicator `Deren · Plan Sender` gửi số liệu pRTH / OVN / VA từng phiên lúc 9:29 ET để Plan Builder lập plan.
 Hướng dẫn đầy đủ, mã indicator, prompt Claude Code và SQL: `docs/plan-sender/README.md`.
-`api/plan.js` là Vercel Function lưu / đọc plan trên Supabase (cần biến môi trường `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `PLAN_TOKEN`).
+`apps/web/app/api/plan/route.ts` là Vercel Function lưu / đọc plan trên Supabase (cần biến môi trường `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `PLAN_TOKEN`).
 Thư mục `docs/` không được deploy lên site.
 
 ## Bối cảnh cho Claude / người mới

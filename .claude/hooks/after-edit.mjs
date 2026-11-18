@@ -2,7 +2,7 @@
 import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
-import { ROOT, readInput, rel, block, addContext, firstTime } from "./_lib.mjs";
+import { ROOT, PUB, readInput, rel, block, addContext, firstTime } from "./_lib.mjs";
 
 const input = readInput();
 const ti = input.tool_input || {};
@@ -16,22 +16,22 @@ function run(cmd) {
   catch (e) { return { ok: false, out: String(e.stdout || "") + String(e.stderr || "") }; }
 }
 
-// 1. Cú pháp JS
+// 1. Cú pháp JS (TypeScript do next build / tsc kiểm)
 if (/\.(m?js)$/.test(r) && fs.existsSync(abs)) {
   const c = run(`node --check "${abs}"`);
   if (!c.ok) block(`Lỗi cú pháp trong ${r}:\n${c.out.trim().split("\n").slice(0, 8).join("\n")}`);
 }
 
 // 2. Engine plan
-if (r === "assets/js/plan-core.js") {
+if (r === PUB + "assets/js/plan-core.js") {
   const c = run("node scripts/check-plan-core.mjs");
   if (!c.ok) block(`plan-core khác snapshot sau khi sửa:\n${c.out.trim().split("\n").slice(0, 14).join("\n")}\nNếu đổi luật / chữ là cố ý: chạy node scripts/check-plan-core.mjs --update và ghi lý do vào claude/09-nhat-ky.md.`);
-  if (firstTime(input, "plancore")) notes.push("plan-core.js đổi: tăng ?v= của plan-core.js trong plan.html, chạy build_en, build lại artifact (node scripts/build-artifact.mjs) rồi publish, cập nhật claude/05-nghiep-vu-trading.md nếu luật đổi. Ảnh server (api/plan.js) dùng chung file này.");
+  if (firstTime(input, "plancore")) notes.push("plan-core.js đổi: tăng ?v= của plan-core.js trong plan.html, chạy build_en, build lại artifact (node scripts/build-artifact.mjs) rồi publish, cập nhật claude/05-nghiep-vu-trading.md nếu luật đổi. Ảnh server (apps/web/app/api/plan/route.ts qua lib/plan-core.ts) dùng chung file này.");
 }
 
 // 3. API
-if (r.startsWith("api/") && /\.js$/.test(r) && firstTime(input, "api")) {
-  notes.push("API đổi: giữ đúng hợp đồng /api/plan + JSON v1 (claude/04-du-lieu-api.md). Sau deploy test bằng assets/sample_plan_20261112.json rồi xoá dòng test + ảnh test.");
+if (r.startsWith("apps/web/app/api/") && /\.tsx?$/.test(r) && firstTime(input, "api")) {
+  notes.push("API đổi: giữ đúng hợp đồng /api/plan + JSON v1 (claude/04-du-lieu-api.md). Chạy next build; test bằng apps/web/public/assets/sample_plan_20261112.json (preview Development trước) rồi xoá dòng test + ảnh test.");
 }
 
 // 4. Indicator ATAS: tên trường JSON phải còn đủ
@@ -44,9 +44,9 @@ if (r === "docs/plan-sender/PlanSender.cs" && fs.existsSync(abs)) {
 }
 
 // 5. Nội dung VI và tài nguyên tĩnh
-const viSource = (/\.html$/.test(r) && !/\.en\.html$/.test(r)) || (/^assets\/js\/[^/]+\.js$/.test(r));
+const viSource = (r.startsWith(PUB) && /\.html$/.test(r) && !/\.en\.html$/.test(r)) || (r.startsWith(PUB + "assets/js/") && /^[^/]+\.js$/.test(r.slice((PUB + "assets/js/").length)));
 if (viSource && firstTime(input, "i18n")) notes.push("Đã sửa bản VI: trước khi xong, chạy python3 i18n/build_en.py (câu chưa dịch → i18n/en_extra.tsv) và tăng ?v= của file JS/CSS vừa đổi ở mọi trang dùng nó.");
-if (/^assets\/css\//.test(r) && firstTime(input, "css")) notes.push("CSS đổi: tăng ?v= ở thẻ <link> của các trang dùng file này (cache /assets 1 giờ).");
+if (r.startsWith(PUB + "assets/css/") && firstTime(input, "css")) notes.push("CSS đổi: tăng ?v= ở thẻ <link> của các trang dùng file này (cache /assets 1 giờ).");
 
 // 6. Nhật ký
 const docOnly = r.startsWith("claude/") || r === "CLAUDE.md" || r.startsWith(".claude/");

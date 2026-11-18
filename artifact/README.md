@@ -11,7 +11,7 @@ Bản song song của trang web `plan.html`, thêm 3 tab chỉ có ở artifact:
 | `va_lines.txt` | VA mẫu cho công cụ HVN (thay `"__VA_LINES__"`) |
 | `app.js` | File build, **không sửa tay**: `node scripts/build-artifact.mjs` |
 
-Engine plan (HVN, bias, setup, vẽ ảnh) lấy từ `assets/js/plan-core.js`, cùng code với web và `/api/plan`. Đổi engine thì build lại artifact và publish `index.html` + `app.js`.
+Engine plan (HVN, bias, setup, vẽ ảnh) lấy từ `apps/web/public/assets/js/plan-core.js`, cùng code với web và `/api/plan`. Đổi engine thì build lại artifact và publish `index.html` + `app.js`.
 
 Khoá localStorage riêng của artifact: `cb-builder`, `cb-builder-json`, `cb-log`, `cb-hvn` (khác origin với web nên không dùng chung).
 

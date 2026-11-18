@@ -2,6 +2,13 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-18 · Monorepo Next.js + nhánh production / development
+- Chốt stack (D26–D30). Monorepo pnpm: `apps/web` (Next.js 16, TypeScript), `supabase/` (config + 3 migration khớp version trên production, kiểm bằng Postgres local).
+- Site tĩnh chuyển vào `apps/web/public/`; `next.config.ts` giữ URL sạch, redirect `.html`, `/testing`, `/overlap`, header cache. `vercel.json` gốc bỏ, `apps/web/vercel.json` chỉ còn region `sin1`.
+- `api/plan.js` → `apps/web/app/api/plan/route.ts`, giữ nguyên hợp đồng; test local với Supabase/Discord giả: 401/400/405, POST mẫu ra PNG 338.930 byte như cũ, header `Content-Profile`/`Accept-Profile: trading`.
+- Script i18n, check-plan-core, build-artifact, hook Claude Code đổi sang đường dẫn mới; snapshot plan-core khớp, bản EN và artifact không đổi.
+- Nhánh: `main` → `production`; `development` là nhánh mặc định (D31).
+
 ## 2026-11-18 · Chuyển Supabase sang Singapore, tách schema
 - Project mới **Personal Trading Dashboard** (`gpbypxuglcfmvarmferr`, `ap-southeast-1`); project Sydney giữ tạm.
 - Bỏ `public`: bảng chuyển thành `trading.trade_plans`, hàm trigger thành `util.touch_updated_at()`; `id` đổi từ bigint identity sang `uuid`. Chép dòng plan 2026-11-17 sang (khớp md5).

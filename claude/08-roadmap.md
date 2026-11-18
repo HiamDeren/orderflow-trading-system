@@ -3,13 +3,13 @@
 Danh sách việc còn lại. Khi Deren nhắn "liệt kê các việc còn lại", trả lời từ file này.
 Hướng dài hạn: **web app cá nhân / dashboard** (xem [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md)).
 
-Cập nhật: 2026-11-17.
+Cập nhật: 2026-11-18.
 
 ## Đã xong
 - [x] Trade Plan · Composite × pRTH × OVN là system chính (2026-11-17): gộp Plan Builder cổ điển + Testing plan thành trang `plan.html`, Plan Builder vẽ ảnh TPO kèm plan chữ, copy ảnh.
 - [x] Plan Builder nhập JSON từ ATAS (dán / clipboard / file) và **"Lấy plan mới nhất từ web"**.
 - [x] Supabase: bảng `trading.trade_plans`, bucket private `trade-plans`, RLS bật, chỉ server đọc ghi.
-- [x] Vercel: `api/plan.js` (token); biến `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `PLAN_TOKEN`, `DISCORD_WEBHOOK_TRADE_PLAN` đã đặt.
+- [x] Vercel: `apps/web/app/api/plan/route.ts` (token); biến `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `PLAN_TOKEN`, `DISCORD_WEBHOOK_TRADE_PLAN` đã đặt.
 - [x] Server tự vẽ ảnh plan tiếng Việt (PNG), lưu Storage, gửi Discord qua webhook. Test đầu-cuối bằng JSON mẫu thành công 2026-11-17.
 - [x] `plan-core.js`: một nguồn code cho tính plan + vẽ ảnh, dùng chung web và server.
 - [x] Avatar webhook Discord "Trade Plan".
@@ -38,8 +38,12 @@ Cập nhật: 2026-11-17.
 
 ## Chuyển sang web app / personal dashboard
 Chi tiết: [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md).
-- [ ] Giai đoạn 0: Deren duyệt stack (đề xuất Next.js + Supabase Auth) và thứ tự module (prompt: `claude/prompts/chuyen-doi-web-app.md`).
-- [ ] Giai đoạn 1: khung Next.js trong repo, trang cũ chạy qua `public/legacy/`, `/api/plan` chuyển sang route handler.
+- [x] Giai đoạn 0: Deren chốt stack 2026-11-18 (D26–D30).
+- [x] Giai đoạn 1 (code, 2026-11-18): monorepo pnpm, `apps/web` Next.js, trang cũ trong `apps/web/public/`, `/api/plan` route handler, `supabase/` migration.
+- [ ] Giai đoạn 1 (cutover): Deren đổi nhánh mặc định GitHub → `development` và Production Branch Vercel → `production`; kiểm preview `development` (trang + `/api/plan` 401); PR `development` → `production`; test plan thật 9:29 ET; xoá nhánh `main`.
+- [ ] Supabase project dev cho Preview (dùng chỗ trống sau khi xoá project Sydney) + biến môi trường Preview trên Vercel.
+- [ ] GitHub Actions: `pnpm build` + `check` cho mọi PR; `supabase db push` khi merge vào `production`.
+- [ ] Biome (lint / format), Vitest cho plan-core, Playwright vào repo.
 - [ ] Giai đoạn 2: đăng nhập chủ site, `profiles` + `user_state`, nhập file sao lưu tiến độ cũ.
 - [ ] Giai đoạn 3: shell component + trang dashboard (plan hôm nay, đồng hồ phiên, lịch tin).
 - [ ] Giai đoạn 4: port dần Trade Plan, Quiz, hai khoá học.

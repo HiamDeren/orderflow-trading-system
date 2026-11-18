@@ -69,7 +69,7 @@ Widget chính:
 - Phím tắt điều hướng, quiz nhanh cuối mỗi chương theo module.
 - Lưu: `ofs.quiz.v1` (đáp án, câu sai, lịch sử), `ofs.exam.cur` (bài thi đang làm).
 
-## Backend (api/plan.js)
+## Backend (apps/web/app/api/plan/route.ts)
 Chi tiết hợp đồng API: [04-du-lieu-api.md](04-du-lieu-api.md).
 - POST: lưu plan → vẽ ảnh tiếng Việt → lưu Storage → cập nhật dòng → gửi Discord.
 - GET: plan mới nhất (hoặc theo `?date=`) kèm link ảnh ký tạm.

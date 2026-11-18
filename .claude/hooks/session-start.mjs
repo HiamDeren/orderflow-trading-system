@@ -9,7 +9,7 @@ L.push("# orderflow-trading-system · bối cảnh phiên");
 L.push("Đọc CLAUDE.md (quy tắc bắt buộc). Bối cảnh đầy đủ: claude/README.md. Trao đổi bằng tiếng Việt.");
 const branch = git("rev-parse --abbrev-ref HEAD");
 if (branch) {
-  L.push(`Nhánh: ${branch}. Push main = Vercel deploy production.`);
+  L.push(`Nhánh: ${branch}. Làm việc trên development (preview); production chỉ nhận merge qua PR khi Deren duyệt.`);
   const log = git("log -5 --format=%h·%ad·%s --date=short");
   if (log) L.push("Commit gần nhất:\n" + log.split("\n").map(s => "  " + s).join("\n"));
   const st = git("status --porcelain");

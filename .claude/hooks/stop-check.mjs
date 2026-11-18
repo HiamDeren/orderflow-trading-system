@@ -1,7 +1,7 @@
 // Stop: không cho kết thúc khi bản EN chưa sinh lại sau khi sửa bản VI.
 import fs from "fs";
 import path from "path";
-import { ROOT, readInput, git, block } from "./_lib.mjs";
+import { ROOT, PUB, readInput, git, block } from "./_lib.mjs";
 
 const input = readInput();
 if (input.stop_hook_active) process.exit(0); // đã nhắc một lần trong lượt này
@@ -14,8 +14,10 @@ if (!changed.size) process.exit(0);
 const stale = [];
 for (const f of changed) {
   let en = null;
-  if (/^[^/]+\.html$/.test(f) && !/\.en\.html$/.test(f)) en = f.replace(/\.html$/, ".en.html");
-  else if (/^assets\/js\/[^/]+\.js$/.test(f)) en = "assets/js/en/" + path.basename(f);
+  const p = f.startsWith(PUB) ? f.slice(PUB.length) : null;
+  if (p === null) continue;
+  if (/^[^/]+\.html$/.test(p) && !/\.en\.html$/.test(p)) en = f.replace(/\.html$/, ".en.html");
+  else if (/^assets\/js\/[^/]+\.js$/.test(p)) en = PUB + "assets/js/en/" + path.basename(f);
   if (en && fs.existsSync(path.join(ROOT, en)) && !changed.has(en)) stale.push(`${f} → ${en}`);
 }
 if (stale.length) {

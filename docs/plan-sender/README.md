@@ -1,7 +1,7 @@
 # Plan Sender · ATAS → Plan Builder → Vercel + Supabase
 
 Tài liệu gộp cho toàn bộ luồng lập plan tự động của khung **Composite × pRTH × OVN**.
-Mọi file liên quan nằm trong thư mục này và trong `api/plan.js` ở gốc repo.
+Mọi file liên quan nằm trong thư mục này và trong `apps/web/app/api/plan/route.ts`.
 
 ```
 ATAS X (chart M30, 30 ngày)
@@ -16,8 +16,8 @@ ATAS X (chart M30, 30 ngày)
 |---|---|
 | `PlanSender.cs` | Indicator C# cho ATAS X: tính VA TPO của pRTH, OVN, VA từng phiên 30 ngày, composite; xuất JSON |
 | `PROMPT_PlanSender.md` | Prompt cho Claude Code: build, cài, kiểm số liệu với giá trị chuẩn |
-| `supabase.sql` | Tạo bảng `trade_plans` trên Supabase (RLS bật, không public) |
-| `../../api/plan.js` | Vercel Function nhận / trả plan, đã nằm trong repo |
+| `supabase.sql` | Bản gộp schema để đọc; nguồn chuẩn là `supabase/migrations/` |
+| `../../apps/web/app/api/plan/route.ts` | API nhận / trả plan (Next.js route handler) |
 
 Thư mục `docs/` không được deploy lên site (khai báo trong `.vercelignore`), nhưng repo đang public trên GitHub: **không đưa token, key, CSV hay file JSON dữ liệu vào repo**.
 
@@ -55,7 +55,7 @@ Kiểm tra nhanh không cần ATAS: nút **"Nạp ví dụ 12/11 (data thật, c
 
 ## Bước 2 · Vercel + Supabase (làm trên web được)
 
-`api/plan.js` **đã có trong repo**. Chỉ cần tạo database và khai báo biến môi trường.
+`apps/web/app/api/plan/route.ts` **đã có trong repo**. Chỉ cần tạo database và khai báo biến môi trường.
 
 ### A. Supabase
 1. supabase.com → **New project**, region **Southeast Asia (Singapore)**, đặt Database password và lưu lại.
@@ -84,7 +84,7 @@ Tạo chuỗi ngẫu nhiên từ 32 ký tự (chữ + số) bằng trình tạo 
 1. Mở `https://<site>/api/plan`:
    - `{"error":"unauthorized"}` → đúng, function chạy và đang chặn khi không có token.
    - `Thiếu biến môi trường ...` → chưa Redeploy sau khi thêm biến.
-   - 404 → bản deploy chưa có `api/plan.js`.
+   - 404 → bản deploy chưa có `apps/web/app/api/plan/route.ts`.
 2. Tối nay, sau khi có `latest_plan.json`, chạy PowerShell:
    ```powershell
    $t = "<PLAN_TOKEN>"
@@ -107,8 +107,8 @@ Tạo chuỗi ngẫu nhiên từ 32 ký tự (chữ + số) bằng trình tạo 
 ## Bước 3 · Ảnh plan tự động + Discord (đã có trong code)
 
 Mỗi lần indicator gửi plan (`POST /api/plan`), server tự làm thêm:
-1. Lập plan bằng `assets/js/plan-core.js`, **cùng code với trang Trade Plan**, nên ảnh giống hệt ảnh trên web.
-2. Vẽ ảnh **tiếng Việt** (font Be Vietnam Pro + JetBrains Mono trong `api/_fonts/`), xuất PNG 2600 px.
+1. Lập plan bằng `apps/web/public/assets/js/plan-core.js`, **cùng code với trang Trade Plan**, nên ảnh giống hệt ảnh trên web.
+2. Vẽ ảnh **tiếng Việt** (font Be Vietnam Pro + JetBrains Mono trong `apps/web/fonts/`), xuất PNG 2600 px.
 3. Lưu PNG vào Supabase Storage, bucket **private** `trade-plans`, đường dẫn `YYYY/MM/plan_YYYY-MM-DD_SYMBOL.png`.
    Bảng `trade_plans` có thêm cột `image_path`, `plan_text`, `summary` (bias, setup, target...).
 4. Gửi ảnh + tóm tắt plan vào kênh Discord (nếu đã đặt `DISCORD_WEBHOOK_TRADE_PLAN`).
