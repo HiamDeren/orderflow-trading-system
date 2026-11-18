@@ -5,6 +5,7 @@ import { ECON_SOURCE_PAGE, getEconWeek, localize } from "@/lib/econ";
 import { tzShort } from "@/lib/prefs";
 import { getT } from "@/lib/prefs-server";
 import { DATE_RE, fmtTime, nowIn } from "@/lib/time";
+import TzPicker from "../_components/TzPicker";
 import CalendarView from "./CalendarView";
 
 export const metadata: Metadata = { title: "Calendar" };
@@ -28,14 +29,10 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
           <span className="lbl">{t("Tổng quan")}</span>
           <h1 className="h1">Calendar</h1>
         </div>
-        <span className="hstack small muted" style={{ gap: 8 }}>
+        <span className="hstack small muted" style={{ gap: 10 }}>
           <span className={"dot " + (econ.ok ? "ok" : "err")} aria-hidden="true" />
-          {econ.ok
-            ? Number.isFinite(fetched)
-              ? <>{t("Nguồn cập nhật lúc")} <span className="mono">{fmtTime(fetched, ui.tz, true)} {tzShort(ui.tz)}</span></>
-              : t("Nguồn đã tải")
-            : t("Nguồn lỗi")}
-          <span className="dim">· ForexFactory</span>
+          {econ.ok && Number.isFinite(fetched) && <span className="mono">{t("Cập nhật")} {fmtTime(fetched, ui.tz, false)}</span>}
+          <TzPicker />
         </span>
       </header>
       {econ.ok ? (

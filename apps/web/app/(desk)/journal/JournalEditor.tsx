@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { DayWithTrades, Trade } from "@/lib/journal";
 import { BIAS_CHECK, DAY_TYPES, FOLLOWED, OPEN_TYPES, RESULTS, SIDES } from "@/lib/settings";
 import { useUi } from "../_components/Ui";
@@ -16,7 +16,19 @@ const toRow = (t: Trade): Row => ({
 const empty = (): Row => ({ entry_time: "", side: "Long", qty: "1", level: "", trigger: "", r: "", pnl: "", fee: "", followed_plan: "", mistakes: "" });
 const money = (v: number) => (v > 0 ? "+$" : v < 0 ? "−$" : "$") + Math.abs(v).toFixed(2).replace(/\.00$/, "");
 
-export default function JournalEditor({ date, initial, textFields }: { date: string; initial: DayWithTrades | null; textFields: readonly TextField[] }) {
+export default function JournalEditor({
+  date,
+  initial,
+  textFields,
+  head,
+  children,
+}: {
+  date: string;
+  initial: DayWithTrades | null;
+  textFields: readonly TextField[];
+  head?: React.ReactNode;
+  children?: React.ReactNode;
+}) {
   const router = useRouter();
   const { t, lang } = useUi();
   const [day, setDay] = useState<Record<string, string>>(() => {
@@ -29,9 +41,35 @@ export default function JournalEditor({ date, initial, textFields }: { date: str
   const [rows, setRows] = useState<Row[]>(() => (initial?.journal_trades || []).map(toRow));
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [dirty, setDirty] = useState(false);
 
-  const set = (k: string, v: string) => setDay((d) => ({ ...d, [k]: v }));
-  const setRow = (i: number, k: keyof Row, v: string) => setRows((rs) => rs.map((r, j) => (j === i ? { ...r, [k]: v } : r)));
+  const set = (k: string, v: string) => {
+    setDirty(true);
+    setDay((d) => ({ ...d, [k]: v }));
+  };
+  const setRow = (i: number, k: keyof Row, v: string) => {
+    setDirty(true);
+    setRows((rs) => rs.map((r, j) => (j === i ? { ...r, [k]: v } : r)));
+  };
+  const saveRef = useRef<() => void>(() => {});
+
+  // Ctrl / Cmd + S để lưu; nhắc khi rời trang lúc còn thay đổi chưa lưu
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        saveRef.current();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+  useEffect(() => {
+    if (!dirty) return;
+    const onLeave = (e: BeforeUnloadEvent) => e.preventDefault();
+    window.addEventListener("beforeunload", onLeave);
+    return () => window.removeEventListener("beforeunload", onLeave);
+  }, [dirty]);
 
   const sum = useMemo(() => {
     const gross = rows.reduce((a, r) => a + (Number(r.pnl) || 0), 0);
@@ -59,6 +97,7 @@ export default function JournalEditor({ date, initial, textFields }: { date: str
       const j = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(res.status === 401 ? t("Phiên đăng nhập hết hạn, đăng nhập lại.") : j.error || `HTTP ${res.status}`);
       setMsg({ ok: true, text: t("Đã lưu journal.") });
+      setDirty(false);
       router.refresh();
     } catch (e) {
       setMsg({ ok: false, text: t("Chưa lưu được") + ": " + String((e as Error).message) });
@@ -66,6 +105,10 @@ export default function JournalEditor({ date, initial, textFields }: { date: str
       setSaving(false);
     }
   }
+
+  saveRef.current = () => {
+    if (!saving) save();
+  };
 
   const sel = (k: string, label: string, opts: readonly string[]) => (
     <label className="field">
@@ -79,7 +122,22 @@ export default function JournalEditor({ date, initial, textFields }: { date: str
 
   return (
     <div className="stack" style={{ gap: 16 }}>
-      <div className="card">
+      <div className="card journal-head">
+        <div className="row wrap" style={{ gap: 12 }}>
+          {head}
+          <div className="hstack journal-save">
+            <span role="status" className={msg ? (msg.ok ? "long small" : "short small") : dirty ? "small accent" : "small dim"}>
+              {msg && !dirty
+                ? msg.text
+                : dirty
+                  ? t("Có thay đổi chưa lưu")
+                  : initial?.updated_at
+                    ? t("Lưu lần cuối {d}", { d: new Date(initial.updated_at).toLocaleString(lang === "en" ? "en-GB" : "vi-VN", { dateStyle: "short", timeStyle: "short" }) })
+                    : t("Chưa lưu")}
+            </span>
+            <button className="btn primary" onClick={save} disabled={saving} title="Ctrl + S">{saving ? t("Đang lưu…") : t("Lưu journal")}</button>
+          </div>
+        </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12 }}>
           {sel("day_type", "Day type", DAY_TYPES)}
           {sel("result", "Kết quả", RESULTS)}
@@ -88,10 +146,12 @@ export default function JournalEditor({ date, initial, textFields }: { date: str
         </div>
       </div>
 
+      {children}
+
       <section className="card" aria-label={t("Lệnh trong ngày")} style={{ padding: "18px 8px 10px" }}>
         <div className="row" style={{ padding: "0 10px" }}>
           <span className="lbl">{t("Lệnh")} · {rows.length}</span>
-          <button className="btn sm" onClick={() => setRows((r) => [...r, empty()])} disabled={rows.length >= 20}>{t("Thêm lệnh")}</button>
+          <button className="btn sm" onClick={() => { setDirty(true); setRows((r) => [...r, empty()]); }} disabled={rows.length >= 20}>{t("Thêm lệnh")}</button>
         </div>
         {rows.length ? (
           <div className="table-box">
@@ -123,7 +183,7 @@ export default function JournalEditor({ date, initial, textFields }: { date: str
                       </select>
                     </td>
                     <td><input className="input" aria-label={t("Lỗi")} value={r.mistakes} onChange={(e) => setRow(i, "mistakes", e.target.value)} placeholder={t("Vào trước trigger, Bỏ qua VWAP")} style={{ minWidth: 200 }} /></td>
-                    <td><button className="btn sm" aria-label={t("Xoá lệnh {n}", { n: i + 1 })} onClick={() => setRows((rs) => rs.filter((_, j) => j !== i))}>{t("Xoá")}</button></td>
+                    <td><button className="btn sm" aria-label={t("Xoá lệnh {n}", { n: i + 1 })} onClick={() => { setDirty(true); setRows((rs) => rs.filter((_, j) => j !== i)); }}>{t("Xoá")}</button></td>
                   </tr>
                 ))}
               </tbody>
@@ -146,7 +206,6 @@ export default function JournalEditor({ date, initial, textFields }: { date: str
       <section className="card" aria-label={t("Recap chi tiết")}>
         <div className="row wrap">
           <span className="lbl">{t("Recap chi tiết")}</span>
-          <span className="small faint">{t("Markdown được")}</span>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14 }}>
           {textFields.map(([k, label, ph]) => (
@@ -157,13 +216,6 @@ export default function JournalEditor({ date, initial, textFields }: { date: str
           ))}
         </div>
       </section>
-
-      <div className="savebar">
-        <span role="status" className={msg ? (msg.ok ? "long small" : "short small") : "small dim"}>
-          {msg ? msg.text : initial?.updated_at ? t("Lưu lần cuối {d}", { d: new Date(initial.updated_at).toLocaleString(lang === "en" ? "en-GB" : "vi-VN") }) : t("Chưa lưu")}
-        </span>
-        <button className="btn primary" onClick={save} disabled={saving}>{saving ? t("Đang lưu…") : t("Lưu journal")}</button>
-      </div>
     </div>
   );
 }

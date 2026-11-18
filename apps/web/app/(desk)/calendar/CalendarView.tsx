@@ -88,9 +88,8 @@ export default function CalendarView({ events, today, initialDay, initialPrefs }
         </fieldset>
       </section>
 
-      <section className="card" aria-label={t("Lịch kinh tế")} style={{ gap: 16 }}>
-        <div className="cal-split">
-          <div className="stack" style={{ minWidth: 0 }}>
+      <div className="cal-split fit">
+          <section className="card" aria-label={t("Lịch kinh tế")}>
             <div className="row">
               <span style={{ fontSize: 16, fontWeight: 600 }}>{t("Tháng {m} · {y}", { m: Number(mo), y })}</span>
               <div className="seg seg-xs" role="group" aria-label={t("Kiểu xem")}>
@@ -118,15 +117,11 @@ export default function CalendarView({ events, today, initialDay, initialPrefs }
                 );
               })}
             </div>
-            <div className="legend">
-              {IMPACTS.map((i) => <span key={i}><span className={"dot imp-" + i} aria-hidden="true" />{t(IMPACT_LABEL[i])}</span>)}
-            </div>
             {hasData.has(today) && day !== today && <button className="btn" onClick={() => setDay(today)}>{t("Về hôm nay")}</button>}
-            <p className="small faint">{t("Chấm màu là tin mạnh nhất trong ngày (theo bộ lọc). Ngày nhóm theo múi giờ hiển thị (đổi ở Profile). Chỉ có tuần hiện tại: lịch gọi API trực tiếp, không lưu lại. Bộ lọc dùng chung với Dashboard.")}</p>
-          </div>
+          </section>
 
           {mode === "day" ? (
-            <div className="stack" style={{ gap: 8, minWidth: 0 }}>
+            <section className="card cal-list" style={{ gap: 8 }} aria-label={t("Danh sách tin")}>
               <div className="row cal-list-head">
                 <span style={{ fontSize: 15, fontWeight: 600 }}>
                   {DOW[lang][dowOf(day)]} · {viDayMonth(day)}{day === today ? ` · ${t("hôm nay")}` : ""}
@@ -135,9 +130,9 @@ export default function CalendarView({ events, today, initialDay, initialPrefs }
                 <span className="mono small dim"><TzHead /> · {t("Thực tế / Dự báo / Trước")}</span>
               </div>
               {list.length ? list.map((e) => <EventRow key={e.id} e={e} />) : <p className="small dim" style={{ padding: "16px 12px" }}>{empty}</p>}
-            </div>
+            </section>
           ) : (
-            <div className="stack" style={{ gap: 8, minWidth: 0 }}>
+            <section className="card cal-list" style={{ gap: 8 }} aria-label={t("Danh sách tin")}>
               <div className="row cal-list-head">
                 <span style={{ fontSize: 15, fontWeight: 600 }}>
                   {t("Tuần {a} – {b}", { a: viDayMonth(wkStart), b: viDayMonth(addDays(wkStart, 6)) })}
@@ -157,10 +152,9 @@ export default function CalendarView({ events, today, initialDay, initialPrefs }
                   </section>
                 );
               })}
-            </div>
+            </section>
           )}
-        </div>
-      </section>
+      </div>
     </>
   );
 }

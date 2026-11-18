@@ -3,7 +3,6 @@ import Link from "next/link";
 import { NQ_WATCH, getEarnings } from "@/lib/market";
 import { getT } from "@/lib/prefs-server";
 import { DATE_RE, MONTH_RE, addDays, etNow, monthRange, shiftMonth } from "@/lib/time";
-import Icon from "../_components/Icon";
 import { NotConfigured } from "../_components/States";
 import EarningsView from "./EarningsView";
 
@@ -43,9 +42,6 @@ export default async function EarningsPage({ searchParams }: { searchParams: Pro
       ) : (
         <EarningsView key={month} month={month} items={res.items} watch={NQ_WATCH} today={today} initialDay={initialDay} />
       )}
-      <span className="small faint hstack" style={{ gap: 6 }}>
-        <Icon name="earnings" size={14} /> {t("Nguồn: Finnhub. NQ top là các mã nặng trong Nasdaq-100 (lib/market.ts).")}
-      </span>
     </>
   );
 }

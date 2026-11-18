@@ -31,7 +31,7 @@ export const NQ_WATCH = [
 
 const num = (v: unknown) => (v === null || v === undefined || v === "" || !Number.isFinite(Number(v)) ? null : Number(v));
 
-async function call<T>(path: string, revalidate: number): Promise<T> {
+export async function call<T>(path: string, revalidate: number): Promise<T> {
   const key = process.env.FINNHUB_API_KEY;
   const r = await fetch(`${BASE}${path}${path.includes("?") ? "&" : "?"}token=${encodeURIComponent(key || "")}`, {
     next: { revalidate },
@@ -46,47 +46,78 @@ export function marketConfigured() {
   return !!process.env.FINNHUB_API_KEY;
 }
 
+function parseNews(raw: unknown): NewsItem[] {
+  return (Array.isArray(raw) ? (raw as Record<string, unknown>[]) : [])
+    .map((n) => ({
+      id: String(n.id ?? n.url),
+      ts: Number(n.datetime) * 1000,
+      headline: String(n.headline || "").trim(),
+      source: String(n.source || ""),
+      summary: String(n.summary || "").trim(),
+      url: String(n.url || ""),
+      related: String(n.related || ""),
+    }))
+    .filter((n) => n.headline && n.url.startsWith("http") && Number.isFinite(n.ts))
+    .sort((a, b) => b.ts - a.ts);
+}
+
 export async function getNews(category: NewsCategory = "general", limit = 60): Promise<Result<NewsItem>> {
   if (!marketConfigured()) return { ok: false, configured: false, items: [] };
   try {
-    const raw = await call<Record<string, unknown>[]>(`/news?category=${category}`, 300);
-    const items = (Array.isArray(raw) ? raw : [])
-      .map((n) => ({
-        id: String(n.id ?? n.url),
-        ts: Number(n.datetime) * 1000,
-        headline: String(n.headline || "").trim(),
-        source: String(n.source || ""),
-        summary: String(n.summary || "").trim(),
-        url: String(n.url || ""),
-        related: String(n.related || ""),
-      }))
-      .filter((n) => n.headline && n.url.startsWith("http") && Number.isFinite(n.ts))
-      .sort((a, b) => b.ts - a.ts)
-      .slice(0, limit);
-    return { ok: true, configured: true, items };
+    const raw = await call<unknown>(`/news?category=${category}`, 300);
+    return { ok: true, configured: true, items: parseNews(raw).slice(0, limit) };
   } catch (e) {
     console.error("[market] news", String((e as Error).message));
     return { ok: false, configured: true, items: [], error: String((e as Error).message) };
   }
 }
 
-export async function getEarnings(from: string, to: string): Promise<Result<Earning>> {
+// Tin theo mã (company-news), mặc định 14 ngày gần nhất
+export async function getCompanyNews(symbol: string, days = 14, limit = 100): Promise<Result<NewsItem>> {
   if (!marketConfigured()) return { ok: false, configured: false, items: [] };
   try {
-    const raw = await call<{ earningsCalendar?: Record<string, unknown>[] }>(`/calendar/earnings?from=${from}&to=${to}`, 3600);
-    const items = (raw.earningsCalendar || [])
-      .map((e) => ({
-        symbol: String(e.symbol || "").toUpperCase(),
-        date: String(e.date || ""),
-        hour: (["bmo", "amc", "dmh"].includes(String(e.hour)) ? String(e.hour) : "") as Earning["hour"],
-        epsEstimate: num(e.epsEstimate),
-        epsActual: num(e.epsActual),
-        revenueEstimate: num(e.revenueEstimate),
-        revenueActual: num(e.revenueActual),
-        quarter: num(e.quarter),
-        year: num(e.year),
-      }))
-      .filter((e) => e.symbol && /^\d{4}-\d{2}-\d{2}$/.test(e.date))
+    const to = new Date().toISOString().slice(0, 10);
+    const from = new Date(Date.now() - days * 86400000).toISOString().slice(0, 10);
+    const raw = await call<unknown>(`/company-news?symbol=${encodeURIComponent(symbol)}&from=${from}&to=${to}`, 600);
+    return { ok: true, configured: true, items: parseNews(raw).slice(0, limit) };
+  } catch (e) {
+    console.error("[market] company-news", String((e as Error).message));
+    return { ok: false, configured: true, items: [], error: String((e as Error).message) };
+  }
+}
+
+function parseEarnings(list: Record<string, unknown>[]): Earning[] {
+  return list
+    .map((e) => ({
+      symbol: String(e.symbol || "").toUpperCase(),
+      date: String(e.date || ""),
+      hour: (["bmo", "amc", "dmh"].includes(String(e.hour)) ? String(e.hour) : "") as Earning["hour"],
+      epsEstimate: num(e.epsEstimate),
+      epsActual: num(e.epsActual),
+      revenueEstimate: num(e.revenueEstimate),
+      revenueActual: num(e.revenueActual),
+      quarter: num(e.quarter),
+      year: num(e.year),
+    }))
+    .filter((e) => e.symbol && /^\d{4}-\d{2}-\d{2}$/.test(e.date));
+}
+
+const addDay = (d: string, n: number) => new Date(Date.parse(d + "T00:00:00Z") + n * 86400000).toISOString().slice(0, 10);
+
+// Finnhub trả tối đa ~1500 dòng / lần gọi: khoảng dài thì chia 3 ngày một lần (song song, cache 1 giờ)
+export async function getEarnings(from: string, to: string, symbol?: string): Promise<Result<Earning>> {
+  if (!marketConfigured()) return { ok: false, configured: false, items: [] };
+  try {
+    const ranges: [string, string][] = [];
+    if (symbol) ranges.push([from, to]);
+    else for (let d = from; d <= to; d = addDay(d, 3)) ranges.push([d, addDay(d, 2) < to ? addDay(d, 2) : to]);
+    const sym = symbol ? `&symbol=${encodeURIComponent(symbol)}` : "";
+    const parts = await Promise.all(
+      ranges.map(([a, b]) => call<{ earningsCalendar?: Record<string, unknown>[] }>(`/calendar/earnings?from=${a}&to=${b}${sym}`, 3600)),
+    );
+    const seen = new Set<string>();
+    const items = parseEarnings(parts.flatMap((p) => p.earningsCalendar || []))
+      .filter((e) => (seen.has(e.symbol + e.date) ? false : (seen.add(e.symbol + e.date), true)))
       .sort((a, b) => (a.date === b.date ? a.symbol.localeCompare(b.symbol) : a.date < b.date ? -1 : 1));
     return { ok: true, configured: true, items };
   } catch (e) {

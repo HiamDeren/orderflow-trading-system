@@ -69,7 +69,6 @@ export default async function ProfilePage() {
               <span className="muted">{k}</span><span className="mono">{v}</span>
             </div>
           ))}
-          <span className="small faint" style={{ paddingTop: 6 }}>{t("Đổi trong apps/web/lib/settings.ts")}</span>
         </section>
 
         <section className="card tight" aria-label={t("Kết nối")}>

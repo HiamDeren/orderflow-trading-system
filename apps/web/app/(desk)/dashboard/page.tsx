@@ -62,7 +62,7 @@ export default async function DashboardPage() {
     .filter((e) => e.dateEt === today && !e.allDay)
     .map((e) => {
       const [h, m] = e.timeEt.split(":").map(Number);
-      return { id: e.id, minutes: h * 60 + m, impact: e.impact, title: `${e.timeEt} ET · ${e.country} · ${e.title}` };
+      return { id: e.id, minutes: h * 60 + m, impact: e.impact, title: e.title, country: e.country, et: e.timeEt, local: ui.tz === "America/New_York" ? "" : e.timeLocal, href: `/calendar?day=${e.dateLocal}` };
     });
   const nqEarn = earn.items.filter((e) => NQ_WATCH.includes(e.symbol));
 

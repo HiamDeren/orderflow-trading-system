@@ -49,13 +49,13 @@ export function hourLabel(h: Earning["hour"], t: (s: string) => string) {
   return h === "bmo" ? t("Trước mở cửa") : h === "amc" ? t("Sau đóng cửa") : h === "dmh" ? t("Trong phiên") : "—";
 }
 
-export function EarningRow({ e }: { e: Earning }) {
+export function EarningRow({ e, noHour }: { e: Earning; noHour?: boolean }) {
   const { t } = useUi();
   const beat = e.epsActual !== null && e.epsEstimate !== null ? (e.epsActual >= e.epsEstimate ? "long" : "short") : "";
   return (
     <div className="ern">
-      <span className="mono ern-s">{e.symbol}</span>
-      <span className={"pill ern-h" + (e.hour === "amc" ? " accent" : "")}>{hourLabel(e.hour, t)}</span>
+      <Link className="mono ern-s" href={`/stock/${encodeURIComponent(e.symbol)}`} title={t("Xem thông tin {s}", { s: e.symbol })}>{e.symbol}</Link>
+      {!noHour && <span className={"pill ern-h" + (e.hour === "amc" ? " accent" : "")}>{hourLabel(e.hour, t)}</span>}
       <span className="ern-n mono small">
         <span className="dim">EPS</span> <span className={beat}>{e.epsActual ?? "—"}</span> / {e.epsEstimate ?? "—"}
       </span>

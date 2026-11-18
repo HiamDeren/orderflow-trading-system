@@ -89,6 +89,16 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [x] Lưới trang đều hơn: nội dung tối đa 1360 px giữa màn hình, Journal 3 cột cố định, Calendar / Earnings / News / Trade Plan chia 2 cột cùng kiểu.
 - [ ] Áp migration `20261118120000_journal_images` lên Supabase (chờ Deren "ok áp migration"; chưa áp thì Journal báo ảnh chưa dùng được, phần còn lại vẫn chạy).
 
+**Đợt 4 (2026-11-19):**
+- [x] Calendar / Earnings / News vừa khung màn hình (desktop ≥ 1101 px): không cuộn cả trang, từng khung tự cuộn; `scrollbar-gutter` 2 bên để các trang căn giữa như nhau.
+- [x] Journal: nút **Lưu journal** lên thẻ đầu (cùng ngày + thuộc tính), Ctrl+S, nhắc khi rời trang lúc chưa lưu; 3 cột thẳng hàng đầu.
+- [x] Trang **Stocks** (D44): tìm mã, earnings sắp tới NQ top; trang mã có giá, chart TradingView, chỉ số, EPS 4 quý / theo năm, biên LN ròng, khuyến nghị analyst, cùng ngành, tin theo mã. Bấm mã ở Earnings / Dashboard mở trang mã.
+- [x] Timeline Dashboard: chấm đúng vị trí trên trục (mốc giờ đặt theo thời gian thật, không chia đều), bỏ tin ngoài 04:00–16:00 ET, rê chuột xem tên tin + giờ ET / giờ chọn, bấm mở Calendar; dòng mốc thêm giờ theo múi giờ chọn.
+- [x] Bỏ chữ nguồn (Finnhub, ForexFactory) và các dòng ghi chú (chú thích chấm màu, PnL, settings, Markdown).
+- [x] Sidebar thu gọn: logo không bị cắt; chọn múi giờ nhanh ở sidebar, thanh trên mobile, Calendar.
+- [x] Knowledge: 4 khoá cũ (TPO Level, Trade Plan, Orderflow Tools, Trắc nghiệm) mở trong layout mới (D45), các bài trong 3 tab trỏ thẳng vào chương.
+- [ ] Áp migration `20261118120000_journal_images` (chờ Deren).
+
 **Còn lại:**
 - [ ] Knowledge: Deren tổng hợp nội dung AMT / Context / Entry; port dần `levels.html`, `tools.html`, quiz vào Next.js.
 - [x] `/` chuyển hướng vào dashboard (đã đăng nhập) hoặc `/login`; trang chủ học cũ ở `/learn` (2026-11-18).

@@ -1,8 +1,9 @@
 "use client";
 // Thành phần chạy theo giờ thực: đồng hồ ET / VN và timeline phiên.
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { tzShort } from "@/lib/prefs";
-import { SESSION_END, SESSION_START, etNow, hhmm } from "@/lib/time";
+import { SESSION_END, SESSION_START, etNow, fmtTime, hhmm } from "@/lib/time";
 import { useUi } from "./Ui";
 
 function useNow(initial: number, everyMs = 15000) {
@@ -65,41 +66,60 @@ const START = 4 * 60;
 const SPAN = 12 * 60;
 const pos = (min: number) => `${Math.max(0, Math.min(100, ((min - START) / SPAN) * 100))}%`;
 
-export type TlEvent = { id: string; minutes: number; impact: string; title: string };
+export type TlEvent = { id: string; minutes: number; impact: string; title: string; country: string; et: string; local: string; href: string };
 
+// Dòng thời gian 04:00–16:00 ET của ngày ET hiện tại. Chấm = tin trong khung (theo bộ lọc Calendar), rê chuột xem tên tin.
 export function Timeline({ initial, events, today }: { initial: number; events: TlEvent[]; today: string }) {
-  const { t } = useUi();
+  const { t, tz } = useUi();
   const now = useNow(initial, 30000);
   const et = etNow(new Date(now));
   const showNow = et.date === today && et.minutes >= START && et.minutes <= START + SPAN;
   const ticks = ["04:00", "06:00", "08:00", "09:30", "11:30", "13:00", "14:00", "16:00"];
+  const inRange = events.filter((e) => e.minutes >= START && e.minutes <= START + SPAN);
+  const outside = events.length - inRange.length;
+  // Giờ theo múi giờ hiển thị của các mốc ET (lệch UTC của ET lấy lúc 12:00 UTC ngày đó)
+  const base = Date.parse(`${today}T00:00:00Z`);
+  const off = 12 * 60 - etNow(new Date(base + 12 * 3600000)).minutes;
+  const local = (hm: string) => {
+    const [h, m] = hm.split(":").map(Number);
+    return fmtTime(base + (h * 60 + m + off) * 60000, tz, false);
+  };
   return (
-    <section className="card" aria-label={t("Dòng thời gian phiên · giờ ET")} style={{ gap: 12 }}>
+    <section className="card" aria-label={t("Dòng thời gian phiên · giờ ET")} style={{ gap: 10 }}>
       <div className="row wrap">
         <span className="lbl">{t("Dòng thời gian phiên · giờ ET")}</span>
-        <span className="small dim">{t("Cửa sổ trade 09:30–11:30 ET · 21:30–23:30 VN")}</span>
+        <span className="small dim">
+          {inRange.length ? t("{n} tin trong khung", { n: inRange.length }) : t("Không có tin trong khung 04:00–16:00 ET")}
+          {outside > 0 ? ` · ${t("{n} tin ngoài khung", { n: outside })}` : ""}
+        </span>
       </div>
       <div className="tl">
         <div className="tl-bar" />
         <div className="tl-pre" style={{ width: pos(SESSION_START) }} />
         <div className="tl-win" style={{ left: pos(SESSION_START), width: `${(120 / SPAN) * 100}%` }} />
         {showNow && <div className="tl-now" style={{ left: pos(et.minutes) }} suppressHydrationWarning />}
-        {events.map((e) => (
-          <div key={e.id} className={"tl-ev imp-" + e.impact} style={{ left: pos(e.minutes), zIndex: e.impact === "High" ? 3 : e.impact === "Medium" ? 2 : 1 }} title={e.title} />
+        {inRange.map((e) => (
+          <Link
+            key={e.id}
+            href={e.href}
+            className={"tl-ev imp-" + e.impact + (e.minutes > START + SPAN * 0.8 ? " right" : e.minutes < START + SPAN * 0.2 ? " left" : "")}
+            style={{ left: pos(e.minutes), zIndex: e.impact === "High" ? 3 : e.impact === "Medium" ? 2 : 1 }}
+            aria-label={`${e.et} ET · ${e.title}`}
+          >
+            <span className="tl-tip" role="tooltip">
+              <b className="mono">{e.et} ET{e.local ? ` · ${e.local} ${tzShort(tz)}` : ""}</b>
+              <span>{e.country} · {e.title}</span>
+            </span>
+          </Link>
         ))}
       </div>
       <div className="tl-ticks">
-        {ticks.map((t) => (
-          <span key={t} style={t === "09:30" ? { color: "var(--accent)" } : undefined}>{t}</span>
+        {ticks.map((x) => (
+          <span key={x} style={{ left: pos(Number(x.slice(0, 2)) * 60 + Number(x.slice(3))), ...(x === "09:30" || x === "11:30" ? { color: "var(--accent)" } : {}) }}>
+            {x}
+            {tz !== "America/New_York" && <small suppressHydrationWarning>{local(x)}</small>}
+          </span>
         ))}
-      </div>
-      <div className="legend">
-        <span><span aria-hidden="true" style={{ width: 10, height: 10, borderRadius: 2, background: "#232a33" }} />OVN / pre-market</span>
-        <span><span aria-hidden="true" style={{ width: 10, height: 10, borderRadius: 2, background: "var(--accent-bg)", boxShadow: "inset 0 0 0 1px var(--accent)" }} />NY AM</span>
-        <span><span aria-hidden="true" className="dot imp-High" />{t("Tin cao")}</span>
-        <span><span aria-hidden="true" className="dot imp-Medium" />{t("Tin vừa")}</span>
-        <span><span aria-hidden="true" className="dot imp-Low" />{t("Tin thấp")}</span>
-        <span><span aria-hidden="true" style={{ width: 2, height: 12, background: "var(--text)" }} />{t("Bây giờ")}</span>
       </div>
     </section>
   );

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { COURSES } from "@/lib/courses";
 import { getT } from "@/lib/prefs-server";
 import KnowledgeTabs from "./KnowledgeTabs";
 
@@ -21,10 +23,7 @@ export default async function KnowledgePage() {
           <span className="lbl">Knowledge</span>
           <h1 className="h1">AMT → Context → Entry</h1>
         </div>
-        <span className="hstack small" style={{ fontWeight: 600 }}>
-          <a href="/learn">{t("Mở trang học cũ")}</a>
-          <a href="/quiz">{t("Làm quiz ôn tập")}</a>
-        </span>
+        <Link className="btn" href="/knowledge/quiz">{t("Làm quiz ôn tập")}</Link>
       </header>
       <section className="card" aria-label={t("Luồng mỗi ngày")}>
         <span className="lbl">{t("Luồng mỗi ngày")}</span>
@@ -39,6 +38,15 @@ export default async function KnowledgePage() {
         </ol>
       </section>
       <KnowledgeTabs />
+      <section className="course-cards" aria-label={t("Khoá học")}>
+        {COURSES.map((c) => (
+          <Link key={c.key} href={`/knowledge/${c.key}`} className="card course-card">
+            <span className="lbl">{t(c.track)} · {t("{n} chương", { n: c.chapters.length })}</span>
+            <span className="h3">{t(c.title)}</span>
+            <span className="small dim">{t(c.sub)}</span>
+          </Link>
+        ))}
+      </section>
     </>
   );
 }

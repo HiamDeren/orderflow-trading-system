@@ -43,18 +43,22 @@ const LOGO=`<svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><
   <rect x="7" y="25" width="6" height="3" rx="1.2" fill="#4CC9F0"/></svg>`;
 
 const page=document.body.dataset.page||'home';
+/* Nhúng trong Deren Desk (iframe /knowledge/...): bỏ sidebar, topbar, bottom nav; báo chiều cao + chương cho trang mẹ */
+const EMBED=window.self!==window.top||/[?&]embed\b/.test(location.search);
+if(EMBED)document.documentElement.classList.add('ui-embed');
 const cur=NAV.find(n=>n.k===page)||NAV[0];
 document.body.style.setProperty('--c',cur.c);
 /* ---------- ngôn ngữ: trang VI = x.html, trang EN = x.en.html ---------- */
 const LANG=document.documentElement.lang==='en'?'en':'vi';
 const FILE={home:'index',tools:'tools',levels:'levels',plan:'plan',quiz:'quiz'}[page]||'index';
 const langHref=to=>FILE+(to==='en'?'.en':'')+'.html'+location.hash;
-(function(){const pref=store.get('ofs.lang',null);if(pref&&pref!==LANG&&!/[?&]stay/.test(location.search))location.replace(langHref(pref));})();
+(function(){if(EMBED)return;const pref=store.get('ofs.lang',null);if(pref&&pref!==LANG&&!/[?&]stay/.test(location.search))location.replace(langHref(pref));})();
 
 
 /* ---------- build shell ---------- */
 function buildShell(){
   const main=$('main.ui-main'); if(!main) return;
+  if(EMBED){const t=document.createElement('div');t.className='ui-toast';t.id='ui-toast';t.setAttribute('role','status');document.body.appendChild(t);return;}
   const side=document.createElement('aside');side.className='ui-side';side.id='ui-side';side.setAttribute('aria-label','Điều hướng');
   let h=`<a class="ui-logo" href="index.html">${LOGO}<span><b>Orderflow System</b><small>NQ · ATAS · Rithmic</small></span></a><nav class="ui-nav">`;
   NAV.forEach((n,i)=>{
@@ -136,6 +140,7 @@ function chapterRouter(){
     document.title=`${titleOf(slug)} · ${cur.label} · Orderflow System`;
     store.set('ofs.last',{href:`${cur.href}#${slug}`,page,course:cur.label,title:titleOf(slug),no:list[i][1],ts:Date.now()});
     document.dispatchEvent(new CustomEvent('ofs:chapter',{detail:{slug}}));
+    if(EMBED) post({type:'ofs:chapter',page,slug,title:titleOf(slug),top:!el});
   }
   window.addEventListener('hashchange',show);
   show();
@@ -200,10 +205,32 @@ function mini(){
     <div style="display:flex;justify-content:space-between;gap:8px"><a href="quiz.html#cau-sai">Câu sai: ${s.wrong}</a><a href="index.html#backup">Sao lưu tiến độ</a></div>`;
 }
 
-window.OFS={store,NAV,session,dur,clock,toast,svg,mini,LANG};
+/* ---------- chế độ nhúng ---------- */
+function post(msg){try{window.parent.postMessage(msg,location.origin);}catch(e){}}
+function embedBridge(){
+  if(!EMBED) return;
+  /* đo theo main (không theo html: html luôn ≥ chiều cao iframe nên không co lại được) */
+  const main=$('main.ui-main')||document.body;
+  const send=()=>post({type:'ofs:h',page,h:Math.ceil(main.getBoundingClientRect().bottom+window.scrollY)});
+  if(window.ResizeObserver) new ResizeObserver(send).observe(main);
+  window.addEventListener('load',send); send();
+  /* link sang trang học khác: để trang mẹ điều hướng (giữ khung Deren Desk) */
+  document.addEventListener('click',e=>{
+    const a=e.target.closest&&e.target.closest('a[href]'); if(!a||a.target==='_blank') return;
+    const u=new URL(a.getAttribute('href'),location.href);
+    if(u.origin!==location.origin||u.pathname===location.pathname) return;
+    e.preventDefault(); post({type:'ofs:nav',path:u.pathname,hash:u.hash});
+  });
+  window.addEventListener('message',e=>{
+    if(e.origin!==location.origin||!e.data||e.data.type!=='ofs:go') return;
+    if(location.hash!=='#'+e.data.hash) location.hash=e.data.hash;
+  });
+}
+
+window.OFS={store,NAV,session,dur,clock,toast,svg,mini,LANG,EMBED};
 
 try{localStorage.removeItem('ofs.seen');}catch(e){}
 buildShell(); tick(); (function loop(){tick();setTimeout(loop,1000-Date.now()%1000+5);})();
-document.addEventListener('DOMContentLoaded',()=>{chapterRouter();mini();});
+document.addEventListener('DOMContentLoaded',()=>{chapterRouter();mini();embedBridge();});
 document.addEventListener('qz:change',mini);
 })();

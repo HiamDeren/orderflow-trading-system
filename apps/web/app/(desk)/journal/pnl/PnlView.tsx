@@ -80,7 +80,6 @@ export default function PnlView({ weeks, today }: { weeks: PnlWeek[]; today: str
           </div>
         </div>
       </section>
-      <span className="small faint">{t("Bấm một ngày để mở journal. Net = PnL $ trừ phí; R là tổng R các lệnh, lấy từ bảng lệnh trong journal. Lệnh cuối tuần (nếu có) tính vào tổng tuần.")}</span>
     </>
   );
 }

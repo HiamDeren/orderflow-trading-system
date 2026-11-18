@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { Owner } from "@/lib/auth";
 import Icon from "./Icon";
+import TzPicker from "./TzPicker";
 import { useUi } from "./Ui";
 
 type Item = { label: string; href: string; icon: string; soon?: boolean; match?: string[] };
@@ -16,6 +17,7 @@ const GROUPS: { name: string; items: Item[] }[] = [
       { label: "Calendar", href: "/calendar", icon: "calendar" },
       { label: "News", href: "/news", icon: "news" },
       { label: "Earnings", href: "/earnings", icon: "earnings" },
+      { label: "Stocks", href: "/stock", icon: "stock" },
     ],
   },
   {
@@ -74,6 +76,7 @@ export default function Shell({ owner, children }: { owner: Owner; children: Rea
           <Icon name="menu" />
         </button>
         <span className="mtop-title">{current ? t(current.label) : "Deren Desk"}</span>
+        <TzPicker />
         <LangSwitch />
       </header>
       <div className="scrim" onClick={() => setDrawer(false)} aria-hidden="true" />
@@ -139,6 +142,7 @@ export default function Shell({ owner, children }: { owner: Owner; children: Rea
             </Link>
             <div className="nl side-tools">
               <LangSwitch />
+              <TzPicker />
               <form action="/auth/logout" method="post">
                 <button className="icon-btn" aria-label={t("Đăng xuất")} title={t("Đăng xuất")}>
                   <Icon name="logout" size={18} />

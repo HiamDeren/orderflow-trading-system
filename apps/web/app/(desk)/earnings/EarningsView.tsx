@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { DOW, DOW_SHORT } from "@/lib/i18n";
 import type { Earning } from "@/lib/market";
@@ -34,7 +35,10 @@ export default function EarningsView({ month, items, watch, today, initialDay }:
   // Lưới Thứ 2 → Thứ 6 (earnings hầu như không có cuối tuần)
   const { start, days } = monthRange(month);
   const end = addDays(start, days - 1);
-  const first = addDays(start, -((dowOf(start) + 6) % 7));
+  // Bắt đầu từ Thứ 2 của tuần có ngày làm việc đầu tiên trong tháng (tháng mở đầu bằng T7 / CN thì không có hàng trống)
+  let firstWd = start;
+  while (!isWeekday(firstWd)) firstWd = addDays(firstWd, 1);
+  const first = addDays(firstWd, -((dowOf(firstWd) + 6) % 7));
   const cells: (string | null)[] = [];
   for (let d = first; d <= end; d = addDays(d, 1)) if (isWeekday(d)) cells.push(d < start ? null : d);
 
@@ -50,11 +54,11 @@ export default function EarningsView({ month, items, watch, today, initialDay }:
           <button aria-pressed={onlyNq} onClick={() => setOnlyNq(true)}>{t("NQ top ({n})", { n: nqCount })}</button>
           <button aria-pressed={!onlyNq} onClick={() => setOnlyNq(false)}>{t("Tất cả ({n})", { n: items.length })}</button>
         </div>
-        <span className="small dim">{t("EPS và Rev: thực tế / dự báo")}</span>
+        <span className="small dim">{t("Bấm mã để xem thông tin cổ phiếu")}</span>
       </div>
 
-      <div className="ern-split">
-        <section className="card" aria-label={t("Lịch earnings")}>
+      <div className="ern-split fit">
+        <section className="card ern-cal" aria-label={t("Lịch earnings")}>
           <div className="ern-head" aria-hidden="true">
             {[1, 2, 3, 4, 5].map((w) => <span key={w}>{DOW_SHORT[lang][w]}</span>)}
           </div>
@@ -63,25 +67,39 @@ export default function EarningsView({ month, items, watch, today, initialDay }:
               if (!d) return <span key={"x" + i} />;
               const evs = byDay.get(d) || [];
               const cls = "ern-cell" + (d === day ? " sel" : "") + (d === today ? " today" : "") + (evs.length ? "" : " empty");
+              const pick = () => setDay(d);
               return (
-                <button key={d} className={cls} onClick={() => setDay(d)} aria-pressed={d === day} aria-label={`${DOW[lang][dowOf(d)]} ${viDayMonth(d)}, ${evs.length}`}>
+                <div
+                  key={d}
+                  className={cls}
+                  role="button"
+                  tabIndex={0}
+                  onClick={pick}
+                  onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), pick())}
+                  aria-pressed={d === day}
+                  aria-label={`${DOW[lang][dowOf(d)]} ${viDayMonth(d)}, ${evs.length}`}
+                >
                   <span className="ern-cell-top">
                     <span className="mono">{d.slice(8).replace(/^0/, "")}</span>
                     {evs.length > 0 && <span className="ern-count">{evs.length}</span>}
                   </span>
                   <span className="ern-syms">
-                    {evs.slice(0, 4).map((e) => (
-                      <span key={e.symbol} className={"ern-sym mono" + (W.has(e.symbol) ? " nq" : "") + (e.hour === "amc" ? " amc" : "")}>{e.symbol}</span>
+                    {evs.slice(0, 6).map((e) => (
+                      <Link
+                        key={e.symbol}
+                        href={`/stock/${encodeURIComponent(e.symbol)}`}
+                        onClick={(ev) => ev.stopPropagation()}
+                        className={"ern-sym mono" + (W.has(e.symbol) ? " nq" : "") + (e.hour === "amc" ? " amc" : "")}
+                        title={`${e.symbol} · ${hourLabel(e.hour, t)}`}
+                      >
+                        {e.symbol}
+                      </Link>
                     ))}
-                    {evs.length > 4 && <span className="ern-more">+{evs.length - 4}</span>}
+                    {evs.length > 6 && <span className="ern-more">+{evs.length - 6}</span>}
                   </span>
-                </button>
+                </div>
               );
             })}
-          </div>
-          <div className="legend">
-            <span><span className="ern-sym mono nq">NQ</span> {t("mã NQ top")}</span>
-            <span><span className="ern-sym mono amc">AMC</span> {t("Sau đóng cửa")}</span>
           </div>
         </section>
 
@@ -89,8 +107,9 @@ export default function EarningsView({ month, items, watch, today, initialDay }:
           <div className="row cal-list-head">
             <span style={{ fontSize: 15, fontWeight: 600 }}>
               {DOW[lang][dowOf(day)]} · {viDayMonth(day)}{day === today ? ` · ${t("hôm nay")}` : ""}
+              <span className="dim" style={{ fontWeight: 400, fontSize: 13 }}> · {t("{n} mã", { n: list.length })}</span>
             </span>
-            <span className="small dim">{list.length}</span>
+            <span className="mono small dim">EPS · Rev</span>
           </div>
           {list.length ? (
             HOURS.map((h) => {
@@ -99,7 +118,7 @@ export default function EarningsView({ month, items, watch, today, initialDay }:
               return (
                 <div key={h || "na"} className="stack" style={{ gap: 2 }}>
                   <span className="lbl">{hourLabel(h, t)} · {rows.length}</span>
-                  {rows.slice(0, 150).map((e) => <EarningRow key={e.symbol + e.date} e={e} />)}
+                  {rows.slice(0, 150).map((e) => <EarningRow key={e.symbol + e.date} e={e} noHour />)}
                   {rows.length > 150 && <span className="small dim">+{rows.length - 150}</span>}
                 </div>
               );

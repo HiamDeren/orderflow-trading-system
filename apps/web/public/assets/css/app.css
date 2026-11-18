@@ -421,3 +421,11 @@ html{scrollbar-width:thin;scrollbar-color:#2f3a4c transparent}
 .ui-side:hover{scrollbar-color:#2f3a4c transparent}
 .ui-side::-webkit-scrollbar-thumb{background:transparent}
 .ui-side:hover::-webkit-scrollbar-thumb{background:#2a3445;background-clip:padding-box}
+
+/* ---------- nhúng trong Deren Desk (html.ui-embed) ---------- */
+.ui-embed,.ui-embed body{background:transparent;color-scheme:dark}
+.ui-embed body::before{display:none}
+.ui-embed body{overflow:hidden}
+.ui-embed .ui-main{margin-left:0}
+.ui-embed .ui-side,.ui-embed .ui-top,.ui-embed .ui-bottom,.ui-embed .ui-scrim,.ui-embed .ui-foot{display:none!important}
+.ui-embed .ui-content{padding-top:4px;padding-bottom:24px;max-width:none}

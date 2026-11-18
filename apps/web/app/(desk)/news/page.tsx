@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { NEWS_CATEGORIES, getNews, type NewsCategory, type NewsItem } from "@/lib/market";
+import { NEWS_CATEGORIES, getCompanyNews, getNews, type NewsCategory, type NewsItem } from "@/lib/market";
+import { SYMBOL_RE } from "@/lib/stock";
 import { getT } from "@/lib/prefs-server";
 import { readArticle } from "@/lib/reader";
 import Icon from "../_components/Icon";
@@ -14,18 +15,20 @@ const LABEL: Record<NewsCategory, string> = { general: "Thị trường", forex:
 const STEP = 20;
 const MAX = 100;
 
-export default async function NewsPage({ searchParams }: { searchParams: Promise<{ cat?: string; id?: string; n?: string }> }) {
+export default async function NewsPage({ searchParams }: { searchParams: Promise<{ cat?: string; id?: string; n?: string; sym?: string }> }) {
   const sp = await searchParams;
+  const sym = sp.sym && SYMBOL_RE.test(sp.sym.toUpperCase()) ? sp.sym.toUpperCase() : "";
   const category = (NEWS_CATEGORIES as readonly string[]).includes(sp.cat || "") ? (sp.cat as NewsCategory) : "general";
   const count = Math.min(MAX, Math.max(STEP, Math.round(Number(sp.n) / STEP) * STEP || STEP));
   const { t } = await getT();
   // Lấy đủ MAX một lần (cùng một lệnh Finnhub, đã cache 5 phút), chỉ hiện `count` bài
-  const res = await getNews(category, MAX);
+  const res = sym ? await getCompanyNews(sym, 14, MAX) : await getNews(category, MAX);
   const shown = res.items.slice(0, count);
   const now = Date.now();
   const q = (o: Record<string, string | number | undefined>) => {
     const p = new URLSearchParams();
-    p.set("cat", category);
+    if (sym) p.set("sym", sym);
+    else p.set("cat", category);
     for (const [k, v] of Object.entries(o)) if (v !== undefined && v !== "") p.set(k, String(v));
     return `/news?${p.toString()}`;
   };
@@ -43,10 +46,11 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
         </div>
         <nav className="seg" aria-label={t("Chủ đề tin")}>
           {NEWS_CATEGORIES.map((c) => (
-            <Link key={c} href={`/news?cat=${c}`} aria-current={c === category ? "page" : undefined} className={"seg-link" + (c === category ? " on" : "")}>
+            <Link key={c} href={`/news?cat=${c}`} aria-current={!sym && c === category ? "page" : undefined} className={"seg-link" + (!sym && c === category ? " on" : "")}>
               {t(LABEL[c])}
             </Link>
           ))}
+          {sym && <Link href={`/stock/${sym}`} className="seg-link on" aria-current="page">{sym}</Link>}
         </nav>
       </header>
       {!res.configured ? (
@@ -56,7 +60,7 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
       ) : !res.items.length ? (
         <p className="small dim">{t("Chưa có tin.")}</p>
       ) : (
-        <div className={"news-split" + (sp.id ? " reading" : "")}>
+        <div className={"news-split fit" + (sp.id ? " reading" : "")}>
           <section className="card news-list tight" aria-label={t("Danh sách tin")}>
             {shown.map((n) => <NewsRow key={n.id} n={n} now={now} href={q({ id: n.id, n: nParam })} active={n.id === sp.id} />)}
             {res.items.length > count && (
@@ -74,7 +78,7 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
               </div>
             ) : !sel ? (
               <div className="reader-empty">
-                <p className="small dim">{t("Tin này không còn trong danh sách mới nhất của Finnhub.")}</p>
+                <p className="small dim">{t("Tin này không còn trong danh sách mới nhất.")}</p>
                 <Link className="btn sm" href={q({ n: nParam })}>{t("Đóng")}</Link>
               </div>
             ) : (
@@ -106,7 +110,6 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
           </article>
         </div>
       )}
-      <span className="small faint">{t("Nguồn: Finnhub, cập nhật khoảng 5 phút một lần, không lưu database. Bài đọc trong app được tách từ trang gốc, chỉ dùng xem cá nhân.")}</span>
     </>
   );
 }

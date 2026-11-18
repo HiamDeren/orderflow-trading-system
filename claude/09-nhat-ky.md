@@ -2,6 +2,12 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-19 · Dashboard đợt 4 (9 góp ý)
+- Layout vừa khung cho Calendar / Earnings / News; sửa lỗi phần đầu trang bị co lại khi trang dài (`.main > *` không co); Journal đưa nút lưu lên đầu.
+- Trang Stocks mới (D44), Knowledge nhúng khoá học cũ (D45): `core.js` v21, `app.css` v19, chạy lại `i18n/build_en.py`.
+- Timeline: mốc giờ cũ chia đều nên chấm tin lệch so với nhãn (14:00 nằm ở 83% nhưng nhãn ở 86%) → đặt mốc theo trục thật.
+- Test mock: 12 trang × desktop 1600 px / mobile 390 px không tràn ngang, không lỗi console; iframe khoá học tự cao theo nội dung.
+
 ## 2026-11-18 · Dashboard đợt 3 (6 góp ý)
 - Calendar xem cả tuần; Earnings thành lịch tháng; News 20 bài + trình đọc trong app (D42, thư viện mới `@mozilla/readability` 0.6.0, `linkedom` 0.18.15, `sanitize-html` 2.18.2); Journal có ảnh lệnh (D43); sidebar thu gọn hết giật khi rê chuột; lưới các trang đều hơn.
 - Migration `20261118120000_journal_images` test trên Postgres 16 local (trigger `day_id`, anon bị chặn); chưa áp lên Supabase.

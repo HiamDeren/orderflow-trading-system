@@ -108,19 +108,28 @@ export default async function JournalPage({ searchParams }: { searchParams: Prom
         </nav>
 
         <article aria-label={`Journal ${date}`} style={{ minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
-          <div className="row wrap">
-            <h2 className="h2">{DOW[ui.lang][dowOf(date)]} · {viDayMonth(date)}/{date.slice(0, 4)}</h2>
-            {plan ? (
-              <Link href={`/trade-plan?date=${date}`} className="hstack small" style={{ fontWeight: 600, gap: 8 }}>
-                <span className={"pill " + (tone === "flat" ? "" : tone)}>Plan · {t(BIAS[tone])}</span>
-                {plan.summary?.location}
-              </Link>
+          {(() => {
+            const head = (
+              <div className="hstack journal-title" style={{ gap: 12, flexWrap: "wrap" }}>
+                <h2 className="h2">{DOW[ui.lang][dowOf(date)]} · {viDayMonth(date)}/{date.slice(0, 4)}</h2>
+                {plan ? (
+                  <Link href={`/trade-plan?date=${date}`} className="hstack small" style={{ fontWeight: 600, gap: 8 }}>
+                    <span className={"pill " + (tone === "flat" ? "" : tone)}>Plan · {t(BIAS[tone])}</span>
+                    {plan.summary?.location}
+                  </Link>
+                ) : (
+                  <span className="small dim">{t("Ngày này chưa có plan")}</span>
+                )}
+              </div>
+            );
+            return error ? (
+              <div className="card journal-head">{head}</div>
             ) : (
-              <span className="small dim">{t("Ngày này chưa có plan")}</span>
-            )}
-          </div>
-          {!error && <JournalImages key={"img" + date} date={date} initial={images} tradeCount={day?.journal_trades?.length || 0} error={imgError || undefined} />}
-          {!error && <JournalEditor key={date + (day?.updated_at || "")} date={date} initial={day} textFields={TEXT_FIELDS} />}
+              <JournalEditor key={date + (day?.updated_at || "")} date={date} initial={day} textFields={TEXT_FIELDS} head={head}>
+                <JournalImages key={"img" + date} date={date} initial={images} tradeCount={day?.journal_trades?.length || 0} error={imgError || undefined} />
+              </JournalEditor>
+            );
+          })()}
         </article>
 
         <aside className="card" aria-label={t("Thống kê")}>
