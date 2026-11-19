@@ -353,7 +353,7 @@ const EN: Record<string, string> = {
   "Bấm “Mở bài gốc” để đọc trên trang nguồn.": "Use “Open original” to read it on the source site.",
   "Chưa dùng được ảnh journal": "Journal images are not available yet",
   "Chỉ nhận PNG, JPEG, WebP": "Only PNG, JPEG and WebP are accepted",
-  "Chọn một tin bên trái để đọc ngay trong Deren Desk.": "Pick a story on the left to read it right here in Deren Desk.",
+  "Chọn một tin bên trái để đọc ngay trong ZenDojo.": "Pick a story on the left to read it right here in ZenDojo.",
   "Danh sách": "List",
   "Danh sách tin": "Story list",
   "Ghi chú ảnh…": "Image note…",
@@ -586,5 +586,9 @@ const EN: Record<string, string> = {
   "Ghi chú (tuỳ chọn)": "Note (optional)",
   "Ghi chú": "Note",
   "Thêm khách": "Add guest",
+  "Võ đường trading của Derenツ": "Derenツ's trading dojo",
+  "Lạc khỏi võ đường": "Lost outside the dojo",
+  "Trang này không có trong ZenDojo. Hít một hơi, quay lại Dashboard.": "This page isn't in ZenDojo. Take a breath and head back to the Dashboard.",
+  "Về Dashboard": "Back to Dashboard",
 };
 export default EN;

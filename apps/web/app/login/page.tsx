@@ -26,8 +26,12 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <section style={{ flex: "1.2 1 380px", display: "flex", flexDirection: "column", gap: 22 }}>
           <div className="row">
             <div className="hstack" style={{ gap: 12 }}>
-              <span className="brand-mark" aria-hidden="true" style={{ width: 40, height: 40, fontSize: 18, borderRadius: 10 }}>D</span>
-              <span style={{ fontWeight: 700, fontSize: 20 }}>Deren Desk</span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="brand-mark brand-logo" src="/assets/img/zendojo/logo.svg" alt="" aria-hidden="true" style={{ width: 44, height: 44, borderRadius: 11 }} />
+              <span className="stack" style={{ gap: 2 }}>
+                <span style={{ fontWeight: 700, fontSize: 20 }}>ZenDojo</span>
+                <span className="small dim">{t("Võ đường trading của Derenツ")}</span>
+              </span>
             </div>
             <LangToggle lang={ui.lang} />
           </div>

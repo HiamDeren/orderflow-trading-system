@@ -2,6 +2,12 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-19 · ZenDojo (D49)
+- Đổi tên Deren Desk → ZenDojo: `layout.tsx` (title, icon, apple icon, Open Graph / Twitter), sidebar, login, mobile topbar, News; câu EN mới.
+- Ảnh trong `apps/web/public/assets/img/zendojo/`: `logo.svg` (ensō + ツ), `mark.svg`, `logo-bracket.svg` (`[ツ]`), `icon-180/192/512.png` (sharp), `login-bg.svg`, `empty.svg`, `og.png` (Playwright, font Inter + Noto CJK). Xoá `desk-login-bg.svg`. Trang học cũ (`/learn`) giữ icon cũ.
+- Minh hoạ ở Dashboard (chưa có plan / cuối tuần) và trang 404 mới `app/not-found.tsx`.
+- Test mock: build OK, login / Dashboard / 404 ở 1440 px và 390 px không tràn ngang, thẻ og:image và icon đúng đường dẫn.
+
 ## 2026-11-19 · Khách (D48)
 - Đợt 2: danh sách khách chuyển từ biến `DESK_GUEST_DISCORD_IDS` sang bảng `access.members` (schema riêng `access`, tách khỏi `trading`; migration `20261119071248_access_members`, test Postgres 16 local: check constraint, trigger `approved_at`, anon / authenticated bị chặn ở mức schema; `lib/db.ts` có `dbSchema(schema)`; đã áp lên Supabase version `20261119071248`; advisor chỉ còn INFO "RLS bật, không policy" như các bảng trading). Callback ghi yêu cầu pending; Profile có khung **Khách truy cập** (duyệt / từ chối / gỡ quyền / thêm bằng ID), `/api/members`. Cache kiểm khách đặt trên `globalThis` để gỡ quyền có hiệu lực ngay (route API và trang là 2 module riêng).
 - `lib/auth.ts`: `getViewer` / `requireViewer` (chủ sở hữu + khách), `requireOwner` đưa khách về `/dashboard`; callback đánh dấu `desk_guest`; proxy chặn khách ở `/trade-plan`, `/journal*`; thêm layout chỉ chủ sở hữu cho 2 trang này.

@@ -298,6 +298,8 @@ function NoPlan({ t, weekday, late }: { t: T; weekday: boolean; late: boolean })
     return (
       <section className="card">
         <span className="lbl">{t("Plan hôm nay")}</span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="empty-art" src="/assets/img/zendojo/empty.svg" alt="" aria-hidden="true" />
         <h2 className="h2">{t("Cuối tuần, không có phiên")}</h2>
         <p className="muted small">{t("Dùng thời gian này để recap tuần trong Journal.")}</p>
         <div className="hstack"><Link className="btn" href="/journal">Journal</Link></div>
@@ -319,6 +321,8 @@ function NoPlan({ t, weekday, late }: { t: T; weekday: boolean; late: boolean })
   return (
     <section className="card" aria-label={t("Chưa có plan")}>
       <span className="lbl">{t("Plan hôm nay")}</span>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img className="empty-art" src="/assets/img/zendojo/empty.svg" alt="" aria-hidden="true" />
       <h2 className="h2">{t("Chưa có plan hôm nay")}</h2>
       <p className="muted" style={{ fontSize: 14 }}>{t("ATAS X thường gửi lúc 09:29 ET. Có thể gửi tay trước nếu đã có JSON.")}</p>
       <div className="hstack"><Link className="btn primary" href="/trade-plan">{t("Mở Trade Plan")}</Link></div>

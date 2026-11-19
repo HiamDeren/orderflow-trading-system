@@ -1,4 +1,4 @@
-// Đọc bài báo ngay trong Deren Desk (News, D42).
+// Đọc bài báo ngay trong ZenDojo (News, D42).
 // Chỉ đọc URL có trong danh sách Finnhub vừa tải (trang /news tra theo id), không nhận URL tuỳ ý từ người dùng.
 // Tải HTML phía server → @mozilla/readability (trên linkedom) tách phần thân → sanitize-html lọc thẻ an toàn.
 // Không lưu database; cache theo fetch 1 giờ. Trang nguồn chặn bot / cần đăng nhập → trả lỗi, giao diện hiện tóm tắt + link gốc.

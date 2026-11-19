@@ -1,4 +1,4 @@
-# Deren Desk · cấu hình đăng nhập Discord và biến môi trường
+# ZenDojo (trước là Deren Desk) · cấu hình đăng nhập Discord và biến môi trường
 
 Dashboard (Next.js trong `apps/web`) nằm ở các đường dẫn `/dashboard`, `/calendar`, `/news`, `/earnings`, `/trade-plan`, `/journal` (+ `/journal/pnl`), `/knowledge`, `/profile`. `/studio` và `/pnl` cũ tự chuyển sang đường dẫn mới. `/` là cửa vào: đã đăng nhập → `/dashboard`, chưa → `/login`. Trang học cũ không cần đăng nhập: trang chủ học chuyển sang `/learn` (`/index.html` tự về đây), `/plan`, `/levels`, `/tools`, `/quiz` giữ nguyên.
 
@@ -6,7 +6,7 @@ Chỉ **một** tài khoản Discord (ID trong `OWNER_DISCORD_ID`) vào được
 
 ## 1. Tạo ứng dụng OAuth trên Discord
 
-1. Mở https://discord.com/developers/applications → **New Application** (tên ví dụ `Deren Desk`).
+1. Mở https://discord.com/developers/applications → **New Application** (tên `ZenDojo`, icon lấy `apps/web/public/assets/img/zendojo/icon-512.png`).
 2. Tab **OAuth2**:
    - Copy **Client ID**, bấm **Reset Secret** rồi copy **Client Secret** (chỉ dán vào Supabase, không gửi qua chat, không commit).
    - **Redirects** → thêm đúng: `https://gpbypxuglcfmvarmferr.supabase.co/auth/v1/callback`

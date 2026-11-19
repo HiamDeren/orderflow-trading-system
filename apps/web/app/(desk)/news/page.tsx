@@ -80,7 +80,7 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
             {!sp.id ? (
               <div className="reader-empty">
                 <Icon name="news" size={28} />
-                <p className="small dim">{t("Chọn một tin bên trái để đọc ngay trong Deren Desk.")}</p>
+                <p className="small dim">{t("Chọn một tin bên trái để đọc ngay trong ZenDojo.")}</p>
               </div>
             ) : !sel ? (
               <div className="reader-empty">

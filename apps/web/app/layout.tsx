@@ -1,13 +1,21 @@
-// Layout gốc cho các trang Next.js (dashboard Deren Desk). Trang học tĩnh trong public/ không đi qua layout này.
+// Layout gốc cho các trang Next.js (dashboard ZenDojo, trước là Deren Desk). Trang học tĩnh trong public/ không đi qua layout này.
 import type { Metadata, Viewport } from "next";
 import { getUi } from "@/lib/prefs-server";
 import "./desk.css";
 
 export const metadata: Metadata = {
-  title: { default: "Deren Desk", template: "%s · Deren Desk" },
-  description: "Dashboard trading cá nhân: plan, lịch tin, journal, PnL.",
+  title: { default: "ZenDojo", template: "%s · ZenDojo" },
+  description: "ZenDojo · võ đường trading của Derenツ: plan TPO, lịch tin, thị trường, journal, PnL.",
   robots: { index: false, follow: false },
-  icons: { icon: "/assets/img/icon.svg" },
+  icons: { icon: "/assets/img/zendojo/logo.svg", apple: "/assets/img/zendojo/icon-180.png" },
+  // Ảnh xem trước khi gửi link (Discord, Messenger...); trang login là trang công khai duy nhất
+  openGraph: {
+    title: "ZenDojo",
+    description: "Derenツ · Personal trading dashboard",
+    siteName: "ZenDojo",
+    images: [{ url: "/assets/img/zendojo/og.png", width: 1200, height: 630, alt: "ZenDojo" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/assets/img/zendojo/og.png"] },
 };
 
 export const viewport: Viewport = { themeColor: "#0f1115", colorScheme: "dark" };

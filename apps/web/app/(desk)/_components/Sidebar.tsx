@@ -98,7 +98,7 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
         <button className="icon-btn" aria-label={t("Mở menu")} aria-expanded={drawer} onClick={() => setDrawer(true)}>
           <Icon name="menu" />
         </button>
-        <span className="mtop-title">{current ? t(current.label) : "Deren Desk"}</span>
+        <span className="mtop-title">{current ? t(current.label) : "ZenDojo"}</span>
         <button className="icon-btn" aria-label={t("Tìm nhanh")} onClick={() => setPal(true)}>
           <Icon name="search" size={18} />
         </button>
@@ -110,10 +110,11 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
         <div className="side-in">
           <div className="side-head">
             <Link className="brand" href="/dashboard">
-              <span className="brand-mark" aria-hidden="true">D</span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="brand-mark brand-logo" src="/assets/img/zendojo/logo.svg" alt="" aria-hidden="true" />
               <span className="nl brand-text">
-                <span style={{ fontWeight: 700, fontSize: 15 }}>Deren Desk</span>
-                <span className="small dim">NQ futures</span>
+                <span style={{ fontWeight: 700, fontSize: 15 }}>ZenDojo</span>
+                <span className="small dim">Derenツ</span>
               </span>
             </Link>
             <button

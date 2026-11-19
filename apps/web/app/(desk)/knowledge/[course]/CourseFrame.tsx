@@ -1,5 +1,5 @@
 "use client";
-// Khoá học cũ trong khung Deren Desk: mục lục chương bên trái, trang học (iframe chế độ nhúng) bên phải.
+// Khoá học cũ trong khung ZenDojo: mục lục chương bên trái, trang học (iframe chế độ nhúng) bên phải.
 // Trang con báo chiều cao + chương qua postMessage (public/assets/js/core.js, embedBridge) nên iframe cao theo nội dung, cuộn chung với trang.
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";

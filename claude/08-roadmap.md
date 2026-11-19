@@ -52,7 +52,7 @@ Chi tiết: [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md).
 - [ ] Giai đoạn 5: module mới: economic calendar, options (GEX / DEX / OI, gộp repo Gex-Dashboard), earnings, news, heatmap.
 - [ ] Các module khác Deren tự quyết: journal, tài chính cá nhân, học tiếng Anh, tập luyện...
 
-## Dashboard mới · Deren Desk (code 2026-11-18, nhánh `development`)
+## Dashboard mới · ZenDojo (trước là Deren Desk; code 2026-11-18, nhánh `development`)
 Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. Màu graphite trầm + nhấn cát `#D4B483`, Long `#8CC2A4`, Short `#E0947C`; font Inter + JetBrains Mono. Code: `apps/web/app/(desk)/`, `apps/web/lib/`, `apps/web/proxy.ts`. Cấu hình: [docs/dashboard-setup.md](../docs/dashboard-setup.md).
 
 **Việc Deren cần làm để chạy được:**
@@ -109,6 +109,12 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [x] Khách (D48): bảng `access.members` (schema riêng), người lạ đăng nhập vào hàng chờ, duyệt / gỡ / thêm bằng ID ở Profile; khách chỉ xem phần thị trường + Knowledge.
 - [x] Áp migration `20261119071248_access_members` lên Supabase (2026-11-19): schema `access` chỉ service_role dùng, RLS bật, anon / authenticated không có quyền.
 - [ ] Deren thêm `access` vào Exposed schemas (Dashboard → Integrations → Data API → Settings). Chưa thêm thì Profile báo chưa đọc được bảng, khách chưa vào được.
+
+**Đợt 6 · ZenDojo (2026-11-19):**
+- [x] Đổi tên Deren Desk → **ZenDojo** (D49): sidebar, login, tab trình duyệt, ảnh OG khi gửi link, favicon / apple icon.
+- [x] Logo ensō + ツ (thêm phương án `[ツ]` khớp server Discord), nền login núi ghép thanh TPO + mặt trời ensō, minh hoạ trạng thái trống (Dashboard chưa có plan / cuối tuần), trang 404.
+- [ ] Deren đổi tên app trên Discord Developer Portal thành "ZenDojo" (màn hình đồng ý khi đăng nhập), đặt icon server / app bằng PNG logo.
+- [ ] (Tuỳ chọn) đổi tên project Vercel / Supabase, domain riêng.
 
 **Còn lại:**
 - [ ] Knowledge: Deren tổng hợp nội dung AMT / Context / Entry; port dần `levels.html`, `tools.html`, quiz vào Next.js.
