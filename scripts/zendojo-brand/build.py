@@ -79,6 +79,18 @@ def mobile_bg(W=1080, H=2340):
     b += ridge(980, H, 1960, 320, 13, "#1E232C", seed=6, gap=0.4)
     return svg(W, H, b)
 
+def profile_banner(W=2040, H=720):
+    """Biểu ngữ hồ sơ Discord (≈ 17:6): avatar đè góc trái dưới nên mặt trời ensō đặt lệch phải."""
+    b = f'<rect width="{W}" height="{H}" fill="{BG}"/>'
+    b += enso_tech(1450, 300, 205, 66, INK, seed=11, op=0.2, bands=3, cuts=7)
+    b += ridge(380, H, 380, 520, 26, "#14171D", seed=2)
+    b += ridge(1960, H, 400, 340, 24, "#14171D", seed=3)
+    b += ridge(1450, H, 300, 640, 36, "#191D25", va_fill="#1D222B", poc=17, poc_fill=SAND, poc_op=0.5, seed=4)
+    b += ridge(720, H, 560, 560, 12, "#1E232C", seed=5, gap=0.4)
+    return svg(W, H, b)
+
+files["profile-banner.svg"] = profile_banner()
+open(os.path.join(OUT, "profile-banner.svg"), "w").write(files["profile-banner.svg"])
 files["mobile-bg.svg"] = mobile_bg()
 open(os.path.join(OUT, "mobile-bg.svg"), "w").write(files["mobile-bg.svg"])
 

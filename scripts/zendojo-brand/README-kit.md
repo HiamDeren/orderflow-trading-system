@@ -13,7 +13,7 @@ Mọi hình đều vẽ bằng code (path SVG, không dùng font hay ảnh có s
 | `02-wordmark` | Logo + chữ "ZenDojo", nằm ngang và dọc, nền tối / trong suốt (4×) | Banner, slide, header |
 | `03-avatar` | Vuông tràn nền + tròn sẵn, 1024 / 2048 px | Avatar Discord, mạng xã hội |
 | `04-icons` | `favicon.ico`, PNG 16 → 1024, `apple-touch-icon-180`, `maskable-512/1024` | Web, app, PWA |
-| `05-backgrounds` | Hình nền 5K / 4K / QHD / 16:10, điện thoại, banner Discord, ảnh OG | Desktop, điện thoại, Discord, link preview |
+| `05-backgrounds` | Hình nền 5K / 4K / QHD / 16:10, điện thoại, biểu ngữ server + biểu ngữ hồ sơ Discord, ảnh OG | Desktop, điện thoại, Discord, link preview |
 | `06-illustrations` | Minh hoạ núi + ensō (trạng thái trống) | Trang trống, 404 |
 | `07-theme` | Bảng màu (ảnh), `zendojo-tokens.css`, `zendojo-tokens.json`, `zendojo-atas-colors-ARGB.txt` | Web, thiết kế, ATAS |
 | `source-svg` | Toàn bộ SVG gốc (kể cả nền) | Xuất lại cỡ khác |
@@ -23,6 +23,18 @@ Mọi hình đều vẽ bằng code (path SVG, không dùng font hay ảnh có s
 Một biểu tượng duy nhất: ensō mực + ツ bút lông màu cát. Dạng: `square` (vuông bo góc, icon app), `round` (hình tròn, góc trong suốt), `none` (không nền, đặt lên nền tối). Avatar dùng dạng tràn nền vuông để Discord tự cắt tròn.
 
 Logo thiết kế cho **nền tối**. Mực màu `#ECE7DC` nên đặt lên nền sáng sẽ không thấy rõ.
+
+## Dùng cho Discord
+
+| Chỗ | File |
+|---|---|
+| Avatar hồ sơ | `03-avatar/zendojo-avatar-tsu-1024.png` (Discord tự cắt tròn) |
+| Biểu ngữ hồ sơ (Nitro) | `05-backgrounds/zendojo-discord-profile-banner-2040x720.png` |
+| Icon server | `03-avatar/zendojo-avatar-tsu-1024.png` |
+| Biểu ngữ server (Boost cấp 2) | `05-backgrounds/zendojo-discord-banner-1920x1080.png` |
+| Nền link mời (Boost cấp 1) | `05-backgrounds/zendojo-discord-banner-1920x1080.png` |
+| Icon app (Developer Portal) | `04-icons/icon-1024.png` |
+| Tên server | `㋡ ZenDojo` |
 
 ## Màu chính
 

@@ -60,6 +60,8 @@ await png("mobile-bg.svg", 1290, 2796, path.join(bgd, "zendojo-mobile-1290x2796-
 await png("login-bg.svg", 1920, 1080, path.join(bgd, "zendojo-discord-banner-1920x1080.png"));
 await png("login-bg.svg", 960, 540, path.join(bgd, "zendojo-discord-banner-960x540.png"));
 await png("og-bg.svg", 2400, 1260, path.join(SRC, "og-bg@2x.png"));
+// biểu ngữ hồ sơ Discord: tối thiểu 680×240 (≈ 17:6), xuất gấp 3
+await png("profile-banner.svg", 2040, 720, path.join(bgd, "zendojo-discord-profile-banner-2040x720.png"));
 
 // 6 · minh hoạ
 const il = dir("06-illustrations");
