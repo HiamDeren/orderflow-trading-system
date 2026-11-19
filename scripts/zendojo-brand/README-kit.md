@@ -14,6 +14,7 @@ Mọi hình đều vẽ bằng code (path SVG, không dùng font hay ảnh có s
 | `03-avatar` | Vuông tràn nền + tròn sẵn, 1024 / 2048 px | Avatar Discord, mạng xã hội |
 | `04-icons` | `favicon.ico`, PNG 16 → 1024, `apple-touch-icon-180`, `maskable-512/1024` | Web, app, PWA |
 | `05-backgrounds` | Hình nền 5K / 4K / QHD / 16:10, điện thoại, biểu ngữ server + biểu ngữ hồ sơ Discord, ảnh OG | Desktop, điện thoại, Discord, link preview |
+| `05-backgrounds/tsu` | Bộ hình nền lấy ㋡ làm hình chính: 5K / 4K / QHD / 16:10, điện thoại, biểu ngữ server + hồ sơ Discord | Desktop, điện thoại, Discord |
 | `06-illustrations` | Minh hoạ núi + ensō (trạng thái trống) | Trang trống, 404 |
 | `07-theme` | Bảng màu (ảnh), `zendojo-tokens.css`, `zendojo-tokens.json`, `zendojo-atas-colors-ARGB.txt` | Web, thiết kế, ATAS |
 | `source-svg` | Toàn bộ SVG gốc (kể cả nền) | Xuất lại cỡ khác |

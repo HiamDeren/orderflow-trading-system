@@ -4,6 +4,7 @@ Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
 ## 2026-11-19 · Brand kit ZenDojo
 - Logo có 3 dạng (vuông bo góc, tròn góc trong suốt, không nền) + avatar tràn nền. Đã thử biến thể `[ツ]` và con dấu son rồi bỏ theo ý Deren: chỉ giữ ensō + ツ; nền login / điện thoại bỏ con dấu ở góc.
+- Thêm bộ hình nền lấy ㋡ làm hình chính (`05-backgrounds/tsu/`: 5K / 4K / QHD / 16:10, điện thoại, biểu ngữ server + hồ sơ Discord) và biểu ngữ hồ sơ Discord 2040×720 cho bộ nền núi.
 - `scripts/zendojo-brand/kit.mjs` + `kit.py` đóng gói ZenDojo-brand-kit.zip (~13 MB, ~60 file): logo SVG + PNG tới 4096 (3 dạng), logo kèm chữ (4×, nền tối / trong suốt), avatar 1024 / 2048, favicon.ico + PNG 16–1024 + maskable, hình nền 5K / 4K / QHD / 16:10 / điện thoại / banner Discord, OG 2400×1260, minh hoạ, bảng màu + `tokens.css` / `tokens.json` / màu ATAS ARGB, README. Kit không commit (file lớn), sinh lại bằng lệnh trong `scripts/zendojo-brand/README-kit.md`.
 
 ## 2026-11-19 · ZenDojo (D49)

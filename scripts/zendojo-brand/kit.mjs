@@ -63,6 +63,18 @@ await png("og-bg.svg", 2400, 1260, path.join(SRC, "og-bg@2x.png"));
 // biểu ngữ hồ sơ Discord: tối thiểu 680×240 (≈ 17:6), xuất gấp 3
 await png("profile-banner.svg", 2040, 720, path.join(bgd, "zendojo-discord-profile-banner-2040x720.png"));
 
+// 5b · hình nền lấy ㋡ làm hình chính
+const tb = dir("05-backgrounds/tsu");
+await png("tsu-bg-16x9.svg", 5120, 2880, path.join(tb, "zendojo-tsu-wallpaper-5120x2880-5K.png"));
+await png("tsu-bg-16x9.svg", 3840, 2160, path.join(tb, "zendojo-tsu-wallpaper-3840x2160-4K.png"));
+await png("tsu-bg-16x9.svg", 2560, 1440, path.join(tb, "zendojo-tsu-wallpaper-2560x1440-QHD.png"));
+await png("tsu-bg-16x10.svg", 3840, 2400, path.join(tb, "zendojo-tsu-wallpaper-3840x2400-16x10.png"));
+await png("tsu-bg-mobile.svg", 1440, 3120, path.join(tb, "zendojo-tsu-mobile-1440x3120.png"));
+await png("tsu-bg-mobile.svg", 1290, 2796, path.join(tb, "zendojo-tsu-mobile-1290x2796-iphone.png"));
+await png("tsu-bg-16x9.svg", 1920, 1080, path.join(tb, "zendojo-tsu-discord-banner-1920x1080.png"));
+await png("tsu-bg-16x9.svg", 960, 540, path.join(tb, "zendojo-tsu-discord-banner-960x540.png"));
+await png("tsu-bg-profile-banner.svg", 2040, 720, path.join(tb, "zendojo-tsu-discord-profile-banner-2040x720.png"));
+
 // 6 · minh hoạ
 const il = dir("06-illustrations");
 await png("empty.svg", 1440, 600, path.join(il, "zendojo-empty-1440x600.png"));

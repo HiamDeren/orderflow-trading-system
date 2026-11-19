@@ -91,6 +91,31 @@ def profile_banner(W=2040, H=720):
 
 files["profile-banner.svg"] = profile_banner()
 open(os.path.join(OUT, "profile-banner.svg"), "w").write(files["profile-banner.svg"])
+def tsu_mark(cx, cy, R, op=None):
+    """㋡ cỡ bất kỳ: ensō mực + glitch, ツ bút lông màu cát (cùng tỉ lệ với logo)."""
+    k = R / 0.344
+    body = enso_tech(cx, cy, R, 0.145 * k, INK, **ENSO) + g(tsu_brush(cx - 0.01 * k, cy + 0.01 * k, 0.37 * k, seed=5), SAND)
+    return f'<g opacity="{op}">{body}</g>' if op else body
+
+def tsu_scene(W, H, cx, cy, R, base_top):
+    """Hình nền lấy ㋡ làm hình chính; núi Market Profile chìm phía dưới."""
+    b = f'<rect width="{W}" height="{H}" fill="{BG}"/>'
+    span = H - base_top
+    b += ridge(W * 0.16, H, base_top + span * 0.15, W * 0.24, 20, "#13161B", seed=2)
+    b += ridge(W * 0.86, H, base_top + span * 0.22, W * 0.22, 18, "#13161B", seed=3)
+    b += ridge(W * 0.5, H, base_top, W * 0.36, 26, "#171B22", va_fill="#1A1E26", poc=12, poc_fill=SAND, poc_op=0.32, seed=4)
+    b += tsu_mark(cx, cy, R)
+    return svg(W, H, b)
+
+TSU_BG = {
+    "tsu-bg-16x9.svg": tsu_scene(1920, 1080, 960, 470, 250, 740),
+    "tsu-bg-16x10.svg": tsu_scene(1920, 1200, 960, 520, 270, 830),
+    "tsu-bg-mobile.svg": tsu_scene(1080, 2340, 540, 1000, 330, 1650),
+    "tsu-bg-profile-banner.svg": tsu_scene(2040, 720, 1500, 330, 210, 520),
+}
+for k, v in TSU_BG.items():
+    files[k] = v; open(os.path.join(OUT, k), "w").write(v)
+
 files["mobile-bg.svg"] = mobile_bg()
 open(os.path.join(OUT, "mobile-bg.svg"), "w").write(files["mobile-bg.svg"])
 
