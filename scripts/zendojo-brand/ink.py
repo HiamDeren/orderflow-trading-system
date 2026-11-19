@@ -1,4 +1,4 @@
-# ZenDojo (D49): ensō vẽ bằng mô phỏng sợi lông bút khô (kasure / phi bạch), con dấu son (hanko) ツ.
+# ZenDojo (D49): ensō vẽ bằng mô phỏng sợi lông bút khô (kasure / phi bạch) + lớp glitch, chữ ツ bút lông.
 # Chỉ dùng path SVG, không dùng font hay filter. Dùng bởi build.py.
 import math, random
 
@@ -135,25 +135,6 @@ def tsu_brush(cx, cy, s, seed=5):
     d += brush_curve(bez(P(-34, -80), P(-28, -64), P(-20, -46), P(-8, -28), 80), 38 * k, seed + 1, clumps=5, per=3, dryness=0.35, w_end=0.45, press_len=0.45)
     d += brush_curve(bez(P(76, -80), P(72, 6), P(26, 66), P(-64, 94), 160), 44 * k, seed + 2, clumps=7, per=4, dryness=0.8, w_end=0.16, press_len=0.14)
     return d
-
-def hanko(x, y, s, red="#B8432F", cut="#0F1115", seed=3):
-    """Con dấu vuông màu son, chữ ツ khắc chìm."""
-    rnd = random.Random(seed); pts = []
-    for side in range(4):
-        for i in range(10):
-            f = i / 10
-            px, py = [(x + s * f, y), (x + s, y + s * f), (x + s - s * f, y + s), (x, y + s - s * f)][side]
-            pts.append((px + rnd.uniform(-1, 1) * s * 0.015, py + rnd.uniform(-1, 1) * s * 0.015))
-    box = "M" + " L".join(f"{a:.1f},{b:.1f}" for a, b in pts) + "Z"
-    k = s / 200; P = lambda a, b: (x + s / 2 + a * k, y + s / 2 + b * k)
-    def solid(p, w0, w1):
-        ws = [w0 + (w1 - w0) * i / (len(p) - 1) for i in range(len(p))]
-        return poly_stroke(p, ws)
-    t = [solid(bez(P(-70, -52), P(-65, -40), P(-58, -27), P(-48, -10), 20), 30 * k, 23 * k),
-         solid(bez(P(-26, -68), P(-21, -54), P(-14, -40), P(-4, -23), 20), 30 * k, 23 * k),
-         solid(bez(P(66, -68), P(63, 6), P(22, 58), P(-58, 80), 40), 36 * k, 13 * k)]
-    return f'<path d="{box}" fill="{red}"/>' + "".join(f'<path d="{d}" fill="{cut}"/>' for d in t)
-
 
 _uid = [0]
 def enso_tech(cx, cy, R, W, color, seed=7, op=None, bands=3, cuts=7, pixels=True, splatter=False):

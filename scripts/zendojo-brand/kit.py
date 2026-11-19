@@ -17,7 +17,7 @@ PALETTE = [
     ("Nhấn (cát)", [("accent", "#D4B483", "Nút chính, ツ trong logo"), ("accent-hi", "#E8CFA3", "Hover"), ("accent-bg", "#3A3326", "Nền chọn"), ("accent-soft", "#1E1C17", "Nền nhấn nhẹ"), ("accent-ring", "#5A4C33", "Viền chọn")]),
     ("Long / Short", [("long", "#8CC2A4", "Long, lãi"), ("long-bg", "#17231D", "Nền lãi"), ("short", "#E0947C", "Short, lỗ"), ("short-bg", "#281D1A", "Nền lỗ"), ("short-ring", "#4A2F28", "Viền lỗ")]),
     ("Tin kinh tế", [("imp-high", "#E5534B", "Tác động cao"), ("imp-medium", "#F0883E", "Trung bình"), ("imp-low", "#E3C14D", "Thấp"), ("imp-holiday", "#8A94A1", "Nghỉ lễ")]),
-    ("Thương hiệu", [("ink", "#ECE7DC", "Mực ensō"), ("seal", "#B8432F", "Con dấu son"), ("ridge", "#191D25", "Núi Market Profile"), ("ridge-va", "#1D222B", "Vùng giá trị trên núi")]),
+    ("Thương hiệu", [("ink", "#ECE7DC", "Mực ensō"), ("ridge", "#191D25", "Núi Market Profile"), ("ridge-va", "#1D222B", "Vùng giá trị trên núi")]),
 ]
 argb = lambda h: "#FF" + h[1:].upper()
 
@@ -59,7 +59,7 @@ def main():
         b = p.chromium.launch(executable_path="/usr/bin/google-chrome", args=["--no-sandbox", "--allow-file-access-from-files"])
         pg = b.new_page(device_scale_factor=4)
         # logo nằm ngang + logo dọc, nền tối và trong suốt
-        for kind in ("tsu", "bracket"):
+        for kind in ("tsu",):
             logo = f"logo-{kind}-none.svg"
             row = f"""<div class="w"><img src="{logo}"><div><div class="n">ZenDojo</div><div class="s">Derenツ · Personal trading dashboard</div></div></div>"""
             css = """.w{display:flex;align-items:center;gap:34px;padding:40px 56px 40px 30px}.w img{width:200px;height:200px}
@@ -88,7 +88,7 @@ h3{font-size:15px;color:#8A94A1;letter-spacing:.08em;text-transform:uppercase;ma
 .c{background:#161A20;border:1px solid #252B34;border-radius:12px;overflow:hidden}.sw{height:84px;border-bottom:1px solid #252B34}
 .m{display:flex;flex-direction:column;gap:4px;padding:12px;font-size:13px}.m span{color:#AEB6C0}.m code{font-family:"JetBrains Mono",monospace;font-size:12px;color:#C9CED5}
 .f{margin-top:30px;display:flex;gap:40px;color:#C9CED5;font-size:18px}.f b{font-size:34px;display:block;color:#E6E8EB}.f .mono b{font-family:"JetBrains Mono",monospace}"""
-        body = f"""<h1>ZenDojo · theme</h1><p class="l">Graphite trầm + một màu nhấn cát. Long xanh xám, Short cam đất. Mực ensō + con dấu son.</p>{cards}
+        body = f"""<h1>ZenDojo · theme</h1><p class="l">Graphite trầm + một màu nhấn cát. Long xanh xám, Short cam đất. Mực ensō + chữ ツ màu cát.</p>{cards}
 <div class="f"><div><b>Inter</b>Chữ giao diện · 400 / 500 / 600 / 700</div><div class="mono"><b>JetBrains Mono</b>Số, giá, giờ</div></div>"""
         pg3 = b.new_page(device_scale_factor=2); f = os.path.join(SRC, "_tmp.html"); open(f, "w").write(html_page(body, css3))
         pg3.set_viewport_size({"width": 1400, "height": 800}); pg3.goto("file://" + f); pg3.wait_for_timeout(500)

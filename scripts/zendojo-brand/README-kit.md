@@ -8,7 +8,7 @@ Mọi hình đều vẽ bằng code (path SVG, không dùng font hay ảnh có s
 
 | Thư mục | Có gì | Dùng cho |
 |---|---|---|
-| `01-logo/svg` | 3 biến thể × 3 dạng, vector | In ấn, thiết kế tiếp, cỡ bất kỳ |
+| `01-logo/svg` | 3 dạng (vuông bo góc, tròn, không nền), vector | In ấn, thiết kế tiếp, cỡ bất kỳ |
 | `01-logo/png` | Như trên, 1024 / 2048 / 4096 px | Ảnh dán nhanh |
 | `02-wordmark` | Logo + chữ "ZenDojo", nằm ngang và dọc, nền tối / trong suốt (4×) | Banner, slide, header |
 | `03-avatar` | Vuông tràn nền + tròn sẵn, 1024 / 2048 px | Avatar Discord, mạng xã hội |
@@ -18,13 +18,9 @@ Mọi hình đều vẽ bằng code (path SVG, không dùng font hay ảnh có s
 | `07-theme` | Bảng màu (ảnh), `zendojo-tokens.css`, `zendojo-tokens.json`, `zendojo-atas-colors-ARGB.txt` | Web, thiết kế, ATAS |
 | `source-svg` | Toàn bộ SVG gốc (kể cả nền) | Xuất lại cỡ khác |
 
-## Biến thể logo
+## Dạng logo
 
-- **tsu** (chính): ensō + ツ bút lông màu cát.
-- **bracket**: ensō + `[ツ]`, khớp tên server Discord "[ツ] ZenDojo".
-- **hanko**: ensō + con dấu son khắc ツ.
-
-Dạng: `square` (vuông bo góc, icon app), `round` (hình tròn, góc trong suốt), `none` (không nền, đặt lên nền tối). Avatar dùng dạng tràn nền vuông để Discord tự cắt tròn.
+Một biểu tượng duy nhất: ensō mực + ツ bút lông màu cát. Dạng: `square` (vuông bo góc, icon app), `round` (hình tròn, góc trong suốt), `none` (không nền, đặt lên nền tối). Avatar dùng dạng tràn nền vuông để Discord tự cắt tròn.
 
 Logo thiết kế cho **nền tối**. Mực màu `#ECE7DC` nên đặt lên nền sáng sẽ không thấy rõ.
 
@@ -39,7 +35,6 @@ Logo thiết kế cho **nền tối**. Mực màu `#ECE7DC` nên đặt lên n�
 | Long | `#8CC2A4` | `#FF8CC2A4` |
 | Short | `#E0947C` | `#FFE0947C` |
 | Mực ensō | `#ECE7DC` | `#FFECE7DC` |
-| Con dấu | `#B8432F` | `#FFB8432F` |
 
 Đủ bảng: `07-theme/`. Font: Inter (giao diện), JetBrains Mono (số, giá, giờ).
 

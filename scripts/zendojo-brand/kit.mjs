@@ -18,7 +18,7 @@ async function png(svgFile, w, h, out, fit = "cover") {
   await sharp(path.join(SRC, svgFile), { density }).resize(w, h, { fit, position: "centre" }).png({ compressionLevel: 9 }).toFile(out);
 }
 
-const KINDS = { tsu: "ツ", bracket: "[ツ]", hanko: "con dấu" };
+const KINDS = { tsu: "ツ" };
 const SHAPES = ["square", "round", "none"];
 
 // 1 · logo: SVG gốc + PNG 1024 / 2048 / 4096

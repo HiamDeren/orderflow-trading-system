@@ -12,5 +12,4 @@ await s("login-bg.svg").resize(1920, 1200).webp({ quality: 82 }).toFile(`${OUT}/
 await s("empty.svg").resize(720, 300).webp({ quality: 85 }).toFile(`${OUT}/empty.webp`);
 await s("og-bg.svg").resize(1200, 630).png().toFile(path.join(SRC, "og-bg.png"));
 await s("logo.svg").resize(512, 512).png().toFile(path.join(SRC, "discord-icon-512.png"));
-await s("logo-hanko.svg").resize(512, 512).png().toFile(path.join(SRC, "discord-icon-hanko-512.png"));
 console.log("raster ok →", OUT);

@@ -3,11 +3,11 @@
 # (raster.mjs xuất PNG / WebP vào apps/web/public/assets/img/zendojo/; og.png chụp bằng Playwright từ og.html).
 import math, os, random, sys
 sys.path.insert(0, os.path.dirname(__file__))
-from ink import enso_ink, enso_tech, tsu_brush, hanko, g
+from ink import enso_ink, enso_tech, tsu_brush, g
 
 OUT = sys.argv[1] if len(sys.argv) > 1 else "/tmp/zendojo"
 os.makedirs(OUT, exist_ok=True)
-BG = "#0F1115"; PANEL = "#161A20"; INK = "#ECE7DC"; SAND = "#D4B483"; RED = "#B8432F"
+BG = "#0F1115"; PANEL = "#161A20"; INK = "#ECE7DC"; SAND = "#D4B483"
 
 def svg(w, h, body, extra=""):
     return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}"{extra}>{body}</svg>\n'
@@ -35,13 +35,6 @@ def logo(s=512):
     b += enso_tech(s * 0.5, s * 0.5, s * 0.344, s * 0.145, INK, **ENSO) + g(tsu_brush(s * 0.49, s * 0.51, s * 0.37, seed=5), SAND)
     return svg(s, s, b)
 
-def logo_hanko(s=512):
-    """Phương án phụ: ensō mực + glitch, con dấu son ツ."""
-    b = f'<rect width="{s}" height="{s}" rx="{s*0.22:.0f}" fill="{BG}"/>'
-    b += enso_tech(s * 0.5, s * 0.5, s * 0.344, s * 0.145, INK, **ENSO)
-    b += hanko(s * 0.645, s * 0.62, s * 0.152, red=RED, cut=BG)
-    return svg(s, s, b)
-
 def login_bg(W=1920, H=1200):
     b = f'<rect width="{W}" height="{H}" fill="{BG}"/>'
     b += enso_tech(1360, 400, 280, 92, INK, seed=11, op=0.13, bands=4, cuts=9)
@@ -50,7 +43,6 @@ def login_bg(W=1920, H=1200):
     b += ridge(1360, H, 565, 670, 46, "#191D25", va_fill="#1D222B", poc=21, poc_fill=SAND, poc_op=0.42, seed=4)
     b += ridge(620, H, 960, 620, 16, "#1E232C", seed=5, gap=0.4)
     b += ridge(1870, H, 1010, 360, 13, "#1E232C", seed=6, gap=0.4)
-    b += hanko(1740, 120, 46, red=RED, cut=BG, seed=9).replace('fill="#B8432F"', 'fill="#B8432F" fill-opacity="0.55"')
     return svg(W, H, b, ' preserveAspectRatio="xMidYMid slice"')
 
 def og_bg(W=1200, H=630):
@@ -70,7 +62,7 @@ def empty_art(W=360, H=150):
     b += ridge(330, H, 108, 64, 5, "#22272F", seed=13, gap=0.38, mask=PANEL)
     return svg(W, H, b)
 
-files = {"logo.svg": logo(), "logo-hanko.svg": logo_hanko(), "login-bg.svg": login_bg(), "og-bg.svg": og_bg(), "empty.svg": empty_art()}
+files = {"logo.svg": logo(), "login-bg.svg": login_bg(), "og-bg.svg": og_bg(), "empty.svg": empty_art()}
 for k, v in files.items():
     open(os.path.join(OUT, k), "w").write(v)
 print("ok", OUT, list(files))
@@ -85,36 +77,14 @@ def mobile_bg(W=1080, H=2340):
     b += ridge(540, H, 1000, 720, 52, "#191D25", va_fill="#1D222B", poc=24, poc_fill=SAND, poc_op=0.42, seed=4)
     b += ridge(260, H, 1880, 520, 16, "#1E232C", seed=5, gap=0.4)
     b += ridge(980, H, 1960, 320, 13, "#1E232C", seed=6, gap=0.4)
-    b += hanko(900, 230, 64, red=RED, cut=BG, seed=9).replace('fill="#B8432F"', 'fill="#B8432F" fill-opacity="0.55"')
     return svg(W, H, b)
 
 files["mobile-bg.svg"] = mobile_bg()
 open(os.path.join(OUT, "mobile-bg.svg"), "w").write(files["mobile-bg.svg"])
 
-def brackets(s, color, gl=True):
-    """Cặp ngoặc vuông kiểu 'công nghệ' (nét đều, bo nhẹ) với vài vạch glitch."""
-    h = s * 0.32; y = s * 0.5 - h / 2; t = s * 0.03; arm = s * 0.06; xl = s * 0.335; xr = s * 0.665
-    def br(x, d):  # d = 1 ngoặc trái, -1 ngoặc phải
-        xs = x if d == 1 else x - t
-        return (f'<rect x="{xs:.1f}" y="{y:.1f}" width="{t:.1f}" height="{h:.1f}" rx="{t*0.25:.1f}"/>'
-                f'<rect x="{min(x, x + d*arm):.1f}" y="{y:.1f}" width="{arm:.1f}" height="{t:.1f}" rx="{t*0.25:.1f}"/>'
-                f'<rect x="{min(x, x + d*arm):.1f}" y="{y+h-t:.1f}" width="{arm:.1f}" height="{t:.1f}" rx="{t*0.25:.1f}"/>')
-    out = f'<g fill="{color}">' + br(xl, 1) + br(xr, -1)
-    if gl:  # vài mẩu pixel lệch ra ngoài ngoặc
-        for (x, yy, w) in ((xl - t * 2.2, y + h * 0.30, t * 1.4), (xr + t * 0.8, y + h * 0.66, t * 1.6), (xr + t * 0.8 + t * 2.2, y + h * 0.66, t * 0.6)):
-            out += f'<rect x="{x:.1f}" y="{yy:.1f}" width="{w:.1f}" height="{t*0.55:.1f}"/>'
-    return out + "</g>"
-
-def mark_body(s, kind):
-    """kind: tsu (ツ bút lông) · bracket ([ツ]) · hanko (con dấu đỏ)."""
-    b = enso_tech(s * 0.5, s * 0.5, s * 0.344, s * 0.145, INK, **ENSO)
-    if kind == "tsu":
-        b += g(tsu_brush(s * 0.49, s * 0.51, s * 0.37, seed=5), SAND)
-    elif kind == "bracket":
-        b += brackets(s, INK) + g(tsu_brush(s * 0.505, s * 0.505, s * 0.2, seed=5), SAND)
-    else:
-        b += hanko(s * 0.645, s * 0.62, s * 0.152, red=RED, cut=BG)
-    return b
+def mark_body(s, kind="tsu"):
+    """Biểu tượng: ensō mực + glitch, chữ ツ bút lông màu cát."""
+    return enso_tech(s * 0.5, s * 0.5, s * 0.344, s * 0.145, INK, **ENSO) + g(tsu_brush(s * 0.49, s * 0.51, s * 0.37, seed=5), SAND)
 
 def framed(s, kind, shape):
     """shape: square (vuông bo góc) · round (hình tròn, góc trong suốt) · full (vuông tràn nền, cho avatar) · none (không nền)."""
@@ -126,7 +96,7 @@ def framed(s, kind, shape):
         k = 0.84; body = f'<g transform="translate({s/2},{s/2}) scale({k}) translate({-s/2},{-s/2})">{body}</g>'
     return svg(s, s, bg + body)
 
-for kind in ("tsu", "bracket", "hanko"):
+for kind in ("tsu",):
     for shape in ("square", "round", "full", "none"):
         name = f"logo-{kind}-{shape}.svg"; files[name] = framed(512, kind, shape)
         open(os.path.join(OUT, name), "w").write(files[name])

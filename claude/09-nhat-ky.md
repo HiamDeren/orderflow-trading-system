@@ -3,12 +3,12 @@
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
 ## 2026-11-19 · Brand kit ZenDojo
-- Thêm biến thể `[ツ]` (ngoặc vuông kiểu công nghệ + ツ bút lông trong vòng ensō) và dạng tròn / tràn nền cho cả 3 biến thể (ツ, [ツ], con dấu).
-- `scripts/zendojo-brand/kit.mjs` + `kit.py` đóng gói ZenDojo-brand-kit.zip (~28 MB, 100+ file): logo SVG + PNG tới 4096, logo kèm chữ (4×, nền tối / trong suốt), avatar 1024 / 2048, favicon.ico + PNG 16–1024 + maskable, hình nền 5K / 4K / QHD / 16:10 / điện thoại / banner Discord, OG 2400×1260, minh hoạ, bảng màu + `tokens.css` / `tokens.json` / màu ATAS ARGB, README. Kit không commit (file lớn), sinh lại bằng lệnh trong `scripts/zendojo-brand/README-kit.md`.
+- Logo có 3 dạng (vuông bo góc, tròn góc trong suốt, không nền) + avatar tràn nền. Đã thử biến thể `[ツ]` và con dấu son rồi bỏ theo ý Deren: chỉ giữ ensō + ツ; nền login / điện thoại bỏ con dấu ở góc.
+- `scripts/zendojo-brand/kit.mjs` + `kit.py` đóng gói ZenDojo-brand-kit.zip (~13 MB, ~60 file): logo SVG + PNG tới 4096 (3 dạng), logo kèm chữ (4×, nền tối / trong suốt), avatar 1024 / 2048, favicon.ico + PNG 16–1024 + maskable, hình nền 5K / 4K / QHD / 16:10 / điện thoại / banner Discord, OG 2400×1260, minh hoạ, bảng màu + `tokens.css` / `tokens.json` / màu ATAS ARGB, README. Kit không commit (file lớn), sinh lại bằng lệnh trong `scripts/zendojo-brand/README-kit.md`.
 
 ## 2026-11-19 · ZenDojo (D49)
 - Đổi tên Deren Desk → ZenDojo: `layout.tsx` (title, icon, apple icon, Open Graph / Twitter), sidebar, login, mobile topbar, News; câu EN mới.
-- Logo làm 2 vòng theo góp ý: bản đầu ensō nét đều → Deren muốn "vết mực quẹt, kiểu Nhật" + "thêm tý công nghệ". Bản chốt: ensō mô phỏng ~75 sợi lông bút gom thành búi (khe khô dọc nét, đầu nét xoè, đuôi mảnh), lát glitch bằng `clipPath` + `<use>` dịch ngang, khe scanline bằng `mask`, đuôi tan thành pixel bám lưới; chữ ツ bút lông màu cát. Phương án phụ: con dấu son ツ.
+- Logo làm 2 vòng theo góp ý: bản đầu ensō nét đều → Deren muốn "vết mực quẹt, kiểu Nhật" + "thêm tý công nghệ". Bản chốt: ensō mô phỏng ~75 sợi lông bút gom thành búi (khe khô dọc nét, đầu nét xoè, đuôi mảnh), lát glitch bằng `clipPath` + `<use>` dịch ngang, khe scanline bằng `mask`, đuôi tan thành pixel bám lưới; chữ ツ bút lông màu cát.
 - Ảnh trong `apps/web/public/assets/img/zendojo/`: `icon-32/180/192/512.png`, `login-bg.webp` (26 KB), `empty.webp`, `og.png` (Playwright, font Inter + Noto CJK). Nguồn: `scripts/zendojo-brand/` (`ink.py`, `build.py`, `raster.mjs`, `og.html`). Xoá `desk-login-bg.svg`. Trang học cũ (`/learn`) giữ icon cũ.
 - Minh hoạ ở Dashboard (chưa có plan / cuối tuần) và trang 404 mới `app/not-found.tsx`.
 - Test mock: build OK, login / Dashboard / 404 ở 1440 px và 390 px không tràn ngang, thẻ og:image và icon đúng đường dẫn.
