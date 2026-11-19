@@ -26,7 +26,7 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
     <>
       <header className="page-head">
         <div>
-          <span className="lbl">{t("Tổng quan")}</span>
+          <span className="lbl">{t("Thị trường")}</span>
           <h1 className="h1">Calendar</h1>
         </div>
         <span className="hstack small muted" style={{ gap: 10 }}>

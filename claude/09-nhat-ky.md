@@ -2,6 +2,12 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-19 · Dashboard đợt 5 (code ý tưởng canvas v2)
+- Shell v2: `Topbar`, `Palette` (Ctrl/Cmd+K), thanh tab mobile; bỏ session khỏi `lib/settings.ts`, `EventRow`, timeline (D47).
+- Markets mới (`lib/markets.ts`, `/markets`, D46); `/api/stock/summary` cho ngăn tóm tắt ở Earnings; proxy thêm `/markets`, `/api/stock`.
+- Dashboard: watchlist (`getQuotes`), earnings tuần, journal mini, thang level plan. Calendar tuần dạng cột, News cột lọc, trang mã chia tab, Journal recap theo tab. 72 câu EN mới.
+- Test mock (Finnhub + CoinGecko giả): build OK, desktop 1600 px / mobile 390 px không tràn ngang, không lỗi console; palette gõ "nvda" + Enter mở `/stock/NVDA`. Sửa CSS thứ tự: topbar ẩn và tab dưới hiện ở ≤ 860 px.
+
 ## 2026-11-19 · Dashboard đợt 4 (9 góp ý)
 - Layout vừa khung cho Calendar / Earnings / News; sửa lỗi phần đầu trang bị co lại khi trang dài (`.main > *` không co); Journal đưa nút lưu lên đầu.
 - Trang Stocks mới (D44), Knowledge nhúng khoá học cũ (D45): `core.js` v21, `app.css` v19, chạy lại `i18n/build_en.py`.

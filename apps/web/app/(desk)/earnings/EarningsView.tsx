@@ -6,6 +6,7 @@ import type { Earning } from "@/lib/market";
 import { addDays, dowOf, isWeekday, monthRange, viDayMonth } from "@/lib/time";
 import { EarningRow, hourLabel } from "../_components/MarketBits";
 import { useUi } from "../_components/Ui";
+import StockDrawer from "./StockDrawer";
 
 const HOURS: Earning["hour"][] = ["bmo", "dmh", "amc", ""];
 
@@ -44,6 +45,7 @@ export default function EarningsView({ month, items, watch, today, initialDay }:
 
   const firstWithData = cells.find((d) => d && (byDay.get(d) || []).length) || cells.find(Boolean) || start;
   const [day, setDay] = useState(initialDay || firstWithData!);
+  const [sym, setSym] = useState<string | null>(null);
   const list = byDay.get(day) || [];
   const nqCount = items.filter((e) => W.has(e.symbol)).length;
 
@@ -88,7 +90,13 @@ export default function EarningsView({ month, items, watch, today, initialDay }:
                       <Link
                         key={e.symbol}
                         href={`/stock/${encodeURIComponent(e.symbol)}`}
-                        onClick={(ev) => ev.stopPropagation()}
+                        onClick={(ev) => {
+                          ev.stopPropagation();
+                          if (ev.metaKey || ev.ctrlKey) return;
+                          ev.preventDefault();
+                          setDay(d);
+                          setSym(e.symbol);
+                        }}
                         className={"ern-sym mono" + (W.has(e.symbol) ? " nq" : "") + (e.hour === "amc" ? " amc" : "")}
                         title={`${e.symbol} · ${hourLabel(e.hour, t)}`}
                       >
@@ -103,7 +111,11 @@ export default function EarningsView({ month, items, watch, today, initialDay }:
           </div>
         </section>
 
-        <section className={"card ern-detail" + (day === today ? " today-card" : "")} aria-label={day}>
+        <section className={"card ern-detail" + (day === today ? " today-card" : "")} aria-label={sym || day}>
+          {sym ? (
+            <StockDrawer symbol={sym} onClose={() => setSym(null)} />
+          ) : (
+          <>
           <div className="row cal-list-head">
             <span style={{ fontSize: 15, fontWeight: 600 }}>
               {DOW[lang][dowOf(day)]} · {viDayMonth(day)}{day === today ? ` · ${t("hôm nay")}` : ""}
@@ -125,6 +137,8 @@ export default function EarningsView({ month, items, watch, today, initialDay }:
             })
           ) : (
             <span className="small dim">{t("Không có")}</span>
+          )}
+          </>
           )}
         </section>
       </div>

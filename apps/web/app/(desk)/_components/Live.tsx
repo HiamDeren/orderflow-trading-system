@@ -1,9 +1,9 @@
 "use client";
-// Thành phần chạy theo giờ thực: đồng hồ ET / VN và timeline phiên.
+// Dòng thời gian tin trong ngày (giờ ET), chạy theo giờ thực.
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { tzShort } from "@/lib/prefs";
-import { SESSION_END, SESSION_START, etNow, fmtTime, hhmm } from "@/lib/time";
+import { etNow, fmtTime } from "@/lib/time";
 import { useUi } from "./Ui";
 
 function useNow(initial: number, everyMs = 15000) {
@@ -14,52 +14,6 @@ function useNow(initial: number, everyMs = 15000) {
     return () => clearInterval(id);
   }, [everyMs]);
   return now;
-}
-
-const pad = (n: number) => String(n).padStart(2, "0");
-const dur = (min: number) => `${Math.floor(min / 60)}:${pad(min % 60)}`;
-
-export function Clock({ initial }: { initial: number }) {
-  const { t, tz } = useUi();
-  const now = useNow(initial);
-  const et = etNow(new Date(now));
-  const weekday = et.dow >= 1 && et.dow <= 5;
-  let label = t("Mở NY AM");
-  let value = "—";
-  let tone = "var(--accent)";
-  if (!weekday) {
-    label = t("Cuối tuần");
-    value = t("Nghỉ");
-    tone = "var(--dim)";
-  } else if (et.minutes < SESSION_START) {
-    value = "−" + dur(SESSION_START - et.minutes);
-  } else if (et.minutes <= SESSION_END) {
-    label = t("Còn trong phiên");
-    value = dur(SESSION_END - et.minutes);
-    tone = "var(--long)";
-  } else {
-    label = "NY AM";
-    value = t("Đã đóng");
-    tone = "var(--dim)";
-  }
-  return (
-    <div className="card clock" aria-live="off">
-      <div>
-        <span className="lbl">New York</span>
-        <span className="v" suppressHydrationWarning>{pad(et.hh)}:{pad(et.mm)}</span>
-      </div>
-      {tz !== "America/New_York" && (
-        <div>
-          <span className="lbl">{tzShort(tz)}</span>
-          <span className="v" suppressHydrationWarning>{hhmm(now, tz)}</span>
-        </div>
-      )}
-      <div>
-        <span className="lbl" suppressHydrationWarning>{label}</span>
-        <span className="v" style={{ color: tone }} suppressHydrationWarning>{value}</span>
-      </div>
-    </div>
-  );
 }
 
 const START = 4 * 60;
@@ -74,7 +28,7 @@ export function Timeline({ initial, events, today }: { initial: number; events: 
   const now = useNow(initial, 30000);
   const et = etNow(new Date(now));
   const showNow = et.date === today && et.minutes >= START && et.minutes <= START + SPAN;
-  const ticks = ["04:00", "06:00", "08:00", "09:30", "11:30", "13:00", "14:00", "16:00"];
+  const ticks = ["04:00", "06:00", "08:00", "10:00", "12:00", "14:00", "16:00"];
   const inRange = events.filter((e) => e.minutes >= START && e.minutes <= START + SPAN);
   const outside = events.length - inRange.length;
   // Giờ theo múi giờ hiển thị của các mốc ET (lệch UTC của ET lấy lúc 12:00 UTC ngày đó)
@@ -85,9 +39,9 @@ export function Timeline({ initial, events, today }: { initial: number; events: 
     return fmtTime(base + (h * 60 + m + off) * 60000, tz, false);
   };
   return (
-    <section className="card" aria-label={t("Dòng thời gian phiên · giờ ET")} style={{ gap: 10 }}>
+    <section className="card" aria-label={t("Dòng thời gian tin · giờ ET")} style={{ gap: 10 }}>
       <div className="row wrap">
-        <span className="lbl">{t("Dòng thời gian phiên · giờ ET")}</span>
+        <span className="lbl">{t("Dòng thời gian tin · giờ ET")}</span>
         <span className="small dim">
           {inRange.length ? t("{n} tin trong khung", { n: inRange.length }) : t("Không có tin trong khung 04:00–16:00 ET")}
           {outside > 0 ? ` · ${t("{n} tin ngoài khung", { n: outside })}` : ""}
@@ -95,8 +49,6 @@ export function Timeline({ initial, events, today }: { initial: number; events: 
       </div>
       <div className="tl">
         <div className="tl-bar" />
-        <div className="tl-pre" style={{ width: pos(SESSION_START) }} />
-        <div className="tl-win" style={{ left: pos(SESSION_START), width: `${(120 / SPAN) * 100}%` }} />
         {showNow && <div className="tl-now" style={{ left: pos(et.minutes) }} suppressHydrationWarning />}
         {inRange.map((e) => (
           <Link
@@ -115,7 +67,7 @@ export function Timeline({ initial, events, today }: { initial: number; events: 
       </div>
       <div className="tl-ticks">
         {ticks.map((x) => (
-          <span key={x} style={{ left: pos(Number(x.slice(0, 2)) * 60 + Number(x.slice(3))), ...(x === "09:30" || x === "11:30" ? { color: "var(--accent)" } : {}) }}>
+          <span key={x} style={{ left: pos(Number(x.slice(0, 2)) * 60 + Number(x.slice(3))) }}>
             {x}
             {tz !== "America/New_York" && <small suppressHydrationWarning>{local(x)}</small>}
           </span>

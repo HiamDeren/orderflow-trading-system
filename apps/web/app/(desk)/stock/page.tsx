@@ -35,7 +35,7 @@ export default async function StocksPage({ searchParams }: { searchParams: Promi
     <>
       <header className="page-head">
         <div>
-          <span className="lbl">{t("Tổng quan")}</span>
+          <span className="lbl">{t("Thị trường")}</span>
           <h1 className="h1">Stocks</h1>
         </div>
         <form className="search" action="/stock" role="search">

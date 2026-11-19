@@ -42,6 +42,8 @@ export default function JournalEditor({
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [dirty, setDirty] = useState(false);
+  const [field, setField] = useState<string>(textFields[0][0]);
+  const [allFields, setAllFields] = useState(false);
 
   const set = (k: string, v: string) => {
     setDirty(true);
@@ -206,15 +208,48 @@ export default function JournalEditor({
       <section className="card" aria-label={t("Recap chi tiết")}>
         <div className="row wrap">
           <span className="lbl">{t("Recap chi tiết")}</span>
+          <div className="seg seg-xs" role="group" aria-label={t("Kiểu xem recap")}>
+            <button aria-pressed={!allFields} onClick={() => setAllFields(false)}>{t("Theo tab")}</button>
+            <button aria-pressed={allFields} onClick={() => setAllFields(true)}>{t("Tất cả")}</button>
+          </div>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14 }}>
-          {textFields.map(([k, label, ph]) => (
-            <label className="field" key={k} style={k === "lesson" || k === "next_levels" ? { gridColumn: "1 / -1" } : undefined}>
-              {t(label)}
-              <textarea value={day[k]} onChange={(e) => set(k, e.target.value)} placeholder={t(ph)} style={k === "lesson" ? { minHeight: 64 } : undefined} />
-            </label>
-          ))}
-        </div>
+        {allFields ? (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14 }}>
+            {textFields.map(([k, label, ph]) => (
+              <label className="field" key={k} style={k === "lesson" || k === "next_levels" ? { gridColumn: "1 / -1" } : undefined}>
+                {t(label)}
+                <textarea value={day[k]} onChange={(e) => set(k, e.target.value)} placeholder={t(ph)} style={k === "lesson" ? { minHeight: 64 } : undefined} />
+              </label>
+            ))}
+          </div>
+        ) : (
+          <>
+            <div className="tabs-line" role="tablist" aria-label={t("Phần recap")}>
+              {textFields.map(([k, label]) => (
+                <a
+                  key={k}
+                  href={`#${k}`}
+                  role="tab"
+                  aria-selected={k === field}
+                  className={k === field ? "on" : ""}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setField(k);
+                  }}
+                >
+                  {t(label)}
+                  {String(day[k] || "").trim() && <span className="long" aria-label={t("đã ghi")} style={{ marginLeft: 6 }}>●</span>}
+                </a>
+              ))}
+            </div>
+            {textFields.filter(([k]) => k === field).map(([k, label, ph]) => (
+              <label className="field" key={k}>
+                <span className="small dim">{t(ph)}</span>
+                <textarea value={day[k]} onChange={(e) => set(k, e.target.value)} aria-label={t(label)} style={{ minHeight: 200 }} />
+              </label>
+            ))}
+          </>
+        )}
       </section>
     </div>
   );

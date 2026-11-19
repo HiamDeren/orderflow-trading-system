@@ -18,8 +18,17 @@ export async function generateMetadata({ params }: { params: Promise<{ symbol: s
 
 const HOUR: Record<string, string> = { bmo: "Trước mở cửa", amc: "Sau đóng cửa", dmh: "Trong phiên", "": "Chưa rõ giờ" };
 
-export default async function StockPage({ params }: { params: Promise<{ symbol: string }> }) {
+const TABS = [
+  ["over", "Tổng quan"],
+  ["fin", "Chỉ số"],
+  ["earn", "Earnings"],
+  ["news", "Tin"],
+] as const;
+
+export default async function StockPage({ params, searchParams }: { params: Promise<{ symbol: string }>; searchParams: Promise<{ tab?: string }> }) {
   const symbol = decodeURIComponent((await params).symbol).toUpperCase();
+  const tabQ = (await searchParams).tab;
+  const tab = TABS.some(([k]) => k === tabQ) ? tabQ! : "over";
   if (!SYMBOL_RE.test(symbol)) notFound();
   const { t } = await getT();
   const ui = await getUi();
@@ -135,6 +144,13 @@ export default async function StockPage({ params }: { params: Promise<{ symbol: 
         </div>
       )}
 
+      <nav className="tabs-line" aria-label={t("Mục của mã")}>
+        {TABS.map(([k, l]) => (
+          <Link key={k} href={`/stock/${symbol}${k === "over" ? "" : `?tab=${k}`}`} className={k === tab ? "on" : ""} aria-current={k === tab ? "page" : undefined} scroll={false}>{t(l)}</Link>
+        ))}
+      </nav>
+
+      {tab === "over" && (
       <div className="stock-top">
         <section className="card stock-chart" aria-label={t("Biểu đồ giá")}>
           <iframe title={`${symbol} chart`} src={tvSrc} loading="lazy" referrerPolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups" />
@@ -159,6 +175,9 @@ export default async function StockPage({ params }: { params: Promise<{ symbol: 
         </section>
       </div>
 
+      )}
+
+      {tab === "fin" && (
       <div className="stock-stats">
         {groups.map((g) => (
           <section className="card tight" key={g.title} aria-label={t(g.title)}>
@@ -175,6 +194,9 @@ export default async function StockPage({ params }: { params: Promise<{ symbol: 
         ))}
       </div>
 
+      )}
+
+      {tab === "earn" && (
       <div className="stock-charts">
         <section className="card" aria-label={t("EPS 4 quý gần nhất")}>
           <span className="lbl">{t("EPS 4 quý gần nhất · thực tế vs dự báo")}</span>
@@ -193,6 +215,9 @@ export default async function StockPage({ params }: { params: Promise<{ symbol: 
         </section>
       </div>
 
+      )}
+
+      {(tab === "over" || tab === "news") && (
       <div className="stock-bottom">
         <section className="card" aria-label={t("Hồ sơ công ty")}>
           <span className="lbl">{t("Hồ sơ công ty")}</span>
@@ -221,6 +246,7 @@ export default async function StockPage({ params }: { params: Promise<{ symbol: 
           )}
         </section>
       </div>
+      )}
     </>
   );
 }

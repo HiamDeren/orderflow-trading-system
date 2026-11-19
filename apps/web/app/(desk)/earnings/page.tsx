@@ -25,7 +25,7 @@ export default async function EarningsPage({ searchParams }: { searchParams: Pro
     <>
       <header className="page-head">
         <div>
-          <span className="lbl">{t("Tổng quan")}</span>
+          <span className="lbl">{t("Thị trường")}</span>
           <h1 className="h1">Earnings</h1>
         </div>
         <div className="hstack" style={{ gap: 6 }}>

@@ -163,3 +163,22 @@ export function fmtBig(v: number | null | undefined) {
   if (a >= 1e6) return (v / 1e6).toFixed(1) + "M";
   return v.toLocaleString("en-US", { maximumFractionDigits: 2 });
 }
+
+export type MiniQuote = { symbol: string; c: number; dp: number | null };
+
+// Giá nhiều mã một lúc (watchlist, Markets). Mỗi mã 1 lệnh /quote, cache 2 phút; mã lỗi thì bỏ qua.
+export async function getQuotes(symbols: string[], revalidate = 120): Promise<MiniQuote[]> {
+  if (!marketConfigured()) return [];
+  const out = await Promise.all(
+    symbols.map(async (symbol) => {
+      try {
+        const q = await call<Record<string, unknown>>(`/quote?symbol=${encodeURIComponent(symbol)}`, revalidate);
+        const c = n(q.c);
+        return c ? { symbol, c, dp: n(q.dp) } : null;
+      } catch {
+        return null;
+      }
+    }),
+  );
+  return out.filter((x): x is MiniQuote => !!x);
+}

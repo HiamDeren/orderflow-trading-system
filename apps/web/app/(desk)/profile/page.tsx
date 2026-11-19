@@ -35,7 +35,6 @@ export default async function ProfilePage() {
   ];
   const trade = [
     [t("Mã chính"), SETTINGS.symbol],
-    [t("Phiên trade"), SETTINGS.session],
     [t("Giới hạn lệnh / ngày"), String(SETTINGS.maxTradesPerDay)],
     [t("Giờ gửi plan"), SETTINGS.planSend],
   ];

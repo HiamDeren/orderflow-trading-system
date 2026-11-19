@@ -3,7 +3,7 @@
 Danh sách việc còn lại. Khi Deren nhắn "liệt kê các việc còn lại", trả lời từ file này.
 Hướng dài hạn: **web app cá nhân / dashboard** (xem [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md)).
 
-Cập nhật: 2026-11-18 (thêm mục Dashboard mới).
+Cập nhật: 2026-11-19 (Dashboard đợt 5 · ý tưởng v2).
 
 ## Đã xong
 - [x] Trade Plan · Composite × pRTH × OVN là system chính (2026-11-17): gộp Plan Builder cổ điển + Testing plan thành trang `plan.html`, Plan Builder vẽ ảnh TPO kèm plan chữ, copy ảnh.
@@ -98,6 +98,14 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [x] Sidebar thu gọn: logo không bị cắt; chọn múi giờ nhanh ở sidebar, thanh trên mobile, Calendar.
 - [x] Knowledge: 4 khoá cũ (TPO Level, Trade Plan, Orderflow Tools, Trắc nghiệm) mở trong layout mới (D45), các bài trong 3 tab trỏ thẳng vào chương.
 - [ ] Áp migration `20261118120000_journal_images` (chờ Deren).
+
+**Đợt 5 (2026-11-19, code theo canvas v2):**
+- [x] Shell v2 (D47): thanh trên có đồng hồ NY, tin đỏ kế tiếp + đếm ngược, Ctrl/Cmd+K mở command palette; mobile có thanh tab dưới (Dashboard / Calendar / Markets / Journal / Thêm). Bỏ chia session NY AM / trước / sau phiên.
+- [x] Dashboard: watchlist 8 mã, earnings tuần, news + journal 5 ngày gần nhất; plan dạng thang level theo tỉ lệ giá.
+- [x] Trang **Markets** (D46): Tổng quan (chỉ số, heatmap sector, top tăng / giảm, heatmap NQ), Stocks theo sector, Crypto (CoinGecko).
+- [x] Calendar tuần dạng cột theo ngày + khung chi tiết tin; News có cột lọc chủ đề / mã; Earnings bấm mã mở ngăn tóm tắt (`/api/stock/summary`); trang mã chia tab Tổng quan / Tài chính / Earnings / Tin; recap Journal chia tab.
+- [ ] Deren thêm `COINGECKO_API_KEY` (Demo, Production + Preview) để bật tab Crypto.
+- [ ] Dọn chữ NY AM còn trong các board v1 của canvas (tuỳ chọn).
 
 **Còn lại:**
 - [ ] Knowledge: Deren tổng hợp nội dung AMT / Context / Entry; port dần `levels.html`, `tools.html`, quiz vào Next.js.

@@ -5,30 +5,42 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { Owner } from "@/lib/auth";
 import Icon from "./Icon";
+import LangSwitch from "./LangSwitch";
+import Palette from "./Palette";
+import Topbar, { type NextEvent } from "./Topbar";
 import TzPicker from "./TzPicker";
 import { useUi } from "./Ui";
 
-type Item = { label: string; href: string; icon: string; soon?: boolean; match?: string[] };
+type Item = { label: string; href: string; icon: string; soon?: boolean; exact?: boolean; also?: string[] };
 const GROUPS: { name: string; items: Item[] }[] = [
   {
-    name: "Tổng quan",
+    name: "Thị trường",
     items: [
       { label: "Dashboard", href: "/dashboard", icon: "dashboard" },
       { label: "Calendar", href: "/calendar", icon: "calendar" },
       { label: "News", href: "/news", icon: "news" },
       { label: "Earnings", href: "/earnings", icon: "earnings" },
-      { label: "Stocks", href: "/stock", icon: "stock" },
+      { label: "Markets", href: "/markets", icon: "stock", also: ["/stock"] },
     ],
   },
   {
     name: "Giao dịch",
     items: [
       { label: "Trade Plan", href: "/trade-plan", icon: "plan" },
-      { label: "Journal", href: "/journal", icon: "journal" },
+      { label: "Journal", href: "/journal", icon: "journal", exact: true },
+      { label: "PnL", href: "/journal/pnl", icon: "pnl" },
     ],
   },
-  { name: "Kiến thức", items: [{ label: "Knowledge", href: "/knowledge", icon: "knowledge" }] },
+  { name: "Học", items: [{ label: "Knowledge", href: "/knowledge", icon: "knowledge" }] },
   { name: "Sắp có", items: [{ label: "Options", href: "", icon: "options", soon: true }] },
+];
+
+// Thanh tab dưới đáy trên mobile
+const TABS: Item[] = [
+  { label: "Dashboard", href: "/dashboard", icon: "dashboard" },
+  { label: "Calendar", href: "/calendar", icon: "calendar" },
+  { label: "Markets", href: "/markets", icon: "stock", also: ["/stock"] },
+  { label: "Journal", href: "/journal", icon: "journal" },
 ];
 
 export function Avatar({ owner, large }: { owner: Owner; large?: boolean }) {
@@ -44,21 +56,25 @@ export function Avatar({ owner, large }: { owner: Owner; large?: boolean }) {
   );
 }
 
-export function LangSwitch() {
-  const { lang, setLang, t } = useUi();
-  return (
-    <div className="seg seg-xs" role="group" aria-label={t("Ngôn ngữ")}>
-      <button aria-pressed={lang === "vi"} onClick={() => setLang("vi")}>VI</button>
-      <button aria-pressed={lang === "en"} onClick={() => setLang("en")}>EN</button>
-    </div>
-  );
-}
+export { LangSwitch };
 
-export default function Shell({ owner, children }: { owner: Owner; children: React.ReactNode }) {
+export default function Shell({ owner, events, children }: { owner: Owner; events: NextEvent[]; children: React.ReactNode }) {
   const path = usePathname();
   const { side, setSide, t } = useUi();
   const [drawer, setDrawer] = useState(false);
+  const [pal, setPal] = useState(false);
   useEffect(() => setDrawer(false), [path]);
+  // Ctrl / Cmd + K mở tìm nhanh
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setPal((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
   useEffect(() => {
     document.body.style.overflow = drawer ? "hidden" : "";
     return () => {
@@ -66,7 +82,8 @@ export default function Shell({ owner, children }: { owner: Owner; children: Rea
     };
   }, [drawer]);
 
-  const active = (it: Item) => !!it.href && (path === it.href || path.startsWith(it.href + "/"));
+  const hit = (h: string, exact?: boolean) => path === h || (!exact && path.startsWith(h + "/"));
+  const active = (it: Item) => !!it.href && (hit(it.href, it.exact) || !!it.also?.some((h) => hit(h)));
   const current = GROUPS.flatMap((g) => g.items).find(active);
 
   return (
@@ -76,8 +93,10 @@ export default function Shell({ owner, children }: { owner: Owner; children: Rea
           <Icon name="menu" />
         </button>
         <span className="mtop-title">{current ? t(current.label) : "Deren Desk"}</span>
+        <button className="icon-btn" aria-label={t("Tìm nhanh")} onClick={() => setPal(true)}>
+          <Icon name="search" size={18} />
+        </button>
         <TzPicker />
-        <LangSwitch />
       </header>
       <div className="scrim" onClick={() => setDrawer(false)} aria-hidden="true" />
 
@@ -88,7 +107,7 @@ export default function Shell({ owner, children }: { owner: Owner; children: Rea
               <span className="brand-mark" aria-hidden="true">D</span>
               <span className="nl brand-text">
                 <span style={{ fontWeight: 700, fontSize: 15 }}>Deren Desk</span>
-                <span className="small dim">NQ · NY AM</span>
+                <span className="small dim">NQ futures</span>
               </span>
             </Link>
             <button
@@ -153,7 +172,24 @@ export default function Shell({ owner, children }: { owner: Owner; children: Rea
         </div>
       </nav>
 
-      <main className="main">{children}</main>
+      <div className="content">
+        <Topbar events={events} onSearch={() => setPal(true)} />
+        <main className="main">{children}</main>
+      </div>
+
+      <nav className="mtabs" aria-label={t("Điều hướng nhanh")}>
+        {TABS.map((it) => (
+          <Link key={it.href} href={it.href} className={active(it) ? "on" : ""} aria-current={active(it) ? "page" : undefined}>
+            <Icon name={it.icon} size={20} />
+            <span>{t(it.label)}</span>
+          </Link>
+        ))}
+        <button onClick={() => setDrawer(true)} aria-label={t("Mở menu")}>
+          <Icon name="menu" size={20} />
+          <span>{t("Thêm")}</span>
+        </button>
+      </nav>
+      <Palette open={pal} onClose={() => setPal(false)} />
     </div>
   );
 }

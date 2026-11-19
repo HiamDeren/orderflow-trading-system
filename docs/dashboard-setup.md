@@ -32,7 +32,8 @@ Chỉ **một** tài khoản Discord (ID trong `OWNER_DISCORD_ID`) vào được
 | `OWNER_DISCORD_ID` | Discord User ID của Deren | như trên |
 | `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `PLAN_TOKEN`, `DISCORD_WEBHOOK_TRADE_PLAN` | đã có | giữ nguyên |
 | `ECON_CALENDAR_URL` | (tuỳ chọn) nguồn lịch khác | mặc định feed tuần hiện tại của ForexFactory |
-| `FINNHUB_API_KEY` | key miễn phí ở https://finnhub.io/register (loại **Secret**) | Production + Preview · cần cho News và Earnings |
+| `FINNHUB_API_KEY` | key miễn phí ở https://finnhub.io/register (loại **Secret**) | Production + Preview · cần cho News, Earnings, Stocks, Markets |
+| `COINGECKO_API_KEY` | key Demo miễn phí ở https://www.coingecko.com/en/developers/dashboard | Production + Preview · cần cho tab Crypto ở Markets |
 
 Biến `NEXT_PUBLIC_*` được nhúng lúc build: đổi xong phải **Redeploy**.
 

@@ -1,6 +1,6 @@
 "use client";
 import { TZS } from "@/lib/prefs";
-import { LangSwitch } from "../_components/Sidebar";
+import LangSwitch from "../_components/LangSwitch";
 import { useUi } from "../_components/Ui";
 
 export default function DisplaySettings() {

@@ -1,7 +1,7 @@
 // Thiết lập giao dịch cố định (hiện ở trang Profile). Đổi ở đây, không lưu database.
 export const SETTINGS = {
   symbol: "NQ",
-  session: "NY AM · 09:30–11:30 ET",
+
   maxTradesPerDay: 3,
   planSend: "09:29 ET · 21:29 VN",
   displayTz: "ET + VN",

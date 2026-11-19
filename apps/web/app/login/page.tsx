@@ -38,7 +38,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             <span className="dim">{t("Recap mỗi ngày.")}</span>
           </h1>
           <div className="facts" style={{ maxWidth: 460 }}>
-            <div><span className="muted">{t("Phiên chính")}</span><span className="mono">NY AM · 09:30–11:30 ET</span></div>
+            <div><span className="muted">{t("Thị trường")}</span><span className="mono">NQ futures</span></div>
             <div><span className="muted">{t("Khung plan")}</span><span className="mono">Composite × pRTH × OVN</span></div>
             <div><span className="muted">{t("Giới hạn")}</span><span className="mono">{t("2–3 lệnh / ngày")}</span></div>
           </div>

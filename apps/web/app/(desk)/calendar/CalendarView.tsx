@@ -2,9 +2,9 @@
 import { useMemo, useState } from "react";
 import type { EconEvent } from "@/lib/econ";
 import { CURRENCIES, IMPACTS, IMPACT_LABEL, IMPACT_RANK, matches, prefsCookie, type EconPrefs, type Impact } from "@/lib/econ-prefs";
-import { DOW, MON_HEAD } from "@/lib/i18n";
+import { DOW, DOW_SHORT, MON_HEAD } from "@/lib/i18n";
 import { addDays, dowOf, isWeekday as i5, monthRange, viDayMonth } from "@/lib/time";
-import EventRow, { TzHead } from "../_components/EventRow";
+import EventRow, { TzHead, nums } from "../_components/EventRow";
 import { useUi } from "../_components/Ui";
 
 export default function CalendarView({ events, today, initialDay, initialPrefs }: { events: EconEvent[]; today: string; initialDay: string; initialPrefs: EconPrefs }) {
@@ -12,6 +12,7 @@ export default function CalendarView({ events, today, initialDay, initialPrefs }
   const [day, setDay] = useState(initialDay);
   const [prefs, setPrefsState] = useState<EconPrefs>(initialPrefs);
   const [mode, setMode] = useState<"day" | "week">("day");
+  const [pick, setPick] = useState<EconEvent | null>(null);
   const month = day.slice(0, 7);
 
   const setPrefs = (p: EconPrefs) => {
@@ -140,18 +141,48 @@ export default function CalendarView({ events, today, initialDay, initialPrefs }
                 </span>
                 <span className="mono small dim"><TzHead /> · {t("Thực tế / Dự báo / Trước")}</span>
               </div>
-              {week.map((d) => {
-                const evs = byDay.get(d) || [];
-                return (
-                  <section key={d} className={"wk-day" + (d === today ? " today" : "")} aria-label={`${DOW[lang][dowOf(d)]} ${viDayMonth(d)}`}>
-                    <button className="wk-day-head" onClick={() => { setDay(d); setMode("day"); }} title={t("Xem riêng ngày này")}>
-                      <span>{DOW[lang][dowOf(d)]} · {viDayMonth(d)}{d === today ? ` · ${t("hôm nay")}` : ""}</span>
-                      <span className="dim small">{t("{n} tin", { n: evs.length })}</span>
-                    </button>
-                    {evs.length ? evs.map((e) => <EventRow key={e.id} e={e} />) : <p className="small faint" style={{ padding: "6px 12px" }}>{hasData.has(d) ? t("Không có tin khớp bộ lọc.") : t("Ngoài tuần dữ liệu.")}</p>}
-                  </section>
-                );
-              })}
+              <div className="wk-cols" style={{ gridTemplateColumns: `repeat(${week.length}, minmax(150px, 1fr))` }}>
+                {week.map((d) => {
+                  const evs = byDay.get(d) || [];
+                  return (
+                    <section key={d} className={"wk-col" + (d === today ? " today" : "")} aria-label={`${DOW[lang][dowOf(d)]} ${viDayMonth(d)}`}>
+                      <button className="wk-col-head" onClick={() => { setDay(d); setMode("day"); }} title={t("Xem riêng ngày này")}>
+                        <b>{DOW_SHORT[lang][dowOf(d)]} <span className="mono">{d.slice(8)}</span></b>
+                        <span className="small dim">{evs.length}</span>
+                      </button>
+                      {evs.length ? (
+                        evs.map((e) => (
+                          <button key={e.id} className={"wk-ev" + (pick?.id === e.id ? " on" : "")} onClick={() => setPick(e)} aria-pressed={pick?.id === e.id}>
+                            <span className={"bar imp-" + e.impact} aria-hidden="true" />
+                            <span className="wk-ev-b">
+                              <span className="mono small"><b>{e.allDay ? t("Cả ngày") : e.timeLocal}</b>{!e.allDay && e.timeLocal !== e.timeEt && <span className="dim"> {e.timeEt} ET</span>}</span>
+                              <span className="wk-ev-n">{e.country !== "USD" && <span className="mono dim">{e.country} </span>}{e.title}</span>
+                              <span className="mono small dim">{nums(e)}</span>
+                            </span>
+                          </button>
+                        ))
+                      ) : (
+                        <p className="small faint" style={{ padding: "4px 6px" }}>{hasData.has(d) ? t("Không có tin") : "—"}</p>
+                      )}
+                    </section>
+                  );
+                })}
+              </div>
+              {pick && (
+                <div className="wk-detail">
+                  <span className={"bar imp-" + pick.impact} aria-hidden="true" />
+                  <div className="stack" style={{ gap: 2, flex: "1 1 220px" }}>
+                    <span className="lbl">{DOW[lang][dowOf(pick.dateLocal)]} · {viDayMonth(pick.dateLocal)} · {pick.timeLocal} · {pick.timeEt} ET · {pick.country}</span>
+                    <b style={{ fontSize: 16 }}>{pick.title}</b>
+                  </div>
+                  <div className="hstack" style={{ gap: 20 }}>
+                    <span className="stack" style={{ gap: 2 }}><span className="lbl">{t("Thực tế")}</span><b className="mono">{pick.actual || "—"}</b></span>
+                    <span className="stack" style={{ gap: 2 }}><span className="lbl">{t("Dự báo")}</span><b className="mono">{pick.forecast || "—"}</b></span>
+                    <span className="stack" style={{ gap: 2 }}><span className="lbl">{t("Trước")}</span><b className="mono">{pick.previous || "—"}</b></span>
+                  </div>
+                  <button className="icon-btn" aria-label={t("Đóng")} onClick={() => setPick(null)}>✕</button>
+                </div>
+              )}
             </section>
           )}
       </div>

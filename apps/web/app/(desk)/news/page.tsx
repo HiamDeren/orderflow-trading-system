@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic";
 
 const LABEL: Record<NewsCategory, string> = { general: "Thị trường", forex: "Forex", merger: "M&A" };
 const STEP = 20;
+const WATCH = ["NVDA", "MSFT", "AAPL", "AMZN", "META", "AVGO", "GOOGL", "TSLA"];
 const MAX = 100;
 
 export default async function NewsPage({ searchParams }: { searchParams: Promise<{ cat?: string; id?: string; n?: string; sym?: string }> }) {
@@ -41,17 +42,10 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
     <>
       <header className="page-head">
         <div>
-          <span className="lbl">{t("Tổng quan")}</span>
+          <span className="lbl">{t("Thị trường")}</span>
           <h1 className="h1">News</h1>
         </div>
-        <nav className="seg" aria-label={t("Chủ đề tin")}>
-          {NEWS_CATEGORIES.map((c) => (
-            <Link key={c} href={`/news?cat=${c}`} aria-current={!sym && c === category ? "page" : undefined} className={"seg-link" + (!sym && c === category ? " on" : "")}>
-              {t(LABEL[c])}
-            </Link>
-          ))}
-          {sym && <Link href={`/stock/${sym}`} className="seg-link on" aria-current="page">{sym}</Link>}
-        </nav>
+        {sym && <Link className="btn sm" href={`/stock/${sym}`}>{t("Trang {s}", { s: sym })} ›</Link>}
       </header>
       {!res.configured ? (
         <NotConfigured what="News" />
@@ -61,6 +55,18 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
         <p className="small dim">{t("Chưa có tin.")}</p>
       ) : (
         <div className={"news-split fit" + (sp.id ? " reading" : "")}>
+          <aside className="news-filter" aria-label={t("Bộ lọc tin")}>
+            <span className="lbl">{t("Chủ đề")}</span>
+            {NEWS_CATEGORIES.map((c) => (
+              <Link key={c} href={`/news?cat=${c}`} className={"nf-link" + (!sym && c === category ? " on" : "")} aria-current={!sym && c === category ? "page" : undefined}>{t(LABEL[c])}</Link>
+            ))}
+            <span className="lbl" style={{ marginTop: 14 }}>{t("Theo mã")}</span>
+            <div className="chips">
+              {WATCH.map((x) => (
+                <Link key={x} href={`/news?sym=${x}`} className={"chip mono" + (sym === x ? " on" : "")} aria-current={sym === x ? "page" : undefined}>{x}</Link>
+              ))}
+            </div>
+          </aside>
           <section className="card news-list tight" aria-label={t("Danh sách tin")}>
             {shown.map((n) => <NewsRow key={n.id} n={n} now={now} href={q({ id: n.id, n: nParam })} active={n.id === sp.id} />)}
             {res.items.length > count && (
@@ -94,6 +100,13 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
                     {article?.ok && <span className="dim">· {t("{n} phút đọc", { n: Math.max(1, Math.round(article.words / 220)) })}</span>}
                   </span>
                   <h2 className="reader-title">{sel.headline}</h2>
+                  {sel.related && (
+                    <div className="chips">
+                      {sel.related.split(",").map((x) => x.trim().toUpperCase()).filter((x) => /^[A-Z][A-Z0-9.\-]{0,9}$/.test(x)).slice(0, 6).map((x) => (
+                        <Link key={x} href={`/stock/${x}`} className="chip mono sm-chip">{x} ↗</Link>
+                      ))}
+                    </div>
+                  )}
                 </header>
                 {article?.ok ? (
                   <div className="prose" dangerouslySetInnerHTML={{ __html: article.html }} />

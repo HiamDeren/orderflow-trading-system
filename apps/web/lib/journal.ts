@@ -6,7 +6,7 @@ import { monthRange } from "@/lib/time";
 
 export const TEXT_FIELDS = [
   ["context", "Context · TPO", "Mở cửa so với value, IB, single prints, cấu trúc profile"],
-  ["session_story", "Diễn biến phiên", "Mở cửa, IB, mở rộng range, các nhịp chính trong NY AM"],
+  ["session_story", "Diễn biến phiên", "Mở cửa, IB, mở rộng range, các nhịp chính trong phiên"],
   ["plan_vs_actual", "Plan so với thực tế", "Bias, kịch bản chính, điểm đổi ý: cái nào đúng, cái nào sai"],
   ["trade_review", "Chấm từng lệnh", "Lệnh 1: level, trigger, quản lý, thoát · điểm A/B/C"],
   ["orderflow", "Footprint · DOM · tape", "Absorption, imbalance, CVD, lệnh lớn trên DOM tại điểm vào"],
