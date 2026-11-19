@@ -6,6 +6,7 @@ export const metadata: Metadata = { title: "Đăng nhập" };
 
 const MESSAGES: Record<string, { text: string; ok?: boolean }> = {
   denied: { text: "Tài khoản Discord này không có quyền vào. Phiên vừa tạo đã bị huỷ." },
+  pending: { text: "Đã gửi yêu cầu vào dashboard. Khi chủ sở hữu duyệt, bấm đăng nhập lại.", ok: true },
   config: { text: "Server chưa cấu hình đăng nhập (Supabase Auth / OWNER_DISCORD_ID). Xem docs/dashboard-setup.md." },
   exchange: { text: "Discord chưa xác nhận được phiên đăng nhập. Thử lại." },
   code: { text: "Thiếu mã xác nhận từ Discord. Thử lại." },

@@ -33,10 +33,12 @@ Chỉ **một** tài khoản Discord (ID trong `OWNER_DISCORD_ID`) vào được
 | `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `PLAN_TOKEN`, `DISCORD_WEBHOOK_TRADE_PLAN` | đã có | giữ nguyên |
 | `ECON_CALENDAR_URL` | (tuỳ chọn) nguồn lịch khác | mặc định feed tuần hiện tại của ForexFactory |
 | `FINNHUB_API_KEY` | key miễn phí ở https://finnhub.io/register (loại **Secret**) | Production + Preview · cần cho News, Earnings, Stocks, Markets |
-| `DESK_GUEST_DISCORD_IDS` | (tuỳ chọn) Discord ID của khách, cách nhau bằng dấu phẩy, ví dụ `111...,222...` | Production + Preview · khách chỉ xem Calendar / News / Earnings / Markets / Stock / Knowledge (D48). Lấy ID: Discord → Settings → Advanced → bật Developer Mode → chuột phải tên → Copy User ID. Gỡ ID + redeploy là khách mất quyền |
 | `COINGECKO_API_KEY` | key Demo miễn phí ở https://www.coingecko.com/en/developers/dashboard | Production + Preview · cần cho tab Crypto ở Markets |
 
 Biến `NEXT_PUBLIC_*` được nhúng lúc build: đổi xong phải **Redeploy**.
+
+## 3b. Cho bạn vào test (khách, D48)
+Không cần biến môi trường. Bạn của Deren mở `/login`, bấm **Tiếp tục với Discord** → bị từ chối nhưng vào hàng chờ. Deren vào **Profile → Khách truy cập** bấm **Duyệt**, người đó đăng nhập lại là vào được. Cũng có thể thêm thẳng bằng Discord User ID (Discord → Settings → Advanced → Developer Mode → chuột phải tên → Copy User ID). **Gỡ quyền** có hiệu lực ngay và xoá user Supabase của khách. Khách chỉ xem Dashboard (không plan / journal), Calendar, News, Earnings, Markets, Stock, Knowledge. Cần bảng `trading.desk_members` (migration `20261119070000_desk_members`).
 
 ## 4. Database
 

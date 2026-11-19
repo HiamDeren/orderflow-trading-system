@@ -9,8 +9,6 @@ const DESK = ["/dashboard", "/calendar", "/news", "/earnings", "/stock", "/marke
 const OWNER_ONLY = ["/trade-plan", "/journal"];
 const OWNER_FLAG = "desk_owner";
 const GUEST_FLAG = "desk_guest";
-// Giống lib/env.ts guestDiscordIds (proxy không import lib để giữ gọn)
-const guestIds = () => (process.env.DESK_GUEST_DISCORD_IDS || "").split(/[\s,;]+/).filter((x) => /^\d{5,25}$/.test(x));
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
@@ -42,7 +40,8 @@ export async function proxy(request: NextRequest) {
   const claims = data?.claims as { app_metadata?: Record<string, unknown> } | undefined;
   const owner = claims?.app_metadata?.[OWNER_FLAG] === true;
   const g = claims?.app_metadata?.[GUEST_FLAG];
-  const guest = !owner && typeof g === "string" && guestIds().includes(g);
+  // Proxy chỉ đọc cờ trong JWT để điều hướng; server (requireViewer) kiểm khách còn được duyệt trong database
+  const guest = !owner && typeof g === "string" && /^\d{5,25}$/.test(g);
   const signedIn = owner || guest;
 
   const withCookies = (res: NextResponse) => {
@@ -58,7 +57,7 @@ export async function proxy(request: NextRequest) {
   }
   if (guest && OWNER_ONLY.some((p) => path === p || path.startsWith(p + "/"))) return withCookies(NextResponse.redirect(new URL("/dashboard", request.url)));
   if (path === "/") return withCookies(NextResponse.redirect(new URL(signedIn ? "/dashboard" : "/login", request.url)));
-  if (path === "/login" && signedIn) return withCookies(NextResponse.redirect(new URL("/dashboard", request.url)));
+  if (path === "/login" && owner) return withCookies(NextResponse.redirect(new URL("/dashboard", request.url)));
   return response;
 }
 
@@ -78,5 +77,6 @@ export const config = {
     "/profile/:path*",
     "/api/journal/:path*",
     "/api/stock/:path*",
+    "/api/members/:path*",
   ],
 };

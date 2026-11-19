@@ -1,17 +1,19 @@
-// Đăng nhập: chủ sở hữu (OWNER_DISCORD_ID) + khách mời (DESK_GUEST_DISCORD_IDS, D48).
+// Đăng nhập: chủ sở hữu (OWNER_DISCORD_ID) + khách được duyệt trong bảng trading.desk_members (D48).
 //
 // Cách kiểm:
 //  1. /auth/callback đổi code lấy phiên, đọc identity Discord (auth.identities, người dùng không sửa được),
 //     so với OWNER_DISCORD_ID. Đúng → server đặt app_metadata.desk_owner = true (chỉ secret key ghi được) rồi làm mới phiên.
 //     Sai → đăng xuất + xoá user vừa tạo.
 //  2. Mọi trang / API của dashboard đọc JWT (getClaims, có kiểm chữ ký) và chỉ cho qua khi app_metadata.desk_owner = true.
-//  Khách: callback đặt app_metadata.desk_guest = <Discord ID>; mỗi request kiểm ID đó còn trong DESK_GUEST_DISCORD_IDS
-//  (bỏ ID khỏi biến + redeploy là khách mất quyền ngay). Khách chỉ xem phần thị trường; getOwner() / requireOwner()
-//  vẫn chỉ trả về chủ sở hữu nên mọi API journal / plan giữ nguyên mức chặn.
+//  Khách: người lạ đăng nhập → callback ghi yêu cầu 'pending' vào desk_members rồi từ chối; chủ sở hữu duyệt ở Profile.
+//  Khách đã duyệt: callback đặt app_metadata.desk_guest = <Discord ID>; mỗi request server kiểm ID đó còn status 'guest'
+//  (lib/members.ts, cache 30 giây). Khách chỉ xem phần thị trường; getOwner() / requireOwner() vẫn chỉ trả về chủ sở hữu
+//  nên mọi API journal / plan giữ nguyên mức chặn.
 //  Không dùng user_metadata để phân quyền (người dùng tự sửa được); user_metadata chỉ để hiện tên, avatar.
 import { redirect } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
-import { authConfigured, guestDiscordIds, ownerDiscordId, secretKey, supabaseUrl } from "@/lib/env";
+import { authConfigured, ownerDiscordId, secretKey, supabaseUrl } from "@/lib/env";
+import { isGuest } from "@/lib/members";
 import { supabaseServer } from "@/lib/supabase/server";
 
 export const OWNER_FLAG = "desk_owner";
@@ -38,22 +40,22 @@ function str(v: unknown) {
 export type Role = "owner" | "guest";
 export type Viewer = Owner & { role: Role };
 
-export function roleFromClaims(c: Claims | null | undefined): Role | null {
+async function roleFromClaims(c: Claims | null | undefined): Promise<Role | null> {
   if (!c?.sub) return null;
   if (c.app_metadata?.[OWNER_FLAG] === true) return "owner";
   const g = c.app_metadata?.[GUEST_FLAG];
-  return typeof g === "string" && guestDiscordIds().includes(g) ? "guest" : null;
-}
-
-export function viewerFromClaims(c: Claims | null | undefined): Viewer | null {
-  const role = roleFromClaims(c);
-  if (!c || !role) return null;
-  return { ...profileOf(c, role === "owner" ? "Deren" : "Guest"), role };
+  return typeof g === "string" && (await isGuest(g)) ? "guest" : null;
 }
 
 export function ownerFromClaims(c: Claims | null | undefined): Owner | null {
   if (!c?.sub || c.app_metadata?.[OWNER_FLAG] !== true) return null;
   return profileOf(c, "Deren");
+}
+
+// Tên / avatar Discord của user vừa đăng nhập (chỉ để hiển thị, không dùng phân quyền).
+export function profileOfUser(user: User) {
+  const p = profileOf({ sub: user.id, user_metadata: user.user_metadata }, "");
+  return { name: p.name || null, handle: p.handle, avatar: p.avatar };
 }
 
 function profileOf(c: Claims, fallback: string): Owner {
@@ -87,7 +89,10 @@ export async function getOwner(): Promise<Owner | null> {
 
 // Chủ sở hữu hoặc khách (trang thị trường).
 export async function getViewer(): Promise<Viewer | null> {
-  return viewerFromClaims(await claims());
+  const c = await claims();
+  const role = await roleFromClaims(c);
+  if (!c || !role) return null;
+  return { ...profileOf(c, role === "owner" ? "Deren" : "Guest"), role };
 }
 
 export async function requireViewer(next = "/dashboard"): Promise<Viewer> {
@@ -117,12 +122,6 @@ export function discordIdsOf(user: User): string[] {
 export function isOwnerUser(user: User) {
   const owner = ownerDiscordId();
   return !!owner && discordIdsOf(user).includes(owner);
-}
-
-// Discord ID khớp danh sách khách (null nếu không phải khách).
-export function guestIdOf(user: User): string | null {
-  const list = guestDiscordIds();
-  return discordIdsOf(user).find((id) => list.includes(id)) ?? null;
 }
 
 // Gọi Admin API của Supabase Auth bằng secret key (chỉ chạy ở server).

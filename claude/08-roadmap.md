@@ -106,8 +106,8 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [x] Calendar tuần dạng cột theo ngày + khung chi tiết tin; News có cột lọc chủ đề / mã; Earnings bấm mã mở ngăn tóm tắt (`/api/stock/summary`); trang mã chia tab Tổng quan / Tài chính / Earnings / Tin; recap Journal chia tab.
 - [ ] Deren thêm `COINGECKO_API_KEY` (Demo, Production + Preview) để bật tab Crypto.
 - [ ] Dọn chữ NY AM còn trong các board v1 của canvas (tuỳ chọn).
-- [x] Khách mời (D48): `DESK_GUEST_DISCORD_IDS`, khách chỉ xem phần thị trường + Knowledge.
-- [ ] Deren thêm `DESK_GUEST_DISCORD_IDS` (Production + Preview) với Discord ID của bạn test, redeploy.
+- [x] Khách (D48): bảng `trading.desk_members`, người lạ đăng nhập vào hàng chờ, duyệt / gỡ / thêm bằng ID ở Profile; khách chỉ xem phần thị trường + Knowledge.
+- [ ] Áp migration `20261119070000_desk_members` lên Supabase (chờ Deren "ok áp migration"; chưa áp thì chỉ chủ sở hữu vào được, Profile báo bảng chưa có).
 
 **Còn lại:**
 - [ ] Knowledge: Deren tổng hợp nội dung AMT / Context / Entry; port dần `levels.html`, `tools.html`, quiz vào Next.js.

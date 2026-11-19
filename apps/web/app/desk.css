@@ -703,3 +703,9 @@ a.mk-tile:hover { border-color: var(--accent-ring); color: var(--text); }
 @media (max-width: 860px) { .topbar { display: none; } .mtabs { display: grid; } }
 /* Khách (D48): Dashboard không có cột plan / journal */
 .dash-grid.solo, .dash-row.solo { grid-template-columns: minmax(0, 1fr); }
+/* Khách truy cập (Profile, D48) */
+.members { gap: 14px; }
+.mem-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line-2); flex-wrap: wrap; }
+.mem-av { width: 34px; height: 34px; border-radius: 50%; flex: none; object-fit: cover; display: grid; place-items: center; background: var(--side); color: var(--accent); font-size: 12px; font-weight: 700; }
+.mem-add { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto; gap: 8px; }
+@media (max-width: 640px) { .mem-add { grid-template-columns: minmax(0, 1fr); } }

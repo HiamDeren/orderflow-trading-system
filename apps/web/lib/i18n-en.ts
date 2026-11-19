@@ -346,8 +346,8 @@ const EN: Record<string, string> = {
   "Thiếu key": "Key missing",
   "Lỗi nguồn": "Source error",
   "Bảo mật": "Security",
-  "Chủ sở hữu và khách trong DESK_GUEST_DISCORD_IDS được vào; khách chỉ xem phần thị trường. Token, key và webhook nằm trên Vercel, không hiện trên trang này.":
-    "The owner and guests listed in DESK_GUEST_DISCORD_IDS can sign in; guests only see the market pages. Tokens, keys and webhooks live on Vercel and are never shown here.",
+  "Chủ sở hữu và khách đã duyệt được vào; khách chỉ xem phần thị trường. Token, key và webhook nằm trên Vercel, không hiện trên trang này.":
+    "The owner and approved guests can sign in; guests only see the market pages. Tokens, keys and webhooks live on Vercel and are never shown here.",
   "Lần đăng nhập gần nhất": "Last sign-in",
   "Đã kết nối": "Connected",
   "Bấm “Mở bài gốc” để đọc trên trang nguồn.": "Use “Open original” to read it on the source site.",
@@ -569,5 +569,22 @@ const EN: Record<string, string> = {
   "Trang": "Page",
   "Khách": "Guest",
   "Tài khoản khách: xem Calendar, News, Earnings, Markets, Knowledge. Trade Plan và Journal chỉ chủ sở hữu.": "Guest account: Calendar, News, Earnings, Markets and Knowledge. Trade Plan and Journal are owner-only.",
+  "Đã gửi yêu cầu vào dashboard. Khi chủ sở hữu duyệt, bấm đăng nhập lại.": "Access request sent. Once the owner approves it, sign in again.",
+  "Khách truy cập": "Guest access",
+  "Làm mới": "Refresh",
+  "Người lạ bấm đăng nhập Discord sẽ vào hàng chờ. Duyệt xong, họ đăng nhập lại để vào. Khách chỉ xem phần thị trường và Knowledge.": "Anyone who signs in with Discord lands in this queue. Once approved, they sign in again to enter. Guests only see the market pages and Knowledge.",
+  "Bảng desk_members chưa có trên Supabase (chưa áp migration).": "The desk_members table is not on Supabase yet (migration not applied).",
+  "Chờ duyệt": "Pending",
+  "Không có yêu cầu mới.": "No new requests.",
+  "Chưa có khách.": "No guests yet.",
+  "Đã chặn": "Blocked",
+  "vào gần nhất": "last visit",
+  "Duyệt": "Approve",
+  "Gỡ quyền": "Revoke",
+  "Từ chối": "Decline",
+  "Discord User ID": "Discord User ID",
+  "Ghi chú (tuỳ chọn)": "Note (optional)",
+  "Ghi chú": "Note",
+  "Thêm khách": "Add guest",
 };
 export default EN;

@@ -9,6 +9,7 @@ import { SETTINGS } from "@/lib/settings";
 import { supabaseServer } from "@/lib/supabase/server";
 import { Avatar } from "../_components/Sidebar";
 import DisplaySettings from "./DisplaySettings";
+import MembersPanel from "./MembersPanel";
 
 export const metadata: Metadata = { title: "Profile" };
 export const dynamic = "force-dynamic";
@@ -86,7 +87,7 @@ export default async function ProfilePage() {
 
         <section className="card" aria-label={t("Bảo mật")}>
           <span className="lbl">{t("Bảo mật")}</span>
-          <p className="small muted">{isOwner ? t("Chủ sở hữu và khách trong DESK_GUEST_DISCORD_IDS được vào; khách chỉ xem phần thị trường. Token, key và webhook nằm trên Vercel, không hiện trên trang này.") : t("Tài khoản khách: xem Calendar, News, Earnings, Markets, Knowledge. Trade Plan và Journal chỉ chủ sở hữu.")}</p>
+          <p className="small muted">{isOwner ? t("Chủ sở hữu và khách đã duyệt được vào; khách chỉ xem phần thị trường. Token, key và webhook nằm trên Vercel, không hiện trên trang này.") : t("Tài khoản khách: xem Calendar, News, Earnings, Markets, Knowledge. Trade Plan và Journal chỉ chủ sở hữu.")}</p>
           <div className="row" style={{ fontSize: 14, minHeight: 40 }}>
             <span className="muted">{t("Lần đăng nhập gần nhất")}</span>
             <span className="mono">{lastSignIn ? new Date(lastSignIn).toLocaleString("en-GB", { timeZone: ui.tz, hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" }) + " " + tzShort(ui.tz) : "—"}</span>
@@ -94,6 +95,7 @@ export default async function ProfilePage() {
           <form action="/auth/logout?scope=global" method="post"><button className="btn danger">{t("Đăng xuất mọi thiết bị")}</button></form>
         </section>
       </div>
+      {isOwner && <MembersPanel />}
     </>
   );
 }
