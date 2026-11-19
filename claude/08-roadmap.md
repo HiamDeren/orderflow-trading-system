@@ -107,7 +107,8 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [ ] Deren thêm `COINGECKO_API_KEY` (Demo, Production + Preview) để bật tab Crypto.
 - [ ] Dọn chữ NY AM còn trong các board v1 của canvas (tuỳ chọn).
 - [x] Khách (D48): bảng `access.members` (schema riêng), người lạ đăng nhập vào hàng chờ, duyệt / gỡ / thêm bằng ID ở Profile; khách chỉ xem phần thị trường + Knowledge.
-- [ ] Áp migration `20261119070000_access_members` lên Supabase (chờ Deren "ok áp migration") + thêm `access` vào Exposed schemas (Dashboard → Integrations → Data API → Settings). Chưa xong thì chỉ chủ sở hữu vào được, Profile báo chưa đọc được bảng.
+- [x] Áp migration `20261119071248_access_members` lên Supabase (2026-11-19): schema `access` chỉ service_role dùng, RLS bật, anon / authenticated không có quyền.
+- [ ] Deren thêm `access` vào Exposed schemas (Dashboard → Integrations → Data API → Settings). Chưa thêm thì Profile báo chưa đọc được bảng, khách chưa vào được.
 
 **Còn lại:**
 - [ ] Knowledge: Deren tổng hợp nội dung AMT / Context / Entry; port dần `levels.html`, `tools.html`, quiz vào Next.js.
