@@ -28,7 +28,7 @@ export function countdown(ms: number) {
   return `${Math.floor(m / 60)}:${pad(m % 60)}`;
 }
 
-export default function Topbar({ events, onSearch }: { events: NextEvent[]; onSearch: () => void }) {
+export default function Topbar({ events, onSearch, guest = false }: { events: NextEvent[]; onSearch: () => void; guest?: boolean }) {
   const { t, tz } = useUi();
   const now = useNow();
   const next = now === null ? null : events.find((e) => e.ts > now - 60000) || null;
@@ -51,7 +51,7 @@ export default function Topbar({ events, onSearch }: { events: NextEvent[]; onSe
       <div className="tb-right">
         <button className="tb-search" onClick={onSearch} aria-label={t("Tìm nhanh")}>
           <Icon name="search" size={15} />
-          <span>{t("Mã, trang, ngày journal…")}</span>
+          <span>{guest ? t("Mã cổ phiếu, tên trang…") : t("Mã, trang, ngày journal…")}</span>
           <kbd className="mono">Ctrl K</kbd>
         </button>
         <TzPicker />

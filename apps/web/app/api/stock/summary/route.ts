@@ -1,12 +1,12 @@
 // GET /api/stock/summary?symbol=NVDA → tóm tắt mã cho ngăn bên phải ở Earnings (chỉ chủ sở hữu).
-import { getOwner } from "@/lib/auth";
+import { getViewer } from "@/lib/auth";
 import { marketConfigured } from "@/lib/market";
 import { SYMBOL_RE, getStock } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
-  if (!(await getOwner())) return Response.json({ error: "unauthorized" }, { status: 401 });
+  if (!(await getViewer())) return Response.json({ error: "unauthorized" }, { status: 401 });
   if (!marketConfigured()) return Response.json({ error: "Chưa có FINNHUB_API_KEY" }, { status: 503 });
   const symbol = (new URL(req.url).searchParams.get("symbol") || "").toUpperCase();
   if (!SYMBOL_RE.test(symbol)) return Response.json({ error: "symbol không hợp lệ" }, { status: 400 });

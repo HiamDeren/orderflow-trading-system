@@ -2,6 +2,11 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-19 · Khách mời (D48)
+- `lib/auth.ts`: `getViewer` / `requireViewer` (chủ sở hữu + khách), `requireOwner` đưa khách về `/dashboard`; callback đánh dấu `desk_guest`; proxy chặn khách ở `/trade-plan`, `/journal*`; thêm layout chỉ chủ sở hữu cho 2 trang này.
+- Khách: sidebar / tab mobile / palette ẩn Trade Plan, Journal, PnL; Dashboard không đọc plan / journal; Profile ẩn thiết lập giao dịch + kết nối.
+- Test mock: khách vào 9 trang thị trường (200), 3 trang giao dịch → `/dashboard`, `/api/journal` + `/api/plan` 401; khách bị gỡ khỏi danh sách → về `/login`; chủ sở hữu không đổi.
+
 ## 2026-11-19 · Dashboard đợt 5 (code ý tưởng canvas v2)
 - Shell v2: `Topbar`, `Palette` (Ctrl/Cmd+K), thanh tab mobile; bỏ session khỏi `lib/settings.ts`, `EventRow`, timeline (D47).
 - Markets mới (`lib/markets.ts`, `/markets`, D46); `/api/stock/summary` cho ngăn tóm tắt ở Earnings; proxy thêm `/markets`, `/api/stock`.

@@ -36,7 +36,9 @@ function parseDate(q: string): string | null {
   return `${y}-${String(mo).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 }
 
-export default function Palette({ open, onClose }: { open: boolean; onClose: () => void }) {
+const OWNER_ONLY = ["/trade-plan", "/journal", "/journal/pnl"];
+
+export default function Palette({ open, onClose, guest = false }: { open: boolean; onClose: () => void; guest?: boolean }) {
   const { t } = useUi();
   const router = useRouter();
   const [q, setQ] = useState("");
@@ -55,14 +57,15 @@ export default function Palette({ open, onClose }: { open: boolean; onClose: () 
     const s = q.trim();
     const f = fold(s);
     const out: Cmd[] = [];
-    const date = parseDate(s);
+    const date = guest ? null : parseDate(s);
     if (date) out.push({ id: "d", label: t("Journal ngày {d}", { d: date.split("-").reverse().join("/") }), hint: "Journal", icon: "journal", href: `/journal?date=${date}` });
     const sym = s.toUpperCase();
     if (/^[A-Z][A-Z0-9.\-]{0,9}$/.test(sym) && !date) out.push({ id: "s", label: t("Mở mã {s}", { s: sym }), hint: "Stock", icon: "stock", href: `/stock/${encodeURIComponent(sym)}` });
-    for (const p of PAGES) if (!f || fold(t(p.label)).includes(f) || p.keys.includes(f)) out.push({ id: p.href, label: t(p.label), hint: t("Trang"), icon: p.icon, href: p.href });
+    for (const p of PAGES) if (guest && OWNER_ONLY.includes(p.href)) continue;
+    else if (!f || fold(t(p.label)).includes(f) || p.keys.includes(f)) out.push({ id: p.href, label: t(p.label), hint: t("Trang"), icon: p.icon, href: p.href });
     if (s && !date) out.push({ id: "q", label: t("Tìm cổ phiếu “{q}”", { q: s }), hint: "Stocks", icon: "search", href: `/stock?q=${encodeURIComponent(s)}` });
     return out.slice(0, 9);
-  }, [q, t]);
+  }, [q, t, guest]);
 
   if (!open) return null;
   const go = (c?: Cmd) => {

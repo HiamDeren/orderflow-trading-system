@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import type { Owner } from "@/lib/auth";
+import type { Owner, Viewer } from "@/lib/auth";
 import Icon from "./Icon";
 import LangSwitch from "./LangSwitch";
 import Palette from "./Palette";
@@ -42,6 +42,9 @@ const TABS: Item[] = [
   { label: "Markets", href: "/markets", icon: "stock", also: ["/stock"] },
   { label: "Journal", href: "/journal", icon: "journal" },
 ];
+// Khách không thấy nhóm Giao dịch (Trade Plan / Journal / PnL)
+const GUEST_GROUPS = GROUPS.filter((g) => g.name !== "Giao dịch");
+const GUEST_TABS: Item[] = [...TABS.slice(0, 3), { label: "News", href: "/news", icon: "news" }];
 
 export function Avatar({ owner, large }: { owner: Owner; large?: boolean }) {
   const cls = "avatar" + (large ? " lg" : "");
@@ -58,7 +61,10 @@ export function Avatar({ owner, large }: { owner: Owner; large?: boolean }) {
 
 export { LangSwitch };
 
-export default function Shell({ owner, events, children }: { owner: Owner; events: NextEvent[]; children: React.ReactNode }) {
+export default function Shell({ owner, events, children }: { owner: Viewer; events: NextEvent[]; children: React.ReactNode }) {
+  const guest = owner.role === "guest";
+  const groups = guest ? GUEST_GROUPS : GROUPS;
+  const tabs = guest ? GUEST_TABS : TABS;
   const path = usePathname();
   const { side, setSide, t } = useUi();
   const [drawer, setDrawer] = useState(false);
@@ -84,7 +90,7 @@ export default function Shell({ owner, events, children }: { owner: Owner; event
 
   const hit = (h: string, exact?: boolean) => path === h || (!exact && path.startsWith(h + "/"));
   const active = (it: Item) => !!it.href && (hit(it.href, it.exact) || !!it.also?.some((h) => hit(h)));
-  const current = GROUPS.flatMap((g) => g.items).find(active);
+  const current = groups.flatMap((g) => g.items).find(active);
 
   return (
     <div className={"shell" + (side === "collapsed" ? " is-collapsed" : "") + (drawer ? " drawer-open" : "")}>
@@ -124,7 +130,7 @@ export default function Shell({ owner, events, children }: { owner: Owner; event
           </div>
 
           <div className="side-scroll">
-            {GROUPS.map((g) => (
+            {groups.map((g) => (
               <div className="nav-group" key={g.name}>
                 <span className="lbl nl">{t(g.name)}</span>
                 {g.items.map((it) =>
@@ -156,7 +162,7 @@ export default function Shell({ owner, events, children }: { owner: Owner; event
               <Avatar owner={owner} />
               <span className="nl me-text">
                 <span style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{owner.name}</span>
-                <span className="small dim">Profile</span>
+                <span className="small dim">{guest ? t("Khách") : "Profile"}</span>
               </span>
             </Link>
             <div className="nl side-tools">
@@ -173,12 +179,12 @@ export default function Shell({ owner, events, children }: { owner: Owner; event
       </nav>
 
       <div className="content">
-        <Topbar events={events} onSearch={() => setPal(true)} />
+        <Topbar events={events} onSearch={() => setPal(true)} guest={guest} />
         <main className="main">{children}</main>
       </div>
 
       <nav className="mtabs" aria-label={t("Điều hướng nhanh")}>
-        {TABS.map((it) => (
+        {tabs.map((it) => (
           <Link key={it.href} href={it.href} className={active(it) ? "on" : ""} aria-current={active(it) ? "page" : undefined}>
             <Icon name={it.icon} size={20} />
             <span>{t(it.label)}</span>
@@ -189,7 +195,7 @@ export default function Shell({ owner, events, children }: { owner: Owner; event
           <span>{t("Thêm")}</span>
         </button>
       </nav>
-      <Palette open={pal} onClose={() => setPal(false)} />
+      <Palette open={pal} onClose={() => setPal(false)} guest={guest} />
     </div>
   );
 }

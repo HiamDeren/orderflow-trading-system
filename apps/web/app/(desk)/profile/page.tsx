@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { requireOwner } from "@/lib/auth";
+import { requireViewer } from "@/lib/auth";
 import { dbReady } from "@/lib/db";
 import { getEconWeek } from "@/lib/econ";
 import { marketConfigured } from "@/lib/market";
@@ -14,7 +14,8 @@ export const metadata: Metadata = { title: "Profile" };
 export const dynamic = "force-dynamic";
 
 export default async function ProfilePage() {
-  const owner = await requireOwner("/profile");
+  const owner = await requireViewer("/profile");
+  const isOwner = owner.role === "owner";
   const { t, ui } = await getT();
   let lastSignIn: string | null = null;
   try {
@@ -51,7 +52,7 @@ export default async function ProfilePage() {
         <div className="stack" style={{ flex: "1 1 260px", gap: 6 }}>
           <div className="hstack">
             <span style={{ fontSize: 22, fontWeight: 700 }}>{owner.name}</span>
-            <span className="pill accent">{t("Chủ sở hữu")}</span>
+            <span className={"pill" + (isOwner ? " accent" : "")}>{isOwner ? t("Chủ sở hữu") : t("Khách")}</span>
           </div>
           <span className="mono small muted">{owner.handle ? `@${owner.handle}` : ""}{owner.discordId ? ` · ID ${owner.discordId}` : ""}</span>
           <span className="small dim">{t("Avatar, tên và ID lấy từ Discord mỗi lần đăng nhập")}</span>
@@ -61,6 +62,7 @@ export default async function ProfilePage() {
 
       <div className="grid-auto" style={{ alignItems: "start" }}>
         <DisplaySettings />
+        {isOwner && (<>
         <section className="card tight" aria-label={t("Thiết lập giao dịch")}>
           <span className="lbl" style={{ paddingBottom: 8 }}>{t("Thiết lập giao dịch")}</span>
           {trade.map(([k, v]) => (
@@ -80,9 +82,11 @@ export default async function ProfilePage() {
           ))}
         </section>
 
+        </>)}
+
         <section className="card" aria-label={t("Bảo mật")}>
           <span className="lbl">{t("Bảo mật")}</span>
-          <p className="small muted">{t("Chỉ ID Discord của chủ sở hữu được vào. Token, key và webhook nằm trên Vercel, không hiện trên trang này.")}</p>
+          <p className="small muted">{isOwner ? t("Chủ sở hữu và khách trong DESK_GUEST_DISCORD_IDS được vào; khách chỉ xem phần thị trường. Token, key và webhook nằm trên Vercel, không hiện trên trang này.") : t("Tài khoản khách: xem Calendar, News, Earnings, Markets, Knowledge. Trade Plan và Journal chỉ chủ sở hữu.")}</p>
           <div className="row" style={{ fontSize: 14, minHeight: 40 }}>
             <span className="muted">{t("Lần đăng nhập gần nhất")}</span>
             <span className="mono">{lastSignIn ? new Date(lastSignIn).toLocaleString("en-GB", { timeZone: ui.tz, hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" }) + " " + tzShort(ui.tz) : "—"}</span>

@@ -49,7 +49,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             <span className="lbl">{t("Đăng nhập")}</span>
             <h2 className="h2" style={{ fontSize: 22 }}>{t("Vào dashboard")}</h2>
             <p className="muted" style={{ fontSize: 14 }}>
-              {t("Web app cá nhân: chỉ đúng một tài khoản Discord của chủ sở hữu được vào. Không có mật khẩu, không đăng ký.")}
+              {t("Web app cá nhân: chỉ tài khoản Discord của chủ sở hữu và khách được mời mới vào được. Không có mật khẩu, không đăng ký.")}
             </p>
           </div>
           {msg && <div className={"notice" + (msg.ok ? " ok" : "")} role="status">{t(msg.text)}</div>}
@@ -62,7 +62,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             {t("Tiếp tục với Discord")}
           </a>
           <p className="muted small" style={{ padding: 14, borderRadius: 10, background: "var(--side)" }}>
-            {t("Sau khi Discord xác nhận, server so Discord ID với ID chủ sở hữu đã cấu hình. Khác ID là bị từ chối và đăng xuất ngay, không tạo tài khoản.")}
+            {t("Sau khi Discord xác nhận, server so Discord ID với danh sách đã cấu hình. Không có trong danh sách là bị từ chối và đăng xuất ngay, không tạo tài khoản.")}
           </p>
           <span className="small dim">{t("Avatar và tên hiển thị lấy từ Discord.")}</span>
         </section>

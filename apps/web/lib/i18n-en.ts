@@ -53,11 +53,11 @@ const EN: Record<string, string> = {
   "Giới hạn": "Limit",
   "2–3 lệnh / ngày": "2–3 trades / day",
   "Vào dashboard": "Enter the dashboard",
-  "Web app cá nhân: chỉ đúng một tài khoản Discord của chủ sở hữu được vào. Không có mật khẩu, không đăng ký.":
-    "Personal web app: only the owner's Discord account can sign in. No passwords, no sign-ups.",
+  "Web app cá nhân: chỉ tài khoản Discord của chủ sở hữu và khách được mời mới vào được. Không có mật khẩu, không đăng ký.":
+    "Personal web app: only the owner's Discord account and invited guests can sign in. No passwords, no sign-ups.",
   "Tiếp tục với Discord": "Continue with Discord",
-  "Sau khi Discord xác nhận, server so Discord ID với ID chủ sở hữu đã cấu hình. Khác ID là bị từ chối và đăng xuất ngay, không tạo tài khoản.":
-    "After Discord confirms, the server compares your Discord ID with the configured owner ID. Any other ID is rejected and signed out immediately; no account is created.",
+  "Sau khi Discord xác nhận, server so Discord ID với danh sách đã cấu hình. Không có trong danh sách là bị từ chối và đăng xuất ngay, không tạo tài khoản.":
+    "After Discord confirms, the server checks your Discord ID against the configured list. IDs not on the list are rejected and signed out immediately; no account is created.",
   "Avatar và tên hiển thị lấy từ Discord.": "Avatar and display name come from Discord.",
   "Tài khoản Discord này không có quyền vào. Phiên vừa tạo đã bị huỷ.": "This Discord account is not allowed. The new session was revoked.",
   "Server chưa cấu hình đăng nhập (Supabase Auth / OWNER_DISCORD_ID). Xem docs/dashboard-setup.md.":
@@ -346,8 +346,8 @@ const EN: Record<string, string> = {
   "Thiếu key": "Key missing",
   "Lỗi nguồn": "Source error",
   "Bảo mật": "Security",
-  "Chỉ ID Discord của chủ sở hữu được vào. Token, key và webhook nằm trên Vercel, không hiện trên trang này.":
-    "Only the owner's Discord ID can sign in. Tokens, keys and webhooks live on Vercel and are never shown here.",
+  "Chủ sở hữu và khách trong DESK_GUEST_DISCORD_IDS được vào; khách chỉ xem phần thị trường. Token, key và webhook nằm trên Vercel, không hiện trên trang này.":
+    "The owner and guests listed in DESK_GUEST_DISCORD_IDS can sign in; guests only see the market pages. Tokens, keys and webhooks live on Vercel and are never shown here.",
   "Lần đăng nhập gần nhất": "Last sign-in",
   "Đã kết nối": "Connected",
   "Bấm “Mở bài gốc” để đọc trên trang nguồn.": "Use “Open original” to read it on the source site.",
@@ -529,6 +529,7 @@ const EN: Record<string, string> = {
   "Lịch": "Calendar",
   "Mã": "Ticker",
   "Mã, trang, ngày journal…": "Ticker, page, journal date…",
+  "Mã cổ phiếu, tên trang…": "Ticker, page name…",
   "Mở mã {s}": "Open {s}",
   "Mở trang {s}": "Open {s} page",
   "Mục của mã": "Ticker sections",
@@ -566,5 +567,7 @@ const EN: Record<string, string> = {
   "Theo tab": "Tabs",
   "Trang {s}": "{s} page",
   "Trang": "Page",
+  "Khách": "Guest",
+  "Tài khoản khách: xem Calendar, News, Earnings, Markets, Knowledge. Trade Plan và Journal chỉ chủ sở hữu.": "Guest account: Calendar, News, Earnings, Markets and Knowledge. Trade Plan and Journal are owner-only.",
 };
 export default EN;

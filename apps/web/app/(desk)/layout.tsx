@@ -1,6 +1,6 @@
-// Khung dashboard: chỉ chủ sở hữu (Discord) vào được. proxy.ts đã chặn trước, ở đây kiểm lại lần nữa.
+// Khung dashboard: chủ sở hữu + khách (D48). proxy.ts đã chặn trước, ở đây kiểm lại lần nữa.
 import { cookies } from "next/headers";
-import { requireOwner } from "@/lib/auth";
+import { requireViewer } from "@/lib/auth";
 import { getEconWeek, localize } from "@/lib/econ";
 import { PREFS_COOKIE, matches, parsePrefs } from "@/lib/econ-prefs";
 import { getUi } from "@/lib/prefs-server";
@@ -11,7 +11,7 @@ import { UiProvider } from "./_components/Ui";
 export const dynamic = "force-dynamic";
 
 export default async function DeskLayout({ children }: { children: React.ReactNode }) {
-  const owner = await requireOwner();
+  const owner = await requireViewer();
   const ui = await getUi();
   // Tin tác động cao của tuần (theo bộ lọc currency của Calendar) cho thanh trên; lịch đã cache 15 phút
   const prefs = parsePrefs((await cookies()).get(PREFS_COOKIE)?.value);

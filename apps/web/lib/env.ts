@@ -19,6 +19,11 @@ export function ownerDiscordId() {
   return (process.env.OWNER_DISCORD_ID || "").trim();
 }
 
+// Discord ID của khách (bạn test chung), cách nhau bằng dấu phẩy / khoảng trắng. Khách chỉ xem phần thị trường.
+export function guestDiscordIds(): string[] {
+  return (process.env.DESK_GUEST_DISCORD_IDS || "").split(/[\s,;]+/).map((x) => x.trim()).filter((x) => /^\d{5,25}$/.test(x));
+}
+
 export function authConfigured() {
   return !!(supabaseUrl() && publishableKey());
 }

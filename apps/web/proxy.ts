@@ -1,11 +1,16 @@
 // Proxy (Next.js 16, tên mới của middleware): làm mới phiên Supabase và chặn trang dashboard khi chưa đăng nhập.
+// Khách (D48) vào được trang thị trường; Trade Plan / Journal chuyển về /dashboard.
 // Chỉ chạy ở các đường dẫn trong matcher; trang học tĩnh và /api/plan (ATAS gửi bằng token) không đi qua đây.
 // "/" luôn chuyển hướng: đã đăng nhập → /dashboard, chưa → /login.
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
 const DESK = ["/dashboard", "/calendar", "/news", "/earnings", "/stock", "/markets", "/trade-plan", "/journal", "/knowledge", "/profile"];
+const OWNER_ONLY = ["/trade-plan", "/journal"];
 const OWNER_FLAG = "desk_owner";
+const GUEST_FLAG = "desk_guest";
+// Giống lib/env.ts guestDiscordIds (proxy không import lib để giữ gọn)
+const guestIds = () => (process.env.DESK_GUEST_DISCORD_IDS || "").split(/[\s,;]+/).filter((x) => /^\d{5,25}$/.test(x));
 
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
@@ -36,6 +41,9 @@ export async function proxy(request: NextRequest) {
   const { data } = await sb.auth.getClaims();
   const claims = data?.claims as { app_metadata?: Record<string, unknown> } | undefined;
   const owner = claims?.app_metadata?.[OWNER_FLAG] === true;
+  const g = claims?.app_metadata?.[GUEST_FLAG];
+  const guest = !owner && typeof g === "string" && guestIds().includes(g);
+  const signedIn = owner || guest;
 
   const withCookies = (res: NextResponse) => {
     for (const c of response.cookies.getAll()) res.cookies.set(c);
@@ -43,13 +51,14 @@ export async function proxy(request: NextRequest) {
     return res;
   };
 
-  if (isDesk && !owner) {
+  if (isDesk && !signedIn) {
     const to = new URL("/login", request.url);
     to.searchParams.set("next", path + request.nextUrl.search);
     return withCookies(NextResponse.redirect(to));
   }
-  if (path === "/") return withCookies(NextResponse.redirect(new URL(owner ? "/dashboard" : "/login", request.url)));
-  if (path === "/login" && owner) return withCookies(NextResponse.redirect(new URL("/dashboard", request.url)));
+  if (guest && OWNER_ONLY.some((p) => path === p || path.startsWith(p + "/"))) return withCookies(NextResponse.redirect(new URL("/dashboard", request.url)));
+  if (path === "/") return withCookies(NextResponse.redirect(new URL(signedIn ? "/dashboard" : "/login", request.url)));
+  if (path === "/login" && signedIn) return withCookies(NextResponse.redirect(new URL("/dashboard", request.url)));
   return response;
 }
 

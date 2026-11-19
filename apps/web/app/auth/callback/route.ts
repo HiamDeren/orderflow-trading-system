@@ -1,7 +1,7 @@
-// GET /auth/callback?code=... → đổi code lấy phiên, chỉ giữ lại nếu là tài khoản Discord của chủ sở hữu.
+// GET /auth/callback?code=... → đổi code lấy phiên, chỉ giữ lại chủ sở hữu hoặc khách trong DESK_GUEST_DISCORD_IDS.
 import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
-import { OWNER_FLAG, deleteUser, isOwnerUser, markOwner } from "@/lib/auth";
+import { GUEST_FLAG, OWNER_FLAG, deleteUser, guestIdOf, isOwnerUser, markGuest, markOwner } from "@/lib/auth";
 import { ownerDiscordId } from "@/lib/env";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -34,6 +34,22 @@ export async function GET(req: NextRequest) {
     await sb.auth.signOut();
     console.error("[auth/callback] thiếu OWNER_DISCORD_ID");
     return NextResponse.redirect(`${origin}/login?e=config`);
+  }
+
+  const guestId = isOwnerUser(user) ? null : guestIdOf(user);
+  if (guestId) {
+    if (user.app_metadata?.[GUEST_FLAG] !== guestId) {
+      try {
+        await markGuest(user, guestId);
+        await sb.auth.refreshSession(); // JWT mới có app_metadata.desk_guest
+      } catch (e) {
+        console.error("[auth/callback] đánh dấu khách lỗi", String((e as Error).message));
+        await sb.auth.signOut();
+        return NextResponse.redirect(`${origin}/login?e=mark`);
+      }
+    }
+    console.info("[auth/callback] khách đăng nhập");
+    return NextResponse.redirect(`${origin}${next.startsWith("/journal") || next.startsWith("/trade-plan") ? "/dashboard" : next}`);
   }
 
   if (!isOwnerUser(user)) {

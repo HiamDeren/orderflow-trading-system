@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { cookies } from "next/headers";
+import { getViewer } from "@/lib/auth";
 import { errText } from "@/lib/db";
 import { ECON_SOURCE_PAGE, getEconWeek, localize, topImpact, type EconEvent } from "@/lib/econ";
 import { IMPACT_RANK, PREFS_COOKIE, matches, parsePrefs } from "@/lib/econ-prefs";
@@ -40,14 +41,16 @@ export default async function DashboardPage() {
   const { t, ui } = await getT();
   const localToday = nowIn(ui.tz, new Date(nowMs)).date;
   const mon = mondayOf(today);
+  // Khách (D48) không xem plan / journal: không đọc database
+  const isOwner = (await getViewer())?.role === "owner";
 
   const [planRes, econ, news, earn, quotes, recent] = await Promise.all([
-    safe(getPlan(today).then((r) => (r ? planView(r) : null))),
+    isOwner ? safe(getPlan(today).then((r) => (r ? planView(r) : null))) : safe(Promise.resolve(null)),
     getEconWeek(),
     getNews("general", 6),
     getEarnings(mon, addDays(mon, 4)),
     getQuotes(WATCH),
-    safe(getRecentDays(5)),
+    isOwner ? safe(getRecentDays(5)) : safe(Promise.resolve([] as Awaited<ReturnType<typeof getRecentDays>>)),
   ]);
 
   const prefs = parsePrefs((await cookies()).get(PREFS_COOKIE)?.value);
@@ -78,13 +81,13 @@ export default async function DashboardPage() {
           <span className="lbl">{DOW[ui.lang][et.dow]} · {viDate(today)}</span>
           <h1 className="h1">Dashboard</h1>
         </div>
-        <Link className="btn primary" href="/trade-plan">{t("Mở Trade Plan")}</Link>
+        {isOwner && <Link className="btn primary" href="/trade-plan">{t("Mở Trade Plan")}</Link>}
       </header>
 
       <Timeline initial={nowMs} events={tl} today={today} />
 
-      <div className="dash-grid">
-        <div className="dash-plan">
+      <div className={"dash-grid" + (isOwner ? "" : " solo")}>
+        {isOwner && <div className="dash-plan">
           {planRes.ok ? (
             planRes.v ? <PlanCard p={planRes.v} t={t} /> : <NoPlan t={t} weekday={isWeekday(today)} late={et.minutes >= PLAN_SEND + 5} />
           ) : (
@@ -93,7 +96,7 @@ export default async function DashboardPage() {
               <p className="small" style={{ color: "#d9cfc9" }}>{planRes.error}</p>
             </section>
           )}
-        </div>
+        </div>}
 
         <section className="card dash-cal" aria-label={t("Lịch hôm nay")}>
           <div className="row">
@@ -178,7 +181,7 @@ export default async function DashboardPage() {
         </section>
       </div>
 
-      <div className="dash-row">
+      <div className={"dash-row" + (isOwner ? "" : " solo")}>
         <section className="card" aria-label="News">
           <div className="row">
             <span className="lbl">News</span>
@@ -195,6 +198,7 @@ export default async function DashboardPage() {
           )}
         </section>
 
+        {isOwner && (
         <section className="card" aria-label="Journal">
           <div className="row">
             <span className="lbl">{t("Journal · 5 phiên gần nhất")}</span>
@@ -226,6 +230,7 @@ export default async function DashboardPage() {
             <p className="small short">{recent.error}</p>
           )}
         </section>
+        )}
       </div>
     </>
   );
