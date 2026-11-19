@@ -38,7 +38,7 @@ Chỉ **một** tài khoản Discord (ID trong `OWNER_DISCORD_ID`) vào được
 Biến `NEXT_PUBLIC_*` được nhúng lúc build: đổi xong phải **Redeploy**.
 
 ## 3b. Cho bạn vào test (khách, D48)
-Không cần biến môi trường. Bạn của Deren mở `/login`, bấm **Tiếp tục với Discord** → bị từ chối nhưng vào hàng chờ. Deren vào **Profile → Khách truy cập** bấm **Duyệt**, người đó đăng nhập lại là vào được. Cũng có thể thêm thẳng bằng Discord User ID (Discord → Settings → Advanced → Developer Mode → chuột phải tên → Copy User ID). **Gỡ quyền** có hiệu lực ngay và xoá user Supabase của khách. Khách chỉ xem Dashboard (không plan / journal), Calendar, News, Earnings, Markets, Stock, Knowledge. Cần bảng `trading.desk_members` (migration `20261119070000_desk_members`).
+Không cần biến môi trường. Bạn của Deren mở `/login`, bấm **Tiếp tục với Discord** → bị từ chối nhưng vào hàng chờ. Deren vào **Profile → Khách truy cập** bấm **Duyệt**, người đó đăng nhập lại là vào được. Cũng có thể thêm thẳng bằng Discord User ID (Discord → Settings → Advanced → Developer Mode → chuột phải tên → Copy User ID). **Gỡ quyền** có hiệu lực ngay và xoá user Supabase của khách. Khách chỉ xem Dashboard (không plan / journal), Calendar, News, Earnings, Markets, Stock, Knowledge. Cần bảng `access.members` (migration `20261119070000_access_members`) và thêm schema `access` vào **Exposed schemas** (Dashboard → Integrations → Data API → Settings), giống lúc thêm `trading`.
 
 ## 4. Database
 

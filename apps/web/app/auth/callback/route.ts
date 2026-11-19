@@ -1,4 +1,4 @@
-// GET /auth/callback?code=... → đổi code lấy phiên, chỉ giữ lại chủ sở hữu hoặc khách đã duyệt (trading.desk_members).
+// GET /auth/callback?code=... → đổi code lấy phiên, chỉ giữ lại chủ sở hữu hoặc khách đã duyệt (access.members).
 // Người lạ: ghi yêu cầu 'pending' để chủ sở hữu duyệt ở Profile, rồi đăng xuất + xoá user vừa tạo.
 import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
     try {
       member = await getMember(discordId);
     } catch (e) {
-      console.error("[auth/callback] đọc desk_members lỗi", String((e as Error).message));
+      console.error("[auth/callback] đọc access.members lỗi", String((e as Error).message));
     }
   }
   const guestId = member?.status === "guest" ? discordId : null;

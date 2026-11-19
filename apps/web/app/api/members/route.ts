@@ -1,4 +1,4 @@
-// /api/members (chỉ chủ sở hữu) · quản lý khách của dashboard (D48), bảng trading.desk_members
+// /api/members (chỉ chủ sở hữu) · quản lý khách của dashboard (D48), bảng access.members
 //   GET                          → danh sách pending / guest / blocked
 //   POST { action, discord_id, note? }
 //     approve  : pending / blocked → guest

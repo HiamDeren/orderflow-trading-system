@@ -1,6 +1,8 @@
-// Khách của dashboard lưu ở trading.desk_members (D48). Chỉ server dùng (secret key).
+// Khách của dashboard lưu ở access.members (schema riêng cho quyền truy cập, D48). Chỉ server dùng (secret key).
 // pending: người lạ đã thử đăng nhập, chờ chủ sở hữu duyệt · guest: được xem phần thị trường · blocked: gỡ / từ chối.
-import { db, DbError } from "@/lib/db";
+import { DbError, dbSchema } from "@/lib/db";
+
+const db = dbSchema("access");
 
 export type MemberStatus = "pending" | "guest" | "blocked";
 export type Member = {
@@ -17,13 +19,13 @@ export type Member = {
   last_login_at: string | null;
 };
 
-const T = "desk_members";
+const T = "members";
 const MAX_PENDING = 50; // chặn spam: quá số này thì không ghi thêm yêu cầu mới
 export const DISCORD_ID_RE = /^\d{5,25}$/;
 
-// Bảng chưa tạo (chưa áp migration) → coi như chưa có khách, không làm sập trang.
+// Bảng chưa tạo (chưa áp migration) hoặc schema access chưa expose (PGRST106) → coi như chưa có khách, không làm sập trang.
 function missing(e: unknown) {
-  return e instanceof DbError && (e.status === 404 || /desk_members|PGRST205|42P01/.test(e.message));
+  return e instanceof DbError && (e.status === 404 || e.status === 406 || /PGRST205|PGRST106|42P01|3F000/.test(e.message));
 }
 
 export async function getMember(discordId: string): Promise<Member | null> {

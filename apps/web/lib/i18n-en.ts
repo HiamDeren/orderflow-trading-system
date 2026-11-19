@@ -573,7 +573,7 @@ const EN: Record<string, string> = {
   "Khách truy cập": "Guest access",
   "Làm mới": "Refresh",
   "Người lạ bấm đăng nhập Discord sẽ vào hàng chờ. Duyệt xong, họ đăng nhập lại để vào. Khách chỉ xem phần thị trường và Knowledge.": "Anyone who signs in with Discord lands in this queue. Once approved, they sign in again to enter. Guests only see the market pages and Knowledge.",
-  "Bảng desk_members chưa có trên Supabase (chưa áp migration).": "The desk_members table is not on Supabase yet (migration not applied).",
+  "Chưa đọc được access.members: chưa áp migration hoặc schema access chưa thêm vào Data API.": "Cannot read access.members: the migration is not applied or the access schema is not exposed in the Data API.",
   "Chờ duyệt": "Pending",
   "Không có yêu cầu mới.": "No new requests.",
   "Chưa có khách.": "No guests yet.",

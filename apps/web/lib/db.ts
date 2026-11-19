@@ -1,9 +1,8 @@
-// Đọc ghi schema "trading" qua PostgREST bằng secret key (chỉ server, sau khi đã kiểm chủ sở hữu).
+// Đọc ghi schema "trading" (và "access", xem lib/members.ts) qua PostgREST bằng secret key (chỉ server, sau khi đã kiểm quyền).
 // Bảng trading.* bật RLS, không có policy: chỉ service_role (secret key) vào được.
 import { secretKey, supabaseUrl } from "@/lib/env";
 import { TRADING_BUCKET } from "@/lib/storage";
 
-const SCHEMA = "trading";
 
 export class DbError extends Error {
   status: number;
@@ -25,13 +24,13 @@ export function dbReady() {
   return !!(supabaseUrl() && secretKey());
 }
 
-async function call<T>(method: string, table: string, query: string, body?: unknown, prefer?: string): Promise<T> {
+async function call<T>(schema: string, method: string, table: string, query: string, body?: unknown, prefer?: string): Promise<T> {
   const { url, h } = cfg();
   const headers: Record<string, string> = { ...h };
-  if (method === "GET") headers["Accept-Profile"] = SCHEMA;
+  if (method === "GET") headers["Accept-Profile"] = schema;
   else {
-    headers["Content-Profile"] = SCHEMA;
-    headers["Accept-Profile"] = SCHEMA;
+    headers["Content-Profile"] = schema;
+    headers["Accept-Profile"] = schema;
     headers["Content-Type"] = "application/json";
   }
   if (prefer) headers.Prefer = prefer;
@@ -47,26 +46,31 @@ async function call<T>(method: string, table: string, query: string, body?: unkn
   return (text ? JSON.parse(text) : []) as T;
 }
 
-export const db = {
-  select<T>(table: string, query: string) {
-    return call<T[]>("GET", table, query);
-  },
-  upsert<T>(table: string, rows: unknown, onConflict: string) {
-    return call<T[]>("POST", table, `on_conflict=${onConflict}`, rows, "resolution=merge-duplicates,return=representation");
-  },
-  insert<T>(table: string, rows: unknown) {
-    return call<T[]>("POST", table, "", rows, "return=representation");
-  },
-  update<T>(table: string, query: string, patch: unknown) {
-    return call<T[]>("PATCH", table, query, patch, "return=representation");
-  },
-  rpc<T>(fn: string, args: unknown) {
-    return call<T>("POST", `rpc/${fn}`, "", args);
-  },
-  remove(table: string, query: string) {
-    return call<unknown[]>("DELETE", table, query, undefined, "return=minimal");
-  },
-};
+// Client cho một schema (phải nằm trong Exposed schemas của Data API).
+export function dbSchema(schema: string) {
+  return {
+    select<T>(table: string, query: string) {
+      return call<T[]>(schema, "GET", table, query);
+    },
+    upsert<T>(table: string, rows: unknown, onConflict: string) {
+      return call<T[]>(schema, "POST", table, `on_conflict=${onConflict}`, rows, "resolution=merge-duplicates,return=representation");
+    },
+    insert<T>(table: string, rows: unknown) {
+      return call<T[]>(schema, "POST", table, "", rows, "return=representation");
+    },
+    update<T>(table: string, query: string, patch: unknown) {
+      return call<T[]>(schema, "PATCH", table, query, patch, "return=representation");
+    },
+    rpc<T>(fn: string, args: unknown) {
+      return call<T>(schema, "POST", `rpc/${fn}`, "", args);
+    },
+    remove(table: string, query: string) {
+      return call<unknown[]>(schema, "DELETE", table, query, undefined, "return=minimal");
+    },
+  };
+}
+
+export const db = dbSchema("trading");
 
 // Link ký tạm để xem ảnh trong bucket private.
 export async function signedUrl(path: string, expiresIn = 3600): Promise<string | null> {

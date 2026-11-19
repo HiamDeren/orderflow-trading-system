@@ -67,7 +67,7 @@ export default function MembersPanel() {
       </p>
 
       {st.kind === "loading" && <p className="small dim">{t("Đang tải…")}</p>}
-      {st.kind === "missing" && <p className="small short">{t("Bảng desk_members chưa có trên Supabase (chưa áp migration).")}</p>}
+      {st.kind === "missing" && <p className="small short">{t("Chưa đọc được access.members: chưa áp migration hoặc schema access chưa thêm vào Data API.")}</p>}
       {st.kind === "error" && <p className="small short">{st.msg}</p>}
 
       {st.kind === "ok" &&

@@ -1,11 +1,11 @@
-// Đăng nhập: chủ sở hữu (OWNER_DISCORD_ID) + khách được duyệt trong bảng trading.desk_members (D48).
+// Đăng nhập: chủ sở hữu (OWNER_DISCORD_ID) + khách được duyệt trong bảng access.members (D48).
 //
 // Cách kiểm:
 //  1. /auth/callback đổi code lấy phiên, đọc identity Discord (auth.identities, người dùng không sửa được),
 //     so với OWNER_DISCORD_ID. Đúng → server đặt app_metadata.desk_owner = true (chỉ secret key ghi được) rồi làm mới phiên.
 //     Sai → đăng xuất + xoá user vừa tạo.
 //  2. Mọi trang / API của dashboard đọc JWT (getClaims, có kiểm chữ ký) và chỉ cho qua khi app_metadata.desk_owner = true.
-//  Khách: người lạ đăng nhập → callback ghi yêu cầu 'pending' vào desk_members rồi từ chối; chủ sở hữu duyệt ở Profile.
+//  Khách: người lạ đăng nhập → callback ghi yêu cầu 'pending' vào access.members rồi từ chối; chủ sở hữu duyệt ở Profile.
 //  Khách đã duyệt: callback đặt app_metadata.desk_guest = <Discord ID>; mỗi request server kiểm ID đó còn status 'guest'
 //  (lib/members.ts, cache 30 giây). Khách chỉ xem phần thị trường; getOwner() / requireOwner() vẫn chỉ trả về chủ sở hữu
 //  nên mọi API journal / plan giữ nguyên mức chặn.
