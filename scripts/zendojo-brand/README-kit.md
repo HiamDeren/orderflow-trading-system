@@ -1,0 +1,54 @@
+# ZenDojo · brand kit
+
+Võ đường trading của Derenツ. Logo: vòng ensō vẽ bằng nét bút lông khô (mực), thêm lớp "công nghệ" (lát glitch dịch ngang, khe scanline, đuôi nét tan thành pixel), chữ ツ bút lông màu cát ở giữa.
+
+Mọi hình đều vẽ bằng code (path SVG, không dùng font hay ảnh có sẵn). Cần cỡ lớn hơn thì mở file trong `source-svg/` hoặc `01-logo/svg/`: vector nên phóng bao nhiêu cũng nét.
+
+## Thư mục
+
+| Thư mục | Có gì | Dùng cho |
+|---|---|---|
+| `01-logo/svg` | 3 biến thể × 3 dạng, vector | In ấn, thiết kế tiếp, cỡ bất kỳ |
+| `01-logo/png` | Như trên, 1024 / 2048 / 4096 px | Ảnh dán nhanh |
+| `02-wordmark` | Logo + chữ "ZenDojo", nằm ngang và dọc, nền tối / trong suốt (4×) | Banner, slide, header |
+| `03-avatar` | Vuông tràn nền + tròn sẵn, 1024 / 2048 px | Avatar Discord, mạng xã hội |
+| `04-icons` | `favicon.ico`, PNG 16 → 1024, `apple-touch-icon-180`, `maskable-512/1024` | Web, app, PWA |
+| `05-backgrounds` | Hình nền 5K / 4K / QHD / 16:10, điện thoại, banner Discord, ảnh OG | Desktop, điện thoại, Discord, link preview |
+| `06-illustrations` | Minh hoạ núi + ensō (trạng thái trống) | Trang trống, 404 |
+| `07-theme` | Bảng màu (ảnh), `zendojo-tokens.css`, `zendojo-tokens.json`, `zendojo-atas-colors-ARGB.txt` | Web, thiết kế, ATAS |
+| `source-svg` | Toàn bộ SVG gốc (kể cả nền) | Xuất lại cỡ khác |
+
+## Biến thể logo
+
+- **tsu** (chính): ensō + ツ bút lông màu cát.
+- **bracket**: ensō + `[ツ]`, khớp tên server Discord "[ツ] ZenDojo".
+- **hanko**: ensō + con dấu son khắc ツ.
+
+Dạng: `square` (vuông bo góc, icon app), `round` (hình tròn, góc trong suốt), `none` (không nền, đặt lên nền tối). Avatar dùng dạng tràn nền vuông để Discord tự cắt tròn.
+
+Logo thiết kế cho **nền tối**. Mực màu `#ECE7DC` nên đặt lên nền sáng sẽ không thấy rõ.
+
+## Màu chính
+
+| Tên | HEX | ATAS (ARGB) |
+|---|---|---|
+| Nền | `#0F1115` | `#FF0F1115` |
+| Thẻ | `#161A20` | `#FF161A20` |
+| Chữ | `#E6E8EB` | `#FFE6E8EB` |
+| Nhấn cát | `#D4B483` | `#FFD4B483` |
+| Long | `#8CC2A4` | `#FF8CC2A4` |
+| Short | `#E0947C` | `#FFE0947C` |
+| Mực ensō | `#ECE7DC` | `#FFECE7DC` |
+| Con dấu | `#B8432F` | `#FFB8432F` |
+
+Đủ bảng: `07-theme/`. Font: Inter (giao diện), JetBrains Mono (số, giá, giờ).
+
+## Sinh lại
+
+Trong repo `orderflow-trading-system`:
+
+```bash
+python3 scripts/zendojo-brand/build.py /tmp/zendojo
+cd apps/web && node ../../scripts/zendojo-brand/kit.mjs /tmp/zendojo /tmp/ZenDojo-brand-kit && cd ../..
+python3 scripts/zendojo-brand/kit.py /tmp/zendojo /tmp/ZenDojo-brand-kit
+```

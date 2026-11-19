@@ -74,3 +74,60 @@ files = {"logo.svg": logo(), "logo-hanko.svg": logo_hanko(), "login-bg.svg": log
 for k, v in files.items():
     open(os.path.join(OUT, k), "w").write(v)
 print("ok", OUT, list(files))
+
+
+def mobile_bg(W=1080, H=2340):
+    """Hình nền điện thoại (dọc)."""
+    b = f'<rect width="{W}" height="{H}" fill="{BG}"/>'
+    b += enso_tech(540, 760, 330, 108, INK, seed=11, op=0.14, bands=4, cuts=9)
+    b += ridge(160, H, 1500, 420, 30, "#14171D", seed=2)
+    b += ridge(1000, H, 1560, 380, 28, "#14171D", seed=3)
+    b += ridge(540, H, 1000, 720, 52, "#191D25", va_fill="#1D222B", poc=24, poc_fill=SAND, poc_op=0.42, seed=4)
+    b += ridge(260, H, 1880, 520, 16, "#1E232C", seed=5, gap=0.4)
+    b += ridge(980, H, 1960, 320, 13, "#1E232C", seed=6, gap=0.4)
+    b += hanko(900, 230, 64, red=RED, cut=BG, seed=9).replace('fill="#B8432F"', 'fill="#B8432F" fill-opacity="0.55"')
+    return svg(W, H, b)
+
+files["mobile-bg.svg"] = mobile_bg()
+open(os.path.join(OUT, "mobile-bg.svg"), "w").write(files["mobile-bg.svg"])
+
+def brackets(s, color, gl=True):
+    """Cặp ngoặc vuông kiểu 'công nghệ' (nét đều, bo nhẹ) với vài vạch glitch."""
+    h = s * 0.32; y = s * 0.5 - h / 2; t = s * 0.03; arm = s * 0.06; xl = s * 0.335; xr = s * 0.665
+    def br(x, d):  # d = 1 ngoặc trái, -1 ngoặc phải
+        xs = x if d == 1 else x - t
+        return (f'<rect x="{xs:.1f}" y="{y:.1f}" width="{t:.1f}" height="{h:.1f}" rx="{t*0.25:.1f}"/>'
+                f'<rect x="{min(x, x + d*arm):.1f}" y="{y:.1f}" width="{arm:.1f}" height="{t:.1f}" rx="{t*0.25:.1f}"/>'
+                f'<rect x="{min(x, x + d*arm):.1f}" y="{y+h-t:.1f}" width="{arm:.1f}" height="{t:.1f}" rx="{t*0.25:.1f}"/>')
+    out = f'<g fill="{color}">' + br(xl, 1) + br(xr, -1)
+    if gl:  # vài mẩu pixel lệch ra ngoài ngoặc
+        for (x, yy, w) in ((xl - t * 2.2, y + h * 0.30, t * 1.4), (xr + t * 0.8, y + h * 0.66, t * 1.6), (xr + t * 0.8 + t * 2.2, y + h * 0.66, t * 0.6)):
+            out += f'<rect x="{x:.1f}" y="{yy:.1f}" width="{w:.1f}" height="{t*0.55:.1f}"/>'
+    return out + "</g>"
+
+def mark_body(s, kind):
+    """kind: tsu (ツ bút lông) · bracket ([ツ]) · hanko (con dấu đỏ)."""
+    b = enso_tech(s * 0.5, s * 0.5, s * 0.344, s * 0.145, INK, **ENSO)
+    if kind == "tsu":
+        b += g(tsu_brush(s * 0.49, s * 0.51, s * 0.37, seed=5), SAND)
+    elif kind == "bracket":
+        b += brackets(s, INK) + g(tsu_brush(s * 0.505, s * 0.505, s * 0.2, seed=5), SAND)
+    else:
+        b += hanko(s * 0.645, s * 0.62, s * 0.152, red=RED, cut=BG)
+    return b
+
+def framed(s, kind, shape):
+    """shape: square (vuông bo góc) · round (hình tròn, góc trong suốt) · full (vuông tràn nền, cho avatar) · none (không nền)."""
+    bg = {"square": f'<rect width="{s}" height="{s}" rx="{s*0.22:.0f}" fill="{BG}"/>',
+          "round": f'<circle cx="{s/2}" cy="{s/2}" r="{s/2}" fill="{BG}"/>',
+          "full": f'<rect width="{s}" height="{s}" fill="{BG}"/>', "none": ""}[shape]
+    body = mark_body(s, kind)
+    if shape in ("round", "full"):  # thu nhỏ để vệt glitch không thò ra ngoài khi cắt tròn
+        k = 0.84; body = f'<g transform="translate({s/2},{s/2}) scale({k}) translate({-s/2},{-s/2})">{body}</g>'
+    return svg(s, s, bg + body)
+
+for kind in ("tsu", "bracket", "hanko"):
+    for shape in ("square", "round", "full", "none"):
+        name = f"logo-{kind}-{shape}.svg"; files[name] = framed(512, kind, shape)
+        open(os.path.join(OUT, name), "w").write(files[name])
+print("variants ok")
