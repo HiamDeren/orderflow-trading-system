@@ -111,7 +111,7 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
           <div className="side-head">
             <Link className="brand" href="/dashboard">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="brand-mark brand-logo" src="/assets/img/zendojo/logo.svg" alt="" aria-hidden="true" />
+              <img className="brand-mark brand-logo" src="/assets/img/zendojo/icon-192.png" alt="" aria-hidden="true" />
               <span className="nl brand-text">
                 <span style={{ fontWeight: 700, fontSize: 15 }}>ZenDojo</span>
                 <span className="small dim">Derenツ</span>

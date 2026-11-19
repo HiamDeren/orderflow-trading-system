@@ -112,7 +112,7 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 
 **Đợt 6 · ZenDojo (2026-11-19):**
 - [x] Đổi tên Deren Desk → **ZenDojo** (D49): sidebar, login, tab trình duyệt, ảnh OG khi gửi link, favicon / apple icon.
-- [x] Logo ensō + ツ (thêm phương án `[ツ]` khớp server Discord), nền login núi ghép thanh TPO + mặt trời ensō, minh hoạ trạng thái trống (Dashboard chưa có plan / cuối tuần), trang 404.
+- [x] Logo ensō mực bút lông khô + glitch (lát dịch ngang, scanline, pixel), chữ ツ bút lông màu cát; nền login núi ghép thanh TPO + mặt trời ensō; minh hoạ trạng thái trống (Dashboard chưa có plan / cuối tuần), trang 404.
 - [ ] Deren đổi tên app trên Discord Developer Portal thành "ZenDojo" (màn hình đồng ý khi đăng nhập), đặt icon server / app bằng PNG logo.
 - [ ] (Tuỳ chọn) đổi tên project Vercel / Supabase, domain riêng.
 

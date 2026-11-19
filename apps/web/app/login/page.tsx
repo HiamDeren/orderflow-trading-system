@@ -27,7 +27,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           <div className="row">
             <div className="hstack" style={{ gap: 12 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="brand-mark brand-logo" src="/assets/img/zendojo/logo.svg" alt="" aria-hidden="true" style={{ width: 44, height: 44, borderRadius: 11 }} />
+              <img className="brand-mark brand-logo" src="/assets/img/zendojo/icon-192.png" alt="" aria-hidden="true" style={{ width: 44, height: 44, borderRadius: 11 }} />
               <span className="stack" style={{ gap: 2 }}>
                 <span style={{ fontWeight: 700, fontSize: 20 }}>ZenDojo</span>
                 <span className="small dim">{t("Võ đường trading của Derenツ")}</span>

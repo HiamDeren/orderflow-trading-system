@@ -4,7 +4,8 @@ Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
 ## 2026-11-19 · ZenDojo (D49)
 - Đổi tên Deren Desk → ZenDojo: `layout.tsx` (title, icon, apple icon, Open Graph / Twitter), sidebar, login, mobile topbar, News; câu EN mới.
-- Ảnh trong `apps/web/public/assets/img/zendojo/`: `logo.svg` (ensō + ツ), `mark.svg`, `logo-bracket.svg` (`[ツ]`), `icon-180/192/512.png` (sharp), `login-bg.svg`, `empty.svg`, `og.png` (Playwright, font Inter + Noto CJK). Xoá `desk-login-bg.svg`. Trang học cũ (`/learn`) giữ icon cũ.
+- Logo làm 2 vòng theo góp ý: bản đầu ensō nét đều → Deren muốn "vết mực quẹt, kiểu Nhật" + "thêm tý công nghệ". Bản chốt: ensō mô phỏng ~75 sợi lông bút gom thành búi (khe khô dọc nét, đầu nét xoè, đuôi mảnh), lát glitch bằng `clipPath` + `<use>` dịch ngang, khe scanline bằng `mask`, đuôi tan thành pixel bám lưới; chữ ツ bút lông màu cát. Phương án phụ: con dấu son ツ.
+- Ảnh trong `apps/web/public/assets/img/zendojo/`: `icon-32/180/192/512.png`, `login-bg.webp` (26 KB), `empty.webp`, `og.png` (Playwright, font Inter + Noto CJK). Nguồn: `scripts/zendojo-brand/` (`ink.py`, `build.py`, `raster.mjs`, `og.html`). Xoá `desk-login-bg.svg`. Trang học cũ (`/learn`) giữ icon cũ.
 - Minh hoạ ở Dashboard (chưa có plan / cuối tuần) và trang 404 mới `app/not-found.tsx`.
 - Test mock: build OK, login / Dashboard / 404 ở 1440 px và 390 px không tràn ngang, thẻ og:image và icon đúng đường dẫn.
 
