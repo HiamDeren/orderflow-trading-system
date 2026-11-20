@@ -16,8 +16,9 @@ Hướng dài hạn (Deren chốt 2026-11-17): **web app cá nhân / dashboard**
 - Dùng trên desktop (đang trade) và điện thoại (học, xem plan). Giao diện tối, ưu tiên đọc nhanh.
 
 ## Hiện trạng (2026-11-17)
-- Production: `https://orderflow-trading-system.vercel.app` (Vercel, project `orderflow-trading-system`, team `derenluus-projects`, gói Hobby).
-- Repo: `HiamDeren/orderflow-trading-system` (monorepo pnpm). Nhánh `production` → Vercel production, `development` → preview (nhánh mặc định).
+- Tên dự án: **ZenDojo** (từ 2026-11-20).
+- Production: `https://zendojo-deren.vercel.app` (Vercel project `zendojo`, team `derenluus-projects`, gói Hobby). Domain cũ `orderflow-trading-system.vercel.app` chuyển hướng về đây.
+- Repo: `HiamDeren/zendojo` (monorepo pnpm; tên cũ `orderflow-trading-system`, GitHub tự chuyển hướng). Nhánh `production` → Vercel production, `development` → preview (nhánh mặc định).
 - 5 trang (mỗi trang có bản VI và EN): Tổng quan, TPO Level, Orderflow Tools, **Trade Plan** (Composite × pRTH × OVN, `plan.html`), Trắc nghiệm. Chi tiết: [03-tinh-nang.md](03-tinh-nang.md).
 - **System trade plan chính** (Deren chốt 2026-11-17): khung Composite × pRTH × OVN. Plan Builder cổ điển (PD levels, kịch bản A/B, bản đồ level) đã bỏ; trang Testing gộp vào trang Trade Plan.
 - Ngân hàng câu hỏi: 188 câu (87 Tools + 101 Level).

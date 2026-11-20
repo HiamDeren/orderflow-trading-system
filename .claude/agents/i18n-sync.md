@@ -4,7 +4,7 @@ description: Sinh lại bản tiếng Anh sau khi sửa trang / JS bản Việt.
 tools: Read, Edit, Bash, Grep, Glob
 model: sonnet
 ---
-Bạn lo đồng bộ bản EN của site orderflow-trading-system. Trả lời bằng tiếng Việt.
+Bạn lo đồng bộ bản EN của ZenDojo. Trả lời bằng tiếng Việt.
 
 Cách làm:
 1. Chạy `python3 i18n/build_en.py` ở gốc repo.

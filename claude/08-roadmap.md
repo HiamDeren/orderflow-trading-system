@@ -18,7 +18,7 @@ Cập nhật: 2026-11-19 (Dashboard đợt 5 · ý tưởng v2).
 
 ## Việc còn lại · plan tự động
 1. [ ] **Indicator Plan Sender (tối 2026-11-17):** chart NQ M30 lookback 30 ngày, Claude Code build `docs/plan-sender/PlanSender.cs` theo `PROMPT_PlanSender.md`, kiểm số với 11/11 và 12/11.
-2. [ ] **Bật gửi web trong indicator:** API URL `https://orderflow-trading-system.vercel.app/api/plan` + `PLAN_TOKEN`; log phải có `HTTP 200`.
+2. [ ] **Bật gửi web trong indicator:** API URL `https://zendojo-deren.vercel.app/api/plan` + `PLAN_TOKEN`; log phải có `HTTP 200`.
 3. [x] **Test đầu-cuối trên production (2026-11-18):** nút "Gửi plan lên web" với JSON ATAS 17/11 → database `trading.trade_plans`, ảnh WebP `trading/2026/11/17/plan/`, Discord nhận ảnh.
 3b. [ ] **Test buổi sáng thật:** 9:29 ET indicator gửi → Discord + Storage, nút "Lấy plan mới nhất" khớp.
 4. [ ] Xoá bucket cũ `trade-plans` (trống) trên Dashboard → Storage.
@@ -114,7 +114,9 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [x] Đổi tên Deren Desk → **ZenDojo** (D49): sidebar, login, tab trình duyệt, ảnh OG khi gửi link, favicon / apple icon.
 - [x] Logo ensō mực bút lông khô + glitch (lát dịch ngang, scanline, pixel), chữ ツ bút lông màu cát; nền login núi ghép thanh TPO + mặt trời ensō; minh hoạ trạng thái trống (Dashboard chưa có plan / cuối tuần), trang 404.
 - [ ] Deren đổi tên app trên Discord Developer Portal thành "ZenDojo" (màn hình đồng ý khi đăng nhập), đặt icon server / app bằng PNG logo.
-- [ ] (Tuỳ chọn) đổi tên project Vercel / Supabase, domain riêng.
+- [x] Đổi tên dự án thành **ZenDojo** trong code và tài liệu (D50, 2026-11-20): `package.json`, `supabase/config.toml`, `CLAUDE.md`, `claude/`, subagent, hook, artifact.
+- [ ] Deren đổi tên trên các app theo `docs/dashboard-setup.md` → "Đổi tên sang ZenDojo": GitHub repo `zendojo`, Vercel project `zendojo` + domain `zendojo-deren.vercel.app` (domain cũ chuyển hướng), Supabase project `ZenDojo` + Auth URL, `ApiUrl` của indicator ATAS.
+- [ ] Publish lại artifact claude.ai (domain mới trong `artifact/index.html`).
 
 **Còn lại:**
 - [ ] Knowledge: Deren tổng hợp nội dung AMT / Context / Entry; port dần `levels.html`, `tools.html`, quiz vào Next.js.

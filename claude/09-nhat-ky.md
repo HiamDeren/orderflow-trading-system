@@ -2,6 +2,10 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-20 · Dự án đổi tên thành ZenDojo (D50)
+- Code và tài liệu dùng tên mới: `package.json` (`zendojo`), `supabase/config.toml` (`project_id`), `CLAUDE.md`, `claude/01`, `02`, `04`, `08`, prompt chuyển đổi, subagent, hook SessionStart, artifact (domain mới, build lại `app.js`).
+- `docs/dashboard-setup.md`: thêm checklist đổi tên trên GitHub, Vercel, Supabase, Discord, ATAS. Domain chính mới `zendojo-deren.vercel.app` (`zendojo.vercel.app` đã có người dùng).
+
 ## 2026-11-19 · Brand kit ZenDojo
 - Logo có 3 dạng (vuông bo góc, tròn góc trong suốt, không nền) + avatar tràn nền. Đã thử biến thể `[ツ]` và con dấu son rồi bỏ theo ý Deren: chỉ giữ ensō + ツ; nền login / điện thoại bỏ con dấu ở góc.
 - Thêm bộ hình nền lấy ㋡ làm hình chính (`05-backgrounds/tsu/`: 5K / 4K / QHD / 16:10, điện thoại, biểu ngữ server + hồ sơ Discord) và biểu ngữ hồ sơ Discord 2040×720 cho bộ nền núi.

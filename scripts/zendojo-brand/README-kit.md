@@ -53,7 +53,7 @@ Logo thiết kế cho **nền tối**. Mực màu `#ECE7DC` nên đặt lên n�
 
 ## Sinh lại
 
-Trong repo `orderflow-trading-system`:
+Trong repo `zendojo`:
 
 ```bash
 python3 scripts/zendojo-brand/build.py /tmp/zendojo

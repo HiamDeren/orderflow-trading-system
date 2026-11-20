@@ -1,4 +1,6 @@
-# CLAUDE.md · orderflow-trading-system
+# CLAUDE.md · ZenDojo
+
+Tên dự án: **ZenDojo** (từ 2026-11-20, D50). Repo `HiamDeren/zendojo` (trước là `orderflow-trading-system`), Vercel project `zendojo`, domain chính `zendojo-deren.vercel.app`, Supabase project **ZenDojo**.
 
 Đọc file này trước mọi việc trong repo. Bối cảnh đầy đủ nằm trong thư mục [`claude/`](claude/README.md).
 

@@ -5,7 +5,7 @@ import { ROOT, readInput, git } from "./_lib.mjs";
 
 readInput();
 const L = [];
-L.push("# orderflow-trading-system · bối cảnh phiên");
+L.push("# ZenDojo · bối cảnh phiên");
 L.push("Đọc CLAUDE.md (quy tắc bắt buộc). Bối cảnh đầy đủ: claude/README.md. Trao đổi bằng tiếng Việt.");
 const branch = git("rev-parse --abbrev-ref HEAD");
 if (branch) {

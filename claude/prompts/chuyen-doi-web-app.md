@@ -1,6 +1,6 @@
 # Prompt chuyển đổi sang web app / personal dashboard
 
-Dùng với **Claude Code mở tại thư mục repo** `orderflow-trading-system` (hook và subagent trong `.claude/` tự nạp).
+Dùng với **Claude Code mở tại thư mục repo** `zendojo` (ZenDojo) (hook và subagent trong `.claude/` tự nạp).
 Mỗi lần bắt đầu một phiên: dán **Prompt khởi động** + prompt của giai đoạn đang làm. Làm xong một giai đoạn mới sang giai đoạn sau.
 
 Kế hoạch gốc: [`../07-chuyen-doi-web-app.md`](../07-chuyen-doi-web-app.md). Tình trạng từng giai đoạn: [`../08-roadmap.md`](../08-roadmap.md).
@@ -10,7 +10,7 @@ Kế hoạch gốc: [`../07-chuyen-doi-web-app.md`](../07-chuyen-doi-web-app.md)
 ## Prompt khởi động (dán đầu mọi phiên chuyển đổi)
 
 ```
-Mình đang chuyển repo orderflow-trading-system từ site tĩnh (HTML + vanilla JS + 1 Vercel Function) sang web app cá nhân / dashboard.
+Mình đang chuyển repo ZenDojo (`HiamDeren/zendojo`) từ site tĩnh (HTML + vanilla JS + 1 Vercel Function) sang web app cá nhân / dashboard.
 
 Trước khi làm gì:
 1. Đọc CLAUDE.md, rồi claude/README.md và lần lượt claude/01 → 09. Đọc claude/prompts/chuyen-doi-web-app.md.

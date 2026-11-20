@@ -1,7 +1,7 @@
 # 04 · Dữ liệu, API và tích hợp
 
 ## Supabase
-- Project: **Personal Trading Dashboard**, ref `gpbypxuglcfmvarmferr`, region `ap-southeast-1` (Singapore), tạo 2026-11-18. Project cũ `njbeaswlwqweblvgvrlx` (Sydney) chỉ giữ tạm tới khi xác nhận xoá.
+- Project: **ZenDojo** (trước là Personal Trading Dashboard), ref `gpbypxuglcfmvarmferr`, region `ap-southeast-1` (Singapore), tạo 2026-11-18. Project cũ `njbeaswlwqweblvgvrlx` (Sydney) chỉ giữ tạm tới khi xác nhận xoá.
 - Truy cập chỉ từ server (Vercel Function, region `sin1`) bằng **secret key**. Không có client nào dùng publishable / anon key.
 - **Mỗi nghiệp vụ một schema, không dùng `public`:** `trading` (trade plan; sau này journal, recap), `util` (hàm dùng chung, không expose). Nghiệp vụ mới (calendar, options, news...) tạo schema riêng theo cùng mẫu quyền.
 - Schema mới phải thêm vào **Project Settings → Data API → Exposed schemas** thì PostgREST mới thấy. Gọi REST: header `Accept-Profile: <schema>` khi đọc, `Content-Profile: <schema>` khi ghi.

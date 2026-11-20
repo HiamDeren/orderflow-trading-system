@@ -4,6 +4,20 @@ Dashboard (Next.js trong `apps/web`) nằm ở các đường dẫn `/dashboard`
 
 Chỉ **một** tài khoản Discord (ID trong `OWNER_DISCORD_ID`) vào được. Tài khoản khác đăng nhập sẽ bị đăng xuất và xoá khỏi Supabase Auth ngay.
 
+## Đổi tên sang ZenDojo trên các app (2026-11-20, D50)
+Làm theo thứ tự. Code trong repo đã dùng tên mới; các bước dưới là việc trên dashboard của từng app.
+
+1. **GitHub:** repo → Settings → General → Repository name: `zendojo` → Rename. GitHub tự chuyển hướng link và lệnh git cũ. Máy local: `git remote set-url origin https://github.com/HiamDeren/zendojo.git`.
+2. **Vercel – tên project:** Project → Settings → General → Project Name: `zendojo` → Save. Kiểm tra Settings → Git vẫn nối với `HiamDeren/zendojo` (nếu mất kết nối thì Connect lại repo, Production Branch `production`).
+3. **Vercel – domain:** Settings → Domains → Add `zendojo-deren.vercel.app`, gắn cho Production. Sửa domain cũ `orderflow-trading-system.vercel.app` → Redirect to `zendojo-deren.vercel.app` (308), giữ để link cũ không chết.
+4. **Supabase – tên project:** Project Settings → General → Project name: `ZenDojo` → Save. Ref, URL và key không đổi, không phải sửa biến môi trường.
+5. **Supabase – Auth URL:** Authentication → URL Configuration:
+   - Site URL: `https://zendojo-deren.vercel.app`
+   - Redirect URLs thêm: `https://zendojo-deren.vercel.app/auth/callback`, `https://zendojo-git-development-derenluus-projects.vercel.app/auth/callback`. Giữ URL cũ tới khi đăng nhập trên domain mới chạy ổn rồi mới xoá.
+6. **Discord Developer Portal:** Redirect của OAuth app vẫn là `https://<ref>.supabase.co/auth/v1/callback`, không đổi. Đổi tên app thành "ZenDojo" (nếu chưa).
+7. **ATAS Plan Sender:** đổi `ApiUrl` thành `https://zendojo-deren.vercel.app/api/plan` (không dựa vào chuyển hướng cho lệnh POST).
+8. **Kiểm tra:** đăng nhập Discord trên domain mới và trên preview `development`; gửi thử plan (JSON mẫu) lên domain mới.
+
 ## 1. Tạo ứng dụng OAuth trên Discord
 
 1. Mở https://discord.com/developers/applications → **New Application** (tên `ZenDojo`, icon lấy `apps/web/public/assets/img/zendojo/icon-512.png`).
@@ -14,12 +28,12 @@ Chỉ **một** tài khoản Discord (ID trong `OWNER_DISCORD_ID`) vào được
 
 ## 2. Bật provider Discord trên Supabase
 
-1. Supabase → project **Personal Trading Dashboard** → **Authentication → Sign In / Providers → Discord**: bật, dán Client ID + Client Secret, lưu.
+1. Supabase → project **ZenDojo** (trước là Personal Trading Dashboard) → **Authentication → Sign In / Providers → Discord**: bật, dán Client ID + Client Secret, lưu.
 2. **Authentication → URL Configuration**:
-   - **Site URL**: `https://orderflow-trading-system.vercel.app`
+   - **Site URL**: `https://zendojo-deren.vercel.app`
    - **Redirect URLs** thêm (Supabase so khớp cả chuỗi, app gọi đúng `<origin>/auth/callback` không kèm query):
-     - `https://orderflow-trading-system.vercel.app/auth/callback`
-     - `https://orderflow-trading-system-git-development-derenluus-projects.vercel.app/auth/callback` (link cố định của nhánh `development`; không dùng `*` cho chặt hơn, nên test preview qua link này)
+     - `https://zendojo-deren.vercel.app/auth/callback`
+     - `https://zendojo-git-development-derenluus-projects.vercel.app/auth/callback` (link cố định của nhánh `development`; không dùng `*` cho chặt hơn, nên test preview qua link này)
      - `http://localhost:3000/auth/callback` (chỉ khi chạy local)
 3. **Project Settings → API Keys**: copy **Publishable key** (`sb_publishable_...`). Key này an toàn cho trình duyệt.
 

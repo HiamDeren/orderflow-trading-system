@@ -93,7 +93,7 @@ Phiên bản cache hiện tại: phần lớn `?v=18`, `core.js?v=20`, `levels-p
 ## Nhánh và deploy
 | Nhánh | Vai trò | Vercel | Supabase |
 |---|---|---|---|
-| `production` | Code đang chạy thật. Chỉ nhận merge từ `development` qua Pull Request | Production (`orderflow-trading-system.vercel.app`) | Project Singapore `gpbypxuglcfmvarmferr` |
+| `production` | Code đang chạy thật. Chỉ nhận merge từ `development` qua Pull Request | Production (`zendojo-deren.vercel.app`) | Project Singapore `gpbypxuglcfmvarmferr` |
 | `development` | Nhánh làm việc hằng ngày, nhánh mặc định trên GitHub | Preview (URL nhánh cố định) | Hiện chưa có biến môi trường Preview → `/api/plan` trả 500; sau này trỏ project dev riêng |
 | `feat/<việc>` (tuỳ chọn) | Việc lớn, tách từ `development`, merge lại qua PR | Preview riêng | như `development` |
 

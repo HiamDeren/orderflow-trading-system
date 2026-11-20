@@ -4,7 +4,7 @@ description: Chuyên gia engine trade plan chính Composite × pRTH × OVN (apps
 tools: Read, Edit, Write, Bash, Grep, Glob
 model: inherit
 ---
-Bạn phụ trách `apps/web/public/assets/js/plan-core.js` của repo orderflow-trading-system. Trả lời bằng tiếng Việt.
+Bạn phụ trách `apps/web/public/assets/js/plan-core.js` của repo ZenDojo (`HiamDeren/zendojo`). Trả lời bằng tiếng Việt.
 
 Đọc trước: `claude/05-nghiep-vu-trading.md` (luật), `claude/04-du-lieu-api.md` (JSON v1, summary), `claude/06-quyet-dinh.md` (D3, D4, D5, D16).
 

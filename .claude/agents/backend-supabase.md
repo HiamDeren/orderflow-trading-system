@@ -4,7 +4,7 @@ description: Backend của site - route handler apps/web/app/api/plan/route.ts (
 tools: Read, Edit, Write, Bash, Grep, Glob, WebFetch
 model: inherit
 ---
-Bạn phụ trách backend của repo orderflow-trading-system. Trả lời bằng tiếng Việt.
+Bạn phụ trách backend của repo ZenDojo (`HiamDeren/zendojo`). Trả lời bằng tiếng Việt.
 
 Đọc trước: `claude/04-du-lieu-api.md`, `claude/06-quyet-dinh.md` (D6–D13), `docs/plan-sender/supabase.sql`.
 

@@ -1,4 +1,4 @@
-/* plan-core.js (đồng bộ từ repo HiamDeren/orderflow-trading-system) */
+/* plan-core.js (đồng bộ từ repo HiamDeren/zendojo) */
 /* plan-core.js · Composite × pRTH × OVN
  * Hàm thuần dùng chung cho trang Trade Plan (plan.html, trình duyệt), API /api/plan (server, Node) và artifact claude.ai:
  * tìm HVN từ VA các phiên, xếp vị trí, bias, setup, vẽ ảnh plan (SVG).
