@@ -8,7 +8,7 @@ Chỉ **một** tài khoản Discord (ID trong `OWNER_DISCORD_ID`) vào được
 Làm theo thứ tự. Code trong repo đã dùng tên mới; các bước dưới là việc trên dashboard của từng app.
 
 1. **GitHub:** repo → Settings → General → Repository name: `zendojo` → Rename. GitHub tự chuyển hướng link và lệnh git cũ. Máy local: `git remote set-url origin https://github.com/HiamDeren/zendojo.git`.
-2. **Vercel – tên project:** Project → Settings → General → Project Name: `zendojo` → Save. Kiểm tra Settings → Git vẫn nối với `HiamDeren/zendojo` (nếu mất kết nối thì Connect lại repo, Production Branch `production`).
+2. **Vercel – tên project:** Project → Settings → General → Project Name: `zendojo` → Save. Kiểm tra Settings → Git vẫn nối với `HiamDeren/zendojo` (nếu mất kết nối thì Connect lại repo, Production Branch `production`). Link preview của nhánh (`zendojo-git-development-derenluus-projects.vercel.app`) chỉ có từ lần deploy **sau** khi đổi tên: push một commit hoặc Redeploy bản mới nhất của `development`.
 3. **Vercel – domain:** Settings → Domains → Add `zendojo-deren.vercel.app`, gắn cho Production. Sửa domain cũ `orderflow-trading-system.vercel.app` → Redirect to `zendojo-deren.vercel.app` (308), giữ để link cũ không chết.
 4. **Supabase – tên project:** Project Settings → General → Project name: `ZenDojo` → Save. Ref, URL và key không đổi, không phải sửa biến môi trường.
 5. **Supabase – Auth URL:** Authentication → URL Configuration:

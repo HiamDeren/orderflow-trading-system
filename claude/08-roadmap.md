@@ -115,7 +115,8 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [x] Logo ensō mực bút lông khô + glitch (lát dịch ngang, scanline, pixel), chữ ツ bút lông màu cát; nền login núi ghép thanh TPO + mặt trời ensō; minh hoạ trạng thái trống (Dashboard chưa có plan / cuối tuần), trang 404.
 - [ ] Deren đổi tên app trên Discord Developer Portal thành "ZenDojo" (màn hình đồng ý khi đăng nhập), đặt icon server / app bằng PNG logo.
 - [x] Đổi tên dự án thành **ZenDojo** trong code và tài liệu (D50, 2026-11-20): `package.json`, `supabase/config.toml`, `CLAUDE.md`, `claude/`, subagent, hook, artifact.
-- [ ] Deren đổi tên trên các app theo `docs/dashboard-setup.md` → "Đổi tên sang ZenDojo": GitHub repo `zendojo`, Vercel project `zendojo` + domain `zendojo-deren.vercel.app` (domain cũ chuyển hướng), Supabase project `ZenDojo` + Auth URL, `ApiUrl` của indicator ATAS.
+- [x] GitHub repo đổi tên `HiamDeren/zendojo`; Vercel project đổi tên `zendojo` (2026-11-20).
+- [ ] Còn lại theo `docs/dashboard-setup.md` → "Đổi tên sang ZenDojo": domain `zendojo-deren.vercel.app` (domain cũ chuyển hướng), Supabase project `ZenDojo` + Auth URL, `ApiUrl` của indicator ATAS.
 - [ ] Publish lại artifact claude.ai (domain mới trong `artifact/index.html`).
 
 **Còn lại:**
