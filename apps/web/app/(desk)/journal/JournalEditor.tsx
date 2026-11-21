@@ -2,30 +2,35 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { DayWithTrades, Trade } from "@/lib/journal";
-import { BIAS_CHECK, DAY_TYPES, FOLLOWED, OPEN_TYPES, RESULTS, SIDES } from "@/lib/settings";
+import { BIAS_CHECK, DAY_TYPES, FOLLOWED, OPEN_TYPES, RESULTS, SETUPS, SIDES } from "@/lib/settings";
 import { useUi } from "../_components/Ui";
 
 type TextField = readonly [string, string, string];
-type Row = { entry_time: string; side: string; qty: string; level: string; trigger: string; r: string; pnl: string; fee: string; followed_plan: string; mistakes: string };
+type SessionField = readonly [string, string, readonly (readonly [string, string])[]];
+type Row = { entry_time: string; side: string; qty: string; setup: string; level: string; trigger: string; r: string; pnl: string; fee: string; followed_plan: string; mistakes: string };
 
 const s = (v: unknown) => (v === null || v === undefined ? "" : String(v));
 const toRow = (t: Trade): Row => ({
-  entry_time: s(t.entry_time).slice(0, 5), side: t.side || "Long", qty: s(t.qty || 1), level: s(t.level), trigger: s(t.trigger),
+  entry_time: s(t.entry_time).slice(0, 5), side: t.side || "Long", qty: s(t.qty || 1), setup: s(t.setup), level: s(t.level), trigger: s(t.trigger),
   r: s(t.r), pnl: s(t.pnl), fee: s(t.fee), followed_plan: s(t.followed_plan), mistakes: (t.mistakes || []).join(", "),
 });
-const empty = (): Row => ({ entry_time: "", side: "Long", qty: "1", level: "", trigger: "", r: "", pnl: "", fee: "", followed_plan: "", mistakes: "" });
+const empty = (): Row => ({ entry_time: "", side: "Long", qty: "1", setup: "", level: "", trigger: "", r: "", pnl: "", fee: "", followed_plan: "", mistakes: "" });
 const money = (v: number) => (v > 0 ? "+$" : v < 0 ? "−$" : "$") + Math.abs(v).toFixed(2).replace(/\.00$/, "");
 
 export default function JournalEditor({
   date,
   initial,
   textFields,
+  sessionFields,
+  preset,
   head,
   children,
 }: {
   date: string;
   initial: DayWithTrades | null;
   textFields: readonly TextField[];
+  sessionFields: readonly SessionField[];
+  preset?: Record<string, string>;
   head?: React.ReactNode;
   children?: React.ReactNode;
 }) {
@@ -35,9 +40,14 @@ export default function JournalEditor({
     const o: Record<string, string> = {
       day_type: s(initial?.day_type), result: s(initial?.result), open_type: s(initial?.open_type), bias_correct: s(initial?.bias_correct),
     };
-    for (const [k] of textFields) o[k] = s((initial as Record<string, unknown> | null)?.[k]);
+    const src = initial as Record<string, unknown> | null;
+    // Khung trước phiên: chưa ghi gì thì điền sẵn từ plan của ngày
+    const fresh = !sessionFields.some(([k]) => src?.[k]);
+    for (const [k] of sessionFields) o[k] = s(src?.[k]) || (fresh ? s(preset?.[k]) : "");
+    for (const [k] of textFields) o[k] = s(src?.[k]);
     return o;
   });
+  const fromPlan = !!preset && !sessionFields.some(([k]) => (initial as Record<string, unknown> | null)?.[k]) && Object.values(preset).some(Boolean);
   const [rows, setRows] = useState<Row[]>(() => (initial?.journal_trades || []).map(toRow));
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
@@ -148,6 +158,24 @@ export default function JournalEditor({
         </div>
       </div>
 
+      <section className="card" aria-label={t("Log phiên")}>
+        <div className="row wrap">
+          <span className="lbl">{t("Log phiên · Composite × pRTH × OVN")}</span>
+          {fromPlan && <span className="small dim">{t("Khung trước phiên điền sẵn từ plan, kiểm lại rồi lưu.")}</span>}
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 12 }}>
+          {sessionFields.map(([k, label, opts]) => (
+            <label className="field" key={k}>
+              {t(label)}
+              <select value={day[k]} onChange={(e) => set(k, e.target.value)} disabled={k === "open_dir" && day.open_type === "Open auction"}>
+                <option value="">—</option>
+                {opts.map(([v, n]) => <option key={v} value={v}>{t(n)}</option>)}
+              </select>
+            </label>
+          ))}
+        </div>
+      </section>
+
       {children}
 
       <section className="card" aria-label={t("Lệnh trong ngày")} style={{ padding: "18px 8px 10px" }}>
@@ -160,7 +188,7 @@ export default function JournalEditor({
             <table className="t">
               <thead>
                 <tr>
-                  <th>{t("Giờ ET")}</th><th>{t("Hướng")}</th><th>{t("HĐ")}</th><th>Level</th><th>Trigger</th><th>R</th><th>PnL $</th><th>{t("Phí")}</th><th>{t("Theo plan")}</th><th>{t("Lỗi (tag, cách nhau dấu phẩy)")}</th><th><span className="sr-only">{t("Xoá")}</span></th>
+                  <th>{t("Giờ ET")}</th><th>{t("Hướng")}</th><th>{t("HĐ")}</th><th>Setup</th><th>Level</th><th>Trigger</th><th>R</th><th>PnL $</th><th>{t("Phí")}</th><th>{t("Theo plan")}</th><th>{t("Lỗi (tag, cách nhau dấu phẩy)")}</th><th><span className="sr-only">{t("Xoá")}</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -173,6 +201,12 @@ export default function JournalEditor({
                       </select>
                     </td>
                     <td><input className="input mono" inputMode="numeric" aria-label={t("Số hợp đồng")} value={r.qty} onChange={(e) => setRow(i, "qty", e.target.value)} style={{ width: 56 }} /></td>
+                    <td>
+                      <select className="input" aria-label="Setup" value={r.setup} onChange={(e) => setRow(i, "setup", e.target.value)} style={{ minWidth: 72 }}>
+                        <option value="">—</option>
+                        {SETUPS.map(([v, n]) => <option key={v} value={v} title={n}>{v}</option>)}
+                      </select>
+                    </td>
                     <td><input className="input" aria-label="Level" value={r.level} onChange={(e) => setRow(i, "level", e.target.value)} placeholder="pRTH VAL" /></td>
                     <td><input className="input" aria-label="Trigger" value={r.trigger} onChange={(e) => setRow(i, "trigger", e.target.value)} placeholder="Absorption + CVD" style={{ minWidth: 180 }} /></td>
                     <td><input className="input mono" inputMode="decimal" aria-label="R" value={r.r} onChange={(e) => setRow(i, "r", e.target.value)} style={{ width: 70 }} /></td>

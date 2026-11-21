@@ -16,8 +16,13 @@ export type PlanLevels = {
 export type PlanPanelRow = { k: string; v: string; c?: string };
 export type Plan = { error?: string; svg: string; text: string; summary: PlanSummary; D: PlanLevels; panel: PlanPanelRow[] };
 
+export type PlanOpt = { k: string; n: string; d: string; dir?: number };
+
 type PlanCore = {
   planFromJson(payload: unknown): Plan;
+  P_OPTS: PlanOpt[];
+  B_OPTS: PlanOpt[];
+  O_OPTS: PlanOpt[];
   fmt(n: number | null | undefined): string;
   lc1(s: string): string;
 };

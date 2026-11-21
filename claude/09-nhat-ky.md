@@ -10,9 +10,12 @@ Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 - Tài liệu: `docs/plan-sender/PROMPT_PlanSender_fix-2026-11-21.md` (sửa indicator trên máy), README mục "Cấu hình bắt buộc", `dashboard-setup.md` (307, Price scale).
 - Supabase: không có dữ liệu test (chỉ 2 dòng thật 17/11, 19/11 + 2 ảnh); `rls_auto_enable` đã thu quyền anon / authenticated.
 
-## 2026-11-21 · Đối chiếu trạng thái, chốt đợt ship dashboard
+## 2026-11-21 · Đối chiếu trạng thái, ship dashboard, log phiên vào Journal
 - Kiểm thật: production còn ở PR #3; Preview `development` READY; domain mới + redirect 307 đã chạy; `journal_images` chưa áp; thiếu `COINGECKO_API_KEY`.
 - Chốt đợt đang làm: nghiệm thu + PR `development` → `production`. Ghi phương án T12 (log phiên → cột trong `journal_entries`, khoá localStorage `cb-log`) vào `08`.
+- Áp migration `journal_images` (file đổi tên `20261121073856_…` cho khớp version).
+- T12 (D51): migration `20261121074126_journal_session_log` + thẻ Log phiên trong Journal, cột Setup, thống kê khung Composite (Wilson 95%). Thống kê journal lấy 20 ngày, thống kê khung lấy tới 250 ngày.
+- D52: dừng duy trì artifact claude.ai.
 
 ## 2026-11-20 · Dự án đổi tên thành ZenDojo (D50)
 - Code và tài liệu dùng tên mới: `package.json` (`zendojo`), `supabase/config.toml` (`project_id`), `CLAUDE.md`, `claude/01`, `02`, `04`, `08`, prompt chuyển đổi, subagent, hook SessionStart, artifact (domain mới, build lại `app.js`).

@@ -28,6 +28,11 @@ Tạo 2026-11-18 khi chuyển sang Singapore (dữ liệu cũ chép sang, khớp
 - RLS bật, **không có policy**; `anon` / `authenticated` không có quyền trên schema `trading` lẫn bảng; chỉ `service_role` (secret key) có `usage` + `select, insert, update, delete`. Default privileges của schema `trading` đã đặt sẵn để bảng mới tự theo mẫu này.
 - Thêm cột mới: Postgres luôn thêm vào cuối. Muốn giữ thứ tự nhóm thì tạo lại bảng khi bảng còn trống, hoặc chấp nhận cột mới ở cuối.
 
+### Journal (`trading.journal_entries`, `journal_trades`, `journal_images`)
+- Một dòng `journal_entries` / ngày / symbol, lệnh ở `journal_trades` (thay toàn bộ khi lưu), lưu qua RPC `trading.save_journal(p jsonb)` (D39). Ảnh: `journal_images` (D43).
+- Log phiên (D51, migration `20261121074126_journal_session_log`): `comp_pos` (in / edgeU / edgeD / lvn / out), `prth_build` (accU / accD / bal / rejU / rejD), `ovn_build` (up / down / in / wide), `pre_bias`, `open_dir`, `ib_width`, `hvn_edge`, `reach_next` — đều text có check constraint; `journal_trades.setup` F / C / V.
+- Migration áp sau ngày 2026-11-19: `access_members`, `journal_images` (version `20261121073856`), `journal_session_log` (`20261121074126`).
+
 ### Storage
 - Bucket **`trading`** (cùng tên schema): private, tối đa 10 MB / file, `image/png`, `image/jpeg`, `image/webp`, không storage policy (chỉ secret key).
 - Đường dẫn theo **ngày rồi loại**: `YYYY/MM/DD/<loại>/<file>`, loại = `plan` | `journal` (journal gồm ảnh chụp lệnh và recap cuối phiên). Ví dụ `2026/11/17/plan/plan_2026-11-17_NQ.webp`. Helper: `apps/web/lib/storage.ts` (`dayPath`, `planImagePath`).

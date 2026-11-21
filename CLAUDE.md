@@ -26,7 +26,8 @@ Tên dự án: **ZenDojo** (từ 2026-11-20, D50). Repo `HiamDeren/zendojo` (tr�
 - Database: đổi schema bằng file mới trong `supabase/migrations/` (không sửa tay trên dashboard).
 - Cài / chạy: `pnpm install`, `pnpm dev` (Next.js), `pnpm build`.
 - Trade plan chính thức (từ 2026-11-17) là khung **Composite × pRTH × OVN** ở trang `plan.html` (Trade Plan). `/testing`, `/overlap` chỉ còn là redirect.
-- Artifact "NQ Trade Plan · Composite × pRTH × OVN" trên claude.ai: nguồn ở `artifact/`, engine lấy từ `plan-core.js`. Đổi engine hoặc trang plan thì `node scripts/build-artifact.mjs` rồi publish lại artifact (xem `artifact/README.md`).
+- Artifact "NQ Trade Plan · Composite × pRTH × OVN" trên claude.ai: **ngừng duy trì từ 2026-11-21 (D52)**. `artifact/` chỉ là lưu trữ, không cần build / publish lại khi đổi engine.
+- Log phiên (khung Composite × pRTH × OVN) nằm trong Journal: cột ở `trading.journal_entries` + `journal_trades.setup` (D51).
 - Sau mỗi thay đổi đáng kể: cập nhật [`claude/08-roadmap.md`](claude/08-roadmap.md) và [`claude/09-nhat-ky.md`](claude/09-nhat-ky.md).
 - Khi Deren nhắn "liệt kê các việc còn lại": trả lời từ `claude/08-roadmap.md`.
 

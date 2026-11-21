@@ -37,7 +37,7 @@ Cập nhật: 2026-11-21 (đối chiếu trạng thái thật, chốt đợt shi
 - [x] Gỡ `i18n/__pycache__/` khỏi git (đã thêm vào `.gitignore`).
 
 ## Ý tưởng tiếp theo cho Trade Plan
-- [ ] Log phiên lên Supabase (bảng `session_logs`) thay vì localStorage, đưa tab Log phiên (đang chỉ có ở artifact) lên trang Trade Plan, để thống kê bias / setup theo thời gian.
+- [x] Log phiên lên Supabase (2026-11-21, D51): cột trong `journal_entries` + `journal_trades.setup`, form trong Journal, thống kê theo thời gian.
 - [ ] Recap sau phiên: kết quả thực tế so với plan (bias đúng / sai, tới HVN kế tiếp hay không).
 - [ ] Backtest khung Composite × pRTH × OVN khi có data M30 6–12 tháng (indicator xuất thêm nến M30).
 - [ ] Discord bot (khác webhook): lệnh `/plan` xem lại plan, `/log` ghi kết quả phiên ngay trong Discord.
@@ -92,7 +92,7 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [x] News: 20 bài / lần (nút tải thêm, tối đa 100) + đọc bài ngay trong app (`lib/reader.ts`, D42); trang nguồn chặn thì hiện tóm tắt + link gốc. Tin trên Dashboard mở thẳng vào trình đọc.
 - [x] Journal: ảnh lệnh (tải lên, dán Ctrl+V, kéo thả, ghi chú, gắn Lệnh n, xem lớn) — bảng `trading.journal_images` + `/api/journal/image` (D43).
 - [x] Lưới trang đều hơn: nội dung tối đa 1360 px giữa màn hình, Journal 3 cột cố định, Calendar / Earnings / News / Trade Plan chia 2 cột cùng kiểu.
-- [ ] Áp migration `20261118120000_journal_images` lên Supabase (chờ Deren "ok áp migration"; chưa áp thì Journal báo ảnh chưa dùng được, phần còn lại vẫn chạy).
+- [x] Áp migration `journal_images` lên Supabase (2026-11-21, file đổi tên `20261121073856_journal_images.sql` khớp version).
 
 **Đợt 4 (2026-11-19):**
 - [x] Calendar / Earnings / News vừa khung màn hình (desktop ≥ 1101 px): không cuộn cả trang, từng khung tự cuộn; `scrollbar-gutter` 2 bên để các trang căn giữa như nhau.
@@ -102,7 +102,6 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [x] Bỏ chữ nguồn (Finnhub, ForexFactory) và các dòng ghi chú (chú thích chấm màu, PnL, settings, Markdown).
 - [x] Sidebar thu gọn: logo không bị cắt; chọn múi giờ nhanh ở sidebar, thanh trên mobile, Calendar.
 - [x] Knowledge: 4 khoá cũ (TPO Level, Trade Plan, Orderflow Tools, Trắc nghiệm) mở trong layout mới (D45), các bài trong 3 tab trỏ thẳng vào chương.
-- [ ] Áp migration `20261118120000_journal_images` (chờ Deren).
 
 **Đợt 5 (2026-11-19, code theo canvas v2):**
 - [x] Shell v2 (D47): thanh trên có đồng hồ NY, tin đỏ kế tiếp + đếm ngược, Ctrl/Cmd+K mở command palette; mobile có thanh tab dưới (Dashboard / Calendar / Markets / Journal / Thêm). Bỏ chia session NY AM / trước / sau phiên.
@@ -123,7 +122,7 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [x] GitHub repo đổi tên `HiamDeren/zendojo`; Vercel project đổi tên `zendojo` (2026-11-20).
 - [x] Vercel domain `zendojo-deren.vercel.app` (Production); `orderflow-trading-system.vercel.app` chuyển hướng **307** (docs ghi 308; 307 vẫn giữ POST) — kiểm 2026-11-21.
 - [ ] Còn lại theo `docs/dashboard-setup.md` → "Đổi tên sang ZenDojo": Supabase Auth Site URL + Redirect URLs domain mới, `ApiUrl` của indicator ATAS.
-- [ ] Publish lại artifact claude.ai (domain mới trong `artifact/index.html`).
+- [x] ~~Publish lại artifact~~ — artifact ngừng duy trì (D52, 2026-11-21).
 
 **Còn lại:**
 - [ ] Knowledge: Deren tổng hợp nội dung AMT / Context / Entry; port dần `levels.html`, `tools.html`, quiz vào Next.js.
@@ -134,20 +133,21 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 ## Đợt đang làm · Ship dashboard lên production (chốt 2026-11-21)
 Thực tế: `production` vẫn ở PR #3 (2026-11-18); toàn bộ dashboard đợt 1–6 chỉ chạy trên Preview `development`. Giai đoạn 2–3 và một phần 5 của `claude/07` đã code xong theo hướng khác (Discord OAuth thay email allowlist) → đợt này = **Nghiệm thu + PR `development` → `production`**.
 - [x] Preview `48926cc` build READY; `check-plan-core` pass.
-- [ ] Áp migration `20261118120000_journal_images` (timestamp cũ hơn `access_members` đã áp → áp bằng MCP; `supabase db push` có thể báo lệch thứ tự).
+- [x] Áp migration `journal_images` (2026-11-21, version `20261121073856`, file đã đổi tên cho khớp).
 - [ ] Xác nhận Supabase Auth Redirect URLs có `zendojo-deren` + preview `zendojo-git-development-…`; `access` trong Exposed schemas.
 - [ ] POST/GET `/api/plan` trên Preview với JSON mẫu (`notify:false` vì `DISCORD_WEBHOOK_TRADE_PLAN` chỉ có ở Production), xoá dòng + ảnh test.
 - [ ] Mở mọi URL cũ + `.en` + hash chương trên Preview.
 - [ ] Advisor security: còn 7 INFO `rls_enabled_no_policy` (cố ý, chỉ service_role) + WARN leaked password (không dùng đăng nhập mật khẩu) — ghi nhận, không sửa.
 - [ ] Mở PR `development` → `production`, Deren duyệt.
 
-## T12 · Log phiên vào Journal (chờ Deren duyệt phương án)
+## T12 · Log phiên vào Journal (D51, code 2026-11-21)
 - Log phiên ở artifact lưu localStorage khoá **`cb-log`** (chưa có trong danh sách `claude/03`; khung cũ `ov-log`). Trường: date, p (vị trí composite), b (pRTH build), o (OVN), bias, ot (open type + hướng), ib, edge (phản ứng mép HVN), reach (tới HVN kế), setup, r, biasok, note.
-- Trùng với `journal_entries`: `open_type`, `bias_correct`; `r` tính được từ `journal_trades`. Đề xuất: thêm cột vào `journal_entries` thay vì bảng `session_logs` riêng (xem `claude/06` khi chốt).
-- [ ] Migration + form "Khung phiên" trong Journal + thống kê (bias đúng, mép HVN giữ, ra mép → tới HVN kế, R theo setup, khoảng tin cậy Wilson như artifact).
-- [ ] Nhập `cb-log` từ file sao lưu JSON / CSV.
+- Trùng với `journal_entries`: `open_type`, `bias_correct`; `r` tính được từ `journal_trades`. Deren chốt: thêm cột vào `journal_entries` (D51); artifact dừng (D52).
+- [x] Migration `20261121074126_journal_session_log` (đã áp, test `save_journal` trong transaction rồi rollback) + thẻ "Log phiên" trong Journal (điền sẵn từ plan) + cột Setup F / C / V + thống kê có khoảng tin cậy Wilson.
+- [ ] Deren test thẻ Log phiên trên Preview.
+- [ ] Nhập `cb-log` cũ: Deren bấm "Copy CSV" ở tab Log của artifact, gửi CSV → Claude nhập bằng SQL (dòng có R tạo một lệnh với setup tương ứng).
 
 ## Quy ước
-- Mỗi thay đổi: sửa artifact (nếu liên quan) + push repo, Vercel tự deploy; cập nhật file này và [09-nhat-ky.md](09-nhat-ky.md).
+- Mỗi thay đổi: push repo, Vercel tự deploy; cập nhật file này và [09-nhat-ky.md](09-nhat-ky.md).
 - Ngôn ngữ mặc định VI (`x.html`), EN sinh tự động bằng `python3 i18n/build_en.py`.
 - Không commit token, key, URL webhook, CSV dữ liệu Rithmic.

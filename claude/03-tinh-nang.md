@@ -76,7 +76,8 @@ Chi tiết hợp đồng API: [04-du-lieu-api.md](04-du-lieu-api.md).
 
 ## Ngoài repo
 - **Indicator ATAS `Deren · Plan Sender`** (`docs/plan-sender/PlanSender.cs`): tính TPO / VA từng phiên RTH / OVN từ nến M30, composite 30 ngày, xuất JSON v1, copy clipboard, ghi file, POST lên API. Chưa build (dự kiến tối 2026-11-17 bằng Claude Code).
-- **Artifact claude.ai "NQ Trade Plan · Composite × pRTH × OVN"**: bản song song của trang Trade Plan, cùng engine `plan-core.js` (nguồn ở `artifact/`), có thêm tab 06 Log phiên, 07 Màu ATAS, 09 Lưu trữ backtest cũ.
+- **Artifact claude.ai "NQ Trade Plan · Composite × pRTH × OVN"** (ngừng duy trì 2026-11-21, D52): bản song song cũ của trang Trade Plan, nguồn lưu ở `artifact/`. Tab Log phiên (localStorage `cb-log`, khung cũ `ov-log`) đã chuyển vào Journal (D51); bảng màu ATAS ARGB còn ở `artifact/app.src.js`.
+- **Journal · Log phiên** (D51): thẻ "Log phiên · Composite × pRTH × OVN" (vị trí composite, pRTH, OVN, bias trước phiên — điền sẵn từ plan; hướng open type, IB, phản ứng mép HVN, tới HVN kế), cột Setup F / C / V ở bảng lệnh, thống kê có khoảng tin cậy ở cột phải.
 - **Discord**: kênh `#trade-plan`, webhook tên "Trade Plan" (avatar TPO profile).
 
 ## Bảng khoá localStorage
