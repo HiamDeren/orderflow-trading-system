@@ -1,0 +1,62 @@
+# CI cho mọi PR vào development / production: lint + format (Biome), test (Vitest), snapshot plan-core, build Next.js.
+# Không dùng secret thật: build chạy với biến môi trường giả, chỉ kiểm code biên dịch được và không lộ secret ra bundle.
+name: CI
+
+on:
+  pull_request:
+    branches: [development, production]
+  push:
+    branches: [development]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      NEXT_PUBLIC_SUPABASE_URL: https://ci-placeholder.supabase.co
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ci-placeholder
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4 # đọc phiên bản pnpm từ "packageManager" trong package.json
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: pnpm
+
+      - name: Cài dependency
+        run: pnpm install --frozen-lockfile
+
+      - name: Biome (lint + format)
+        run: pnpm exec biome ci
+
+      - name: Vitest
+        run: pnpm test
+
+      - name: Snapshot plan-core
+        run: node scripts/check-plan-core.mjs
+
+      - name: Kiểm cú pháp JS trang học + script
+        run: |
+          for f in apps/web/public/assets/js/*.js apps/web/public/assets/js/en/*.js scripts/*.mjs .claude/hooks/*.mjs; do
+            node --check "$f"
+          done
+
+      - name: Build Next.js
+        run: pnpm build
+
+      - name: Không lộ secret trong bundle client
+        run: |
+          if grep -rEl 'sb_secret_[A-Za-z0-9]|discord(app)?\.com/api/webhooks/[0-9]|eyJhbGciOiJIUzI1Ni' apps/web/.next/static; then
+            echo "::error::Bundle client chứa chuỗi giống secret"
+            exit 1
+          fi
