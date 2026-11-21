@@ -2,6 +2,15 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-21 · Tối ưu đợt 1 (audit hạng 1–14, nhánh `chore/optimize-2026-11`)
+- Audit: `claude/11-audit-2026-11.md`. Bundle client đã nhỏ (~160 KB gzip / trang desk, không đổi sau đợt này); chỗ chậm nằm ở server.
+- Test & CI: Vitest (57 test: plan-core 12/11 + 7 biến thể, journal, lịch kinh tế, giờ ET/VN qua DST, `lib/api` + schema); Biome (format 1 commit riêng, lỗi lint cũ để `warn`); `.github/workflows/ci.yml`. Lệnh: `pnpm test`, `pnpm lint`, `pnpm format`.
+- Hiệu năng: timeout Finnhub / ForexFactory / Supabase / Discord; Finnhub key qua header `X-Finnhub-Token`, retry 1 lần khi 429, tối đa 8 lệnh quote / 4 lệnh earnings cùng lúc; `cache()` cho `getClaims` / `getViewer`; layout desk chạy song song; `next/font` thay `<link>` Google Fonts.
+- API: `lib/api.ts` (`json`, `fail`, `requireOwnerApi`, `requireViewerApi`, `tokenEquals` băm SHA-256 + `timingSafeEqual`, `crossOrigin`, `readJson`), `lib/schemas.ts` (zod JSON v1 `.loose`, journal, members). Lỗi `{ ok:false, error, code }`, **giữ nguyên chuỗi `error`**. Ghi bằng cookie phải cùng Origin. Body tối đa: plan 2 MB, journal 1 MB.
+- Bảo mật: `X-Frame-Options: SAMEORIGIN`, `Permissions-Policy`, HSTS, CSP Report-Only.
+- Dọn: export / hàm chết (knip), `lib/num.ts`, `metadataBase`, proxy dùng `lib/env`.
+- Kiểm: `next build` OK, `check-plan-core` OK, smoke test `next start` + Supabase giả: POST JSON 12/11 → 200, payload lưu nguyên vẹn, ảnh 101 834 byte như trước; 401 / 400 / 405 đúng chuỗi cũ; trang học 200.
+
 ## 2026-11-21 · Chẩn đoán Plan Sender (log máy ATAS + Supabase + Vercel)
 - 17/11 21:31–21:40 VN: log không có dòng `web:` → "Gửi lên web" chưa bật / URL mẫu, indicator bỏ qua im lặng. 21:41 và 21:43 đã `HTTP 200` nhưng vào project Supabase cũ (Sydney); project Singapore tạo lúc 22:45 VN nên "không thấy POST". Dòng 17/11 hiện có là bản gửi lại qua Plan Builder 18/11.
 - 19/11 9:29 ET: đầu-cuối chạy (`HTTP 200`, dòng DB, ảnh `2026/11/19/plan/plan_2026-11-19_NQ.webp`, `discord.sent:true`) nhưng 2 POST (bấm tay + tự gửi) → 2 tin Discord; chart Price scale 4 → tick 4, row 16, cả `periods_hl` bị làm tròn 4 điểm → số 19/11 sai.

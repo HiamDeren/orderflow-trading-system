@@ -38,6 +38,8 @@ Tên dự án: **ZenDojo** (từ 2026-11-20, D50). Repo `HiamDeren/zendojo` (tr�
 - Chuyển sang web app: dùng [`claude/prompts/chuyen-doi-web-app.md`](claude/prompts/chuyen-doi-web-app.md).
 
 ## Kiểm tra nhanh
+- Test + lint: `pnpm test` (Vitest, `apps/web/tests/`), `pnpm lint` / `pnpm format` (Biome). CI chạy đủ trên mọi PR (`.github/workflows/ci.yml`).
+- API dùng helper `apps/web/lib/api.ts` (lỗi `{ ok:false, error, code }`, giữ chuỗi `error` cũ) và schema zod `apps/web/lib/schemas.ts` (JSON v1 không đổi tên trường).
 - Engine plan: `node scripts/check-plan-core.mjs` (snapshot `scripts/plan-core.snapshot.json`).
 - Local: `pnpm dev` hoặc `pnpm build && pnpm --filter web start` (trang tĩnh + API). API cần biến môi trường; không có thì test trên preview `development`.
 - Test API bằng `apps/web/public/assets/sample_plan_20261112.json` (xem `docs/plan-sender/README.md`, Bước 3). Test xong nhớ xoá dòng mẫu trong `trade_plans` và ảnh trong Storage.
