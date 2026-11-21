@@ -3,6 +3,8 @@
 //   GET /api/v1/news?category=general|forex|merger → [{ id, datetime (unix s), headline, source, summary, url, category, related }]
 //   GET /api/v1/calendar/earnings?from&to → { earningsCalendar: [{ symbol, date, hour: bmo|amc|dmh, epsEstimate, epsActual, revenueEstimate, revenueActual, quarter, year }] }
 
+import { num } from "@/lib/num";
+
 const BASE = process.env.FINNHUB_BASE_URL || "https://finnhub.io/api/v1";
 export const NEWS_CATEGORIES = ["general", "forex", "merger"] as const;
 export type NewsCategory = (typeof NEWS_CATEGORIES)[number];
@@ -29,8 +31,6 @@ export const NQ_WATCH = [
   "KLAC", "CRWD", "MRVL", "SNPS", "CDNS", "MELI", "PDD", "ADP", "SBUX", "GILD", "AMGN", "CMCSA", "HON", "ABNB", "DASH",
   "FTNT", "ORLY", "REGN", "VRTX", "MDLZ", "CTAS", "WDAY", "ADSK", "ZS", "DDOG", "TEAM",
 ];
-
-const num = (v: unknown) => (v === null || v === undefined || v === "" || !Number.isFinite(Number(v)) ? null : Number(v));
 
 const TIMEOUT_MS = 8000;
 const RETRY_429_MS = 1500;

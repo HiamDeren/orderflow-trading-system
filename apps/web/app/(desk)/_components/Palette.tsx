@@ -8,7 +8,7 @@ import { useUi } from "./Ui";
 
 type Cmd = { id: string; label: string; hint: string; icon: string; href: string };
 
-export const PAGES: { label: string; href: string; icon: string; keys: string }[] = [
+const PAGES: { label: string; href: string; icon: string; keys: string }[] = [
   { label: "Dashboard", href: "/dashboard", icon: "dashboard", keys: "dashboard tong quan home" },
   { label: "Calendar", href: "/calendar", icon: "calendar", keys: "calendar lich tin kinh te economic" },
   { label: "News", href: "/news", icon: "news", keys: "news tin tuc" },

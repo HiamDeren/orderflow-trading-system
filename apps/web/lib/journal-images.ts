@@ -19,11 +19,7 @@ export type JournalImage = {
 
 const TABLE = "journal_images";
 export const MAX_UPLOAD = 8 * 1024 * 1024; // sau khi trình duyệt đã thu nhỏ; Vercel giới hạn body ~4.5 MB nên client nén trước
-export const MAX_PER_DAY = 30;
-
-export function imageUrl(img: Pick<JournalImage, "id">) {
-  return `/api/journal/image?id=${img.id}`;
-}
+const MAX_PER_DAY = 30;
 
 export async function listImages(date: string): Promise<JournalImage[]> {
   return db.select<JournalImage>(TABLE, `select=*&trade_date=eq.${date}&order=created_at.asc`);

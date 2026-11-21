@@ -67,7 +67,7 @@ export async function isGuest(discordId: string): Promise<boolean> {
   return ok;
 }
 
-export function forget(discordId: string) {
+function forget(discordId: string) {
   cache.delete(discordId);
 }
 

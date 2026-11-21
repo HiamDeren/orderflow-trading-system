@@ -44,8 +44,8 @@ export function hhmm(ts: number, timeZone: string) {
   return `${String(p.hh).padStart(2, "0")}:${String(p.mm).padStart(2, "0")}`;
 }
 
-export const SESSION_START = 9 * 60 + 30; // 09:30 ET
-export const SESSION_END = 11 * 60 + 30; // 11:30 ET
+const SESSION_START = 9 * 60 + 30; // 09:30 ET
+const SESSION_END = 11 * 60 + 30; // 11:30 ET
 export const PLAN_SEND = 9 * 60 + 29; // ATAS gửi plan lúc 09:29 ET
 
 export function inSession(minutesEt: number) {
@@ -68,10 +68,6 @@ export function isWeekday(date: string) {
   return w >= 1 && w <= 5;
 }
 
-export function monthOf(date: string) {
-  return date.slice(0, 7);
-}
-
 export function monthRange(month: string) {
   const [y, m] = month.split("-").map(Number);
   const start = `${month}-01`;
@@ -85,9 +81,6 @@ export function shiftMonth(month: string, n: number) {
   const t = y * 12 + (m - 1) + n;
   return `${Math.floor(t / 12)}-${String((t % 12) + 1).padStart(2, "0")}`;
 }
-
-export const DOW_VI = ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
-export const DOW_SHORT = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
 
 export function viDate(date: string) {
   const [y, m, d] = date.split("-");

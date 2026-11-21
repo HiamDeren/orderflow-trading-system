@@ -9,6 +9,10 @@ const inter = Inter({ subsets: ["latin", "latin-ext", "vietnamese"], variable: "
 const mono = JetBrains_Mono({ subsets: ["latin", "latin-ext", "vietnamese"], variable: "--font-jbmono", display: "swap" });
 
 export const metadata: Metadata = {
+  // URL tuyệt đối cho ảnh OG / Twitter (thiếu thì Next.js resolve về localhost ngoài Vercel)
+  metadataBase: new URL(
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "https://zendojo-deren.vercel.app",
+  ),
   title: { default: "ZenDojo", template: "%s · ZenDojo" },
   description: "ZenDojo · võ đường trading của Derenツ: plan TPO, lịch tin, thị trường, journal, PnL.",
   robots: { index: false, follow: false },

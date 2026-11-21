@@ -8,7 +8,7 @@ import { fmtTime } from "@/lib/time";
 import Icon from "./Icon";
 import { useUi } from "./Ui";
 
-export function ago(ts: number, now: number, t: (s: string, v?: Record<string, string | number>) => string) {
+function ago(ts: number, now: number, t: (s: string, v?: Record<string, string | number>) => string) {
   const m = Math.max(0, Math.round((now - ts) / 60000));
   if (m < 60) return t("{n} phút trước", { n: m });
   const h = Math.round(m / 60);

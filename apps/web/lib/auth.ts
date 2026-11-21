@@ -48,7 +48,7 @@ async function roleFromClaims(c: Claims | null | undefined): Promise<Role | null
   return typeof g === "string" && (await isGuest(g)) ? "guest" : null;
 }
 
-export function ownerFromClaims(c: Claims | null | undefined): Owner | null {
+function ownerFromClaims(c: Claims | null | undefined): Owner | null {
   if (!c?.sub || c.app_metadata?.[OWNER_FLAG] !== true) return null;
   return profileOf(c, "Deren");
 }

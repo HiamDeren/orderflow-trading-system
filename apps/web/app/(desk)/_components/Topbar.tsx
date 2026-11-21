@@ -22,7 +22,7 @@ function useNow(every = 15000) {
 }
 
 const pad = (n: number) => String(n).padStart(2, "0");
-export function countdown(ms: number) {
+function countdown(ms: number) {
   const m = Math.max(0, Math.round(ms / 60000));
   if (m >= 24 * 60) return `${Math.floor(m / 1440)}d ${pad(Math.floor((m % 1440) / 60))}h`;
   return `${Math.floor(m / 60)}:${pad(m % 60)}`;

@@ -1,6 +1,7 @@
 // Dữ liệu trang Markets (D46). Không lưu database.
 //   Cổ phiếu / ETF: Finnhub /quote (lib/stock.ts getQuotes), cache 2–5 phút.
 //   Crypto: CoinGecko Demo API (COINGECKO_API_KEY, header x-cg-demo-api-key), cache 10 phút.
+import { num } from "@/lib/num";
 import { getQuotes, type MiniQuote } from "@/lib/stock";
 
 export const INDEX_ETF = [
@@ -79,8 +80,6 @@ export type Coin = {
   d7: number | null;
   spark: number[];
 };
-
-const num = (v: unknown) => (v === null || v === undefined || !Number.isFinite(Number(v)) ? null : Number(v));
 
 export async function getCrypto(cat: string) {
   const catQ = CRYPTO_CATS.some((c) => c.id === cat && c.id) ? `&category=${cat}` : "";

@@ -7,6 +7,7 @@
 //   /stock/peers      mã cùng ngành
 //   /search           tìm mã
 import { call, type Earning, getEarnings, mapLimit, marketConfigured } from "@/lib/market";
+import { num } from "@/lib/num";
 
 export const SYMBOL_RE = /^[A-Z][A-Z0-9.\-]{0,9}$/;
 
@@ -42,7 +43,7 @@ export type Stock = {
   errors: string[];
 };
 
-const n = (v: unknown) => (v === null || v === undefined || v === "" || !Number.isFinite(Number(v)) ? null : Number(v));
+const n = num;
 
 function series(v: unknown, take: number): Point[] {
   return (Array.isArray(v) ? (v as Record<string, unknown>[]) : [])

@@ -10,7 +10,7 @@ export const CURRENCIES = ["AUD", "CAD", "CHF", "CNY", "EUR", "GBP", "JPY", "NZD
 
 export const PREFS_COOKIE = "desk_econ";
 export type EconPrefs = { cur: string[]; imp: Impact[] };
-export const DEFAULT_PREFS: EconPrefs = { cur: ["USD"], imp: [...IMPACTS] };
+const DEFAULT_PREFS: EconPrefs = { cur: ["USD"], imp: [...IMPACTS] };
 
 export function parsePrefs(raw: string | undefined | null): EconPrefs {
   if (!raw) return { ...DEFAULT_PREFS };

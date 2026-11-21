@@ -59,7 +59,7 @@ export function planPayloadError(issues: z.core.$ZodIssue[]) {
 }
 
 // PUT /api/journal: lib/journal.ts (normDay / normTrade) tự lọc giá trị; ở đây chỉ kiểm khung + giới hạn số lệnh.
-export const MAX_TRADES = 50;
+const MAX_TRADES = 50;
 export const JournalPut = z.object({
   day: z.looseObject({ trade_date: z.string().regex(DATE_RE) }),
   trades: z.array(z.looseObject({})).max(MAX_TRADES).optional(),

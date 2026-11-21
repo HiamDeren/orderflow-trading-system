@@ -59,8 +59,6 @@ export function Avatar({ owner, large }: { owner: Owner; large?: boolean }) {
   );
 }
 
-export { LangSwitch };
-
 export default function Shell({ owner, events, children }: { owner: Viewer; events: NextEvent[]; children: React.ReactNode }) {
   const guest = owner.role === "guest";
   const groups = guest ? GUEST_GROUPS : GROUPS;

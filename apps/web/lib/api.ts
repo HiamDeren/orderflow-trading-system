@@ -43,7 +43,7 @@ export function bearer(req: Request) {
     .trim();
 }
 
-export const unauthorized = () => fail(401, "unauthorized", "unauthorized");
+const unauthorized = () => fail(401, "unauthorized", "unauthorized");
 
 // Chỉ chủ sở hữu (journal, plan, ảnh, members). Trả Owner hoặc Response 401.
 export async function requireOwnerApi(): Promise<Owner | Response> {
@@ -53,11 +53,6 @@ export async function requireOwnerApi(): Promise<Owner | Response> {
 // Chủ sở hữu hoặc khách đã duyệt (dữ liệu thị trường).
 export async function requireViewerApi(): Promise<Viewer | Response> {
   return (await getViewer()) ?? unauthorized();
-}
-
-// Token Bearer cố định (ATAS gửi PLAN_TOKEN). true khi đúng.
-export function requireToken(req: Request, expected: string | undefined) {
-  return tokenEquals(bearer(req), expected);
 }
 
 // ---------- chống CSRF (lớp phụ, cookie Supabase đã SameSite=Lax) ----------
@@ -109,7 +104,7 @@ export async function readJson<S extends z.ZodType>(
 }
 
 // Tối đa 5 lỗi, dạng "prth.vah: Expected number" để đọc nhanh trong log / response.
-export function issuesOf(issues: z.core.$ZodIssue[]) {
+function issuesOf(issues: z.core.$ZodIssue[]) {
   return issues.slice(0, 5).map((i) => `${i.path.join(".") || "(body)"}: ${i.message}`);
 }
 
