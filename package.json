@@ -3,12 +3,21 @@
   "private": true,
   "description": "Monorepo: apps/web (Next.js trên Vercel), packages/*, supabase/ (migration)",
   "packageManager": "pnpm@10.34.9",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "pnpm --filter web dev",
     "build": "pnpm --filter web build",
     "check": "node scripts/check-plan-core.mjs",
     "build:artifact": "node scripts/build-artifact.mjs",
-    "i18n": "python3 i18n/build_en.py"
+    "i18n": "python3 i18n/build_en.py",
+    "test": "pnpm --filter web test",
+    "lint": "biome lint",
+    "format": "biome format --write",
+    "format:check": "biome format"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.6.8"
   }
 }
