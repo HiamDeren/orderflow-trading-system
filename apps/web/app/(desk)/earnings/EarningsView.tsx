@@ -16,7 +16,19 @@ function rank(watch: Set<string>) {
     Number(watch.has(b.symbol)) - Number(watch.has(a.symbol)) || (b.revenueEstimate ?? 0) - (a.revenueEstimate ?? 0) || a.symbol.localeCompare(b.symbol);
 }
 
-export default function EarningsView({ month, items, watch, today, initialDay }: { month: string; items: Earning[]; watch: string[]; today: string; initialDay: string }) {
+export default function EarningsView({
+  month,
+  items,
+  watch,
+  today,
+  initialDay,
+}: {
+  month: string;
+  items: Earning[];
+  watch: string[];
+  today: string;
+  initialDay: string;
+}) {
   const { t, lang } = useUi();
   const [onlyNq, setOnlyNq] = useState(true);
   const W = useMemo(() => new Set(watch), [watch]);
@@ -53,8 +65,12 @@ export default function EarningsView({ month, items, watch, today, initialDay }:
     <>
       <div className="row wrap">
         <div className="seg" role="group" aria-label={t("Phạm vi")}>
-          <button aria-pressed={onlyNq} onClick={() => setOnlyNq(true)}>{t("NQ top ({n})", { n: nqCount })}</button>
-          <button aria-pressed={!onlyNq} onClick={() => setOnlyNq(false)}>{t("Tất cả ({n})", { n: items.length })}</button>
+          <button aria-pressed={onlyNq} onClick={() => setOnlyNq(true)}>
+            {t("NQ top ({n})", { n: nqCount })}
+          </button>
+          <button aria-pressed={!onlyNq} onClick={() => setOnlyNq(false)}>
+            {t("Tất cả ({n})", { n: items.length })}
+          </button>
         </div>
         <span className="small dim">{t("Bấm mã để xem thông tin cổ phiếu")}</span>
       </div>
@@ -62,7 +78,9 @@ export default function EarningsView({ month, items, watch, today, initialDay }:
       <div className="ern-split fit">
         <section className="card ern-cal" aria-label={t("Lịch earnings")}>
           <div className="ern-head" aria-hidden="true">
-            {[1, 2, 3, 4, 5].map((w) => <span key={w}>{DOW_SHORT[lang][w]}</span>)}
+            {[1, 2, 3, 4, 5].map((w) => (
+              <span key={w}>{DOW_SHORT[lang][w]}</span>
+            ))}
           </div>
           <div className="ern-grid">
             {cells.map((d, i) => {
@@ -115,30 +133,38 @@ export default function EarningsView({ month, items, watch, today, initialDay }:
           {sym ? (
             <StockDrawer symbol={sym} onClose={() => setSym(null)} />
           ) : (
-          <>
-          <div className="row cal-list-head">
-            <span style={{ fontSize: 15, fontWeight: 600 }}>
-              {DOW[lang][dowOf(day)]} · {viDayMonth(day)}{day === today ? ` · ${t("hôm nay")}` : ""}
-              <span className="dim" style={{ fontWeight: 400, fontSize: 13 }}> · {t("{n} mã", { n: list.length })}</span>
-            </span>
-            <span className="mono small dim">EPS · Rev</span>
-          </div>
-          {list.length ? (
-            HOURS.map((h) => {
-              const rows = list.filter((e) => e.hour === h);
-              if (!rows.length) return null;
-              return (
-                <div key={h || "na"} className="stack" style={{ gap: 2 }}>
-                  <span className="lbl">{hourLabel(h, t)} · {rows.length}</span>
-                  {rows.slice(0, 150).map((e) => <EarningRow key={e.symbol + e.date} e={e} noHour />)}
-                  {rows.length > 150 && <span className="small dim">+{rows.length - 150}</span>}
-                </div>
-              );
-            })
-          ) : (
-            <span className="small dim">{t("Không có")}</span>
-          )}
-          </>
+            <>
+              <div className="row cal-list-head">
+                <span style={{ fontSize: 15, fontWeight: 600 }}>
+                  {DOW[lang][dowOf(day)]} · {viDayMonth(day)}
+                  {day === today ? ` · ${t("hôm nay")}` : ""}
+                  <span className="dim" style={{ fontWeight: 400, fontSize: 13 }}>
+                    {" "}
+                    · {t("{n} mã", { n: list.length })}
+                  </span>
+                </span>
+                <span className="mono small dim">EPS · Rev</span>
+              </div>
+              {list.length ? (
+                HOURS.map((h) => {
+                  const rows = list.filter((e) => e.hour === h);
+                  if (!rows.length) return null;
+                  return (
+                    <div key={h || "na"} className="stack" style={{ gap: 2 }}>
+                      <span className="lbl">
+                        {hourLabel(h, t)} · {rows.length}
+                      </span>
+                      {rows.slice(0, 150).map((e) => (
+                        <EarningRow key={e.symbol + e.date} e={e} noHour />
+                      ))}
+                      {rows.length > 150 && <span className="small dim">+{rows.length - 150}</span>}
+                    </div>
+                  );
+                })
+              ) : (
+                <span className="small dim">{t("Không có")}</span>
+              )}
+            </>
           )}
         </section>
       </div>

@@ -33,8 +33,9 @@ export const maxDuration = 30;
 const SCHEMA = "trading";
 const TABLE = "trade_plans";
 const FONT_DIR = path.join(process.cwd(), "fonts");
-const FONT_FILES = ["BeVietnamPro-Regular.ttf", "BeVietnamPro-Bold.ttf", "JetBrainsMono-Regular.ttf", "JetBrainsMono-Bold.ttf"]
-  .map(f => path.join(FONT_DIR, f));
+const FONT_FILES = ["BeVietnamPro-Regular.ttf", "BeVietnamPro-Bold.ttf", "JetBrainsMono-Regular.ttf", "JetBrainsMono-Bold.ttf"].map((f) =>
+  path.join(FONT_DIR, f),
+);
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const MONTH_RE = /^\d{4}-\d{2}$/;
 const DUP_WINDOW_S = 120;
@@ -72,7 +73,14 @@ function safeEqual(a: string, b: string | undefined) {
 function stable(v: unknown): string {
   if (Array.isArray(v)) return "[" + v.map(stable).join(",") + "]";
   if (v && typeof v === "object") {
-    return "{" + Object.keys(v as Json).sort().map(k => JSON.stringify(k) + ":" + stable((v as Json)[k])).join(",") + "}";
+    return (
+      "{" +
+      Object.keys(v as Json)
+        .sort()
+        .map((k) => JSON.stringify(k) + ":" + stable((v as Json)[k]))
+        .join(",") +
+      "}"
+    );
   }
   return JSON.stringify(v);
 }
@@ -86,7 +94,10 @@ function planKey(p: Json) {
 // Bỏ dấu "?" do indicator thay ký tự không phải ASCII; giữ tối đa 3 cảnh báo, mỗi cái 200 ký tự.
 function warningsOf(p: Json): string[] {
   const w = Array.isArray(p.warnings) ? p.warnings : [];
-  return w.filter(x => typeof x === "string" && x.trim()).slice(0, 3).map(x => (x as string).slice(0, 200));
+  return w
+    .filter((x) => typeof x === "string" && x.trim())
+    .slice(0, 3)
+    .map((x) => (x as string).slice(0, 200));
 }
 
 function svgToPng(svg: string) {
@@ -107,17 +118,19 @@ async function sendDiscord(webhook: string, plan: Plan, img: Buffer, fileName: s
     `**Target:** ${s.target != null ? `${core.fmt(s.target)} (cách giá 9:29 ${core.fmt(s.distance)} điểm)` : "theo mô tả setup"}`,
     `**Đổi bias:** ${s.flip}`,
     `**Giá 9:29:** ${core.fmt(s.price)} · Prev RTH ${core.lc1(s.prth)} · OVN ${core.lc1(s.ovn)}`,
-    ...warnings.map(w => `⚠️ **Cảnh báo indicator:** ${w}`),
+    ...warnings.map((w) => `⚠️ **Cảnh báo indicator:** ${w}`),
   ];
   const payload = {
     username: "Trade Plan",
-    embeds: [{
-      title: `PLAN ${s.date} · ${symbol}`,
-      description: lines.join("\n").slice(0, 4000),
-      color,
-      image: { url: `attachment://${fileName}` },
-      footer: { text: "Composite × pRTH × OVN · TPO 30' đổi bias, vào lệnh trên M1" },
-    }],
+    embeds: [
+      {
+        title: `PLAN ${s.date} · ${symbol}`,
+        description: lines.join("\n").slice(0, 4000),
+        color,
+        image: { url: `attachment://${fileName}` },
+        footer: { text: "Composite × pRTH × OVN · TPO 30' đổi bias, vào lệnh trên M1" },
+      },
+    ],
     allowed_mentions: { parse: [] },
   };
   const fd = new FormData();
@@ -139,7 +152,9 @@ async function setup(req: Request) {
     log("error", "thiếu biến môi trường", { url: !!url, key: !!key, planToken: !!planToken, env: process.env.VERCEL_ENV });
     return { error: json({ error: "Thiếu biến môi trường SUPABASE_URL / SUPABASE_SERVICE_KEY / PLAN_TOKEN" }, 500) };
   }
-  const token = String(req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "").trim();
+  const token = String(req.headers.get("authorization") || "")
+    .replace(/^Bearer\s+/i, "")
+    .trim();
   const tokenOk = !!planToken && safeEqual(token, planToken);
   // Không có token thì thử phiên đăng nhập dashboard (cookie). Có token mà sai thì từ chối luôn.
   const via = tokenOk ? "token" : !token && (await getOwner()) ? "session" : null;
@@ -173,7 +188,11 @@ export async function POST(req: Request) {
   if ("error" in c) return c.error;
   try {
     let p: Payload | null = null;
-    try { p = JSON.parse(await req.text()); } catch { p = null; }
+    try {
+      p = JSON.parse(await req.text());
+    } catch {
+      p = null;
+    }
     if (!p || typeof p !== "object" || !DATE_RE.test(p.date || "") || !p.prth || !p.ovn) {
       log("warn", "400 payload thiếu trường", { date: p && p.date, prth: !!(p && p.prth), ovn: !!(p && p.ovn) });
       return json({ error: "Payload thiếu date (yyyy-MM-dd), prth hoặc ovn" }, 400);
@@ -185,16 +204,18 @@ export async function POST(req: Request) {
     //    → vẫn lưu + vẽ ảnh như thường nhưng không gửi Discord lần nữa (19/11: bấm tay + tự gửi 9:29 ra 2 tin).
     let duplicate = false;
     try {
-      const r = await fetch(
-        `${c.rest}?select=updated_at,payload&trade_date=eq.${date}&symbol=eq.${encodeURIComponent(symbol)}&limit=1`,
-        { headers: c.hr, cache: "no-store" },
-      );
+      const r = await fetch(`${c.rest}?select=updated_at,payload&trade_date=eq.${date}&symbol=eq.${encodeURIComponent(symbol)}&limit=1`, {
+        headers: c.hr,
+        cache: "no-store",
+      });
       if (r.ok) {
         const prev = ((await r.json()) as Json[])[0];
         const age = prev ? (Date.now() - Date.parse(String(prev.updated_at))) / 1000 : Infinity;
         duplicate = !!prev && age >= 0 && age < DUP_WINDOW_S && planKey(prev.payload as Json) === planKey(p);
       }
-    } catch { /* không đọc được thì coi như không trùng */ }
+    } catch {
+      /* không đọc được thì coi như không trùng */
+    }
     // 1. Lưu payload. Lỗi ở đây không dừng hẳn: vẫn vẽ ảnh + gửi Discord, cuối cùng trả 502.
     let dbError: Json | null = null;
     try {
@@ -209,7 +230,9 @@ export async function POST(req: Request) {
     }
 
     const out: Json = { ok: !dbError, date, symbol, image: null, discord: null, ...(warnings.length ? { warnings } : {}) };
-    let plan: Plan | null = null, img: Buffer | null = null, objPath: string | null = null;
+    let plan: Plan | null = null,
+      img: Buffer | null = null,
+      objPath: string | null = null;
 
     // 2–3. Lập plan, vẽ ảnh, lưu Storage
     try {
@@ -246,7 +269,18 @@ export async function POST(req: Request) {
         out.discord = { error: errMsg(e) };
       }
     }
-    log(dbError ? "error" : "info", "POST xong", { via: c.via, date, symbol, db: dbError || "ok", image: out.image, discord: out.discord, duplicate, warnings: warnings.length, notify: p.notify !== false, hook: !!c.hook });
+    log(dbError ? "error" : "info", "POST xong", {
+      via: c.via,
+      date,
+      symbol,
+      db: dbError || "ok",
+      image: out.image,
+      discord: out.discord,
+      duplicate,
+      warnings: warnings.length,
+      notify: p.notify !== false,
+      hook: !!c.hook,
+    });
     if (dbError) return json({ ...dbError, ...out }, 502);
     return json(out);
   } catch (e) {
@@ -294,14 +328,18 @@ export async function GET(req: Request) {
     if (row.image_path) {
       try {
         const s = await fetch(`${c.storage}/object/sign/${c.bucket}/${row.image_path}`, {
-          method: "POST", headers: c.hj, body: JSON.stringify({ expiresIn: 3600 }),
+          method: "POST",
+          headers: c.hj,
+          body: JSON.stringify({ expiresIn: 3600 }),
         });
         if (s.ok) {
           const j = (await s.json()) as { signedURL?: string; signedUrl?: string };
           const u = j.signedURL || j.signedUrl;
           if (u) row.image_url = c.storage + u;
         }
-      } catch { /* bỏ qua: vẫn trả plan */ }
+      } catch {
+        /* bỏ qua: vẫn trả plan */
+      }
     }
     return json(row);
   } catch (e) {

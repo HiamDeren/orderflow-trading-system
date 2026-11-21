@@ -23,16 +23,22 @@ export default async function KnowledgePage() {
           <span className="lbl">Knowledge</span>
           <h1 className="h1">AMT → Context → Entry</h1>
         </div>
-        <Link className="btn" href="/knowledge/quiz">{t("Làm quiz ôn tập")}</Link>
+        <Link className="btn" href="/knowledge/quiz">
+          {t("Làm quiz ôn tập")}
+        </Link>
       </header>
       <section className="card" aria-label={t("Luồng mỗi ngày")}>
         <span className="lbl">{t("Luồng mỗi ngày")}</span>
         <ol className="flow">
           {FLOW.map((f) => (
             <li key={f.n} className={f.hi ? "hi" : ""}>
-              <span className="mono small" style={{ color: f.hi ? "var(--accent)" : "var(--dim)" }}>{f.n}</span>
+              <span className="mono small" style={{ color: f.hi ? "var(--accent)" : "var(--dim)" }}>
+                {f.n}
+              </span>
               <span style={{ fontSize: 14, fontWeight: 600 }}>{f.t}</span>
-              <span className="small muted" style={{ lineHeight: 1.45 }}>{t(f.s)}</span>
+              <span className="small muted" style={{ lineHeight: 1.45 }}>
+                {t(f.s)}
+              </span>
             </li>
           ))}
         </ol>
@@ -41,7 +47,9 @@ export default async function KnowledgePage() {
       <section className="course-cards" aria-label={t("Khoá học")}>
         {COURSES.map((c) => (
           <Link key={c.key} href={`/knowledge/${c.key}`} className="card course-card">
-            <span className="lbl">{t(c.track)} · {t("{n} chương", { n: c.chapters.length })}</span>
+            <span className="lbl">
+              {t(c.track)} · {t("{n} chương", { n: c.chapters.length })}
+            </span>
             <span className="h3">{t(c.title)}</span>
             <span className="small dim">{t(c.sub)}</span>
           </Link>

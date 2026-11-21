@@ -29,16 +29,26 @@ export default async function EarningsPage({ searchParams }: { searchParams: Pro
           <h1 className="h1">Earnings</h1>
         </div>
         <div className="hstack" style={{ gap: 6 }}>
-          <Link className="btn icon" aria-label={t("Tháng trước")} href={`/earnings?month=${shiftMonth(month, -1)}`}>‹</Link>
+          <Link className="btn icon" aria-label={t("Tháng trước")} href={`/earnings?month=${shiftMonth(month, -1)}`}>
+            ‹
+          </Link>
           <span style={{ fontSize: 14, fontWeight: 600, minWidth: 120, textAlign: "center" }}>{t("Tháng {m} · {y}", { m: Number(mo), y })}</span>
-          <Link className="btn icon" aria-label={t("Tháng sau")} href={`/earnings?month=${shiftMonth(month, 1)}`}>›</Link>
-          {today.slice(0, 7) !== month && <Link className="btn sm" href="/earnings">{t("Tháng này")}</Link>}
+          <Link className="btn icon" aria-label={t("Tháng sau")} href={`/earnings?month=${shiftMonth(month, 1)}`}>
+            ›
+          </Link>
+          {today.slice(0, 7) !== month && (
+            <Link className="btn sm" href="/earnings">
+              {t("Tháng này")}
+            </Link>
+          )}
         </div>
       </header>
       {!res.configured ? (
         <NotConfigured what="Earnings" />
       ) : !res.ok ? (
-        <div className="notice">{t("Không tải được earnings")}: {res.error}</div>
+        <div className="notice">
+          {t("Không tải được earnings")}: {res.error}
+        </div>
       ) : (
         <EarningsView key={month} month={month} items={res.items} watch={NQ_WATCH} today={today} initialDay={initialDay} />
       )}

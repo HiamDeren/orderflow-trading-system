@@ -36,13 +36,27 @@ export default function Topbar({ events, onSearch, guest = false }: { events: Ne
   return (
     <header className="topbar">
       <div className="tb-clocks mono" suppressHydrationWarning>
-        <span><b>NY</b>{now === null ? "--:--" : fmtTime(now, "America/New_York", false)}</span>
-        {showLocal && <span><b>{tzShort(tz)}</b>{now === null ? "--:--" : fmtTime(now, tz, false)}</span>}
+        <span>
+          <b>NY</b>
+          {now === null ? "--:--" : fmtTime(now, "America/New_York", false)}
+        </span>
+        {showLocal && (
+          <span>
+            <b>{tzShort(tz)}</b>
+            {now === null ? "--:--" : fmtTime(now, tz, false)}
+          </span>
+        )}
       </div>
       {next && now !== null ? (
-        <Link className="tb-next" href={`/calendar?day=${next.dateLocal}`} title={`${fmtTime(next.ts, tz, true)} ${tzShort(tz)} · ${next.country} · ${next.title}`}>
+        <Link
+          className="tb-next"
+          href={`/calendar?day=${next.dateLocal}`}
+          title={`${fmtTime(next.ts, tz, true)} ${tzShort(tz)} · ${next.country} · ${next.title}`}
+        >
           <span className="tb-dot" aria-hidden="true" />
-          <span className="tb-next-t">{t("Tin mạnh kế tiếp")}: <b>{next.title}</b></span>
+          <span className="tb-next-t">
+            {t("Tin mạnh kế tiếp")}: <b>{next.title}</b>
+          </span>
           <span className="mono tb-cd">{next.ts <= now ? t("đang ra") : countdown(next.ts - now)}</span>
         </Link>
       ) : (

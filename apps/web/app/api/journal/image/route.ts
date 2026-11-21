@@ -19,7 +19,9 @@ function json(body: unknown, status = 200) {
   return Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
 }
 const cap = (v: unknown) => {
-  const s = String(v ?? "").trim().slice(0, 300);
+  const s = String(v ?? "")
+    .trim()
+    .slice(0, 300);
   return s || null;
 };
 const seq = (v: unknown) => {

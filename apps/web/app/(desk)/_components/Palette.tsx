@@ -58,11 +58,21 @@ export default function Palette({ open, onClose, guest = false }: { open: boolea
     const f = fold(s);
     const out: Cmd[] = [];
     const date = guest ? null : parseDate(s);
-    if (date) out.push({ id: "d", label: t("Journal ngày {d}", { d: date.split("-").reverse().join("/") }), hint: "Journal", icon: "journal", href: `/journal?date=${date}` });
+    if (date)
+      out.push({
+        id: "d",
+        label: t("Journal ngày {d}", { d: date.split("-").reverse().join("/") }),
+        hint: "Journal",
+        icon: "journal",
+        href: `/journal?date=${date}`,
+      });
     const sym = s.toUpperCase();
-    if (/^[A-Z][A-Z0-9.\-]{0,9}$/.test(sym) && !date) out.push({ id: "s", label: t("Mở mã {s}", { s: sym }), hint: "Stock", icon: "stock", href: `/stock/${encodeURIComponent(sym)}` });
-    for (const p of PAGES) if (guest && OWNER_ONLY.includes(p.href)) continue;
-    else if (!f || fold(t(p.label)).includes(f) || p.keys.includes(f)) out.push({ id: p.href, label: t(p.label), hint: t("Trang"), icon: p.icon, href: p.href });
+    if (/^[A-Z][A-Z0-9.\-]{0,9}$/.test(sym) && !date)
+      out.push({ id: "s", label: t("Mở mã {s}", { s: sym }), hint: "Stock", icon: "stock", href: `/stock/${encodeURIComponent(sym)}` });
+    for (const p of PAGES)
+      if (guest && OWNER_ONLY.includes(p.href)) continue;
+      else if (!f || fold(t(p.label)).includes(f) || p.keys.includes(f))
+        out.push({ id: p.href, label: t(p.label), hint: t("Trang"), icon: p.icon, href: p.href });
     if (s && !date) out.push({ id: "q", label: t("Tìm cổ phiếu “{q}”", { q: s }), hint: "Stocks", icon: "search", href: `/stock?q=${encodeURIComponent(s)}` });
     return out.slice(0, 9);
   }, [q, t, guest]);
@@ -113,7 +123,11 @@ export default function Palette({ open, onClose, guest = false }: { open: boolea
               </button>
             </li>
           ))}
-          {!cmds.length && <li className="small dim" style={{ padding: 14 }}>{t("Không có kết quả")}</li>}
+          {!cmds.length && (
+            <li className="small dim" style={{ padding: 14 }}>
+              {t("Không có kết quả")}
+            </li>
+          )}
         </ul>
       </div>
     </div>

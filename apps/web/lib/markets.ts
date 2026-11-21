@@ -14,23 +14,179 @@ export const INDEX_ETF = [
 
 // 11 sector S&P 500 qua ETF SPDR. w/h = cỡ ô heatmap (lớn hơn cho sector tỷ trọng lớn)
 export const SECTORS: { key: string; name: string; etf: string; w: number; h: number; stocks: [string, string][] }[] = [
-  { key: "tech", name: "Công nghệ", etf: "XLK", w: 2, h: 2, stocks: [["NVDA", "NVIDIA"], ["MSFT", "Microsoft"], ["AAPL", "Apple"], ["AVGO", "Broadcom"], ["ORCL", "Oracle"], ["AMD", "AMD"], ["CRM", "Salesforce"], ["ADBE", "Adobe"]] },
-  { key: "fin", name: "Tài chính", etf: "XLF", w: 2, h: 1, stocks: [["JPM", "JPMorgan"], ["V", "Visa"], ["MA", "Mastercard"], ["BAC", "Bank of America"], ["WFC", "Wells Fargo"], ["GS", "Goldman Sachs"]] },
-  { key: "health", name: "Y tế", etf: "XLV", w: 2, h: 1, stocks: [["LLY", "Eli Lilly"], ["UNH", "UnitedHealth"], ["JNJ", "Johnson & Johnson"], ["ABBV", "AbbVie"], ["MRK", "Merck"], ["ISRG", "Intuitive Surgical"]] },
-  { key: "disc", name: "Tiêu dùng không thiết yếu", etf: "XLY", w: 2, h: 1, stocks: [["AMZN", "Amazon"], ["TSLA", "Tesla"], ["HD", "Home Depot"], ["MCD", "McDonald's"], ["BKNG", "Booking"], ["LOW", "Lowe's"]] },
-  { key: "comm", name: "Truyền thông", etf: "XLC", w: 2, h: 1, stocks: [["GOOGL", "Alphabet"], ["META", "Meta"], ["NFLX", "Netflix"], ["TMUS", "T-Mobile"], ["DIS", "Disney"]] },
-  { key: "ind", name: "Công nghiệp", etf: "XLI", w: 1, h: 1, stocks: [["GE", "GE Aerospace"], ["CAT", "Caterpillar"], ["RTX", "RTX"], ["UBER", "Uber"], ["HON", "Honeywell"]] },
-  { key: "stap", name: "Tiêu dùng thiết yếu", etf: "XLP", w: 1, h: 1, stocks: [["WMT", "Walmart"], ["COST", "Costco"], ["PG", "Procter & Gamble"], ["KO", "Coca-Cola"], ["PEP", "PepsiCo"]] },
-  { key: "energy", name: "Năng lượng", etf: "XLE", w: 1, h: 1, stocks: [["XOM", "Exxon Mobil"], ["CVX", "Chevron"], ["COP", "ConocoPhillips"], ["SLB", "SLB"]] },
-  { key: "util", name: "Tiện ích", etf: "XLU", w: 1, h: 1, stocks: [["NEE", "NextEra"], ["SO", "Southern Co"], ["DUK", "Duke Energy"]] },
-  { key: "re", name: "Bất động sản", etf: "XLRE", w: 1, h: 1, stocks: [["PLD", "Prologis"], ["AMT", "American Tower"], ["EQIX", "Equinix"]] },
-  { key: "mat", name: "Vật liệu", etf: "XLB", w: 1, h: 1, stocks: [["LIN", "Linde"], ["SHW", "Sherwin-Williams"], ["FCX", "Freeport-McMoRan"]] },
+  {
+    key: "tech",
+    name: "Công nghệ",
+    etf: "XLK",
+    w: 2,
+    h: 2,
+    stocks: [
+      ["NVDA", "NVIDIA"],
+      ["MSFT", "Microsoft"],
+      ["AAPL", "Apple"],
+      ["AVGO", "Broadcom"],
+      ["ORCL", "Oracle"],
+      ["AMD", "AMD"],
+      ["CRM", "Salesforce"],
+      ["ADBE", "Adobe"],
+    ],
+  },
+  {
+    key: "fin",
+    name: "Tài chính",
+    etf: "XLF",
+    w: 2,
+    h: 1,
+    stocks: [
+      ["JPM", "JPMorgan"],
+      ["V", "Visa"],
+      ["MA", "Mastercard"],
+      ["BAC", "Bank of America"],
+      ["WFC", "Wells Fargo"],
+      ["GS", "Goldman Sachs"],
+    ],
+  },
+  {
+    key: "health",
+    name: "Y tế",
+    etf: "XLV",
+    w: 2,
+    h: 1,
+    stocks: [
+      ["LLY", "Eli Lilly"],
+      ["UNH", "UnitedHealth"],
+      ["JNJ", "Johnson & Johnson"],
+      ["ABBV", "AbbVie"],
+      ["MRK", "Merck"],
+      ["ISRG", "Intuitive Surgical"],
+    ],
+  },
+  {
+    key: "disc",
+    name: "Tiêu dùng không thiết yếu",
+    etf: "XLY",
+    w: 2,
+    h: 1,
+    stocks: [
+      ["AMZN", "Amazon"],
+      ["TSLA", "Tesla"],
+      ["HD", "Home Depot"],
+      ["MCD", "McDonald's"],
+      ["BKNG", "Booking"],
+      ["LOW", "Lowe's"],
+    ],
+  },
+  {
+    key: "comm",
+    name: "Truyền thông",
+    etf: "XLC",
+    w: 2,
+    h: 1,
+    stocks: [
+      ["GOOGL", "Alphabet"],
+      ["META", "Meta"],
+      ["NFLX", "Netflix"],
+      ["TMUS", "T-Mobile"],
+      ["DIS", "Disney"],
+    ],
+  },
+  {
+    key: "ind",
+    name: "Công nghiệp",
+    etf: "XLI",
+    w: 1,
+    h: 1,
+    stocks: [
+      ["GE", "GE Aerospace"],
+      ["CAT", "Caterpillar"],
+      ["RTX", "RTX"],
+      ["UBER", "Uber"],
+      ["HON", "Honeywell"],
+    ],
+  },
+  {
+    key: "stap",
+    name: "Tiêu dùng thiết yếu",
+    etf: "XLP",
+    w: 1,
+    h: 1,
+    stocks: [
+      ["WMT", "Walmart"],
+      ["COST", "Costco"],
+      ["PG", "Procter & Gamble"],
+      ["KO", "Coca-Cola"],
+      ["PEP", "PepsiCo"],
+    ],
+  },
+  {
+    key: "energy",
+    name: "Năng lượng",
+    etf: "XLE",
+    w: 1,
+    h: 1,
+    stocks: [
+      ["XOM", "Exxon Mobil"],
+      ["CVX", "Chevron"],
+      ["COP", "ConocoPhillips"],
+      ["SLB", "SLB"],
+    ],
+  },
+  {
+    key: "util",
+    name: "Tiện ích",
+    etf: "XLU",
+    w: 1,
+    h: 1,
+    stocks: [
+      ["NEE", "NextEra"],
+      ["SO", "Southern Co"],
+      ["DUK", "Duke Energy"],
+    ],
+  },
+  {
+    key: "re",
+    name: "Bất động sản",
+    etf: "XLRE",
+    w: 1,
+    h: 1,
+    stocks: [
+      ["PLD", "Prologis"],
+      ["AMT", "American Tower"],
+      ["EQIX", "Equinix"],
+    ],
+  },
+  {
+    key: "mat",
+    name: "Vật liệu",
+    etf: "XLB",
+    w: 1,
+    h: 1,
+    stocks: [
+      ["LIN", "Linde"],
+      ["SHW", "Sherwin-Williams"],
+      ["FCX", "Freeport-McMoRan"],
+    ],
+  },
 ];
 
 // Bản đồ NQ top: cỡ ô theo nhóm vốn hoá (3 bậc), không phải tỷ trọng chính xác
 export const NQ_MAP: [string, number, number][] = [
-  ["NVDA", 3, 2], ["MSFT", 3, 2], ["AAPL", 2, 2], ["AMZN", 2, 1], ["META", 2, 1], ["AVGO", 2, 1], ["GOOGL", 2, 1],
-  ["TSLA", 1, 1], ["COST", 1, 1], ["NFLX", 1, 1], ["AMD", 1, 1], ["PLTR", 1, 1], ["CSCO", 1, 1], ["INTU", 1, 1], ["QCOM", 1, 1], ["ADBE", 1, 1],
+  ["NVDA", 3, 2],
+  ["MSFT", 3, 2],
+  ["AAPL", 2, 2],
+  ["AMZN", 2, 1],
+  ["META", 2, 1],
+  ["AVGO", 2, 1],
+  ["GOOGL", 2, 1],
+  ["TSLA", 1, 1],
+  ["COST", 1, 1],
+  ["NFLX", 1, 1],
+  ["AMD", 1, 1],
+  ["PLTR", 1, 1],
+  ["CSCO", 1, 1],
+  ["INTU", 1, 1],
+  ["QCOM", 1, 1],
+  ["ADBE", 1, 1],
 ];
 
 export async function getOverview() {
@@ -83,7 +239,9 @@ const num = (v: unknown) => (v === null || v === undefined || !Number.isFinite(N
 export async function getCrypto(cat: string) {
   const catQ = CRYPTO_CATS.some((c) => c.id === cat && c.id) ? `&category=${cat}` : "";
   const [markets, global, cats, trend] = await Promise.allSettled([
-    cg<Record<string, unknown>[]>(`/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=30&page=1&sparkline=true&price_change_percentage=1h,24h,7d${catQ}`),
+    cg<Record<string, unknown>[]>(
+      `/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=30&page=1&sparkline=true&price_change_percentage=1h,24h,7d${catQ}`,
+    ),
     cg<{ data?: Record<string, unknown> }>(`/global`),
     cg<Record<string, unknown>[]>(`/coins/categories`, 1800),
     cg<{ coins?: { item?: Record<string, unknown> }[] }>(`/search/trending`),
@@ -117,7 +275,12 @@ export async function getCrypto(cat: string) {
     cats.status === "fulfilled" && Array.isArray(cats.value) ? cats.value.map((c) => [String(c.id), num(c.market_cap_change_24h)]) : [],
   );
   const trending =
-    trend.status === "fulfilled" ? (trend.value.coins || []).map((c) => String(c.item?.symbol || "").toUpperCase()).filter(Boolean).slice(0, 7) : [];
+    trend.status === "fulfilled"
+      ? (trend.value.coins || [])
+          .map((c) => String(c.item?.symbol || "").toUpperCase())
+          .filter(Boolean)
+          .slice(0, 7)
+      : [];
   const error = markets.status === "rejected" ? String(markets.reason?.message || markets.reason) : null;
   return {
     coins,

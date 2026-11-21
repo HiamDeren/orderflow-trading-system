@@ -59,8 +59,12 @@ export function Timeline({ initial, events, today }: { initial: number; events: 
             aria-label={`${e.et} ET · ${e.title}`}
           >
             <span className="tl-tip" role="tooltip">
-              <b className="mono">{e.et} ET{e.local ? ` · ${e.local} ${tzShort(tz)}` : ""}</b>
-              <span>{e.country} · {e.title}</span>
+              <b className="mono">
+                {e.et} ET{e.local ? ` · ${e.local} ${tzShort(tz)}` : ""}
+              </b>
+              <span>
+                {e.country} · {e.title}
+              </span>
             </span>
           </Link>
         ))}

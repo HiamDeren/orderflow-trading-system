@@ -12,9 +12,5 @@ const JOURNAL_MAX_WIDTH = 2560;
 export async function optimizeImage(input: Buffer | Uint8Array, kind: StorageKind): Promise<Buffer> {
   const img = sharp(input, { failOn: "error" });
   if (kind === "plan") return img.webp({ lossless: true, effort: 6 }).toBuffer();
-  return img
-    .rotate()
-    .resize({ width: JOURNAL_MAX_WIDTH, withoutEnlargement: true })
-    .webp({ quality: 85, effort: 5, smartSubsample: true })
-    .toBuffer();
+  return img.rotate().resize({ width: JOURNAL_MAX_WIDTH, withoutEnlargement: true }).webp({ quality: 85, effort: 5, smartSubsample: true }).toBuffer();
 }

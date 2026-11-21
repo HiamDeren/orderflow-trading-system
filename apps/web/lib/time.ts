@@ -6,8 +6,14 @@ export type EtNow = { date: string; hh: number; mm: number; dow: number; minutes
 
 function parts(d: Date, timeZone: string) {
   const f = new Intl.DateTimeFormat("en-US", {
-    timeZone, year: "numeric", month: "2-digit", day: "2-digit",
-    hour: "2-digit", minute: "2-digit", hour12: false, weekday: "short",
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    weekday: "short",
   });
   const o: Record<string, string> = {};
   for (const p of f.formatToParts(d)) o[p.type] = p.value;
@@ -104,6 +110,10 @@ export function mondayOf(date: string) {
 
 export function fmtTime(ts: number, timeZone: string, withDate = false) {
   return new Date(ts).toLocaleString("en-GB", {
-    timeZone, hour: "2-digit", minute: "2-digit", hour12: false, ...(withDate ? { day: "2-digit", month: "2-digit" } : {}),
+    timeZone,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    ...(withDate ? { day: "2-digit", month: "2-digit" } : {}),
   });
 }

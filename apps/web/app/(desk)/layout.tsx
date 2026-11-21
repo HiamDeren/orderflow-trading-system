@@ -22,7 +22,9 @@ export default async function DeskLayout({ children }: { children: React.ReactNo
     .map((e) => ({ ts: e.ts, title: e.title, country: e.country, dateLocal: e.dateLocal }));
   return (
     <UiProvider prefs={ui}>
-      <Shell owner={owner} events={events}>{children}</Shell>
+      <Shell owner={owner} events={events}>
+        {children}
+      </Shell>
     </UiProvider>
   );
 }

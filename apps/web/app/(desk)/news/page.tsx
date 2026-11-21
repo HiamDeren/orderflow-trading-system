@@ -45,12 +45,18 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
           <span className="lbl">{t("Thị trường")}</span>
           <h1 className="h1">News</h1>
         </div>
-        {sym && <Link className="btn sm" href={`/stock/${sym}`}>{t("Trang {s}", { s: sym })} ›</Link>}
+        {sym && (
+          <Link className="btn sm" href={`/stock/${sym}`}>
+            {t("Trang {s}", { s: sym })} ›
+          </Link>
+        )}
       </header>
       {!res.configured ? (
         <NotConfigured what="News" />
       ) : !res.ok ? (
-        <div className="notice">{t("Không tải được tin")}: {res.error}</div>
+        <div className="notice">
+          {t("Không tải được tin")}: {res.error}
+        </div>
       ) : !res.items.length ? (
         <p className="small dim">{t("Chưa có tin.")}</p>
       ) : (
@@ -58,17 +64,30 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
           <aside className="news-filter" aria-label={t("Bộ lọc tin")}>
             <span className="lbl">{t("Chủ đề")}</span>
             {NEWS_CATEGORIES.map((c) => (
-              <Link key={c} href={`/news?cat=${c}`} className={"nf-link" + (!sym && c === category ? " on" : "")} aria-current={!sym && c === category ? "page" : undefined}>{t(LABEL[c])}</Link>
+              <Link
+                key={c}
+                href={`/news?cat=${c}`}
+                className={"nf-link" + (!sym && c === category ? " on" : "")}
+                aria-current={!sym && c === category ? "page" : undefined}
+              >
+                {t(LABEL[c])}
+              </Link>
             ))}
-            <span className="lbl" style={{ marginTop: 14 }}>{t("Theo mã")}</span>
+            <span className="lbl" style={{ marginTop: 14 }}>
+              {t("Theo mã")}
+            </span>
             <div className="chips">
               {WATCH.map((x) => (
-                <Link key={x} href={`/news?sym=${x}`} className={"chip mono" + (sym === x ? " on" : "")} aria-current={sym === x ? "page" : undefined}>{x}</Link>
+                <Link key={x} href={`/news?sym=${x}`} className={"chip mono" + (sym === x ? " on" : "")} aria-current={sym === x ? "page" : undefined}>
+                  {x}
+                </Link>
               ))}
             </div>
           </aside>
           <section className="card news-list tight" aria-label={t("Danh sách tin")}>
-            {shown.map((n) => <NewsRow key={n.id} n={n} now={now} href={q({ id: n.id, n: nParam })} active={n.id === sp.id} />)}
+            {shown.map((n) => (
+              <NewsRow key={n.id} n={n} now={now} href={q({ id: n.id, n: nParam })} active={n.id === sp.id} />
+            ))}
             {res.items.length > count && (
               <Link className="btn sm" style={{ alignSelf: "center", marginTop: 8 }} href={q({ n: count + STEP, id: sp.id })} scroll={false}>
                 {t("Tải thêm {n} bài", { n: Math.min(STEP, res.items.length - count) })}
@@ -85,13 +104,19 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
             ) : !sel ? (
               <div className="reader-empty">
                 <p className="small dim">{t("Tin này không còn trong danh sách mới nhất.")}</p>
-                <Link className="btn sm" href={q({ n: nParam })}>{t("Đóng")}</Link>
+                <Link className="btn sm" href={q({ n: nParam })}>
+                  {t("Đóng")}
+                </Link>
               </div>
             ) : (
               <>
                 <div className="row reader-bar">
-                  <Link className="btn sm" href={q({ n: nParam })} scroll={false}>‹ {t("Danh sách")}</Link>
-                  <a className="btn sm" href={sel.url} target="_blank" rel="noreferrer noopener"><Icon name="external" size={14} /> {t("Mở bài gốc")}</a>
+                  <Link className="btn sm" href={q({ n: nParam })} scroll={false}>
+                    ‹ {t("Danh sách")}
+                  </Link>
+                  <a className="btn sm" href={sel.url} target="_blank" rel="noreferrer noopener">
+                    <Icon name="external" size={14} /> {t("Mở bài gốc")}
+                  </a>
                 </div>
                 <header className="reader-head">
                   <span className="news-meta">
@@ -102,9 +127,16 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
                   <h2 className="reader-title">{sel.headline}</h2>
                   {sel.related && (
                     <div className="chips">
-                      {sel.related.split(",").map((x) => x.trim().toUpperCase()).filter((x) => /^[A-Z][A-Z0-9.\-]{0,9}$/.test(x)).slice(0, 6).map((x) => (
-                        <Link key={x} href={`/stock/${x}`} className="chip mono sm-chip">{x} ↗</Link>
-                      ))}
+                      {sel.related
+                        .split(",")
+                        .map((x) => x.trim().toUpperCase())
+                        .filter((x) => /^[A-Z][A-Z0-9.\-]{0,9}$/.test(x))
+                        .slice(0, 6)
+                        .map((x) => (
+                          <Link key={x} href={`/stock/${x}`} className="chip mono sm-chip">
+                            {x} ↗
+                          </Link>
+                        ))}
                     </div>
                   )}
                 </header>

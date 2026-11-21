@@ -25,8 +25,25 @@ describe("journal · mistakesOf", () => {
 
 describe("journal · normDay", () => {
   it("chỉ nhận giá trị trong danh sách, Open auction bỏ hướng", () => {
-    const d = normDay({ trade_date: "2026-11-20", day_type: "Trending day", result: "Thắng", open_type: "Open auction", open_dir: "Lên", context: "  ", lesson: "Chờ trigger" });
-    expect(d).toMatchObject({ trade_date: "2026-11-20", symbol: "NQ", day_type: "Trending day", result: null, open_type: "Open auction", open_dir: null, context: null, lesson: "Chờ trigger" });
+    const d = normDay({
+      trade_date: "2026-11-20",
+      day_type: "Trending day",
+      result: "Thắng",
+      open_type: "Open auction",
+      open_dir: "Lên",
+      context: "  ",
+      lesson: "Chờ trigger",
+    });
+    expect(d).toMatchObject({
+      trade_date: "2026-11-20",
+      symbol: "NQ",
+      day_type: "Trending day",
+      result: null,
+      open_type: "Open auction",
+      open_dir: null,
+      context: null,
+      lesson: "Chờ trigger",
+    });
   });
 });
 
@@ -38,8 +55,30 @@ describe("journal · rate (Wilson 95%)", () => {
 
 describe("journal · dayNet / statsOf", () => {
   const day = (over: Partial<DayWithTrades>): DayWithTrades =>
-    ({ trade_date: "2026-11-20", symbol: "NQ", day_type: null, result: null, open_type: null, bias_correct: null, journal_trades: [], ...over }) as DayWithTrades;
-  const tr = (r: number, pnl: number, extra = {}) => ({ entry_time: null, side: "Long", qty: 1, setup: "F", level: null, trigger: null, r, pnl, fee: 5, followed_plan: "Có", mistakes: [], ...extra });
+    ({
+      trade_date: "2026-11-20",
+      symbol: "NQ",
+      day_type: null,
+      result: null,
+      open_type: null,
+      bias_correct: null,
+      journal_trades: [],
+      ...over,
+    }) as DayWithTrades;
+  const tr = (r: number, pnl: number, extra = {}) => ({
+    entry_time: null,
+    side: "Long",
+    qty: 1,
+    setup: "F",
+    level: null,
+    trigger: null,
+    r,
+    pnl,
+    fee: 5,
+    followed_plan: "Có",
+    mistakes: [],
+    ...extra,
+  });
 
   it("dayNet trừ phí", () => {
     expect(dayNet(day({ journal_trades: [tr(1, 300), tr(-0.5, -150)] }))).toEqual({ gross: 150, fee: 10, net: 140, r: 0.5, n: 2 });

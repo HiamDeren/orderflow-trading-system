@@ -20,7 +20,8 @@ type Sum = {
   next: { date: string; hour: string; epsEstimate: number | null; revenueEstimate: number | null } | null;
 };
 
-const big = (v: number | null) => (v === null ? "—" : v >= 1e12 ? (v / 1e12).toFixed(2) + "T" : v >= 1e9 ? (v / 1e9).toFixed(1) + "B" : v >= 1e6 ? (v / 1e6).toFixed(1) + "M" : String(v));
+const big = (v: number | null) =>
+  v === null ? "—" : v >= 1e12 ? (v / 1e12).toFixed(2) + "T" : v >= 1e9 ? (v / 1e9).toFixed(1) + "B" : v >= 1e6 ? (v / 1e6).toFixed(1) + "M" : String(v);
 
 export default function StockDrawer({ symbol, onClose }: { symbol: string; onClose: () => void }) {
   const { t } = useUi();
@@ -50,8 +51,12 @@ export default function StockDrawer({ symbol, onClose }: { symbol: string; onClo
   return (
     <div className="drawer stack" style={{ gap: 14 }}>
       <div className="row">
-        <button className="btn sm" onClick={onClose}>‹ {t("Danh sách ngày")}</button>
-        <Link className="btn sm primary" href={`/stock/${symbol}`}>{t("Mở trang {s}", { s: symbol })}</Link>
+        <button className="btn sm" onClick={onClose}>
+          ‹ {t("Danh sách ngày")}
+        </button>
+        <Link className="btn sm primary" href={`/stock/${symbol}`}>
+          {t("Mở trang {s}", { s: symbol })}
+        </Link>
       </div>
       {err ? (
         <div className="notice small">{err}</div>
@@ -64,24 +69,37 @@ export default function StockDrawer({ symbol, onClose }: { symbol: string; onClo
               // eslint-disable-next-line @next/next/no-img-element
               <img className="stock-logo" src={d.logo} alt="" width={44} height={44} referrerPolicy="no-referrer" style={{ width: 44, height: 44 }} />
             ) : (
-              <span className="stock-logo ph mono" style={{ width: 44, height: 44 }}>{symbol.slice(0, 2)}</span>
+              <span className="stock-logo ph mono" style={{ width: 44, height: 44 }}>
+                {symbol.slice(0, 2)}
+              </span>
             )}
             <div className="stack" style={{ gap: 2, flex: 1, minWidth: 0 }}>
               <b style={{ fontSize: 16 }}>{d.name}</b>
-              <span className="small dim"><span className="mono">{symbol}</span>{d.industry ? ` · ${d.industry}` : ""}</span>
+              <span className="small dim">
+                <span className="mono">{symbol}</span>
+                {d.industry ? ` · ${d.industry}` : ""}
+              </span>
             </div>
             {d.quote && (
               <div className="stack" style={{ gap: 0, alignItems: "flex-end" }}>
-                <b className="mono" style={{ fontSize: 18 }}>{d.quote.c.toFixed(2)}</b>
-                <span className={"mono small " + ((d.quote.dp ?? 0) >= 0 ? "long" : "short")}>{d.quote.dp === null ? "—" : ((d.quote.dp >= 0 ? "+" : "") + d.quote.dp.toFixed(2) + "%")}</span>
+                <b className="mono" style={{ fontSize: 18 }}>
+                  {d.quote.c.toFixed(2)}
+                </b>
+                <span className={"mono small " + ((d.quote.dp ?? 0) >= 0 ? "long" : "short")}>
+                  {d.quote.dp === null ? "—" : (d.quote.dp >= 0 ? "+" : "") + d.quote.dp.toFixed(2) + "%"}
+                </span>
               </div>
             )}
           </div>
           {d.next && (
             <div className="notice info stack" style={{ gap: 4 }}>
               <span className="lbl accent">{t("Báo cáo")}</span>
-              <b>{viDayMonth(d.next.date)} · {hour(d.next.hour)}</b>
-              <span className="mono small">EPS {t("dự báo")} {d.next.epsEstimate ?? "—"} · Rev {t("dự báo")} {big(d.next.revenueEstimate)}</span>
+              <b>
+                {viDayMonth(d.next.date)} · {hour(d.next.hour)}
+              </b>
+              <span className="mono small">
+                EPS {t("dự báo")} {d.next.epsEstimate ?? "—"} · Rev {t("dự báo")} {big(d.next.revenueEstimate)}
+              </span>
             </div>
           )}
           {q.length > 0 && (
@@ -100,18 +118,35 @@ export default function StockDrawer({ symbol, onClose }: { symbol: string; onClo
                   <span key={x.period}>
                     Q{x.quarter} {String(x.year).slice(2)}
                     <br />
-                    <span className={(x.surprisePct ?? 0) >= 0 ? "long" : "short"}>{x.surprisePct === null ? "—" : ((x.surprisePct >= 0 ? "+" : "") + x.surprisePct.toFixed(1) + "%")}</span>
+                    <span className={(x.surprisePct ?? 0) >= 0 ? "long" : "short"}>
+                      {x.surprisePct === null ? "—" : (x.surprisePct >= 0 ? "+" : "") + x.surprisePct.toFixed(1) + "%"}
+                    </span>
                   </span>
                 ))}
               </div>
             </div>
           )}
           <div className="dq-kv">
-            <div><span className="small dim">P/E</span><b className="mono">{d.pe?.toFixed(1) ?? "—"}</b></div>
-            <div><span className="small dim">{t("Biên LN ròng")}</span><b className="mono">{d.margin === null ? "—" : d.margin.toFixed(1) + "%"}</b></div>
-            <div><span className="small dim">{t("Vốn hoá")}</span><b className="mono">{big(d.cap)}</b></div>
-            <div><span className="small dim">EPS (TTM)</span><b className="mono">{d.eps?.toFixed(2) ?? "—"}</b></div>
-            <div><span className="small dim">{t("Analyst mua")}</span><b className="mono">{recoN ?? "—"}</b></div>
+            <div>
+              <span className="small dim">P/E</span>
+              <b className="mono">{d.pe?.toFixed(1) ?? "—"}</b>
+            </div>
+            <div>
+              <span className="small dim">{t("Biên LN ròng")}</span>
+              <b className="mono">{d.margin === null ? "—" : d.margin.toFixed(1) + "%"}</b>
+            </div>
+            <div>
+              <span className="small dim">{t("Vốn hoá")}</span>
+              <b className="mono">{big(d.cap)}</b>
+            </div>
+            <div>
+              <span className="small dim">EPS (TTM)</span>
+              <b className="mono">{d.eps?.toFixed(2) ?? "—"}</b>
+            </div>
+            <div>
+              <span className="small dim">{t("Analyst mua")}</span>
+              <b className="mono">{recoN ?? "—"}</b>
+            </div>
           </div>
         </>
       )}

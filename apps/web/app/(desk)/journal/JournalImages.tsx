@@ -132,7 +132,17 @@ export default function JournalImages({ date, initial, tradeCount, error }: { da
           <button className="btn sm" disabled={!!error} onClick={() => input.current?.click()}>
             <Icon name="plus" size={14} /> {t("Thêm ảnh")}
           </button>
-          <input ref={input} type="file" accept="image/png,image/jpeg,image/webp" multiple hidden onChange={(e) => { upload(Array.from(e.target.files || [])); e.target.value = ""; }} />
+          <input
+            ref={input}
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            multiple
+            hidden
+            onChange={(e) => {
+              upload(Array.from(e.target.files || []));
+              e.target.value = "";
+            }}
+          />
         </div>
       </div>
       {msg && <div className="notice small">{msg}</div>}
@@ -155,19 +165,32 @@ export default function JournalImages({ date, initial, tradeCount, error }: { da
                   onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
                 />
                 <div className="row" style={{ gap: 6 }}>
-                  <select className="jimg-sel" value={img.trade_seq ?? ""} onChange={(e) => patch(img.id, { trade_seq: e.target.value ? Number(e.target.value) : null })} aria-label={t("Gắn với lệnh")}>
+                  <select
+                    className="jimg-sel"
+                    value={img.trade_seq ?? ""}
+                    onChange={(e) => patch(img.id, { trade_seq: e.target.value ? Number(e.target.value) : null })}
+                    aria-label={t("Gắn với lệnh")}
+                  >
                     <option value="">{t("Ảnh chung")}</option>
                     {Array.from({ length: Math.max(tradeCount, img.trade_seq || 0) }, (_, k) => (
-                      <option key={k + 1} value={k + 1}>{t("Lệnh {n}", { n: k + 1 })}</option>
+                      <option key={k + 1} value={k + 1}>
+                        {t("Lệnh {n}", { n: k + 1 })}
+                      </option>
                     ))}
                   </select>
                   {confirmDel === img.id ? (
                     <span className="hstack" style={{ gap: 4 }}>
-                      <button className="btn sm danger" onClick={() => remove(img.id)}>{t("Xoá")}</button>
-                      <button className="btn sm" onClick={() => setConfirmDel(null)}>{t("Huỷ")}</button>
+                      <button className="btn sm danger" onClick={() => remove(img.id)}>
+                        {t("Xoá")}
+                      </button>
+                      <button className="btn sm" onClick={() => setConfirmDel(null)}>
+                        {t("Huỷ")}
+                      </button>
                     </span>
                   ) : (
-                    <button className="btn icon sm" onClick={() => setConfirmDel(img.id)} aria-label={t("Xoá ảnh")}><Icon name="trash" size={14} /></button>
+                    <button className="btn icon sm" onClick={() => setConfirmDel(img.id)} aria-label={t("Xoá ảnh")}>
+                      <Icon name="trash" size={14} />
+                    </button>
                   )}
                 </div>
               </figcaption>
@@ -192,16 +215,38 @@ export default function JournalImages({ date, initial, tradeCount, error }: { da
               {cur.caption ? ` · ${cur.caption}` : ""}
             </span>
             <span className="hstack" style={{ gap: 6 }}>
-              <a className="btn sm" href={src(cur)} target="_blank" rel="noreferrer"><Icon name="external" size={14} /> {t("Mở tab mới")}</a>
-              <button className="btn icon sm" onClick={() => setOpen(null)} aria-label={t("Đóng")}><Icon name="close" size={16} /></button>
+              <a className="btn sm" href={src(cur)} target="_blank" rel="noreferrer">
+                <Icon name="external" size={14} /> {t("Mở tab mới")}
+              </a>
+              <button className="btn icon sm" onClick={() => setOpen(null)} aria-label={t("Đóng")}>
+                <Icon name="close" size={16} />
+              </button>
             </span>
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={src(cur)} alt={cur.caption || ""} onClick={(e) => e.stopPropagation()} />
           {images.length > 1 && (
             <>
-              <button className="lightbox-nav prev" onClick={(e) => { e.stopPropagation(); setOpen((open! - 1 + images.length) % images.length); }} aria-label={t("Ảnh trước")}>‹</button>
-              <button className="lightbox-nav next" onClick={(e) => { e.stopPropagation(); setOpen((open! + 1) % images.length); }} aria-label={t("Ảnh sau")}>›</button>
+              <button
+                className="lightbox-nav prev"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen((open! - 1 + images.length) % images.length);
+                }}
+                aria-label={t("Ảnh trước")}
+              >
+                ‹
+              </button>
+              <button
+                className="lightbox-nav next"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen((open! + 1) % images.length);
+                }}
+                aria-label={t("Ảnh sau")}
+              >
+                ›
+              </button>
             </>
           )}
         </div>

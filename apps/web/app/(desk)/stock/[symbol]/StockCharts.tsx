@@ -42,7 +42,9 @@ export function BarChart({ data, unit = "", title, estLabel }: { data: Bar[]; un
         {tk.map((v) => (
           <g key={v}>
             <line x1={PAD.l} x2={W - PAD.r} y1={y(v)} y2={y(v)} className={v === 0 ? "ax0" : "grid"} />
-            <text x={PAD.l - 6} y={y(v) + 3.5} textAnchor="end" className="tick">{fmt(v, 1)}</text>
+            <text x={PAD.l - 6} y={y(v) + 3.5} textAnchor="end" className="tick">
+              {fmt(v, 1)}
+            </text>
           </g>
         ))}
         {data.map((d, i) => {
@@ -60,7 +62,9 @@ export function BarChart({ data, unit = "", title, estLabel }: { data: Bar[]; un
               <rect x={cx - slot / 2} y={PAD.t} width={slot} height={ih} fill="transparent" />
               <path d={path} className={"bar" + (d.v < 0 ? " neg" : "") + (hover === i ? " on" : "")} />
               {d.est !== undefined && d.est !== null && <circle cx={cx} cy={y(d.est)} r={4.5} className="est" />}
-              <text x={cx} y={H - 8} textAnchor="middle" className="tick">{d.label}</text>
+              <text x={cx} y={H - 8} textAnchor="middle" className="tick">
+                {d.label}
+              </text>
             </g>
           );
         })}
@@ -68,14 +72,24 @@ export function BarChart({ data, unit = "", title, estLabel }: { data: Bar[]; un
       {h && (
         <div className="chart-tip" style={{ left: `${((PAD.l + slot * hover! + slot / 2) / W) * 100}%` }}>
           <b>{h.label}</b>
-          <span>{fmt(h.v)}{unit}{h.est !== undefined && h.est !== null ? ` · ${estLabel || t("dự báo")} ${fmt(h.est)}${unit}` : ""}</span>
+          <span>
+            {fmt(h.v)}
+            {unit}
+            {h.est !== undefined && h.est !== null ? ` · ${estLabel || t("dự báo")} ${fmt(h.est)}${unit}` : ""}
+          </span>
           {h.note && <span className="dim">{h.note}</span>}
         </div>
       )}
       {data.some((d) => d.est !== undefined) && (
         <figcaption className="legend">
-          <span><span className="key bar-key" aria-hidden="true" />{t("Thực tế")}</span>
-          <span><span className="key est-key" aria-hidden="true" />{estLabel || t("Dự báo")}</span>
+          <span>
+            <span className="key bar-key" aria-hidden="true" />
+            {t("Thực tế")}
+          </span>
+          <span>
+            <span className="key est-key" aria-hidden="true" />
+            {estLabel || t("Dự báo")}
+          </span>
         </figcaption>
       )}
     </figure>
@@ -103,7 +117,10 @@ export function RecoBar({ reco }: { reco: Record<string, number | string> }) {
       </div>
       <div className="legend">
         {RECO_KEYS.map(([k, l, c]) => (
-          <span key={k}><span className="key" style={{ background: c }} aria-hidden="true" />{t(l)} <b className="mono">{reco[k]}</b></span>
+          <span key={k}>
+            <span className="key" style={{ background: c }} aria-hidden="true" />
+            {t(l)} <b className="mono">{reco[k]}</b>
+          </span>
         ))}
       </div>
     </div>

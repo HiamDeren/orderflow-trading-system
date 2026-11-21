@@ -3,7 +3,6 @@
 import { secretKey, supabaseUrl } from "@/lib/env";
 import { TRADING_BUCKET } from "@/lib/storage";
 
-
 export class DbError extends Error {
   status: number;
   constructor(message: string, status = 0) {

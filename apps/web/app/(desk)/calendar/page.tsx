@@ -31,7 +31,11 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
         </div>
         <span className="hstack small muted" style={{ gap: 10 }}>
           <span className={"dot " + (econ.ok ? "ok" : "err")} aria-hidden="true" />
-          {econ.ok && Number.isFinite(fetched) && <span className="mono">{t("Cập nhật")} {fmtTime(fetched, ui.tz, false)}</span>}
+          {econ.ok && Number.isFinite(fetched) && (
+            <span className="mono">
+              {t("Cập nhật")} {fmtTime(fetched, ui.tz, false)}
+            </span>
+          )}
           <TzPicker />
         </span>
       </header>
@@ -41,10 +45,16 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
         <section className="card" style={{ maxWidth: 640 }}>
           <span className="lbl">{t("Calendar · API lỗi")}</span>
           <h2 className="h2">{t("Chưa có lịch tin tuần này")}</h2>
-          <p className="muted" style={{ fontSize: 14 }}>{t("Nguồn đang không phản hồi ({e}). Trước khi vào phiên, kiểm tra tin trực tiếp trên trang nguồn.", { e: econ.error || "" })}</p>
+          <p className="muted" style={{ fontSize: 14 }}>
+            {t("Nguồn đang không phản hồi ({e}). Trước khi vào phiên, kiểm tra tin trực tiếp trên trang nguồn.", { e: econ.error || "" })}
+          </p>
           <div className="hstack">
-            <a className="btn" href="/calendar">{t("Thử lại")}</a>
-            <a className="btn ghost" href={ECON_SOURCE_PAGE} target="_blank" rel="noreferrer">{t("Mở trang nguồn")}</a>
+            <a className="btn" href="/calendar">
+              {t("Thử lại")}
+            </a>
+            <a className="btn ghost" href={ECON_SOURCE_PAGE} target="_blank" rel="noreferrer">
+              {t("Mở trang nguồn")}
+            </a>
           </div>
         </section>
       )}

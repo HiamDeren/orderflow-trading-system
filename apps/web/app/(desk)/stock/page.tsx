@@ -46,7 +46,9 @@ export default async function StocksPage({ searchParams }: { searchParams: Promi
 
       {q && (
         <section className="card tight" aria-label={t("Kết quả tìm")}>
-          <span className="lbl">{t("Kết quả cho “{q}”", { q })} · {hits.length}</span>
+          <span className="lbl">
+            {t("Kết quả cho “{q}”", { q })} · {hits.length}
+          </span>
           {err && <div className="notice small">{err}</div>}
           {hits.length ? (
             <div className="hits">
@@ -73,7 +75,9 @@ export default async function StocksPage({ searchParams }: { searchParams: Promi
                 <Link key={e.symbol + e.date} href={`/stock/${e.symbol}`} className="hit">
                   <b className="mono">{e.symbol}</b>
                   <span className="dim">{viDayMonth(e.date)}</span>
-                  <span className="small faint">{e.hour === "amc" ? t("Sau đóng cửa") : e.hour === "bmo" ? t("Trước mở cửa") : e.hour === "dmh" ? t("Trong phiên") : ""}</span>
+                  <span className="small faint">
+                    {e.hour === "amc" ? t("Sau đóng cửa") : e.hour === "bmo" ? t("Trước mở cửa") : e.hour === "dmh" ? t("Trong phiên") : ""}
+                  </span>
                 </Link>
               ))}
             </div>
@@ -84,7 +88,11 @@ export default async function StocksPage({ searchParams }: { searchParams: Promi
         <section className="card" aria-label={t("NQ top")}>
           <span className="lbl">{t("Mã nặng trong Nasdaq-100")}</span>
           <div className="chips">
-            {NQ_WATCH.map((s) => <Link key={s} className="chip mono" href={`/stock/${s}`}>{s}</Link>)}
+            {NQ_WATCH.map((s) => (
+              <Link key={s} className="chip mono" href={`/stock/${s}`}>
+                {s}
+              </Link>
+            ))}
           </div>
         </section>
       </div>

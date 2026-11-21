@@ -27,7 +27,13 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           <div className="row">
             <div className="hstack" style={{ gap: 12 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="brand-mark brand-logo" src="/assets/img/zendojo/icon-192.png" alt="" aria-hidden="true" style={{ width: 44, height: 44, borderRadius: 11 }} />
+              <img
+                className="brand-mark brand-logo"
+                src="/assets/img/zendojo/icon-192.png"
+                alt=""
+                aria-hidden="true"
+                style={{ width: 44, height: 44, borderRadius: 11 }}
+              />
               <span className="stack" style={{ gap: 2 }}>
                 <span style={{ fontWeight: 700, fontSize: 20 }}>ZenDojo</span>
                 <span className="small dim">{t("Võ đường trading của Derenツ")}</span>
@@ -43,23 +49,48 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             <span className="dim">{t("Recap mỗi ngày.")}</span>
           </h1>
           <div className="facts" style={{ maxWidth: 460 }}>
-            <div><span className="muted">{t("Thị trường")}</span><span className="mono">NQ futures</span></div>
-            <div><span className="muted">{t("Khung plan")}</span><span className="mono">Composite × pRTH × OVN</span></div>
-            <div><span className="muted">{t("Giới hạn")}</span><span className="mono">{t("2–3 lệnh / ngày")}</span></div>
+            <div>
+              <span className="muted">{t("Thị trường")}</span>
+              <span className="mono">NQ futures</span>
+            </div>
+            <div>
+              <span className="muted">{t("Khung plan")}</span>
+              <span className="mono">Composite × pRTH × OVN</span>
+            </div>
+            <div>
+              <span className="muted">{t("Giới hạn")}</span>
+              <span className="mono">{t("2–3 lệnh / ngày")}</span>
+            </div>
           </div>
         </section>
 
         <section className="login-card" aria-label={t("Đăng nhập")}>
           <div className="stack" style={{ gap: 6 }}>
             <span className="lbl">{t("Đăng nhập")}</span>
-            <h2 className="h2" style={{ fontSize: 22 }}>{t("Vào dashboard")}</h2>
+            <h2 className="h2" style={{ fontSize: 22 }}>
+              {t("Vào dashboard")}
+            </h2>
             <p className="muted" style={{ fontSize: 14 }}>
               {t("Web app cá nhân: chỉ tài khoản Discord của chủ sở hữu và khách được mời mới vào được. Không có mật khẩu, không đăng ký.")}
             </p>
           </div>
-          {msg && <div className={"notice" + (msg.ok ? " ok" : "")} role="status">{t(msg.text)}</div>}
+          {msg && (
+            <div className={"notice" + (msg.ok ? " ok" : "")} role="status">
+              {t(msg.text)}
+            </div>
+          )}
           <a className="btn light" href={href} style={{ minHeight: 48, fontSize: 15 }}>
-            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14161A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              aria-hidden="true"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#14161A"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
               <path d="M10 17l5-5-5-5" />
               <path d="M15 12H3" />
@@ -67,7 +98,9 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             {t("Tiếp tục với Discord")}
           </a>
           <p className="muted small" style={{ padding: 14, borderRadius: 10, background: "var(--side)" }}>
-            {t("Sau khi Discord xác nhận, server so Discord ID với danh sách đã cấu hình. Không có trong danh sách là bị từ chối và đăng xuất ngay, không tạo tài khoản.")}
+            {t(
+              "Sau khi Discord xác nhận, server so Discord ID với danh sách đã cấu hình. Không có trong danh sách là bị từ chối và đăng xuất ngay, không tạo tài khoản.",
+            )}
           </p>
           <span className="small dim">{t("Avatar và tên hiển thị lấy từ Discord.")}</span>
         </section>

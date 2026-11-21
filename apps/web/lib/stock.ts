@@ -68,7 +68,13 @@ export async function getStock(symbol: string): Promise<Stock> {
   const [pf, q, m, er, rc, pe, next] = await Promise.all([
     grab("profile", call<Record<string, unknown>>(`/stock/profile2?symbol=${s}`, 86400)),
     grab("quote", call<Record<string, unknown>>(`/quote?symbol=${s}`, 60)),
-    grab("metric", call<{ metric?: Record<string, unknown>; series?: { annual?: Record<string, unknown>; quarterly?: Record<string, unknown> } }>(`/stock/metric?symbol=${s}&metric=all`, 21600)),
+    grab(
+      "metric",
+      call<{ metric?: Record<string, unknown>; series?: { annual?: Record<string, unknown>; quarterly?: Record<string, unknown> } }>(
+        `/stock/metric?symbol=${s}&metric=all`,
+        21600,
+      ),
+    ),
     grab("earnings", call<unknown>(`/stock/earnings?symbol=${s}`, 21600)),
     grab("recommendation", call<unknown>(`/stock/recommendation?symbol=${s}`, 21600)),
     grab("peers", call<unknown>(`/stock/peers?symbol=${s}`, 86400)),
@@ -93,9 +99,7 @@ export async function getStock(symbol: string): Promise<Stock> {
       : null;
 
   const quote: Quote | null =
-    q && n(q.c)
-      ? { c: n(q.c)!, d: n(q.d), dp: n(q.dp), h: n(q.h), l: n(q.l), o: n(q.o), pc: n(q.pc), t: (n(q.t) || 0) * 1000 }
-      : null;
+    q && n(q.c) ? { c: n(q.c)!, d: n(q.d), dp: n(q.dp), h: n(q.h), l: n(q.l), o: n(q.o), pc: n(q.pc), t: (n(q.t) || 0) * 1000 } : null;
 
   const metric: Record<string, number> = {};
   for (const [k, v] of Object.entries(m?.metric || {})) if (n(v) !== null) metric[k] = n(v)!;
@@ -115,10 +119,20 @@ export async function getStock(symbol: string): Promise<Stock> {
   const recos = (Array.isArray(rc) ? (rc as Record<string, unknown>[]) : []).sort((a, b) => (String(a.period) < String(b.period) ? 1 : -1));
   const r0 = recos[0];
   const reco: Reco | null = r0
-    ? { period: String(r0.period), strongBuy: n(r0.strongBuy) || 0, buy: n(r0.buy) || 0, hold: n(r0.hold) || 0, sell: n(r0.sell) || 0, strongSell: n(r0.strongSell) || 0 }
+    ? {
+        period: String(r0.period),
+        strongBuy: n(r0.strongBuy) || 0,
+        buy: n(r0.buy) || 0,
+        hold: n(r0.hold) || 0,
+        sell: n(r0.sell) || 0,
+        strongSell: n(r0.strongSell) || 0,
+      }
     : null;
 
-  const peers = (Array.isArray(pe) ? (pe as unknown[]) : []).map(String).filter((p) => p !== symbol && SYMBOL_RE.test(p)).slice(0, 12);
+  const peers = (Array.isArray(pe) ? (pe as unknown[]) : [])
+    .map(String)
+    .filter((p) => p !== symbol && SYMBOL_RE.test(p))
+    .slice(0, 12);
   const nextEarning = next.ok ? next.items.find((e) => e.symbol === symbol && e.date >= today) || null : null;
 
   return {
@@ -151,7 +165,13 @@ export async function searchSymbols(q: string): Promise<SearchHit[]> {
 // Mã TradingView cho iframe biểu đồ
 export function tvSymbol(symbol: string, exchange: string) {
   const ex = exchange.toUpperCase();
-  const pre = ex.includes("NASDAQ") ? "NASDAQ" : ex.includes("NEW YORK") || ex.includes("NYSE") ? "NYSE" : ex.includes("AMEX") || ex.includes("ARCA") ? "AMEX" : "";
+  const pre = ex.includes("NASDAQ")
+    ? "NASDAQ"
+    : ex.includes("NEW YORK") || ex.includes("NYSE")
+      ? "NYSE"
+      : ex.includes("AMEX") || ex.includes("ARCA")
+        ? "AMEX"
+        : "";
   return (pre ? pre + ":" : "") + symbol.replace(".", "_");
 }
 
