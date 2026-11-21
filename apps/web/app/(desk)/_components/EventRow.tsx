@@ -15,7 +15,9 @@ export default function EventRow({ e, showNums = true }: { e: EconEvent; showNum
   return (
     <div className="ev">
       <span className="t">
-        <span className="mono" style={{ fontSize: 13, fontWeight: 600 }}>{e.allDay ? t("Cả ngày") : sameTz ? e.timeEt : e.timeLocal}</span>
+        <span className="mono" style={{ fontSize: 13, fontWeight: 600 }}>
+          {e.allDay ? t("Cả ngày") : sameTz ? e.timeEt : e.timeLocal}
+        </span>
         {!e.allDay && !sameTz && <span className="mono small dim">{e.timeEt} ET</span>}
       </span>
       <span className={"bar imp-" + e.impact} aria-hidden="true" />
@@ -26,7 +28,11 @@ export default function EventRow({ e, showNums = true }: { e: EconEvent; showNum
           {e.impact === "Holiday" ? t("Ngày nghỉ") : t("Tác động {x}", { x: t(IMPACT_LABEL[e.impact]).toLowerCase() })}
         </span>
       </span>
-      {showNums && <span className="nums" title={t("Thực tế / Dự báo / Trước")}>{nums(e)}</span>}
+      {showNums && (
+        <span className="nums" title={t("Thực tế / Dự báo / Trước")}>
+          {nums(e)}
+        </span>
+      )}
     </div>
   );
 }

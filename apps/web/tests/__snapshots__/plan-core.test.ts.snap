@@ -1,0 +1,379 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`plan-core · biến thể giá 9:29 (từ payload 12/11) > OVN lệch lên trên VA pRTH (dịch OVN + giá 9:29 thêm 600 điểm) 1`] = `
+{
+  "summary": {
+    "bias": "Lên",
+    "conf": "A cần xác nhận",
+    "date": "2026-11-12",
+    "distance": 195.75,
+    "flip": "Period đóng dưới 28,120 → bias hỏng.",
+    "location": "Trong HVN",
+    "ovn": "Lệch lên / trên VA pRTH",
+    "price": 28664.25,
+    "prth": "Balance",
+    "setup": "Theo bias trong HVN",
+    "target": 28860,
+    "zone": {
+      "hi": 28860,
+      "lo": 28120,
+    },
+  },
+  "text": "PLAN 2026-11-12 · Composite × pRTH × OVN
+VỊ TRÍ: Trong HVN (HVN 28,120–28,860)
+pRTH: Balance · VA 28,416–28,697 · POC 28,548.5
+OVN: Lệch lên / trên VA pRTH · VA 28,776–28,907 · POC 28,804.5 · ONH 28,968.75 / ONL 28,613.75
+BIAS: Lên · A cần xác nhận
+  Cần OD/OTD lên cùng hướng OVN.
+
+SETUP ƯU TIÊN: Theo bias trong HVN
+  Mua pullback trong HVN (về POC / VWAP) theo bias lên, target mép trên 28,860. Không short ở mép dưới. Tới mép trên thì xử lý như "Sát mép trên".
+TARGET: 28,860 (cách giá 9:29 195.75 điểm)
+ĐỔI BIAS (TPO 30'): Period đóng dưới 28,120 → bias hỏng.
+VWAP RTH: Giá phải giữ phía VWAP RTH theo bias lên; vào ở lần chạm VWAP đầu tiên có trigger.
+VÀO LỆNH: trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Dừng 11:30 ET.
+LÚC 10:00: open type + EMA 9/34 (5') + VWAP RTH chốt hướng; open type ngược bias thì đi theo open type.",
+  "zones": [
+    {
+      "hi": 28050,
+      "lo": 27900,
+    },
+    {
+      "hi": 28860,
+      "lo": 28120,
+    },
+    {
+      "hi": 29220,
+      "lo": 29100,
+    },
+    {
+      "hi": 29740,
+      "lo": 29420,
+    },
+  ],
+}
+`;
+
+exports[`plan-core · biến thể giá 9:29 (từ payload 12/11) > dưới ONL 1`] = `
+{
+  "summary": {
+    "bias": "Xuống",
+    "conf": "A cần xác nhận",
+    "date": "2026-11-12",
+    "distance": 50,
+    "flip": "Period đóng trên 28,050 → bias hỏng.",
+    "location": "Trong HVN",
+    "ovn": "Lệch xuống / dưới VA pRTH",
+    "price": 27950,
+    "prth": "Balance",
+    "setup": "Theo bias trong HVN",
+    "target": 27900,
+    "zone": {
+      "hi": 28050,
+      "lo": 27900,
+    },
+  },
+  "text": "PLAN 2026-11-12 · Composite × pRTH × OVN
+VỊ TRÍ: Trong HVN (HVN 27,900–28,050)
+pRTH: Balance · VA 28,416–28,697 · POC 28,548.5
+OVN: Lệch xuống / dưới VA pRTH · VA 28,176–28,307 · POC 28,204.5 · ONH 28,368.75 / ONL 28,013.75
+BIAS: Xuống · A cần xác nhận
+  Cần OD/OTD xuống cùng hướng OVN.
+
+SETUP ƯU TIÊN: Theo bias trong HVN
+  Bán nhịp hồi trong HVN (về POC / VWAP) theo bias xuống, target mép dưới 27,900. Không long ở mép trên. Tới mép dưới thì xử lý như "Sát mép dưới".
+TARGET: 27,900 (cách giá 9:29 50 điểm)
+ĐỔI BIAS (TPO 30'): Period đóng trên 28,050 → bias hỏng.
+VWAP RTH: Giá phải giữ phía VWAP RTH theo bias xuống; vào ở lần chạm VWAP đầu tiên có trigger.
+VÀO LỆNH: trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Dừng 11:30 ET.
+LÚC 10:00: open type + EMA 9/34 (5') + VWAP RTH chốt hướng; open type ngược bias thì đi theo open type.",
+  "zones": [
+    {
+      "hi": 27240,
+      "lo": 26930,
+    },
+    {
+      "hi": 28050,
+      "lo": 27900,
+    },
+    {
+      "hi": 28860,
+      "lo": 28120,
+    },
+    {
+      "hi": 29220,
+      "lo": 29100,
+    },
+  ],
+}
+`;
+
+exports[`plan-core · biến thể giá 9:29 (từ payload 12/11) > giữa OVN và pRTH 1`] = `
+{
+  "summary": {
+    "bias": "Xuống",
+    "conf": "A cần xác nhận",
+    "date": "2026-11-12",
+    "distance": 240,
+    "flip": "Period đóng trên 28,860 → bias hỏng.",
+    "location": "Trong HVN",
+    "ovn": "Lệch xuống / dưới VA pRTH",
+    "price": 28360,
+    "prth": "Balance",
+    "setup": "Theo bias trong HVN",
+    "target": 28120,
+    "zone": {
+      "hi": 28860,
+      "lo": 28120,
+    },
+  },
+  "text": "PLAN 2026-11-12 · Composite × pRTH × OVN
+VỊ TRÍ: Trong HVN (HVN 28,120–28,860)
+pRTH: Balance · VA 28,416–28,697 · POC 28,548.5
+OVN: Lệch xuống / dưới VA pRTH · VA 28,176–28,307 · POC 28,204.5 · ONH 28,368.75 / ONL 28,013.75
+BIAS: Xuống · A cần xác nhận
+  Cần OD/OTD xuống cùng hướng OVN.
+
+SETUP ƯU TIÊN: Theo bias trong HVN
+  Bán nhịp hồi trong HVN (về POC / VWAP) theo bias xuống, target mép dưới 28,120. Không long ở mép trên. Tới mép dưới thì xử lý như "Sát mép dưới".
+TARGET: 28,120 (cách giá 9:29 240 điểm)
+ĐỔI BIAS (TPO 30'): Period đóng trên 28,860 → bias hỏng.
+VWAP RTH: Giá phải giữ phía VWAP RTH theo bias xuống; vào ở lần chạm VWAP đầu tiên có trigger.
+VÀO LỆNH: trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Dừng 11:30 ET.
+LÚC 10:00: open type + EMA 9/34 (5') + VWAP RTH chốt hướng; open type ngược bias thì đi theo open type.",
+  "zones": [
+    {
+      "hi": 28050,
+      "lo": 27900,
+    },
+    {
+      "hi": 28860,
+      "lo": 28120,
+    },
+    {
+      "hi": 29220,
+      "lo": 29100,
+    },
+    {
+      "hi": 29740,
+      "lo": 29420,
+    },
+  ],
+}
+`;
+
+exports[`plan-core · biến thể giá 9:29 (từ payload 12/11) > không có composite vẫn lập được plan 1`] = `
+{
+  "summary": {
+    "bias": "Xuống",
+    "conf": "A cần xác nhận",
+    "date": "2026-11-12",
+    "distance": 89.25,
+    "flip": "Period 30' đóng trên 28,050 → ngừng fade, cân nhắc continuation lên.",
+    "location": "Sát mép trên HVN",
+    "ovn": "Lệch xuống / dưới VA pRTH",
+    "price": 28064.25,
+    "prth": "Balance",
+    "setup": "Fade mép trên",
+    "target": 27975,
+    "zone": {
+      "hi": 28050,
+      "lo": 27900,
+    },
+  },
+  "text": "PLAN 2026-11-12 · Composite × pRTH × OVN
+VỊ TRÍ: Sát mép trên HVN (HVN 27,900–28,050)
+pRTH: Balance · VA 28,416–28,697 · POC 28,548.5
+OVN: Lệch xuống / dưới VA pRTH · VA 28,176–28,307 · POC 28,204.5 · ONH 28,368.75 / ONL 28,013.75
+BIAS: Xuống · A cần xác nhận
+  Cần OD/OTD xuống cùng hướng OVN.
+
+SETUP ƯU TIÊN: Fade mép trên
+  Short khi giá bị từ chối ở 28,050 (nến đóng lại vào trong, delta âm hoặc absorption). Target 27,975, sau đó 27,900.
+TARGET: 27,975 (cách giá 9:29 89.25 điểm)
+ĐỔI BIAS (TPO 30'): Period 30' đóng trên 28,050 → ngừng fade, cân nhắc continuation lên.
+VWAP RTH: Chỉ fade khi VWAP RTH phẳng. VWAP dốc ra phía mép đang fade thì bỏ. Mép trùng band ±2σ là chỗ fade tốt nhất.
+VÀO LỆNH: trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Dừng 11:30 ET.
+LÚC 10:00: open type + EMA 9/34 (5') + VWAP RTH chốt hướng; open type ngược bias thì đi theo open type.",
+  "zones": [
+    {
+      "hi": 27240,
+      "lo": 26930,
+    },
+    {
+      "hi": 28050,
+      "lo": 27900,
+    },
+    {
+      "hi": 28860,
+      "lo": 28120,
+    },
+    {
+      "hi": 29220,
+      "lo": 29100,
+    },
+  ],
+}
+`;
+
+exports[`plan-core · biến thể giá 9:29 (từ payload 12/11) > trong VA OVN 1`] = `
+{
+  "summary": {
+    "bias": "Xuống",
+    "conf": "A cần xác nhận",
+    "date": "2026-11-12",
+    "distance": 100,
+    "flip": "Period đóng trên 28,860 → bias hỏng.",
+    "location": "Trong HVN",
+    "ovn": "Lệch xuống / dưới VA pRTH",
+    "price": 28220,
+    "prth": "Balance",
+    "setup": "Theo bias trong HVN",
+    "target": 28120,
+    "zone": {
+      "hi": 28860,
+      "lo": 28120,
+    },
+  },
+  "text": "PLAN 2026-11-12 · Composite × pRTH × OVN
+VỊ TRÍ: Trong HVN (HVN 28,120–28,860)
+pRTH: Balance · VA 28,416–28,697 · POC 28,548.5
+OVN: Lệch xuống / dưới VA pRTH · VA 28,176–28,307 · POC 28,204.5 · ONH 28,368.75 / ONL 28,013.75
+BIAS: Xuống · A cần xác nhận
+  Cần OD/OTD xuống cùng hướng OVN.
+
+SETUP ƯU TIÊN: Theo bias trong HVN
+  Bán nhịp hồi trong HVN (về POC / VWAP) theo bias xuống, target mép dưới 28,120. Không long ở mép trên. Tới mép dưới thì xử lý như "Sát mép dưới".
+TARGET: 28,120 (cách giá 9:29 100 điểm)
+ĐỔI BIAS (TPO 30'): Period đóng trên 28,860 → bias hỏng.
+VWAP RTH: Giá phải giữ phía VWAP RTH theo bias xuống; vào ở lần chạm VWAP đầu tiên có trigger.
+VÀO LỆNH: trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Dừng 11:30 ET.
+LÚC 10:00: open type + EMA 9/34 (5') + VWAP RTH chốt hướng; open type ngược bias thì đi theo open type.",
+  "zones": [
+    {
+      "hi": 27240,
+      "lo": 26930,
+    },
+    {
+      "hi": 28050,
+      "lo": 27900,
+    },
+    {
+      "hi": 28860,
+      "lo": 28120,
+    },
+    {
+      "hi": 29220,
+      "lo": 29100,
+    },
+  ],
+}
+`;
+
+exports[`plan-core · biến thể giá 9:29 (từ payload 12/11) > trong VA pRTH 1`] = `
+{
+  "summary": {
+    "bias": "Xuống",
+    "conf": "A cần xác nhận",
+    "date": "2026-11-12",
+    "distance": 430,
+    "flip": "Period đóng trên 28,860 → bias hỏng.",
+    "location": "Trong HVN",
+    "ovn": "Lệch xuống / dưới VA pRTH",
+    "price": 28550,
+    "prth": "Balance",
+    "setup": "Theo bias trong HVN",
+    "target": 28120,
+    "zone": {
+      "hi": 28860,
+      "lo": 28120,
+    },
+  },
+  "text": "PLAN 2026-11-12 · Composite × pRTH × OVN
+VỊ TRÍ: Trong HVN (HVN 28,120–28,860)
+pRTH: Balance · VA 28,416–28,697 · POC 28,548.5
+OVN: Lệch xuống / dưới VA pRTH · VA 28,176–28,307 · POC 28,204.5 · ONH 28,368.75 / ONL 28,013.75
+BIAS: Xuống · A cần xác nhận
+  Cần OD/OTD xuống cùng hướng OVN.
+
+SETUP ƯU TIÊN: Theo bias trong HVN
+  Bán nhịp hồi trong HVN (về POC / VWAP) theo bias xuống, target mép dưới 28,120. Không long ở mép trên. Tới mép dưới thì xử lý như "Sát mép dưới".
+TARGET: 28,120 (cách giá 9:29 430 điểm)
+ĐỔI BIAS (TPO 30'): Period đóng trên 28,860 → bias hỏng.
+VWAP RTH: Giá phải giữ phía VWAP RTH theo bias xuống; vào ở lần chạm VWAP đầu tiên có trigger.
+VÀO LỆNH: trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Dừng 11:30 ET.
+LÚC 10:00: open type + EMA 9/34 (5') + VWAP RTH chốt hướng; open type ngược bias thì đi theo open type.",
+  "zones": [
+    {
+      "hi": 28050,
+      "lo": 27900,
+    },
+    {
+      "hi": 28860,
+      "lo": 28120,
+    },
+    {
+      "hi": 29220,
+      "lo": 29100,
+    },
+    {
+      "hi": 29740,
+      "lo": 29420,
+    },
+  ],
+}
+`;
+
+exports[`plan-core · biến thể giá 9:29 (từ payload 12/11) > trên VA pRTH 1`] = `
+{
+  "summary": {
+    "bias": "Xuống",
+    "conf": "A cần xác nhận",
+    "date": "2026-11-12",
+    "distance": 640,
+    "flip": "Period đóng trên 28,860 → bias hỏng.",
+    "location": "Trong HVN",
+    "ovn": "Lệch xuống / dưới VA pRTH",
+    "price": 28760,
+    "prth": "Balance",
+    "setup": "Theo bias trong HVN",
+    "target": 28120,
+    "zone": {
+      "hi": 28860,
+      "lo": 28120,
+    },
+  },
+  "text": "PLAN 2026-11-12 · Composite × pRTH × OVN
+VỊ TRÍ: Trong HVN (HVN 28,120–28,860)
+pRTH: Balance · VA 28,416–28,697 · POC 28,548.5
+OVN: Lệch xuống / dưới VA pRTH · VA 28,176–28,307 · POC 28,204.5 · ONH 28,368.75 / ONL 28,013.75
+BIAS: Xuống · A cần xác nhận
+  Cần OD/OTD xuống cùng hướng OVN.
+
+SETUP ƯU TIÊN: Theo bias trong HVN
+  Bán nhịp hồi trong HVN (về POC / VWAP) theo bias xuống, target mép dưới 28,120. Không long ở mép trên. Tới mép dưới thì xử lý như "Sát mép dưới".
+TARGET: 28,120 (cách giá 9:29 640 điểm)
+ĐỔI BIAS (TPO 30'): Period đóng trên 28,860 → bias hỏng.
+VWAP RTH: Giá phải giữ phía VWAP RTH theo bias xuống; vào ở lần chạm VWAP đầu tiên có trigger.
+VÀO LỆNH: trên M1 + footprint, stop theo cấu trúc M1. Không vào giữa LVN. Dừng 11:30 ET.
+LÚC 10:00: open type + EMA 9/34 (5') + VWAP RTH chốt hướng; open type ngược bias thì đi theo open type.",
+  "zones": [
+    {
+      "hi": 28050,
+      "lo": 27900,
+    },
+    {
+      "hi": 28860,
+      "lo": 28120,
+    },
+    {
+      "hi": 29220,
+      "lo": 29100,
+    },
+    {
+      "hi": 29740,
+      "lo": 29420,
+    },
+  ],
+}
+`;

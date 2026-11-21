@@ -4,6 +4,7 @@
 // "/" luôn chuyển hướng: đã đăng nhập → /dashboard, chưa → /login.
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { publishableKey, supabaseUrl } from "@/lib/env";
 
 const DESK = ["/dashboard", "/calendar", "/news", "/earnings", "/stock", "/markets", "/trade-plan", "/journal", "/knowledge", "/profile"];
 const OWNER_ONLY = ["/trade-plan", "/journal"];
@@ -13,8 +14,8 @@ const GUEST_FLAG = "desk_guest";
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isDesk = DESK.some((p) => path === p || path.startsWith(p + "/"));
-  const url = (process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || "").replace(/\/$/, "");
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+  const url = supabaseUrl();
+  const key = publishableKey();
 
   if (!url || !key) {
     if (isDesk || path === "/") return NextResponse.redirect(new URL("/login?e=config", request.url));

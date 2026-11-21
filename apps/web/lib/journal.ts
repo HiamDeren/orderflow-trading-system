@@ -2,9 +2,7 @@
 // Mọi bảng nối về trading.trade_days qua day_id (trigger điền từ trade_date). Lưu qua RPC trading.save_journal (một giao dịch).
 import { db } from "@/lib/db";
 import core from "@/lib/plan-core";
-import {
-  BIAS_CHECK, DAY_TYPES, FOLLOWED, HVN_EDGES, IB_WIDTHS, OPEN_DIRS, OPEN_TYPES, PRE_BIAS, REACH, RESULTS, SETUPS, SIDES,
-} from "@/lib/settings";
+import { BIAS_CHECK, DAY_TYPES, FOLLOWED, HVN_EDGES, IB_WIDTHS, OPEN_DIRS, OPEN_TYPES, PRE_BIAS, REACH, RESULTS, SETUPS, SIDES } from "@/lib/settings";
 import { monthRange } from "@/lib/time";
 
 export const TEXT_FIELDS = [
@@ -77,7 +75,8 @@ export type JournalDay = {
   open_type: string | null;
   bias_correct: string | null;
   updated_at?: string;
-} & Record<SessionKey, string | null> & Record<TextKey, string | null>;
+} & Record<SessionKey, string | null> &
+  Record<TextKey, string | null>;
 
 export type DayWithTrades = JournalDay & { journal_trades?: Trade[] };
 
@@ -162,10 +161,7 @@ export function getMonth(month: string) {
 }
 
 export async function getRecentDays(limit = 20): Promise<DayWithTrades[]> {
-  const rows = await db.select<DayWithTrades>(
-    TABLE_DAYS,
-    `${EMBED}&order=trade_date.desc&limit=${limit}&journal_trades.order=seq.asc`,
-  );
+  const rows = await db.select<DayWithTrades>(TABLE_DAYS, `${EMBED}&order=trade_date.desc&limit=${limit}&journal_trades.order=seq.asc`);
   return rows.map(withMistakes);
 }
 
@@ -200,7 +196,9 @@ export type Stats = {
 export type Rate = { k: number; n: number; pct: number | null; lo: number | null; hi: number | null };
 export function rate(k: number, n: number): Rate {
   if (!n) return { k, n, pct: null, lo: null, hi: null };
-  const z = 1.96, p = k / n, d = 1 + (z * z) / n;
+  const z = 1.96,
+    p = k / n,
+    d = 1 + (z * z) / n;
   const c = (p + (z * z) / (2 * n)) / d;
   const h = (z * Math.sqrt((p * (1 - p)) / n + (z * z) / (4 * n * n))) / d;
   return { k, n, pct: Math.round(p * 100), lo: Math.round(Math.max(0, c - h) * 100), hi: Math.round(Math.min(1, c + h) * 100) };
@@ -266,7 +264,10 @@ export function statsOf(days: DayWithTrades[]): Stats {
     followed,
     biasOk,
     byType: [...byTypeMap].map(([name, v]) => ({ name, ...v })).sort((a, b) => b.r - a.r),
-    mistakes: [...mist].map(([name, n]) => ({ name, n })).sort((a, b) => b.n - a.n).slice(0, 6),
+    mistakes: [...mist]
+      .map(([name, n]) => ({ name, n }))
+      .sort((a, b) => b.n - a.n)
+      .slice(0, 6),
     session: sessionStatsOf(days),
   };
 }

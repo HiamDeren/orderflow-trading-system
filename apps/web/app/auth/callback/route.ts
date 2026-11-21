@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
   }
 
   const owner = isOwnerUser(user);
-  const discordId = owner ? null : discordIdsOf(user).find((id) => DISCORD_ID_RE.test(id)) ?? null;
+  const discordId = owner ? null : (discordIdsOf(user).find((id) => DISCORD_ID_RE.test(id)) ?? null);
   let member = null;
   if (discordId) {
     try {

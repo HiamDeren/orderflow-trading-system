@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { marketConfigured } from "@/lib/market";
 import { CRYPTO_CATS, INDEX_ETF, NQ_MAP, SECTORS, cryptoConfigured, fmtUsd, getCrypto, getOverview, sparkPath } from "@/lib/markets";
 import { getT } from "@/lib/prefs-server";
 import { getQuotes } from "@/lib/stock";
+import { CardSkeleton } from "../_components/Skeleton";
 import { NotConfigured } from "../_components/States";
 
 export const metadata: Metadata = { title: "Markets" };
@@ -40,18 +42,43 @@ export default async function MarketsPage({ searchParams }: { searchParams: Prom
         </div>
         <nav className="seg" aria-label={t("Loại tài sản")}>
           {TABS.map((x) => (
-            <Link key={x.id} href={`/markets?tab=${x.id}`} className={"seg-link" + (x.id === tab ? " on" : "")} aria-current={x.id === tab ? "page" : undefined}>
+            <Link
+              key={x.id}
+              href={`/markets?tab=${x.id}`}
+              className={"seg-link" + (x.id === tab ? " on" : "")}
+              aria-current={x.id === tab ? "page" : undefined}
+            >
               {t(x.label)}
             </Link>
           ))}
         </nav>
       </header>
-      {tab === "crypto" ? <Crypto cat={sp.cat || ""} t={t} href={href} /> : !marketConfigured() ? <NotConfigured what="Markets" /> : tab === "stocks" ? <Stocks sector={sp.sector || "tech"} t={t} href={href} /> : <Overview t={t} />}
+      {/* Tiêu đề + tab hiện ngay; phần dữ liệu (tới ~33 lệnh quote / CoinGecko) stream vào sau */}
+      <Suspense key={`${tab}-${sp.sector || ""}-${sp.cat || ""}`} fallback={<MarketsSkeleton />}>
+        {tab === "crypto" ? (
+          <Crypto cat={sp.cat || ""} t={t} href={href} />
+        ) : !marketConfigured() ? (
+          <NotConfigured what="Markets" />
+        ) : tab === "stocks" ? (
+          <Stocks sector={sp.sector || "tech"} t={t} href={href} />
+        ) : (
+          <Overview t={t} />
+        )}
+      </Suspense>
     </>
   );
 }
 
 type T = (s: string, v?: Record<string, string | number>) => string;
+
+function MarketsSkeleton() {
+  return (
+    <div className="dash-grid two" aria-busy="true">
+      <CardSkeleton lines={6} tall />
+      <CardSkeleton lines={6} tall />
+    </div>
+  );
+}
 
 async function Overview({ t }: { t: T }) {
   const { by } = await getOverview();
@@ -64,7 +91,10 @@ async function Overview({ t }: { t: T }) {
           const q = by.get(x.sym);
           return (
             <Link key={x.sym} href={`/stock/${x.sym}`} className="mk-tile">
-              <span className="row small dim"><span>{t(x.name)}</span><span className="mono">{x.sym}</span></span>
+              <span className="row small dim">
+                <span>{t(x.name)}</span>
+                <span className="mono">{x.sym}</span>
+              </span>
               <span className="mono mk-px">{q ? q.c.toFixed(2) : "—"}</span>
               <span className={"mono small " + tone(q?.dp ?? null)}>{pct(q?.dp ?? null)}</span>
             </Link>
@@ -74,33 +104,61 @@ async function Overview({ t }: { t: T }) {
 
       <div className="mk-two">
         <section className="card" aria-label={t("Sector hôm nay")}>
-          <div className="row"><span className="lbl">{t("11 sector S&P 500 · qua ETF · % hôm nay")}</span></div>
+          <div className="row">
+            <span className="lbl">{t("11 sector S&P 500 · qua ETF · % hôm nay")}</span>
+          </div>
           <div className="heat heat-6">
             {SECTORS.map((s) => {
               const q = by.get(s.etf);
               return (
-                <Link key={s.key} href={`/markets?tab=stocks&sector=${s.key}`} className={"heat-c " + heat(q?.dp ?? null)} style={{ gridColumn: `span ${s.w}`, gridRow: `span ${s.h}` }}>
+                <Link
+                  key={s.key}
+                  href={`/markets?tab=stocks&sector=${s.key}`}
+                  className={"heat-c " + heat(q?.dp ?? null)}
+                  style={{ gridColumn: `span ${s.w}`, gridRow: `span ${s.h}` }}
+                >
                   <span className="heat-n">{t(s.name)}</span>
-                  <span className="row"><span className="mono small">{s.etf}</span><b className="mono">{pct(q?.dp ?? null)}</b></span>
+                  <span className="row">
+                    <span className="mono small">{s.etf}</span>
+                    <b className="mono">{pct(q?.dp ?? null)}</b>
+                  </span>
                 </Link>
               );
             })}
           </div>
         </section>
         <section className="card" aria-label={t("Tăng / giảm mạnh · NQ top")} style={{ gap: 4 }}>
-          <span className="lbl" style={{ paddingBottom: 6 }}>{t("NQ top · tăng mạnh")}</span>
-          {movers.slice(0, 4).map((m) => <Mover key={m.s} s={m.s} c={m.q!.c} dp={m.q!.dp} />)}
-          <span className="lbl" style={{ padding: "12px 0 6px" }}>{t("NQ top · giảm mạnh")}</span>
-          {movers.slice(-4).reverse().map((m) => <Mover key={m.s} s={m.s} c={m.q!.c} dp={m.q!.dp} />)}
+          <span className="lbl" style={{ paddingBottom: 6 }}>
+            {t("NQ top · tăng mạnh")}
+          </span>
+          {movers.slice(0, 4).map((m) => (
+            <Mover key={m.s} s={m.s} c={m.q!.c} dp={m.q!.dp} />
+          ))}
+          <span className="lbl" style={{ padding: "12px 0 6px" }}>
+            {t("NQ top · giảm mạnh")}
+          </span>
+          {movers
+            .slice(-4)
+            .reverse()
+            .map((m) => (
+              <Mover key={m.s} s={m.s} c={m.q!.c} dp={m.q!.dp} />
+            ))}
         </section>
       </div>
 
       <section className="card" aria-label={t("Bản đồ NQ top")}>
-        <div className="row"><span className="lbl">{t("NQ top · ô to theo nhóm vốn hoá")}</span><Link className="small" href="/earnings" style={{ fontWeight: 600 }}>Earnings</Link></div>
+        <div className="row">
+          <span className="lbl">{t("NQ top · ô to theo nhóm vốn hoá")}</span>
+          <Link className="small" href="/earnings" style={{ fontWeight: 600 }}>
+            Earnings
+          </Link>
+        </div>
         <div className="heat heat-8">
           {nq.map((x) => (
             <Link key={x.s} href={`/stock/${x.s}`} className={"heat-c center " + heat(x.q!.dp)} style={{ gridColumn: `span ${x.w}`, gridRow: `span ${x.h}` }}>
-              <b className="mono" style={{ fontSize: x.w * x.h >= 4 ? 18 : 13 }}>{x.s}</b>
+              <b className="mono" style={{ fontSize: x.w * x.h >= 4 ? 18 : 13 }}>
+                {x.s}
+              </b>
               <span className="mono small">{pct(x.q!.dp)}</span>
             </Link>
           ))}
@@ -113,7 +171,9 @@ async function Overview({ t }: { t: T }) {
 function Mover({ s, c, dp }: { s: string; c: number; dp: number | null }) {
   return (
     <Link href={`/stock/${s}`} className="watch-row" style={{ gridTemplateColumns: "64px minmax(0,1fr) 72px" }}>
-      <span className="mono" style={{ fontWeight: 600 }}>{s}</span>
+      <span className="mono" style={{ fontWeight: 600 }}>
+        {s}
+      </span>
       <span className="mono">{c.toFixed(2)}</span>
       <span className={"mono small " + tone(dp)}>{pct(dp)}</span>
     </Link>
@@ -122,7 +182,16 @@ function Mover({ s, c, dp }: { s: string; c: number; dp: number | null }) {
 
 async function Stocks({ sector, t, href }: { sector: string; t: T; href: (o: Record<string, string>) => string }) {
   const sec = SECTORS.find((s) => s.key === sector) || SECTORS[0];
-  const [etfs, rows] = await Promise.all([getQuotes(SECTORS.map((s) => s.etf), 180), getQuotes(sec.stocks.map((x) => x[0]), 180)]);
+  const [etfs, rows] = await Promise.all([
+    getQuotes(
+      SECTORS.map((s) => s.etf),
+      180,
+    ),
+    getQuotes(
+      sec.stocks.map((x) => x[0]),
+      180,
+    ),
+  ]);
   const etf = new Map(etfs.map((q) => [q.symbol, q]));
   const by = new Map(rows.map((q) => [q.symbol, q]));
   return (
@@ -141,14 +210,23 @@ async function Stocks({ sector, t, href }: { sector: string; t: T; href: (o: Rec
       <div className="tbl-wrap">
         <table className="tbl">
           <thead>
-            <tr><th>{t("Mã")}</th><th>{t("Công ty")}</th><th className="r">{t("Giá")}</th><th className="r">{t("Hôm nay")}</th></tr>
+            <tr>
+              <th>{t("Mã")}</th>
+              <th>{t("Công ty")}</th>
+              <th className="r">{t("Giá")}</th>
+              <th className="r">{t("Hôm nay")}</th>
+            </tr>
           </thead>
           <tbody>
             {sec.stocks.map(([s, name]) => {
               const q = by.get(s);
               return (
                 <tr key={s}>
-                  <td><Link className="mono" href={`/stock/${s}`} style={{ fontWeight: 700, color: "var(--text)" }}>{s}</Link></td>
+                  <td>
+                    <Link className="mono" href={`/stock/${s}`} style={{ fontWeight: 700, color: "var(--text)" }}>
+                      {s}
+                    </Link>
+                  </td>
                   <td className="muted">{name}</td>
                   <td className="r mono">{q ? q.c.toFixed(2) : "—"}</td>
                   <td className={"r mono " + tone(q?.dp ?? null)}>{pct(q?.dp ?? null)}</td>
@@ -186,14 +264,18 @@ async function Crypto({ cat, t, href }: { cat: string; t: T; href: (o: Record<st
       {d.trending.length > 0 && (
         <div className="hstack small" style={{ gap: 8 }}>
           <span className="lbl">{t("Đang được tìm nhiều")}</span>
-          {d.trending.map((s) => <span key={s} className="chip mono">{s}</span>)}
+          {d.trending.map((s) => (
+            <span key={s} className="chip mono">
+              {s}
+            </span>
+          ))}
         </div>
       )}
       <section className="card" aria-label={t("Bảng coin")} style={{ padding: 0, gap: 0 }}>
         <div className="chips mk-chips">
           {CRYPTO_CATS.map((c) => {
             const on = c.id === cat || (!c.id && !CRYPTO_CATS.some((x) => x.id && x.id === cat));
-            const ch = c.id ? d.catChange.get(c.id) ?? null : null;
+            const ch = c.id ? (d.catChange.get(c.id) ?? null) : null;
             return (
               <Link key={c.id || "all"} href={href({ cat: c.id })} className={"chip" + (on ? " on" : "")} aria-current={on ? "true" : undefined}>
                 {t(c.label)} {c.id && <span className={"mono " + tone(ch)}>{pct(ch)}</span>}
@@ -202,12 +284,24 @@ async function Crypto({ cat, t, href }: { cat: string; t: T; href: (o: Record<st
           })}
         </div>
         {d.error ? (
-          <div className="notice" style={{ margin: 16 }}>{t("Không tải được dữ liệu crypto")}: {d.error}</div>
+          <div className="notice" style={{ margin: 16 }}>
+            {t("Không tải được dữ liệu crypto")}: {d.error}
+          </div>
         ) : (
           <div className="tbl-wrap">
             <table className="tbl">
               <thead>
-                <tr><th>#</th><th>Coin</th><th className="r">{t("Giá")}</th><th className="r">1h</th><th className="r">24h</th><th className="r">{t("7 ngày")}</th><th className="r">{t("Vốn hoá")}</th><th className="r">Volume 24h</th><th className="r">{t("7 ngày qua")}</th></tr>
+                <tr>
+                  <th>#</th>
+                  <th>Coin</th>
+                  <th className="r">{t("Giá")}</th>
+                  <th className="r">1h</th>
+                  <th className="r">24h</th>
+                  <th className="r">{t("7 ngày")}</th>
+                  <th className="r">{t("Vốn hoá")}</th>
+                  <th className="r">Volume 24h</th>
+                  <th className="r">{t("7 ngày qua")}</th>
+                </tr>
               </thead>
               <tbody>
                 {d.coins.map((c) => (
@@ -227,7 +321,9 @@ async function Crypto({ cat, t, href }: { cat: string; t: T; href: (o: Record<st
                     <td className="r mono">{fmtUsd(c.cap, true)}</td>
                     <td className="r mono">{fmtUsd(c.vol, true)}</td>
                     <td className="r">
-                      <svg width="100" height="28" viewBox="0 0 100 28" aria-hidden="true"><path d={sparkPath(c.spark, 100, 28)} fill="none" className={"spark " + tone(c.d7)} /></svg>
+                      <svg width="100" height="28" viewBox="0 0 100 28" aria-hidden="true">
+                        <path d={sparkPath(c.spark, 100, 28)} fill="none" className={"spark " + tone(c.d7)} />
+                      </svg>
                     </td>
                   </tr>
                 ))}

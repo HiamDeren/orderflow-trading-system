@@ -20,7 +20,7 @@ export const TZS = [
   { id: "Australia/Sydney", short: "SYD", label: "Sydney" },
 ] as const;
 
-export const DEFAULT_UI: UiPrefs = { lang: "vi", tz: "Asia/Ho_Chi_Minh", side: "pinned" };
+const DEFAULT_UI: UiPrefs = { lang: "vi", tz: "Asia/Ho_Chi_Minh", side: "pinned" };
 
 export function parseUi(get: (name: string) => string | undefined): UiPrefs {
   const lang = get(UI_COOKIES.lang) === "en" ? "en" : "vi";

@@ -4,7 +4,7 @@ import EN from "@/lib/i18n-en";
 import type { Lang } from "@/lib/prefs";
 
 export function translate(lang: Lang, s: string, vars?: Record<string, string | number>) {
-  let out = lang === "en" ? EN[s] ?? s : s;
+  let out = lang === "en" ? (EN[s] ?? s) : s;
   if (vars) for (const [k, v] of Object.entries(vars)) out = out.split(`{${k}}`).join(String(v));
   return out;
 }

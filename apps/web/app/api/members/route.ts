@@ -5,40 +5,38 @@
 //     add      : thêm thẳng Discord ID làm khách (không cần chờ người đó xin)
 //     block    : gỡ quyền + không nhận yêu cầu mới từ ID này; xoá user Supabase của khách (phiên cũ hết làm mới được)
 //     remove   : xoá dòng (người đó đăng nhập lại sẽ thành yêu cầu mới); cũng xoá user Supabase nếu có
-import { deleteUser, getOwner } from "@/lib/auth";
-import { errText } from "@/lib/db";
+// Lỗi: { ok:false, error, code } (lib/api.ts).
+import { crossOrigin, errText, fail, json, readJson, requireOwnerApi } from "@/lib/api";
+import { deleteUser } from "@/lib/auth";
 import { ownerDiscordId } from "@/lib/env";
-import { DISCORD_ID_RE, addGuest, listMembers, removeMember, setStatus } from "@/lib/members";
+import { addGuest, DISCORD_ID_RE, listMembers, removeMember, setStatus } from "@/lib/members";
+import { MemberPost } from "@/lib/schemas";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-function json(body: unknown, status = 200) {
-  return Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
-}
-
 export async function GET() {
-  if (!(await getOwner())) return json({ error: "unauthorized" }, 401);
+  const owner = await requireOwnerApi();
+  if (owner instanceof Response) return owner;
   const r = await listMembers();
-  if (!r.ok) return json({ error: r.missing ? "missing" : r.error }, r.missing ? 503 : 502);
+  if (!r.ok) return r.missing ? fail(503, "config", "missing") : fail(502, "upstream", r.error);
   return json({ members: r.rows });
 }
 
 export async function POST(req: Request) {
-  const owner = await getOwner();
-  if (!owner) return json({ error: "unauthorized" }, 401);
-  let body: { action?: string; discord_id?: string; note?: string } | null = null;
+  const owner = await requireOwnerApi();
+  if (owner instanceof Response) return owner;
+  const bad = crossOrigin(req);
+  if (bad) return bad;
+  const body = await readJson(req, MemberPost, { maxBytes: 16 * 1024, invalid: () => "body phải là JSON", notJson: "body phải là JSON" });
+  if (!body.ok) return body.response;
+  const b = body.data;
+  const id = String(b.discord_id || "").trim();
+  if (!DISCORD_ID_RE.test(id)) return fail(400, "bad_request", "Discord ID phải là 5–25 chữ số");
+  if (id === ownerDiscordId()) return fail(400, "bad_request", "Đây là ID chủ sở hữu");
+  const note = b.note ? String(b.note).slice(0, 200) : null;
   try {
-    body = await req.json();
-  } catch {
-    return json({ error: "body phải là JSON" }, 400);
-  }
-  const id = String(body?.discord_id || "").trim();
-  if (!DISCORD_ID_RE.test(id)) return json({ error: "Discord ID phải là 5–25 chữ số" }, 400);
-  if (id === ownerDiscordId()) return json({ error: "Đây là ID chủ sở hữu" }, 400);
-  const note = body?.note ? String(body.note).slice(0, 200) : null;
-  try {
-    switch (body?.action) {
+    switch (b.action) {
       case "approve":
         return json({ member: await setStatus(id, "guest") });
       case "add":
@@ -54,11 +52,11 @@ export async function POST(req: Request) {
         return json({ ok: true });
       }
       default:
-        return json({ error: "action không hợp lệ" }, 400);
+        return fail(400, "bad_request", "action không hợp lệ");
     }
   } catch (e) {
-    console.error("[api/members]", body?.action, errText(e));
-    return json({ error: errText(e) }, 502);
+    console.error("[api/members]", b.action, errText(e));
+    return fail(502, "upstream", errText(e));
   }
 }
 

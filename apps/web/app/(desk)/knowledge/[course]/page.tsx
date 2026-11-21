@@ -18,12 +18,19 @@ export default async function CoursePage({ params }: { params: Promise<{ course:
     <>
       <header className="page-head">
         <div>
-          <span className="lbl"><Link href="/knowledge">Knowledge</Link> · {t(c.track)}</span>
+          <span className="lbl">
+            <Link href="/knowledge">Knowledge</Link> · {t(c.track)}
+          </span>
           <h1 className="h1">{t(c.title)}</h1>
         </div>
         <nav className="seg" aria-label={t("Khoá học")}>
           {COURSES.map((x) => (
-            <Link key={x.key} href={`/knowledge/${x.key}`} className={"seg-link" + (x.key === c.key ? " on" : "")} aria-current={x.key === c.key ? "page" : undefined}>
+            <Link
+              key={x.key}
+              href={`/knowledge/${x.key}`}
+              className={"seg-link" + (x.key === c.key ? " on" : "")}
+              aria-current={x.key === c.key ? "page" : undefined}
+            >
               {t(x.title)}
             </Link>
           ))}

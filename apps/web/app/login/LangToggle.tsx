@@ -8,8 +8,12 @@ export default function LangToggle({ lang }: { lang: Lang }) {
   };
   return (
     <div className="seg seg-xs" role="group" aria-label="Language">
-      <button aria-pressed={lang === "vi"} onClick={() => set("vi")}>VI</button>
-      <button aria-pressed={lang === "en"} onClick={() => set("en")}>EN</button>
+      <button type="button" aria-pressed={lang === "vi"} onClick={() => set("vi")}>
+        VI
+      </button>
+      <button type="button" aria-pressed={lang === "en"} onClick={() => set("en")}>
+        EN
+      </button>
     </div>
   );
 }

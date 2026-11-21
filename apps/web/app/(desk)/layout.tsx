@@ -11,18 +11,19 @@ import { UiProvider } from "./_components/Ui";
 export const dynamic = "force-dynamic";
 
 export default async function DeskLayout({ children }: { children: React.ReactNode }) {
-  const owner = await requireViewer();
-  const ui = await getUi();
-  // Tin tác động cao của tuần (theo bộ lọc currency của Calendar) cho thanh trên; lịch đã cache 15 phút
-  const prefs = parsePrefs((await cookies()).get(PREFS_COOKIE)?.value);
-  const econ = await getEconWeek();
+  // Kiểm đăng nhập, đọc cookie và lấy lịch tin chạy song song (lịch đã cache 15 phút; chưa đăng nhập thì requireViewer redirect)
+  const [owner, ui, store, econ] = await Promise.all([requireViewer(), getUi(), cookies(), getEconWeek()]);
+  // Tin tác động cao của tuần (theo bộ lọc currency của Calendar) cho thanh trên
+  const prefs = parsePrefs(store.get(PREFS_COOKIE)?.value);
   const events: NextEvent[] = localize(econ.events, ui.tz)
     .filter((e) => e.impact === "High" && !e.allDay && Number.isFinite(e.ts) && matches({ ...prefs, imp: ["High"] }, e))
     .sort((a, b) => a.ts - b.ts)
     .map((e) => ({ ts: e.ts, title: e.title, country: e.country, dateLocal: e.dateLocal }));
   return (
     <UiProvider prefs={ui}>
-      <Shell owner={owner} events={events}>{children}</Shell>
+      <Shell owner={owner} events={events}>
+        {children}
+      </Shell>
     </UiProvider>
   );
 }

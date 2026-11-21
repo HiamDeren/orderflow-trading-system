@@ -31,7 +31,7 @@ export default function CopyImage({ src, small }: { src: string; small?: boolean
     setTimeout(() => setState("idle"), 2200);
   }
   return (
-    <button className={"btn" + (small ? " sm" : "")} onClick={copy} disabled={state === "busy"} aria-live="polite">
+    <button type="button" className={"btn" + (small ? " sm" : "")} onClick={copy} disabled={state === "busy"} aria-live="polite">
       <Icon name={state === "ok" ? "check" : "copy"} size={16} />
       {state === "ok" ? t("Đã copy ảnh") : state === "err" ? t("Trình duyệt chặn copy, mở ảnh để lưu") : state === "busy" ? t("Đang copy…") : t("Copy ảnh")}
     </button>

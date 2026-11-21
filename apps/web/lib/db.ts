@@ -3,6 +3,8 @@
 import { secretKey, supabaseUrl } from "@/lib/env";
 import { TRADING_BUCKET } from "@/lib/storage";
 
+// Supabase chậm / treo thì báo lỗi sau 10 giây thay vì giữ cả trang tới khi function hết giờ.
+const TIMEOUT_MS = 10_000;
 
 export class DbError extends Error {
   status: number;
@@ -39,6 +41,8 @@ async function call<T>(schema: string, method: string, table: string, query: str
     headers,
     body: body === undefined ? undefined : JSON.stringify(body),
     cache: "no-store",
+
+    signal: AbortSignal.timeout(TIMEOUT_MS),
   });
   if (!r.ok) throw new DbError(`supabase ${r.status}: ${(await r.text()).slice(0, 300)}`, r.status);
   if (r.status === 204) return [] as T;
@@ -82,6 +86,8 @@ export async function signedUrl(path: string, expiresIn = 3600): Promise<string 
       headers: { ...h, "Content-Type": "application/json" },
       body: JSON.stringify({ expiresIn }),
       cache: "no-store",
+
+      signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     if (!r.ok) return null;
     const j = (await r.json()) as { signedURL?: string; signedUrl?: string };
@@ -101,6 +107,8 @@ export const storage = {
       headers: { ...h, "Content-Type": contentType, "x-upsert": "false", "Cache-Control": "max-age=31536000" },
       body: body as BodyInit,
       cache: "no-store",
+
+      signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     if (!r.ok) throw new DbError(`storage ${r.status}: ${(await r.text()).slice(0, 200)}`, r.status);
   },
@@ -115,6 +123,8 @@ export const storage = {
       headers: { ...h, "Content-Type": "application/json" },
       body: JSON.stringify({ prefixes: paths }),
       cache: "no-store",
+
+      signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     if (!r.ok) throw new DbError(`storage ${r.status}: ${(await r.text()).slice(0, 200)}`, r.status);
   },

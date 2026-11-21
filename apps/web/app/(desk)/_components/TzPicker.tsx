@@ -11,7 +11,11 @@ export default function TzPicker({ className = "" }: { className?: string }) {
       <Icon name="globe" size={14} />
       <span className="mono">{tzShort(tz)}</span>
       <select value={tz} onChange={(e) => setTz(e.target.value)} aria-label={t("Múi giờ hiển thị")}>
-        {TZS.map((z) => <option key={z.id} value={z.id}>{t(z.label)}</option>)}
+        {TZS.map((z) => (
+          <option key={z.id} value={z.id}>
+            {t(z.label)}
+          </option>
+        ))}
       </select>
     </label>
   );

@@ -11,7 +11,7 @@ export type StorageKind = (typeof STORAGE_KINDS)[number];
 const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
 /** Ký tự lạ trong tên file → "_" (giữ chữ, số, gạch dưới, gạch ngang, dấu chấm). */
-export function safeName(s: string) {
+function safeName(s: string) {
   return String(s).replace(/[^A-Za-z0-9_.-]/g, "_");
 }
 

@@ -6,7 +6,8 @@
 //   /stock/recommendation  khuyến nghị analyst theo tháng
 //   /stock/peers      mã cùng ngành
 //   /search           tìm mã
-import { call, getEarnings, marketConfigured, type Earning } from "@/lib/market";
+import { call, type Earning, getEarnings, mapLimit, marketConfigured } from "@/lib/market";
+import { num } from "@/lib/num";
 
 export const SYMBOL_RE = /^[A-Z][A-Z0-9.\-]{0,9}$/;
 
@@ -42,7 +43,7 @@ export type Stock = {
   errors: string[];
 };
 
-const n = (v: unknown) => (v === null || v === undefined || v === "" || !Number.isFinite(Number(v)) ? null : Number(v));
+const n = num;
 
 function series(v: unknown, take: number): Point[] {
   return (Array.isArray(v) ? (v as Record<string, unknown>[]) : [])
@@ -68,7 +69,13 @@ export async function getStock(symbol: string): Promise<Stock> {
   const [pf, q, m, er, rc, pe, next] = await Promise.all([
     grab("profile", call<Record<string, unknown>>(`/stock/profile2?symbol=${s}`, 86400)),
     grab("quote", call<Record<string, unknown>>(`/quote?symbol=${s}`, 60)),
-    grab("metric", call<{ metric?: Record<string, unknown>; series?: { annual?: Record<string, unknown>; quarterly?: Record<string, unknown> } }>(`/stock/metric?symbol=${s}&metric=all`, 21600)),
+    grab(
+      "metric",
+      call<{ metric?: Record<string, unknown>; series?: { annual?: Record<string, unknown>; quarterly?: Record<string, unknown> } }>(
+        `/stock/metric?symbol=${s}&metric=all`,
+        21600,
+      ),
+    ),
     grab("earnings", call<unknown>(`/stock/earnings?symbol=${s}`, 21600)),
     grab("recommendation", call<unknown>(`/stock/recommendation?symbol=${s}`, 21600)),
     grab("peers", call<unknown>(`/stock/peers?symbol=${s}`, 86400)),
@@ -93,9 +100,7 @@ export async function getStock(symbol: string): Promise<Stock> {
       : null;
 
   const quote: Quote | null =
-    q && n(q.c)
-      ? { c: n(q.c)!, d: n(q.d), dp: n(q.dp), h: n(q.h), l: n(q.l), o: n(q.o), pc: n(q.pc), t: (n(q.t) || 0) * 1000 }
-      : null;
+    q && n(q.c) ? { c: n(q.c)!, d: n(q.d), dp: n(q.dp), h: n(q.h), l: n(q.l), o: n(q.o), pc: n(q.pc), t: (n(q.t) || 0) * 1000 } : null;
 
   const metric: Record<string, number> = {};
   for (const [k, v] of Object.entries(m?.metric || {})) if (n(v) !== null) metric[k] = n(v)!;
@@ -115,10 +120,20 @@ export async function getStock(symbol: string): Promise<Stock> {
   const recos = (Array.isArray(rc) ? (rc as Record<string, unknown>[]) : []).sort((a, b) => (String(a.period) < String(b.period) ? 1 : -1));
   const r0 = recos[0];
   const reco: Reco | null = r0
-    ? { period: String(r0.period), strongBuy: n(r0.strongBuy) || 0, buy: n(r0.buy) || 0, hold: n(r0.hold) || 0, sell: n(r0.sell) || 0, strongSell: n(r0.strongSell) || 0 }
+    ? {
+        period: String(r0.period),
+        strongBuy: n(r0.strongBuy) || 0,
+        buy: n(r0.buy) || 0,
+        hold: n(r0.hold) || 0,
+        sell: n(r0.sell) || 0,
+        strongSell: n(r0.strongSell) || 0,
+      }
     : null;
 
-  const peers = (Array.isArray(pe) ? (pe as unknown[]) : []).map(String).filter((p) => p !== symbol && SYMBOL_RE.test(p)).slice(0, 12);
+  const peers = (Array.isArray(pe) ? (pe as unknown[]) : [])
+    .map(String)
+    .filter((p) => p !== symbol && SYMBOL_RE.test(p))
+    .slice(0, 12);
   const nextEarning = next.ok ? next.items.find((e) => e.symbol === symbol && e.date >= today) || null : null;
 
   return {
@@ -151,7 +166,13 @@ export async function searchSymbols(q: string): Promise<SearchHit[]> {
 // Mã TradingView cho iframe biểu đồ
 export function tvSymbol(symbol: string, exchange: string) {
   const ex = exchange.toUpperCase();
-  const pre = ex.includes("NASDAQ") ? "NASDAQ" : ex.includes("NEW YORK") || ex.includes("NYSE") ? "NYSE" : ex.includes("AMEX") || ex.includes("ARCA") ? "AMEX" : "";
+  const pre = ex.includes("NASDAQ")
+    ? "NASDAQ"
+    : ex.includes("NEW YORK") || ex.includes("NYSE")
+      ? "NYSE"
+      : ex.includes("AMEX") || ex.includes("ARCA")
+        ? "AMEX"
+        : "";
   return (pre ? pre + ":" : "") + symbol.replace(".", "_");
 }
 
@@ -166,19 +187,22 @@ export function fmtBig(v: number | null | undefined) {
 
 export type MiniQuote = { symbol: string; c: number; dp: number | null };
 
-// Giá nhiều mã một lúc (watchlist, Markets). Mỗi mã 1 lệnh /quote, cache 2 phút; mã lỗi thì bỏ qua.
+const QUOTE_CONCURRENCY = 8;
+
+// Giá nhiều mã một lúc (watchlist, Markets). Mỗi mã 1 lệnh /quote (tối đa 8 lệnh cùng lúc), cache 2 phút; mã lỗi thì bỏ qua.
 export async function getQuotes(symbols: string[], revalidate = 120): Promise<MiniQuote[]> {
   if (!marketConfigured()) return [];
-  const out = await Promise.all(
-    symbols.map(async (symbol) => {
-      try {
-        const q = await call<Record<string, unknown>>(`/quote?symbol=${encodeURIComponent(symbol)}`, revalidate);
-        const c = n(q.c);
-        return c ? { symbol, c, dp: n(q.dp) } : null;
-      } catch {
-        return null;
-      }
-    }),
-  );
+  const errors: string[] = [];
+  const out = await mapLimit(symbols, QUOTE_CONCURRENCY, async (symbol) => {
+    try {
+      const q = await call<Record<string, unknown>>(`/quote?symbol=${encodeURIComponent(symbol)}`, revalidate, 0);
+      const c = n(q.c);
+      return c ? { symbol, c, dp: n(q.dp) } : null;
+    } catch (e) {
+      errors.push(`${symbol}: ${(e as Error).message}`);
+      return null;
+    }
+  });
+  if (errors.length) console.warn(`[stock] getQuotes thiếu ${errors.length}/${symbols.length} mã`, errors.slice(0, 3).join(" · "));
   return out.filter((x): x is MiniQuote => !!x);
 }

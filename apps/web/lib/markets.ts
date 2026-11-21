@@ -1,6 +1,7 @@
 // Dữ liệu trang Markets (D46). Không lưu database.
 //   Cổ phiếu / ETF: Finnhub /quote (lib/stock.ts getQuotes), cache 2–5 phút.
 //   Crypto: CoinGecko Demo API (COINGECKO_API_KEY, header x-cg-demo-api-key), cache 10 phút.
+import { num } from "@/lib/num";
 import { getQuotes, type MiniQuote } from "@/lib/stock";
 
 export const INDEX_ETF = [
@@ -13,6 +14,7 @@ export const INDEX_ETF = [
 ];
 
 // 11 sector S&P 500 qua ETF SPDR. w/h = cỡ ô heatmap (lớn hơn cho sector tỷ trọng lớn)
+// biome-ignore format: bảng dữ liệu, giữ một dòng / sector
 export const SECTORS: { key: string; name: string; etf: string; w: number; h: number; stocks: [string, string][] }[] = [
   { key: "tech", name: "Công nghệ", etf: "XLK", w: 2, h: 2, stocks: [["NVDA", "NVIDIA"], ["MSFT", "Microsoft"], ["AAPL", "Apple"], ["AVGO", "Broadcom"], ["ORCL", "Oracle"], ["AMD", "AMD"], ["CRM", "Salesforce"], ["ADBE", "Adobe"]] },
   { key: "fin", name: "Tài chính", etf: "XLF", w: 2, h: 1, stocks: [["JPM", "JPMorgan"], ["V", "Visa"], ["MA", "Mastercard"], ["BAC", "Bank of America"], ["WFC", "Wells Fargo"], ["GS", "Goldman Sachs"]] },
@@ -28,6 +30,7 @@ export const SECTORS: { key: string; name: string; etf: string; w: number; h: nu
 ];
 
 // Bản đồ NQ top: cỡ ô theo nhóm vốn hoá (3 bậc), không phải tỷ trọng chính xác
+// biome-ignore format: bảng dữ liệu
 export const NQ_MAP: [string, number, number][] = [
   ["NVDA", 3, 2], ["MSFT", 3, 2], ["AAPL", 2, 2], ["AMZN", 2, 1], ["META", 2, 1], ["AVGO", 2, 1], ["GOOGL", 2, 1],
   ["TSLA", 1, 1], ["COST", 1, 1], ["NFLX", 1, 1], ["AMD", 1, 1], ["PLTR", 1, 1], ["CSCO", 1, 1], ["INTU", 1, 1], ["QCOM", 1, 1], ["ADBE", 1, 1],
@@ -78,12 +81,12 @@ export type Coin = {
   spark: number[];
 };
 
-const num = (v: unknown) => (v === null || v === undefined || !Number.isFinite(Number(v)) ? null : Number(v));
-
 export async function getCrypto(cat: string) {
   const catQ = CRYPTO_CATS.some((c) => c.id === cat && c.id) ? `&category=${cat}` : "";
   const [markets, global, cats, trend] = await Promise.allSettled([
-    cg<Record<string, unknown>[]>(`/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=30&page=1&sparkline=true&price_change_percentage=1h,24h,7d${catQ}`),
+    cg<Record<string, unknown>[]>(
+      `/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=30&page=1&sparkline=true&price_change_percentage=1h,24h,7d${catQ}`,
+    ),
     cg<{ data?: Record<string, unknown> }>(`/global`),
     cg<Record<string, unknown>[]>(`/coins/categories`, 1800),
     cg<{ coins?: { item?: Record<string, unknown> }[] }>(`/search/trending`),
@@ -117,7 +120,12 @@ export async function getCrypto(cat: string) {
     cats.status === "fulfilled" && Array.isArray(cats.value) ? cats.value.map((c) => [String(c.id), num(c.market_cap_change_24h)]) : [],
   );
   const trending =
-    trend.status === "fulfilled" ? (trend.value.coins || []).map((c) => String(c.item?.symbol || "").toUpperCase()).filter(Boolean).slice(0, 7) : [];
+    trend.status === "fulfilled"
+      ? (trend.value.coins || [])
+          .map((c) => String(c.item?.symbol || "").toUpperCase())
+          .filter(Boolean)
+          .slice(0, 7)
+      : [];
   const error = markets.status === "rejected" ? String(markets.reason?.message || markets.reason) : null;
   return {
     coins,

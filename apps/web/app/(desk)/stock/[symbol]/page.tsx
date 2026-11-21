@@ -39,7 +39,8 @@ export default async function StockPage({ params, searchParams }: { params: Prom
   const q = s.quote;
   const m = s.metric;
   const pick = (...keys: string[]) => keys.map((k) => m[k]).find((v) => v !== undefined) ?? null;
-  const num = (v: number | null, d = 2, suf = "") => (v === null ? "—" : v.toLocaleString("en-US", { maximumFractionDigits: d, minimumFractionDigits: 0 }) + suf);
+  const num = (v: number | null, d = 2, suf = "") =>
+    v === null ? "—" : v.toLocaleString("en-US", { maximumFractionDigits: d, minimumFractionDigits: 0 }) + suf;
   const pct = (v: number | null) => (v === null ? "—" : (v > 0 ? "+" : "") + v.toFixed(2) + "%");
   const tone = (v: number | null) => (v === null ? "" : v > 0 ? "long" : v < 0 ? "short" : "");
 
@@ -47,10 +48,18 @@ export default async function StockPage({ params, searchParams }: { params: Prom
     return (
       <>
         <header className="page-head">
-          <div><span className="lbl">Stocks</span><h1 className="h1">{symbol}</h1></div>
-          <Link className="btn" href="/stock">‹ {t("Tìm mã khác")}</Link>
+          <div>
+            <span className="lbl">Stocks</span>
+            <h1 className="h1">{symbol}</h1>
+          </div>
+          <Link className="btn" href="/stock">
+            ‹ {t("Tìm mã khác")}
+          </Link>
         </header>
-        <div className="notice">{t("Không tìm thấy dữ liệu cho mã này.")}{s.errors.length ? ` (${s.errors[0]})` : ""}</div>
+        <div className="notice">
+          {t("Không tìm thấy dữ liệu cho mã này.")}
+          {s.errors.length ? ` (${s.errors[0]})` : ""}
+        </div>
       </>
     );
   }
@@ -118,15 +127,28 @@ export default async function StockPage({ params, searchParams }: { params: Prom
           )}
           <div className="stack" style={{ gap: 2 }}>
             <span className="lbl">
-              <Link href="/stock">Stocks</Link> · {p?.exchange?.split(" ")[0] || "US"}{p?.industry ? ` · ${p.industry}` : ""}{isNq ? " · NQ top" : ""}
+              <Link href="/stock">Stocks</Link> · {p?.exchange?.split(" ")[0] || "US"}
+              {p?.industry ? ` · ${p.industry}` : ""}
+              {isNq ? " · NQ top" : ""}
             </span>
-            <h1 className="h1">{p?.name || symbol} <span className="mono dim" style={{ fontSize: 18 }}>{symbol}</span></h1>
+            <h1 className="h1">
+              {p?.name || symbol}{" "}
+              <span className="mono dim" style={{ fontSize: 18 }}>
+                {symbol}
+              </span>
+            </h1>
           </div>
         </div>
         {q && (
           <div className="stock-price">
-            <span className="mono">{num(q.c)}<small> {p?.currency || "USD"}</small></span>
-            <span className={"mono " + tone(q.d)}>{q.d !== null && q.d > 0 ? "+" : ""}{num(q.d)} ({pct(q.dp)})</span>
+            <span className="mono">
+              {num(q.c)}
+              <small> {p?.currency || "USD"}</small>
+            </span>
+            <span className={"mono " + tone(q.d)}>
+              {q.d !== null && q.d > 0 ? "+" : ""}
+              {num(q.d)} ({pct(q.dp)})
+            </span>
             {q.t > 0 && <span className="small dim mono">{fmtTime(q.t, ui.tz, true)}</span>}
           </div>
         )}
@@ -140,112 +162,178 @@ export default async function StockPage({ params, searchParams }: { params: Prom
             {ne.epsEstimate !== null ? ` · EPS ${t("dự báo")} ${ne.epsEstimate}` : ""}
             {ne.revenueEstimate !== null ? ` · Rev ${t("dự báo")} ${fmtBig(ne.revenueEstimate)}` : ""}
           </span>
-          <Link className="btn sm" href={`/earnings?day=${ne.date}`}>{t("Xem lịch")}</Link>
+          <Link className="btn sm" href={`/earnings?day=${ne.date}`}>
+            {t("Xem lịch")}
+          </Link>
         </div>
       )}
 
       <nav className="tabs-line" aria-label={t("Mục của mã")}>
         {TABS.map(([k, l]) => (
-          <Link key={k} href={`/stock/${symbol}${k === "over" ? "" : `?tab=${k}`}`} className={k === tab ? "on" : ""} aria-current={k === tab ? "page" : undefined} scroll={false}>{t(l)}</Link>
+          <Link
+            key={k}
+            href={`/stock/${symbol}${k === "over" ? "" : `?tab=${k}`}`}
+            className={k === tab ? "on" : ""}
+            aria-current={k === tab ? "page" : undefined}
+            scroll={false}
+          >
+            {t(l)}
+          </Link>
         ))}
       </nav>
 
       {tab === "over" && (
-      <div className="stock-top">
-        <section className="card stock-chart" aria-label={t("Biểu đồ giá")}>
-          <iframe title={`${symbol} chart`} src={tvSrc} loading="lazy" referrerPolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups" />
-        </section>
-        <section className="card" aria-label={t("Hôm nay")}>
-          <span className="lbl">{t("Hôm nay")}</span>
-          <dl className="kv">
-            <div className="kv-row"><dt>{t("Mở cửa")}</dt><dd className="mono">{num(q?.o ?? null)}</dd></div>
-            <div className="kv-row"><dt>{t("Cao / thấp")}</dt><dd className="mono">{num(q?.h ?? null)} / {num(q?.l ?? null)}</dd></div>
-            <div className="kv-row"><dt>{t("Đóng cửa trước")}</dt><dd className="mono">{num(q?.pc ?? null)}</dd></div>
-          </dl>
-          <span className="lbl" style={{ marginTop: 6 }}>{t("Khuyến nghị analyst")}{s.reco ? ` · ${s.reco.period.slice(0, 7)}` : ""}</span>
-          {s.reco ? <RecoBar reco={s.reco} /> : <p className="small dim">{t("Chưa có dữ liệu.")}</p>}
-          {s.peers.length > 0 && (
-            <>
-              <span className="lbl" style={{ marginTop: 6 }}>{t("Cùng ngành")}</span>
-              <div className="chips">
-                {s.peers.map((x) => <Link key={x} className="chip mono" href={`/stock/${x}`}>{x}</Link>)}
+        <div className="stock-top">
+          <section className="card stock-chart" aria-label={t("Biểu đồ giá")}>
+            <iframe title={`${symbol} chart`} src={tvSrc} loading="lazy" referrerPolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups" />
+          </section>
+          <section className="card" aria-label={t("Hôm nay")}>
+            <span className="lbl">{t("Hôm nay")}</span>
+            <dl className="kv">
+              <div className="kv-row">
+                <dt>{t("Mở cửa")}</dt>
+                <dd className="mono">{num(q?.o ?? null)}</dd>
               </div>
-            </>
-          )}
-        </section>
-      </div>
-
+              <div className="kv-row">
+                <dt>{t("Cao / thấp")}</dt>
+                <dd className="mono">
+                  {num(q?.h ?? null)} / {num(q?.l ?? null)}
+                </dd>
+              </div>
+              <div className="kv-row">
+                <dt>{t("Đóng cửa trước")}</dt>
+                <dd className="mono">{num(q?.pc ?? null)}</dd>
+              </div>
+            </dl>
+            <span className="lbl" style={{ marginTop: 6 }}>
+              {t("Khuyến nghị analyst")}
+              {s.reco ? ` · ${s.reco.period.slice(0, 7)}` : ""}
+            </span>
+            {s.reco ? <RecoBar reco={s.reco} /> : <p className="small dim">{t("Chưa có dữ liệu.")}</p>}
+            {s.peers.length > 0 && (
+              <>
+                <span className="lbl" style={{ marginTop: 6 }}>
+                  {t("Cùng ngành")}
+                </span>
+                <div className="chips">
+                  {s.peers.map((x) => (
+                    <Link key={x} className="chip mono" href={`/stock/${x}`}>
+                      {x}
+                    </Link>
+                  ))}
+                </div>
+              </>
+            )}
+          </section>
+        </div>
       )}
 
       {tab === "fin" && (
-      <div className="stock-stats">
-        {groups.map((g) => (
-          <section className="card tight" key={g.title} aria-label={t(g.title)}>
-            <span className="lbl">{t(g.title)}</span>
-            <dl className="kv">
-              {g.rows.map(([k, v, c]) => (
-                <div key={k} className="kv-row">
-                  <dt>{t(k)}</dt>
-                  <dd className={"mono " + (c || "")}>{v}</dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-        ))}
-      </div>
-
+        <div className="stock-stats">
+          {groups.map((g) => (
+            <section className="card tight" key={g.title} aria-label={t(g.title)}>
+              <span className="lbl">{t(g.title)}</span>
+              <dl className="kv">
+                {g.rows.map(([k, v, c]) => (
+                  <div key={k} className="kv-row">
+                    <dt>{t(k)}</dt>
+                    <dd className={"mono " + (c || "")}>{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          ))}
+        </div>
       )}
 
       {tab === "earn" && (
-      <div className="stock-charts">
-        <section className="card" aria-label={t("EPS 4 quý gần nhất")}>
-          <span className="lbl">{t("EPS 4 quý gần nhất · thực tế vs dự báo")}</span>
-          <BarChart
-            title={t("EPS 4 quý gần nhất")}
-            data={s.surprises.filter((x) => x.actual !== null).map((x) => ({ label: `Q${x.quarter} ${String(x.year).slice(2)}`, v: x.actual!, est: x.estimate, note: x.surprisePct !== null ? `${t("Bất ngờ")} ${pct(x.surprisePct)}` : undefined }))}
-          />
-        </section>
-        <section className="card" aria-label={t("EPS theo năm")}>
-          <span className="lbl">{t("EPS theo năm")}</span>
-          <BarChart title={t("EPS theo năm")} data={s.annualEps.map((x) => ({ label: x.period.slice(0, 4), v: x.v }))} />
-        </section>
-        <section className="card" aria-label={t("Biên lợi nhuận ròng theo năm")}>
-          <span className="lbl">{t("Biên lợi nhuận ròng theo năm")}</span>
-          <BarChart title={t("Biên lợi nhuận ròng theo năm")} unit="%" data={s.annualNetMargin.map((x) => ({ label: x.period.slice(0, 4), v: x.v * (Math.abs(x.v) <= 1.5 ? 100 : 1) }))} />
-        </section>
-      </div>
-
+        <div className="stock-charts">
+          <section className="card" aria-label={t("EPS 4 quý gần nhất")}>
+            <span className="lbl">{t("EPS 4 quý gần nhất · thực tế vs dự báo")}</span>
+            <BarChart
+              title={t("EPS 4 quý gần nhất")}
+              data={s.surprises
+                .filter((x) => x.actual !== null)
+                .map((x) => ({
+                  label: `Q${x.quarter} ${String(x.year).slice(2)}`,
+                  v: x.actual!,
+                  est: x.estimate,
+                  note: x.surprisePct !== null ? `${t("Bất ngờ")} ${pct(x.surprisePct)}` : undefined,
+                }))}
+            />
+          </section>
+          <section className="card" aria-label={t("EPS theo năm")}>
+            <span className="lbl">{t("EPS theo năm")}</span>
+            <BarChart title={t("EPS theo năm")} data={s.annualEps.map((x) => ({ label: x.period.slice(0, 4), v: x.v }))} />
+          </section>
+          <section className="card" aria-label={t("Biên lợi nhuận ròng theo năm")}>
+            <span className="lbl">{t("Biên lợi nhuận ròng theo năm")}</span>
+            <BarChart
+              title={t("Biên lợi nhuận ròng theo năm")}
+              unit="%"
+              data={s.annualNetMargin.map((x) => ({ label: x.period.slice(0, 4), v: x.v * (Math.abs(x.v) <= 1.5 ? 100 : 1) }))}
+            />
+          </section>
+        </div>
       )}
 
       {(tab === "over" || tab === "news") && (
-      <div className="stock-bottom">
-        <section className="card" aria-label={t("Hồ sơ công ty")}>
-          <span className="lbl">{t("Hồ sơ công ty")}</span>
-          <dl className="kv">
-            <div className="kv-row"><dt>{t("Ngành")}</dt><dd>{p?.industry || "—"}</dd></div>
-            <div className="kv-row"><dt>{t("Sàn")}</dt><dd>{p?.exchange || "—"}</dd></div>
-            <div className="kv-row"><dt>{t("Quốc gia")}</dt><dd>{p?.country || "—"}</dd></div>
-            <div className="kv-row"><dt>IPO</dt><dd className="mono">{p?.ipo || "—"}</dd></div>
-            {p?.web && <div className="kv-row"><dt>Website</dt><dd><a href={p.web} target="_blank" rel="noreferrer noopener">{p.web.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}</a></dd></div>}
-          </dl>
-        </section>
-        <section className="card tight" aria-label={t("Tin về {s}", { s: symbol })}>
-          <div className="row">
-            <span className="lbl">{t("Tin về {s}", { s: symbol })}</span>
-            {news.items.length > 0 && <Link className="small" href={`/news?sym=${symbol}`}>{t("Xem tất cả")} ›</Link>}
-          </div>
-          {news.items.length ? (
-            news.items.map((n) => (
-              <Link key={n.id} className="news compact" href={`/news?sym=${symbol}&id=${encodeURIComponent(n.id)}`}>
-                <span className="news-meta"><span className="mono">{fmtTime(n.ts, ui.tz, true)}</span><span>· {n.source}</span></span>
-                <span className="news-h">{n.headline}</span>
-              </Link>
-            ))
-          ) : (
-            <p className="small dim">{t("Chưa có tin trong 10 ngày qua.")}</p>
-          )}
-        </section>
-      </div>
+        <div className="stock-bottom">
+          <section className="card" aria-label={t("Hồ sơ công ty")}>
+            <span className="lbl">{t("Hồ sơ công ty")}</span>
+            <dl className="kv">
+              <div className="kv-row">
+                <dt>{t("Ngành")}</dt>
+                <dd>{p?.industry || "—"}</dd>
+              </div>
+              <div className="kv-row">
+                <dt>{t("Sàn")}</dt>
+                <dd>{p?.exchange || "—"}</dd>
+              </div>
+              <div className="kv-row">
+                <dt>{t("Quốc gia")}</dt>
+                <dd>{p?.country || "—"}</dd>
+              </div>
+              <div className="kv-row">
+                <dt>IPO</dt>
+                <dd className="mono">{p?.ipo || "—"}</dd>
+              </div>
+              {p?.web && (
+                <div className="kv-row">
+                  <dt>Website</dt>
+                  <dd>
+                    <a href={p.web} target="_blank" rel="noreferrer noopener">
+                      {p.web.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
+                    </a>
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </section>
+          <section className="card tight" aria-label={t("Tin về {s}", { s: symbol })}>
+            <div className="row">
+              <span className="lbl">{t("Tin về {s}", { s: symbol })}</span>
+              {news.items.length > 0 && (
+                <Link className="small" href={`/news?sym=${symbol}`}>
+                  {t("Xem tất cả")} ›
+                </Link>
+              )}
+            </div>
+            {news.items.length ? (
+              news.items.map((n) => (
+                <Link key={n.id} className="news compact" href={`/news?sym=${symbol}&id=${encodeURIComponent(n.id)}`}>
+                  <span className="news-meta">
+                    <span className="mono">{fmtTime(n.ts, ui.tz, true)}</span>
+                    <span>· {n.source}</span>
+                  </span>
+                  <span className="news-h">{n.headline}</span>
+                </Link>
+              ))
+            ) : (
+              <p className="small dim">{t("Chưa có tin trong 10 ngày qua.")}</p>
+            )}
+          </section>
+        </div>
       )}
     </>
   );

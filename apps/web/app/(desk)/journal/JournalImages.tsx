@@ -129,10 +129,20 @@ export default function JournalImages({ date, initial, tradeCount, error }: { da
         <span className="lbl">{t("Ảnh lệnh · {n}", { n: images.length })}</span>
         <div className="hstack" style={{ gap: 8 }}>
           {busy > 0 && <span className="small dim">{t("Đang tải {n} ảnh…", { n: busy })}</span>}
-          <button className="btn sm" disabled={!!error} onClick={() => input.current?.click()}>
+          <button type="button" className="btn sm" disabled={!!error} onClick={() => input.current?.click()}>
             <Icon name="plus" size={14} /> {t("Thêm ảnh")}
           </button>
-          <input ref={input} type="file" accept="image/png,image/jpeg,image/webp" multiple hidden onChange={(e) => { upload(Array.from(e.target.files || [])); e.target.value = ""; }} />
+          <input
+            ref={input}
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            multiple
+            hidden
+            onChange={(e) => {
+              upload(Array.from(e.target.files || []));
+              e.target.value = "";
+            }}
+          />
         </div>
       </div>
       {msg && <div className="notice small">{msg}</div>}
@@ -140,7 +150,7 @@ export default function JournalImages({ date, initial, tradeCount, error }: { da
         <div className="jimg-grid">
           {images.map((img, i) => (
             <figure key={img.id} className="jimg-item">
-              <button className="jimg-thumb" onClick={() => setOpen(i)} aria-label={t("Xem ảnh lớn")}>
+              <button type="button" className="jimg-thumb" onClick={() => setOpen(i)} aria-label={t("Xem ảnh lớn")}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={src(img)} alt={img.caption || t("Ảnh lệnh")} loading="lazy" />
                 {img.trade_seq && <span className="jimg-tag mono">#{img.trade_seq}</span>}
@@ -155,19 +165,33 @@ export default function JournalImages({ date, initial, tradeCount, error }: { da
                   onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
                 />
                 <div className="row" style={{ gap: 6 }}>
-                  <select className="jimg-sel" value={img.trade_seq ?? ""} onChange={(e) => patch(img.id, { trade_seq: e.target.value ? Number(e.target.value) : null })} aria-label={t("Gắn với lệnh")}>
+                  <select
+                    className="jimg-sel"
+                    value={img.trade_seq ?? ""}
+                    onChange={(e) => patch(img.id, { trade_seq: e.target.value ? Number(e.target.value) : null })}
+                    aria-label={t("Gắn với lệnh")}
+                  >
                     <option value="">{t("Ảnh chung")}</option>
                     {Array.from({ length: Math.max(tradeCount, img.trade_seq || 0) }, (_, k) => (
-                      <option key={k + 1} value={k + 1}>{t("Lệnh {n}", { n: k + 1 })}</option>
+                      // biome-ignore lint/suspicious/noArrayIndexKey: số thứ tự lệnh chính là giá trị
+                      <option key={k + 1} value={k + 1}>
+                        {t("Lệnh {n}", { n: k + 1 })}
+                      </option>
                     ))}
                   </select>
                   {confirmDel === img.id ? (
                     <span className="hstack" style={{ gap: 4 }}>
-                      <button className="btn sm danger" onClick={() => remove(img.id)}>{t("Xoá")}</button>
-                      <button className="btn sm" onClick={() => setConfirmDel(null)}>{t("Huỷ")}</button>
+                      <button type="button" className="btn sm danger" onClick={() => remove(img.id)}>
+                        {t("Xoá")}
+                      </button>
+                      <button type="button" className="btn sm" onClick={() => setConfirmDel(null)}>
+                        {t("Huỷ")}
+                      </button>
                     </span>
                   ) : (
-                    <button className="btn icon sm" onClick={() => setConfirmDel(img.id)} aria-label={t("Xoá ảnh")}><Icon name="trash" size={14} /></button>
+                    <button type="button" className="btn icon sm" onClick={() => setConfirmDel(img.id)} aria-label={t("Xoá ảnh")}>
+                      <Icon name="trash" size={14} />
+                    </button>
                   )}
                 </div>
               </figcaption>
@@ -176,7 +200,7 @@ export default function JournalImages({ date, initial, tradeCount, error }: { da
         </div>
       ) : (
         !error && (
-          <button className="jimg-drop" onClick={() => input.current?.click()}>
+          <button type="button" className="jimg-drop" onClick={() => input.current?.click()}>
             <Icon name="image" size={22} />
             <span>{t("Kéo thả, dán (Ctrl+V) hoặc bấm để thêm ảnh chụp lệnh / chart")}</span>
           </button>
@@ -184,7 +208,9 @@ export default function JournalImages({ date, initial, tradeCount, error }: { da
       )}
 
       {cur && (
+        // biome-ignore lint/a11y/useKeyWithClickEvents: bấm nền để đóng là tiện ích chuột; Esc / mũi tên đã xử lý ở keydown của window
         <div className="lightbox" role="dialog" aria-modal="true" aria-label={cur.caption || t("Ảnh lệnh")} onClick={() => setOpen(null)}>
+          {/* biome-ignore lint/a11y/useKeyWithClickEvents lint/a11y/noStaticElementInteractions: chỉ chặn click lan ra nền */}
           <div className="lightbox-bar" onClick={(e) => e.stopPropagation()}>
             <span className="small">
               {open! + 1}/{images.length}
@@ -192,16 +218,41 @@ export default function JournalImages({ date, initial, tradeCount, error }: { da
               {cur.caption ? ` · ${cur.caption}` : ""}
             </span>
             <span className="hstack" style={{ gap: 6 }}>
-              <a className="btn sm" href={src(cur)} target="_blank" rel="noreferrer"><Icon name="external" size={14} /> {t("Mở tab mới")}</a>
-              <button className="btn icon sm" onClick={() => setOpen(null)} aria-label={t("Đóng")}><Icon name="close" size={16} /></button>
+              <a className="btn sm" href={src(cur)} target="_blank" rel="noreferrer">
+                <Icon name="external" size={14} /> {t("Mở tab mới")}
+              </a>
+              <button type="button" className="btn icon sm" onClick={() => setOpen(null)} aria-label={t("Đóng")}>
+                <Icon name="close" size={16} />
+              </button>
             </span>
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
+          {/* biome-ignore lint/a11y/useKeyWithClickEvents: chỉ chặn click lan ra nền (đóng) */}
           <img src={src(cur)} alt={cur.caption || ""} onClick={(e) => e.stopPropagation()} />
           {images.length > 1 && (
             <>
-              <button className="lightbox-nav prev" onClick={(e) => { e.stopPropagation(); setOpen((open! - 1 + images.length) % images.length); }} aria-label={t("Ảnh trước")}>‹</button>
-              <button className="lightbox-nav next" onClick={(e) => { e.stopPropagation(); setOpen((open! + 1) % images.length); }} aria-label={t("Ảnh sau")}>›</button>
+              <button
+                type="button"
+                className="lightbox-nav prev"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen((open! - 1 + images.length) % images.length);
+                }}
+                aria-label={t("Ảnh trước")}
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                className="lightbox-nav next"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen((open! + 1) % images.length);
+                }}
+                aria-label={t("Ảnh sau")}
+              >
+                ›
+              </button>
             </>
           )}
         </div>

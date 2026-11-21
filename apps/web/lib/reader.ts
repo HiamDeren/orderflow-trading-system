@@ -7,7 +7,9 @@ import { Readability } from "@mozilla/readability";
 import { parseHTML } from "linkedom";
 import sanitizeHtml from "sanitize-html";
 
-export type Article = { ok: true; title: string; byline: string; site: string; html: string; words: number; url: string } | { ok: false; error: string; url: string };
+export type Article =
+  | { ok: true; title: string; byline: string; site: string; html: string; words: number; url: string }
+  | { ok: false; error: string; url: string };
 
 const MAX_BYTES = 3_000_000;
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0 Safari/537.36";
@@ -68,16 +70,56 @@ function clean(html: string, base: string) {
     }
   };
   return sanitizeHtml(html, {
-    allowedTags: ["p", "br", "h2", "h3", "h4", "ul", "ol", "li", "blockquote", "strong", "b", "em", "i", "a", "img", "figure", "figcaption", "table", "thead", "tbody", "tr", "th", "td", "pre", "code", "hr", "sup", "sub"],
-    allowedAttributes: { a: ["href", "target", "rel"], img: ["src", "alt", "loading", "referrerpolicy"], th: ["colspan", "rowspan"], td: ["colspan", "rowspan"] },
+    allowedTags: [
+      "p",
+      "br",
+      "h2",
+      "h3",
+      "h4",
+      "ul",
+      "ol",
+      "li",
+      "blockquote",
+      "strong",
+      "b",
+      "em",
+      "i",
+      "a",
+      "img",
+      "figure",
+      "figcaption",
+      "table",
+      "thead",
+      "tbody",
+      "tr",
+      "th",
+      "td",
+      "pre",
+      "code",
+      "hr",
+      "sup",
+      "sub",
+    ],
+    allowedAttributes: {
+      a: ["href", "target", "rel"],
+      img: ["src", "alt", "loading", "referrerpolicy"],
+      th: ["colspan", "rowspan"],
+      td: ["colspan", "rowspan"],
+    },
     allowedSchemes: ["http", "https"],
     transformTags: {
       h1: "h2",
       a: (_tag, attribs) => ({ tagName: "a", attribs: { href: abs(attribs.href), target: "_blank", rel: "noreferrer noopener" } }),
-      img: (_tag, attribs) => ({ tagName: "img", attribs: { src: abs(attribs.src || attribs["data-src"]), alt: attribs.alt || "", loading: "lazy", referrerpolicy: "no-referrer" } }),
+      img: (_tag, attribs) => ({
+        tagName: "img",
+        attribs: { src: abs(attribs.src || attribs["data-src"]), alt: attribs.alt || "", loading: "lazy", referrerpolicy: "no-referrer" },
+      }),
     },
     allowedSchemesAppliedToAttributes: ["href", "src"],
-    exclusiveFilter: (f) => (f.tag === "img" && !f.attribs.src) || (f.tag === "a" && !f.attribs.href && !f.text.trim()) || (f.tag === "p" && !f.text.trim() && !f.mediaChildren?.length),
+    exclusiveFilter: (f) =>
+      (f.tag === "img" && !f.attribs.src) ||
+      (f.tag === "a" && !f.attribs.href && !f.text.trim()) ||
+      (f.tag === "p" && !f.text.trim() && !f.mediaChildren?.length),
   });
 }
 
@@ -93,7 +135,12 @@ export async function readArticle(url: string): Promise<Article> {
     return { ok: true, title: (art.title || "").trim(), byline: (art.byline || "").trim(), site: (art.siteName || "").trim(), html, words, url: page.url };
   } catch (e) {
     const err = e as Error;
-    const msg = err.name === "TimeoutError" ? "Trang nguồn phản hồi quá chậm" : err.message === "fetch failed" ? "Không kết nối được trang nguồn" : String(err.message || e);
+    const msg =
+      err.name === "TimeoutError"
+        ? "Trang nguồn phản hồi quá chậm"
+        : err.message === "fetch failed"
+          ? "Không kết nối được trang nguồn"
+          : String(err.message || e);
     return { ok: false, error: msg, url };
   }
 }

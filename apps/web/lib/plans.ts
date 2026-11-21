@@ -24,19 +24,11 @@ export async function getPlan(date: string): Promise<PlanRow | null> {
   return rows[0] || null;
 }
 
-export async function getLatestPlanBefore(date: string): Promise<PlanRow | null> {
-  const rows = await db.select<PlanRow>(
-    "trade_plans",
-    `select=trade_date,symbol,summary,image_path,updated_at&trade_date=lt.${date}&order=trade_date.desc&limit=1`,
-  );
-  return rows[0] || null;
-}
-
 export function biasTone(bias: string | undefined | null): "long" | "short" | "flat" {
   return bias === "Lên" ? "long" : bias === "Xuống" ? "short" : "flat";
 }
 
-export function levelsOf(payload: unknown): Level[] {
+function levelsOf(payload: unknown): Level[] {
   try {
     const p = core.planFromJson(payload);
     if (p.error || !p.D) return [];
@@ -56,7 +48,7 @@ export function levelsOf(payload: unknown): Level[] {
     add("OVN High", D.onh, "ovn");
     add("OVN POC", D.opoc, "ovn");
     add("OVN Low", D.onl, "ovn");
-    (D.zones || []).forEach((z) => add(`HVN ${core.fmt(z.lo)}–${core.fmt(z.hi)}`, (z.lo + z.hi) / 2, "hvn"));
+    for (const z of D.zones || []) add(`HVN ${core.fmt(z.lo)}–${core.fmt(z.hi)}`, (z.lo + z.hi) / 2, "hvn");
     add("Target", D.target, "target");
     add("Giá 9:29", D.px, "price");
     return out.sort((a, b) => b.px - a.px);

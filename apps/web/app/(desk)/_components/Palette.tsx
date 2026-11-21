@@ -8,7 +8,7 @@ import { useUi } from "./Ui";
 
 type Cmd = { id: string; label: string; hint: string; icon: string; href: string };
 
-export const PAGES: { label: string; href: string; icon: string; keys: string }[] = [
+const PAGES: { label: string; href: string; icon: string; keys: string }[] = [
   { label: "Dashboard", href: "/dashboard", icon: "dashboard", keys: "dashboard tong quan home" },
   { label: "Calendar", href: "/calendar", icon: "calendar", keys: "calendar lich tin kinh te economic" },
   { label: "News", href: "/news", icon: "news", keys: "news tin tuc" },
@@ -58,11 +58,21 @@ export default function Palette({ open, onClose, guest = false }: { open: boolea
     const f = fold(s);
     const out: Cmd[] = [];
     const date = guest ? null : parseDate(s);
-    if (date) out.push({ id: "d", label: t("Journal ngày {d}", { d: date.split("-").reverse().join("/") }), hint: "Journal", icon: "journal", href: `/journal?date=${date}` });
+    if (date)
+      out.push({
+        id: "d",
+        label: t("Journal ngày {d}", { d: date.split("-").reverse().join("/") }),
+        hint: "Journal",
+        icon: "journal",
+        href: `/journal?date=${date}`,
+      });
     const sym = s.toUpperCase();
-    if (/^[A-Z][A-Z0-9.\-]{0,9}$/.test(sym) && !date) out.push({ id: "s", label: t("Mở mã {s}", { s: sym }), hint: "Stock", icon: "stock", href: `/stock/${encodeURIComponent(sym)}` });
-    for (const p of PAGES) if (guest && OWNER_ONLY.includes(p.href)) continue;
-    else if (!f || fold(t(p.label)).includes(f) || p.keys.includes(f)) out.push({ id: p.href, label: t(p.label), hint: t("Trang"), icon: p.icon, href: p.href });
+    if (/^[A-Z][A-Z0-9.\-]{0,9}$/.test(sym) && !date)
+      out.push({ id: "s", label: t("Mở mã {s}", { s: sym }), hint: "Stock", icon: "stock", href: `/stock/${encodeURIComponent(sym)}` });
+    for (const p of PAGES)
+      if (guest && OWNER_ONLY.includes(p.href)) continue;
+      else if (!f || fold(t(p.label)).includes(f) || p.keys.includes(f))
+        out.push({ id: p.href, label: t(p.label), hint: t("Trang"), icon: p.icon, href: p.href });
     if (s && !date) out.push({ id: "q", label: t("Tìm cổ phiếu “{q}”", { q: s }), hint: "Stocks", icon: "search", href: `/stock?q=${encodeURIComponent(s)}` });
     return out.slice(0, 9);
   }, [q, t, guest]);
@@ -75,6 +85,7 @@ export default function Palette({ open, onClose, guest = false }: { open: boolea
   };
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: bấm ra ngoài để đóng chỉ là tiện ích chuột; bàn phím dùng Esc trong ô tìm
     <div className="pal-scrim" onMouseDown={onClose}>
       <div className="pal" role="dialog" aria-modal="true" aria-label={t("Tìm nhanh")} onMouseDown={(e) => e.stopPropagation()}>
         <label className="pal-in">
@@ -103,17 +114,28 @@ export default function Palette({ open, onClose, guest = false }: { open: boolea
           />
           <kbd className="mono">Esc</kbd>
         </label>
-        <ul className="pal-list" role="listbox" aria-label={t("Kết quả")}>
+        {/* Danh sách nút thường (không dùng listbox: option không được chứa nút). Mũi tên lên / xuống trong ô tìm đổi mục đang chọn. */}
+        <ul className="pal-list" aria-label={t("Kết quả")}>
           {cmds.map((c, k) => (
-            <li key={c.id} role="option" aria-selected={k === i}>
-              <button className={k === i ? "on" : ""} onMouseEnter={() => setI(k)} onClick={() => go(c)}>
+            <li key={c.id}>
+              <button
+                type="button"
+                className={k === i ? "on" : ""}
+                aria-current={k === i ? "true" : undefined}
+                onMouseEnter={() => setI(k)}
+                onClick={() => go(c)}
+              >
                 <Icon name={c.icon} size={16} />
                 <span>{c.label}</span>
                 <span className="small dim">{c.hint}</span>
               </button>
             </li>
           ))}
-          {!cmds.length && <li className="small dim" style={{ padding: 14 }}>{t("Không có kết quả")}</li>}
+          {!cmds.length && (
+            <li className="small dim" style={{ padding: 14 }}>
+              {t("Không có kết quả")}
+            </li>
+          )}
         </ul>
       </div>
     </div>

@@ -10,7 +10,10 @@ type Track = { short: string; part: string; title: string; desc: string; color: 
 const K = (c: string, s: string) => `/knowledge/${c}#${s}`;
 const TRACKS: Track[] = [
   {
-    short: "AMT", part: "Phần 1", title: "AMT · Auction Market Theory", color: "var(--muted)",
+    short: "AMT",
+    part: "Phần 1",
+    title: "AMT · Auction Market Theory",
+    color: "var(--muted)",
     desc: "Nền tảng: giá đi tìm nơi giao dịch hiệu quả, value hình thành ra sao.",
     lessons: [
       { t: "Auction & value", s: "Giá quảng bá, thời gian xác nhận", href: K("levels", "nen-tang") },
@@ -22,7 +25,10 @@ const TRACKS: Track[] = [
     more: { label: "Mở khoá TPO Level", href: "/knowledge/levels" },
   },
   {
-    short: "Context · TPO / VPO", part: "Phần 2", title: "Context · TPO / VPO", color: "var(--accent)",
+    short: "Context · TPO / VPO",
+    part: "Phần 2",
+    title: "Context · TPO / VPO",
+    color: "var(--accent)",
     desc: "Đọc profile để ra level và bối cảnh, từ đó lập trade plan.",
     lessons: [
       { t: "TPO profile", s: "Period, IB, range extension, single prints", href: K("levels", "nen-tang") },
@@ -37,7 +43,10 @@ const TRACKS: Track[] = [
     more: { label: "Mở khoá Trade Plan", href: "/knowledge/plan" },
   },
   {
-    short: "Entry · Orderflow", part: "Phần 3", title: "Entry · Orderflow tools", color: "var(--long)",
+    short: "Entry · Orderflow",
+    part: "Phần 3",
+    title: "Entry · Orderflow tools",
+    color: "var(--long)",
     desc: "Trigger vào lệnh khi giá tới level của plan.",
     lessons: [
       { t: "VWAP RTH", s: "Cổng hướng trong phiên", href: K("levels", "vwap") },
@@ -62,8 +71,10 @@ export default function KnowledgeTabs() {
     <div className="stack" style={{ gap: 16 }}>
       <div className="seg" role="tablist" aria-label={t("Phần kiến thức")} style={{ alignSelf: "flex-start", padding: 4 }}>
         {TRACKS.map((x, i) => (
-          <button key={x.short} role="tab" aria-selected={i === tab} onClick={() => setTab(i)} style={{ minHeight: 40, padding: "0 16px" }}>
-            <span className="mono" style={{ fontSize: 11, marginRight: 8, color: i === tab ? x.color : "var(--faint)" }}>0{i + 1}</span>
+          <button type="button" key={x.short} role="tab" aria-selected={i === tab} onClick={() => setTab(i)} style={{ minHeight: 40, padding: "0 16px" }}>
+            <span className="mono" style={{ fontSize: 11, marginRight: 8, color: i === tab ? x.color : "var(--faint)" }}>
+              0{i + 1}
+            </span>
             {x.short}
           </button>
         ))}
@@ -71,23 +82,43 @@ export default function KnowledgeTabs() {
       <section className="card" role="tabpanel" aria-label={cur.title} style={{ padding: 22, gap: 16 }}>
         <div className="row wrap" style={{ alignItems: "flex-end", paddingBottom: 14, borderBottom: "1px solid var(--line)" }}>
           <div className="stack" style={{ gap: 6, maxWidth: 640 }}>
-            <span className="lbl" style={{ color: cur.color }}>{t(cur.part)}</span>
-            <h2 className="h2" style={{ fontSize: 22 }}>{cur.title}</h2>
-            <p className="muted" style={{ fontSize: 14 }}>{t(cur.desc)}</p>
+            <span className="lbl" style={{ color: cur.color }}>
+              {t(cur.part)}
+            </span>
+            <h2 className="h2" style={{ fontSize: 22 }}>
+              {cur.title}
+            </h2>
+            <p className="muted" style={{ fontSize: 14 }}>
+              {t(cur.desc)}
+            </p>
           </div>
-          {cur.more && <Link className="btn sm" href={cur.more.href}>{t(cur.more.label)} ›</Link>}
+          {cur.more && (
+            <Link className="btn sm" href={cur.more.href}>
+              {t(cur.more.label)} ›
+            </Link>
+          )}
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "6px 16px" }}>
           {cur.lessons.map((l, i) =>
             l.href ? (
               <Link key={l.t} className="lesson" href={l.href}>
-                <span className="num" aria-hidden="true">{i + 1}</span>
-                <span style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}><span style={{ fontSize: 14, fontWeight: 500 }}>{t(l.t)}</span><span className="small dim">{t(l.s)}</span></span>
+                <span className="num" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <span style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+                  <span style={{ fontSize: 14, fontWeight: 500 }}>{t(l.t)}</span>
+                  <span className="small dim">{t(l.s)}</span>
+                </span>
               </Link>
             ) : (
               <div key={l.t} className="lesson">
-                <span className="num" aria-hidden="true">{i + 1}</span>
-                <span style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}><span style={{ fontSize: 14, fontWeight: 500 }}>{t(l.t)}</span><span className="small dim">{t(l.s)}</span></span>
+                <span className="num" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <span style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+                  <span style={{ fontSize: 14, fontWeight: 500 }}>{t(l.t)}</span>
+                  <span className="small dim">{t(l.s)}</span>
+                </span>
               </div>
             ),
           )}

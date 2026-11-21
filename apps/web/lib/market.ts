@@ -3,6 +3,8 @@
 //   GET /api/v1/news?category=general|forex|merger → [{ id, datetime (unix s), headline, source, summary, url, category, related }]
 //   GET /api/v1/calendar/earnings?from&to → { earningsCalendar: [{ symbol, date, hour: bmo|amc|dmh, epsEstimate, epsActual, revenueEstimate, revenueActual, quarter, year }] }
 
+import { num } from "@/lib/num";
+
 const BASE = process.env.FINNHUB_BASE_URL || "https://finnhub.io/api/v1";
 export const NEWS_CATEGORIES = ["general", "forex", "merger"] as const;
 export type NewsCategory = (typeof NEWS_CATEGORIES)[number];
@@ -22,6 +24,7 @@ export type Earning = {
 export type Result<T> = { ok: boolean; configured: boolean; items: T[]; error?: string };
 
 // Cổ phiếu nặng trong Nasdaq-100 (ảnh hưởng NQ). Đổi tuỳ ý.
+// biome-ignore format: danh sách mã, giữ gọn
 export const NQ_WATCH = [
   "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "GOOG", "META", "AVGO", "TSLA", "COST", "NFLX", "AMD", "PLTR", "TMUS", "CSCO",
   "PEP", "ADBE", "QCOM", "INTU", "AMAT", "TXN", "ISRG", "MU", "LRCX", "BKNG", "PANW", "ARM", "ASML", "INTC", "ADI",
@@ -29,17 +32,41 @@ export const NQ_WATCH = [
   "FTNT", "ORLY", "REGN", "VRTX", "MDLZ", "CTAS", "WDAY", "ADSK", "ZS", "DDOG", "TEAM",
 ];
 
-const num = (v: unknown) => (v === null || v === undefined || v === "" || !Number.isFinite(Number(v)) ? null : Number(v));
+const TIMEOUT_MS = 8000;
+const RETRY_429_MS = 1500;
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-export async function call<T>(path: string, revalidate: number): Promise<T> {
-  const key = process.env.FINNHUB_API_KEY;
-  const r = await fetch(`${BASE}${path}${path.includes("?") ? "&" : "?"}token=${encodeURIComponent(key || "")}`, {
+// Key gửi qua header X-Finnhub-Token (không nằm trong URL / khoá cache / log). Timeout 8 giây.
+// 429: thử lại 1 lần sau 1,5 giây (retry = 0 cho lệnh gọi theo lô như getQuotes, tránh dồn thêm tải).
+export async function call<T>(path: string, revalidate: number, retry = 1): Promise<T> {
+  const r = await fetch(`${BASE}${path}`, {
     next: { revalidate },
-    headers: { Accept: "application/json" },
+    headers: { Accept: "application/json", "X-Finnhub-Token": process.env.FINNHUB_API_KEY || "" },
+    signal: AbortSignal.timeout(TIMEOUT_MS),
   });
-  if (r.status === 429) throw new Error("Finnhub giới hạn tần suất (429), thử lại sau ít phút");
+  if (r.status === 429) {
+    if (retry > 0) {
+      await sleep(RETRY_429_MS);
+      return call<T>(path, revalidate, retry - 1);
+    }
+    throw new Error("Finnhub giới hạn tần suất (429), thử lại sau ít phút");
+  }
   if (!r.ok) throw new Error(`Finnhub HTTP ${r.status}`);
   return (await r.json()) as T;
+}
+
+// Chạy fn cho từng phần tử, tối đa `limit` lệnh cùng lúc (Finnhub free: 60 lệnh / phút).
+export async function mapLimit<I, O>(items: I[], limit: number, fn: (item: I) => Promise<O>): Promise<O[]> {
+  const out = new Array<O>(items.length);
+  let next = 0;
+  const worker = async () => {
+    while (next < items.length) {
+      const i = next++;
+      out[i] = await fn(items[i]);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return out;
 }
 
 export function marketConfigured() {
@@ -104,7 +131,7 @@ function parseEarnings(list: Record<string, unknown>[]): Earning[] {
 
 const addDay = (d: string, n: number) => new Date(Date.parse(d + "T00:00:00Z") + n * 86400000).toISOString().slice(0, 10);
 
-// Finnhub trả tối đa ~1500 dòng / lần gọi: khoảng dài thì chia 3 ngày một lần (song song, cache 1 giờ)
+// Finnhub trả tối đa ~1500 dòng / lần gọi: khoảng dài thì chia 3 ngày một lần (tối đa 4 lệnh cùng lúc, cache 1 giờ)
 export async function getEarnings(from: string, to: string, symbol?: string): Promise<Result<Earning>> {
   if (!marketConfigured()) return { ok: false, configured: false, items: [] };
   try {
@@ -112,8 +139,8 @@ export async function getEarnings(from: string, to: string, symbol?: string): Pr
     if (symbol) ranges.push([from, to]);
     else for (let d = from; d <= to; d = addDay(d, 3)) ranges.push([d, addDay(d, 2) < to ? addDay(d, 2) : to]);
     const sym = symbol ? `&symbol=${encodeURIComponent(symbol)}` : "";
-    const parts = await Promise.all(
-      ranges.map(([a, b]) => call<{ earningsCalendar?: Record<string, unknown>[] }>(`/calendar/earnings?from=${a}&to=${b}${sym}`, 3600)),
+    const parts = await mapLimit(ranges, 4, ([a, b]) =>
+      call<{ earningsCalendar?: Record<string, unknown>[] }>(`/calendar/earnings?from=${a}&to=${b}${sym}`, 3600),
     );
     const seen = new Set<string>();
     const items = parseEarnings(parts.flatMap((p) => p.earningsCalendar || []))

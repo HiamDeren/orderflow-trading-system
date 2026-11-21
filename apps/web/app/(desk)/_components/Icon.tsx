@@ -28,8 +28,22 @@ const P: Record<string, string[]> = {
 
 export default function Icon({ name, size = 20 }: { name: string; size?: number }) {
   return (
-    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none" }}>
-      {(P[name] || []).map((d, i) => <path key={i} d={d} />)}
+    <svg
+      aria-hidden="true"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ flex: "none" }}
+    >
+      {(P[name] || []).map((d, i) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: danh sách path cố định của icon
+        <path key={i} d={d} />
+      ))}
     </svg>
   );
 }

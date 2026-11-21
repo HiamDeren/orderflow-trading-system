@@ -8,7 +8,7 @@ import { fmtTime } from "@/lib/time";
 import Icon from "./Icon";
 import { useUi } from "./Ui";
 
-export function ago(ts: number, now: number, t: (s: string, v?: Record<string, string | number>) => string) {
+function ago(ts: number, now: number, t: (s: string, v?: Record<string, string | number>) => string) {
   const m = Math.max(0, Math.round((now - ts) / 60000));
   if (m < 60) return t("{n} phút trước", { n: m });
   const h = Math.round(m / 60);
@@ -22,7 +22,9 @@ export function NewsRow({ n, now, compact, href, active }: { n: NewsItem; now: n
   const body = (
     <>
       <span className="news-meta">
-        <span className="mono">{fmtTime(n.ts, tz, !compact)} {compact ? "" : tzShort(tz)}</span>
+        <span className="mono">
+          {fmtTime(n.ts, tz, !compact)} {compact ? "" : tzShort(tz)}
+        </span>
         <span>· {n.source}</span>
         <span className="dim">· {ago(n.ts, now, t)}</span>
       </span>
@@ -40,7 +42,11 @@ export function NewsRow({ n, now, compact, href, active }: { n: NewsItem; now: n
   return (
     <a className={cls} href={n.url} target="_blank" rel="noreferrer noopener">
       {body}
-      {!compact && <span className="news-go small"><Icon name="external" size={14} /> {t("Mở bài gốc")}</span>}
+      {!compact && (
+        <span className="news-go small">
+          <Icon name="external" size={14} /> {t("Mở bài gốc")}
+        </span>
+      )}
     </a>
   );
 }
@@ -54,7 +60,9 @@ export function EarningRow({ e, noHour }: { e: Earning; noHour?: boolean }) {
   const beat = e.epsActual !== null && e.epsEstimate !== null ? (e.epsActual >= e.epsEstimate ? "long" : "short") : "";
   return (
     <div className="ern">
-      <Link className="mono ern-s" href={`/stock/${encodeURIComponent(e.symbol)}`} title={t("Xem thông tin {s}", { s: e.symbol })}>{e.symbol}</Link>
+      <Link className="mono ern-s" href={`/stock/${encodeURIComponent(e.symbol)}`} title={t("Xem thông tin {s}", { s: e.symbol })}>
+        {e.symbol}
+      </Link>
       {!noHour && <span className={"pill ern-h" + (e.hour === "amc" ? " accent" : "")}>{hourLabel(e.hour, t)}</span>}
       <span className="ern-n mono small">
         <span className="dim">EPS</span> <span className={beat}>{e.epsActual ?? "—"}</span> / {e.epsEstimate ?? "—"}

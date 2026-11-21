@@ -59,8 +59,6 @@ export function Avatar({ owner, large }: { owner: Owner; large?: boolean }) {
   );
 }
 
-export { LangSwitch };
-
 export default function Shell({ owner, events, children }: { owner: Viewer; events: NextEvent[]; children: React.ReactNode }) {
   const guest = owner.role === "guest";
   const groups = guest ? GUEST_GROUPS : GROUPS;
@@ -69,6 +67,7 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
   const { side, setSide, t } = useUi();
   const [drawer, setDrawer] = useState(false);
   const [pal, setPal] = useState(false);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: cố ý đóng ngăn kéo mỗi khi đổi trang (path)
   useEffect(() => setDrawer(false), [path]);
   // Ctrl / Cmd + K mở tìm nhanh
   useEffect(() => {
@@ -95,11 +94,11 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
   return (
     <div className={"shell" + (side === "collapsed" ? " is-collapsed" : "") + (drawer ? " drawer-open" : "")}>
       <header className="mtop">
-        <button className="icon-btn" aria-label={t("Mở menu")} aria-expanded={drawer} onClick={() => setDrawer(true)}>
+        <button type="button" className="icon-btn" aria-label={t("Mở menu")} aria-expanded={drawer} onClick={() => setDrawer(true)}>
           <Icon name="menu" />
         </button>
         <span className="mtop-title">{current ? t(current.label) : "ZenDojo"}</span>
-        <button className="icon-btn" aria-label={t("Tìm nhanh")} onClick={() => setPal(true)}>
+        <button type="button" className="icon-btn" aria-label={t("Tìm nhanh")} onClick={() => setPal(true)}>
           <Icon name="search" size={18} />
         </button>
         <TzPicker />
@@ -118,6 +117,7 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
               </span>
             </Link>
             <button
+              type="button"
               className="icon-btn pin"
               aria-label={side === "pinned" ? t("Thu gọn sidebar") : t("Ghim sidebar")}
               title={side === "pinned" ? t("Thu gọn sidebar") : t("Ghim sidebar")}
@@ -125,7 +125,7 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
             >
               <Icon name={side === "pinned" ? "unpin" : "pin"} size={18} />
             </button>
-            <button className="icon-btn close" aria-label={t("Đóng menu")} onClick={() => setDrawer(false)}>
+            <button type="button" className="icon-btn close" aria-label={t("Đóng menu")} onClick={() => setDrawer(false)}>
               <Icon name="close" />
             </button>
           </div>
@@ -170,7 +170,7 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
               <LangSwitch />
               <TzPicker />
               <form action="/auth/logout" method="post">
-                <button className="icon-btn" aria-label={t("Đăng xuất")} title={t("Đăng xuất")}>
+                <button type="submit" className="icon-btn" aria-label={t("Đăng xuất")} title={t("Đăng xuất")}>
                   <Icon name="logout" size={18} />
                 </button>
               </form>
@@ -191,7 +191,7 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
             <span>{t(it.label)}</span>
           </Link>
         ))}
-        <button onClick={() => setDrawer(true)} aria-label={t("Mở menu")}>
+        <button type="button" onClick={() => setDrawer(true)} aria-label={t("Mở menu")}>
           <Icon name="menu" size={20} />
           <span>{t("Thêm")}</span>
         </button>

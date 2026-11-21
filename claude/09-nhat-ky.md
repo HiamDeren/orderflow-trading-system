@@ -2,6 +2,21 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-21 · Tối ưu giao diện (nhóm A tốc độ cảm nhận + nhóm B a11y, theme theo brand kit)
+- A: `app/(desk)/loading.tsx` (skeleton, `_components/Skeleton.tsx`) + `error.tsx` (tiếng Việt, nút Thử lại, chỉ hiện digest). Dashboard tách watchlist / earnings tuần / news thành `dashboard/MarketCards.tsx` bọc `<Suspense>`; News đọc bài trong Suspense; Markets stream phần dữ liệu; Journal tải ảnh song song; Trade Plan nạp sẵn lịch sử tháng ở server. Page journal / PnL / Trade Plan gọi `requireOwner` trước khi đọc DB.
+- Đo local (mock Finnhub chậm 2 s): Dashboard byte đầu 0,25 s (trước chờ hết ~2,3 s), Markets 0,04 s (trước ~8 s). Xem bằng trình duyệt: Dashboard / Journal / Trade Plan / Markets đúng, không lỗi console, 390 px không tràn ngang.
+- B · theme: `:root` thêm token từ brand kit (`--imp-*`, `--ink`, `--ridge*`) + token ngữ nghĩa `--hover`, `--text-strong`, `--on-accent` thay 25 mã hex viết cứng. Tương phản: `--faint` #7d8794 → #848e9b (4.6:1 trên panel-3), chữ tin đỏ dùng `--imp-high-text` #ec6a63 (5:1), viền ô nhập `--field-line` #5e6774 (3:1), placeholder → `--faint`, ô Earnings trống → `--faint`. Thêm `prefers-reduced-motion`.
+- B · a11y: `type` cho 60 nút (4 nút submit trong form), key ổn định cho lệnh journal (trước dùng index), PnL, thang level, bước gửi plan; palette bỏ listbox chứa nút; `aria-label` đặt đúng phần tử. Biome: rule a11y / correctness về mức error, `useSemanticElements` tắt (role="group" hợp lệ).
+
+## 2026-11-21 · Tối ưu đợt 1 (audit hạng 1–14, nhánh `chore/optimize-2026-11`)
+- Audit: `claude/11-audit-2026-11.md`. Bundle client đã nhỏ (~160 KB gzip / trang desk, không đổi sau đợt này); chỗ chậm nằm ở server.
+- Test & CI: Vitest (57 test: plan-core 12/11 + 7 biến thể, journal, lịch kinh tế, giờ ET/VN qua DST, `lib/api` + schema); Biome (format 1 commit riêng, lỗi lint cũ để `warn`); `.github/workflows/ci.yml`. Lệnh: `pnpm test`, `pnpm lint`, `pnpm format`.
+- Hiệu năng: timeout Finnhub / ForexFactory / Supabase / Discord; Finnhub key qua header `X-Finnhub-Token`, retry 1 lần khi 429, tối đa 8 lệnh quote / 4 lệnh earnings cùng lúc; `cache()` cho `getClaims` / `getViewer`; layout desk chạy song song; `next/font` thay `<link>` Google Fonts.
+- API: `lib/api.ts` (`json`, `fail`, `requireOwnerApi`, `requireViewerApi`, `tokenEquals` băm SHA-256 + `timingSafeEqual`, `crossOrigin`, `readJson`), `lib/schemas.ts` (zod JSON v1 `.loose`, journal, members). Lỗi `{ ok:false, error, code }`, **giữ nguyên chuỗi `error`**. Ghi bằng cookie phải cùng Origin. Body tối đa: plan 2 MB, journal 1 MB.
+- Bảo mật: `X-Frame-Options: SAMEORIGIN`, `Permissions-Policy`, HSTS, CSP Report-Only.
+- Dọn: export / hàm chết (knip), `lib/num.ts`, `metadataBase`, proxy dùng `lib/env`.
+- Kiểm: `next build` OK, `check-plan-core` OK, smoke test `next start` + Supabase giả: POST JSON 12/11 → 200, payload lưu nguyên vẹn, ảnh 101 834 byte như trước; 401 / 400 / 405 đúng chuỗi cũ; trang học 200.
+
 ## 2026-11-21 · Chẩn đoán Plan Sender (log máy ATAS + Supabase + Vercel)
 - 17/11 21:31–21:40 VN: log không có dòng `web:` → "Gửi lên web" chưa bật / URL mẫu, indicator bỏ qua im lặng. 21:41 và 21:43 đã `HTTP 200` nhưng vào project Supabase cũ (Sydney); project Singapore tạo lúc 22:45 VN nên "không thấy POST". Dòng 17/11 hiện có là bản gửi lại qua Plan Builder 18/11.
 - 19/11 9:29 ET: đầu-cuối chạy (`HTTP 200`, dòng DB, ảnh `2026/11/19/plan/plan_2026-11-19_NQ.webp`, `discord.sent:true`) nhưng 2 POST (bấm tay + tự gửi) → 2 tin Discord; chart Price scale 4 → tick 4, row 16, cả `periods_hl` bị làm tròn 4 điểm → số 19/11 sai.

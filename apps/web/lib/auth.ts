@@ -11,6 +11,7 @@
 //  nên mọi API journal / plan giữ nguyên mức chặn.
 //  Không dùng user_metadata để phân quyền (người dùng tự sửa được); user_metadata chỉ để hiện tên, avatar.
 import { redirect } from "next/navigation";
+import { cache } from "react";
 import type { User } from "@supabase/supabase-js";
 import { authConfigured, ownerDiscordId, secretKey, supabaseUrl } from "@/lib/env";
 import { isGuest } from "@/lib/members";
@@ -47,7 +48,7 @@ async function roleFromClaims(c: Claims | null | undefined): Promise<Role | null
   return typeof g === "string" && (await isGuest(g)) ? "guest" : null;
 }
 
-export function ownerFromClaims(c: Claims | null | undefined): Owner | null {
+function ownerFromClaims(c: Claims | null | undefined): Owner | null {
   if (!c?.sub || c.app_metadata?.[OWNER_FLAG] !== true) return null;
   return profileOf(c, "Deren");
 }
@@ -70,7 +71,8 @@ function profileOf(c: Claims, fallback: string): Owner {
   };
 }
 
-async function claims(): Promise<Claims | null> {
+// cache(): layout desk + layout journal / trade-plan + page cùng gọi trong một request → chỉ đọc JWT một lần.
+const claims = cache(async (): Promise<Claims | null> => {
   if (!authConfigured()) return null;
   try {
     const sb = await supabaseServer();
@@ -80,7 +82,7 @@ async function claims(): Promise<Claims | null> {
   } catch {
     return null;
   }
-}
+});
 
 // Chỉ chủ sở hữu (journal, plan, ảnh...). Khách nhận null.
 export async function getOwner(): Promise<Owner | null> {
@@ -88,12 +90,12 @@ export async function getOwner(): Promise<Owner | null> {
 }
 
 // Chủ sở hữu hoặc khách (trang thị trường).
-export async function getViewer(): Promise<Viewer | null> {
+export const getViewer = cache(async (): Promise<Viewer | null> => {
   const c = await claims();
   const role = await roleFromClaims(c);
   if (!c || !role) return null;
   return { ...profileOf(c, role === "owner" ? "Deren" : "Guest"), role };
-}
+});
 
 export async function requireViewer(next = "/dashboard"): Promise<Viewer> {
   const v = await getViewer();

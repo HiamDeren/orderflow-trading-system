@@ -49,8 +49,10 @@ Chi tiết: [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md).
 - [x] Giai đoạn 1 (cutover, 2026-11-18): GitHub nhánh mặc định `development`, ruleset bảo vệ `production` (PR bắt buộc, chặn force push / xoá); Vercel Root Directory `apps/web`, Next.js, Production Branch `production`; PR #1 merge, production chạy Next.js (trang + `/api/plan` 401 không token).
 - [ ] Xoá nhánh `main` sau khi lần gửi plan thật 9:29 ET chạy ổn trên bản mới (Discord + dòng mới trong `trading.trade_plans`).
 - [ ] Supabase project dev cho Preview (dùng chỗ trống sau khi xoá project Sydney) + biến môi trường Preview trên Vercel.
-- [ ] GitHub Actions: `pnpm build` + `check` cho mọi PR; `supabase db push` khi merge vào `production`.
-- [ ] Biome (lint / format), Vitest cho plan-core, Playwright vào repo.
+- [x] GitHub Actions `.github/workflows/ci.yml` (2026-11-21): Biome, Vitest, `check-plan-core`, `node --check`, `pnpm build` env giả, chặn secret trong bundle cho mọi PR vào `development` / `production`.
+- [ ] `supabase db push` khi merge vào `production` (cần secret Supabase trên GitHub, Deren duyệt).
+- [x] Biome (lint + format, 2026-11-21) và Vitest (57 test: plan-core, journal, econ, time DST, API / schema).
+- [ ] Playwright vào repo (login mock + ma trận quyền chủ / khách / chưa đăng nhập).
 - [ ] Giai đoạn 2: đăng nhập chủ site, `profiles` + `user_state`, nhập file sao lưu tiến độ cũ.
 - [ ] Giai đoạn 3: shell component + trang dashboard (plan hôm nay, đồng hồ phiên, lịch tin).
 - [ ] Giai đoạn 4: port dần Trade Plan, Quiz, hai khoá học.
@@ -127,7 +129,7 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 **Còn lại:**
 - [ ] Knowledge: Deren tổng hợp nội dung AMT / Context / Entry; port dần `levels.html`, `tools.html`, quiz vào Next.js.
 - [x] `/` chuyển hướng vào dashboard (đã đăng nhập) hoặc `/login`; trang chủ học cũ ở `/learn` (2026-11-18).
-- [ ] Test tự động (Vitest cho `lib/journal.ts`, `lib/econ.ts`; Playwright cho luồng đăng nhập bằng mock).
+- [x] Vitest cho `lib/journal.ts`, `lib/econ.ts`, `lib/time.ts`, plan-core (2026-11-21). Còn Playwright (xem mục chuyển web app).
 - [ ] Menu "Sắp có": Options (GEX / DEX / OI khi có API).
 
 ## Đợt đang làm · Ship dashboard lên production (chốt 2026-11-21)
@@ -146,6 +148,20 @@ Thực tế: `production` vẫn ở PR #3 (2026-11-18); toàn bộ dashboard đ�
 - [x] Migration `20261121074126_journal_session_log` (đã áp, test `save_journal` trong transaction rồi rollback) + thẻ "Log phiên" trong Journal (điền sẵn từ plan) + cột Setup F / C / V + thống kê có khoảng tin cậy Wilson.
 - [ ] Deren test thẻ Log phiên trên Preview.
 - [ ] Nhập `cb-log` cũ: Deren bấm "Copy CSV" ở tab Log của artifact, gửi CSV → Claude nhập bằng SQL (dòng có R tạo một lệnh với setup tương ứng).
+
+## Tối ưu 2026-11 (audit `claude/11-audit-2026-11.md`, nhánh `chore/optimize-2026-11`)
+- [x] Hạng 1–14 của audit (2026-11-21): CI, timeout + retry 429 + giới hạn đồng thời API ngoài, `cache()` kiểm đăng nhập, layout desk song song, `next/font`, security headers + CSP Report-Only, `timingSafeEqual` + helper `lib/api.ts`, lỗi `{ ok:false, error, code }`, zod (`lib/schemas.ts`), kiểm Origin, Biome, dọn export chết.
+- [ ] Deren review + merge PR `chore/optimize-2026-11` → `development`; test Preview: đăng nhập, Journal lưu / ảnh, Trade Plan gửi JSON (`notify:false`), `/stock/[mã]` (TradingView), `/knowledge` (iframe).
+- [ ] Đo Lighthouse mobile `/dashboard`, `/journal`, `/markets`, `/trade-plan` trên Preview (cần đăng nhập), ghi vào audit.
+- [ ] Xem console 1 tuần các vi phạm CSP Report-Only rồi bật `Content-Security-Policy` thật.
+- [ ] Thêm JSON thật 11/11 và 17/11 (file `plan_yyyyMMdd.json` trên máy ATAS) vào `scripts/plan-core.snapshot.json` + Vitest (repo mới có 12/11).
+- [ ] Rate limit (hạng 15): in-memory cho 401 hoặc Upstash / Vercel Firewall — chờ Deren chọn.
+- [x] Nhóm A (loading / Suspense / error) + nhóm B (a11y, tương phản, token theme theo brand kit) — 2026-11-21.
+- [ ] Brand kit (`ZenDojo-brand-kit/07-theme`): thêm `--faint` #848e9b, `--imp-high-text`, `--field-line`, `--hover`, `--text-strong`, `--on-accent` để kit và `desk.css` khớp; cân nhắc sinh `:root` của `desk.css` từ `zendojo-tokens.json`.
+- [ ] Ảnh plan / embed Discord (plan-core `COL`, `0x3fbf7f` / `0xef5350`) dùng màu khác theme dashboard (Long #8cc2a4, Short #e0947c) — Deren quyết có đồng bộ không (đổi SVG plan-core, cần cập nhật snapshot).
+- [ ] Còn 18 cảnh báo Biome complexity (`useOptionalChain`…) — dọn khi tiện.
+- [ ] Gộp code Supabase riêng của `/api/plan` vào `lib/db.ts` (A2) khi đã có test đầu-cuối cho route.
+- [ ] Sinh TypeScript types cho schema `trading` / `access` (S5).
 
 ## Quy ước
 - Mỗi thay đổi: push repo, Vercel tự deploy; cập nhật file này và [09-nhat-ky.md](09-nhat-ky.md).

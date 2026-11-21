@@ -1,3 +1,4 @@
+import { requireOwner } from "@/lib/auth";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { errText } from "@/lib/db";
@@ -11,6 +12,7 @@ export const metadata: Metadata = { title: "PnL Calendar · Journal" };
 export const dynamic = "force-dynamic";
 
 export default async function PnlPage({ searchParams }: { searchParams: Promise<{ month?: string }> }) {
+  await requireOwner("/journal/pnl"); // layout + page render song song: chặn trước khi đọc database
   const q = await searchParams;
   const { t } = await getT();
   const today = etNow().date;
@@ -64,17 +66,25 @@ export default async function PnlPage({ searchParams }: { searchParams: Promise<
         </div>
         <div className="hstack" style={{ gap: 6 }}>
           <JournalTabs />
-          <Link className="btn icon" aria-label={t("Tháng trước")} href={`/journal/pnl?month=${shiftMonth(month, -1)}`}>‹</Link>
+          <Link className="btn icon" aria-label={t("Tháng trước")} href={`/journal/pnl?month=${shiftMonth(month, -1)}`}>
+            ‹
+          </Link>
           <span style={{ fontSize: 14, fontWeight: 600, minWidth: 120, textAlign: "center" }}>{t("Tháng {m} · {y}", { m: Number(m), y })}</span>
           {month < today.slice(0, 7) ? (
-            <Link className="btn icon" aria-label={t("Tháng sau")} href={`/journal/pnl?month=${shiftMonth(month, 1)}`}>›</Link>
+            <Link className="btn icon" aria-label={t("Tháng sau")} href={`/journal/pnl?month=${shiftMonth(month, 1)}`}>
+              ›
+            </Link>
           ) : (
-            <span className="btn icon" aria-disabled="true" style={{ opacity: 0.4 }}>›</span>
+            <span className="btn icon" aria-disabled="true" style={{ opacity: 0.4 }}>
+              ›
+            </span>
           )}
         </div>
       </header>
       {error ? (
-        <div className="notice">{t("Không đọc được journal")}: {error}</div>
+        <div className="notice">
+          {t("Không đọc được journal")}: {error}
+        </div>
       ) : (
         <PnlView weeks={weeks} today={today} />
       )}
