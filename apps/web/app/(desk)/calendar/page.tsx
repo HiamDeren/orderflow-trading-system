@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { PREFS_COOKIE, parsePrefs } from "@/lib/econ-prefs";
 import { ECON_SOURCE_PAGE, getEconWeek, localize } from "@/lib/econ";
-import { tzShort } from "@/lib/prefs";
 import { getT } from "@/lib/prefs-server";
 import { DATE_RE, fmtTime, nowIn } from "@/lib/time";
 import TzPicker from "../_components/TzPicker";

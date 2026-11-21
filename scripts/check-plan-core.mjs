@@ -4,10 +4,10 @@
 //   node scripts/check-plan-core.mjs            → so sánh, sai thì exit 1
 //   node scripts/check-plan-core.mjs --update   → ghi lại snapshot (chỉ khi cố ý đổi luật / chữ)
 // Khi port sang TypeScript (web app), bản mới phải cho ra đúng snapshot này.
-import { createRequire } from "module";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import { createRequire } from "node:module";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const require = createRequire(import.meta.url);

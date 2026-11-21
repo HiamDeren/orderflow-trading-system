@@ -16,7 +16,7 @@ import { PLAN_SEND, addDays, dowOf, etNow, isWeekday, mondayOf, nowIn, viDate, v
 import CopyImage from "../_components/CopyImage";
 import { EventLine } from "../_components/EventRow";
 import { Timeline } from "../_components/Live";
-import { EarningRow, NewsRow } from "../_components/MarketBits";
+import { NewsRow } from "../_components/MarketBits";
 
 export const metadata: Metadata = { title: "Dashboard" };
 export const dynamic = "force-dynamic";

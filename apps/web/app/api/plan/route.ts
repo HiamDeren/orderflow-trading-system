@@ -19,7 +19,7 @@
 //   Schema "trading" phải nằm trong Exposed schemas (Supabase → Project Settings → Data API).
 // Hợp đồng request / response giữ y như api/plan.js cũ (indicator ATAS đã code theo đó).
 
-import path from "path";
+import path from "node:path";
 import { Resvg } from "@resvg/resvg-js";
 import core, { type Plan } from "@/lib/plan-core";
 import { TRADING_BUCKET, planImagePath } from "@/lib/storage";
