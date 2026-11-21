@@ -95,6 +95,13 @@ Tạo chuỗi ngẫu nhiên từ 32 ký tự (chữ + số) bằng trình tạo 
    Lệnh 1 trả `ok: True`, lệnh 2 trả lại plan, bảng `trade_plans` có 1 dòng.
 3. Trong indicator, nhóm **"2 · Web"**: bật "Gửi lên web", điền API URL = `$u`, API token = `$t`. Bấm gửi → `plan_sender.log` có `HTTP 200`.
 
+### Cấu hình bắt buộc (rút ra từ lỗi 17/11 và 19/11)
+- API URL: **`https://zendojo-deren.vercel.app/api/plan`**. Domain cũ `orderflow-trading-system.vercel.app` trả 307 redirect; .NET bỏ header `Authorization` khi theo redirect → `401`.
+- Chart **Price scale = 1**. Price scale > 1 làm ATAS gộp giá: high/low từng nến bị làm tròn (19/11: tick 4, row 16 điểm), VA / POC / ONH / ONL sai hết.
+- Chỉ dùng **một** cách gửi lúc 9:29: hoặc bấm tay, hoặc "Tự gửi lúc 9:29 ET". Server đã chặn Discord trùng (cùng số liệu trong 120 giây), nhưng đừng dựa vào đó.
+- Log phải có dòng `web: POST ...` rồi `HTTP 200`. Không có dòng `web:` nghĩa là "Gửi lên web" đang tắt hoặc URL còn mẫu.
+- Sửa indicator theo [PROMPT_PlanSender_fix-2026-11-21.md](PROMPT_PlanSender_fix-2026-11-21.md). Source đang chạy nằm trên máy ATAS; `PlanSender.cs` trong thư mục này đã cũ.
+
 ### API
 | Method | Header | Kết quả |
 |---|---|---|

@@ -2,6 +2,14 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-21 · Chẩn đoán Plan Sender (log máy ATAS + Supabase + Vercel)
+- 17/11 21:31–21:40 VN: log không có dòng `web:` → "Gửi lên web" chưa bật / URL mẫu, indicator bỏ qua im lặng. 21:41 và 21:43 đã `HTTP 200` nhưng vào project Supabase cũ (Sydney); project Singapore tạo lúc 22:45 VN nên "không thấy POST". Dòng 17/11 hiện có là bản gửi lại qua Plan Builder 18/11.
+- 19/11 9:29 ET: đầu-cuối chạy (`HTTP 200`, dòng DB, ảnh `2026/11/19/plan/plan_2026-11-19_NQ.webp`, `discord.sent:true`) nhưng 2 POST (bấm tay + tự gửi) → 2 tin Discord; chart Price scale 4 → tick 4, row 16, cả `periods_hl` bị làm tròn 4 điểm → số 19/11 sai.
+- Domain cũ trả 307 sang `zendojo-deren.vercel.app`; indicator vẫn trỏ domain cũ → lần gửi tới sẽ `401` (.NET bỏ `Authorization` khi redirect).
+- `/api/plan`: chống Discord trùng (cùng ngày + symbol + cùng số liệu, bỏ qua `trigger` / `ts_et`, trong 120 giây → `discord: {sent:false, skipped:"duplicate"}`); đẩy `warnings` của indicator vào tin Discord và response. `tsc` + `check-plan-core` OK.
+- Tài liệu: `docs/plan-sender/PROMPT_PlanSender_fix-2026-11-21.md` (sửa indicator trên máy), README mục "Cấu hình bắt buộc", `dashboard-setup.md` (307, Price scale).
+- Supabase: không có dữ liệu test (chỉ 2 dòng thật 17/11, 19/11 + 2 ảnh); `rls_auto_enable` đã thu quyền anon / authenticated.
+
 ## 2026-11-21 · Đối chiếu trạng thái, chốt đợt ship dashboard
 - Kiểm thật: production còn ở PR #3; Preview `development` READY; domain mới + redirect 307 đã chạy; `journal_images` chưa áp; thiếu `COINGECKO_API_KEY`.
 - Chốt đợt đang làm: nghiệm thu + PR `development` → `production`. Ghi phương án T12 (log phiên → cột trong `journal_entries`, khoá localStorage `cb-log`) vào `08`.

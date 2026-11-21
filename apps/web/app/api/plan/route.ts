@@ -1,8 +1,9 @@
 // POST /api/plan   Header: Authorization: Bearer <PLAN_TOKEN>   Body: JSON v1 từ indicator "Deren · Plan Sender"
+//   0. Cùng ngày + symbol + cùng số liệu (bỏ qua trigger / ts_et) trong 120 giây → không gửi Discord lần 2
 //   1. Lưu (upsert theo ngày + symbol) vào bảng trading.trade_plans trên Supabase (schema riêng, không dùng public)
 //   2. Lập plan bằng plan-core.js (cùng code với trang Trade Plan), vẽ ảnh tiếng Việt, PNG rồi nén WebP lossless (lib/image.ts)
 //   3. Lưu ảnh WebP vào Supabase Storage (bucket private "trading", YYYY/MM/DD/plan/...), ghi đường dẫn + plan chữ vào bảng
-//   4. Gửi ảnh + tóm tắt plan lên Discord (nếu có DISCORD_WEBHOOK_TRADE_PLAN và payload không có "notify": false)
+//   4. Gửi ảnh + tóm tắt plan (kèm warnings của indicator) lên Discord (nếu có DISCORD_WEBHOOK_TRADE_PLAN và payload không có "notify": false)
 //   Bước 2–4 lỗi thì plan vẫn được lưu; kết quả từng bước nằm trong response.
 //   Bước 1 (database) lỗi thì vẫn vẽ ảnh, lưu Storage và gửi Discord để plan 9:29 không mất; response 502 kèm kết quả các bước.
 //
@@ -36,6 +37,7 @@ const FONT_FILES = ["BeVietnamPro-Regular.ttf", "BeVietnamPro-Bold.ttf", "JetBra
   .map(f => path.join(FONT_DIR, f));
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const MONTH_RE = /^\d{4}-\d{2}$/;
+const DUP_WINDOW_S = 120;
 
 type Json = Record<string, unknown>;
 type Payload = Json & { date?: string; symbol?: string; prth?: unknown; ovn?: unknown; notify?: boolean };
@@ -66,6 +68,27 @@ function safeEqual(a: string, b: string | undefined) {
   return diff === 0;
 }
 
+// So sánh payload không phụ thuộc thứ tự key (jsonb trong Postgres tự sắp lại key).
+function stable(v: unknown): string {
+  if (Array.isArray(v)) return "[" + v.map(stable).join(",") + "]";
+  if (v && typeof v === "object") {
+    return "{" + Object.keys(v as Json).sort().map(k => JSON.stringify(k) + ":" + stable((v as Json)[k])).join(",") + "}";
+  }
+  return JSON.stringify(v);
+}
+
+// Bỏ các trường đổi theo lần bấm (trigger, ts_et) để nhận ra 2 lần gửi cùng một plan.
+function planKey(p: Json) {
+  const { trigger: _t, ts_et: _ts, ...rest } = p;
+  return stable(rest);
+}
+
+// Bỏ dấu "?" do indicator thay ký tự không phải ASCII; giữ tối đa 3 cảnh báo, mỗi cái 200 ký tự.
+function warningsOf(p: Json): string[] {
+  const w = Array.isArray(p.warnings) ? p.warnings : [];
+  return w.filter(x => typeof x === "string" && x.trim()).slice(0, 3).map(x => (x as string).slice(0, 200));
+}
+
 function svgToPng(svg: string) {
   const r = new Resvg(svg, {
     fitTo: { mode: "zoom", value: 2 },
@@ -74,7 +97,7 @@ function svgToPng(svg: string) {
   return Buffer.from(r.render().asPng());
 }
 
-async function sendDiscord(webhook: string, plan: Plan, img: Buffer, fileName: string, symbol: string) {
+async function sendDiscord(webhook: string, plan: Plan, img: Buffer, fileName: string, symbol: string, warnings: string[] = []) {
   const s = plan.summary;
   const color = s.bias === "Lên" ? 0x3fbf7f : s.bias === "Xuống" ? 0xef5350 : 0x9aa0a8;
   const lines = [
@@ -84,6 +107,7 @@ async function sendDiscord(webhook: string, plan: Plan, img: Buffer, fileName: s
     `**Target:** ${s.target != null ? `${core.fmt(s.target)} (cách giá 9:29 ${core.fmt(s.distance)} điểm)` : "theo mô tả setup"}`,
     `**Đổi bias:** ${s.flip}`,
     `**Giá 9:29:** ${core.fmt(s.price)} · Prev RTH ${core.lc1(s.prth)} · OVN ${core.lc1(s.ovn)}`,
+    ...warnings.map(w => `⚠️ **Cảnh báo indicator:** ${w}`),
   ];
   const payload = {
     username: "Trade Plan",
@@ -156,6 +180,21 @@ export async function POST(req: Request) {
     }
     const date = p.date as string;
     const symbol = String(p.symbol || "NQ").slice(0, 20);
+    const warnings = warningsOf(p);
+    // 0. Chống gửi trùng: cùng ngày + symbol, cùng số liệu (bỏ qua trigger / ts_et), lần trước < DUP_WINDOW_S giây
+    //    → vẫn lưu + vẽ ảnh như thường nhưng không gửi Discord lần nữa (19/11: bấm tay + tự gửi 9:29 ra 2 tin).
+    let duplicate = false;
+    try {
+      const r = await fetch(
+        `${c.rest}?select=updated_at,payload&trade_date=eq.${date}&symbol=eq.${encodeURIComponent(symbol)}&limit=1`,
+        { headers: c.hr, cache: "no-store" },
+      );
+      if (r.ok) {
+        const prev = ((await r.json()) as Json[])[0];
+        const age = prev ? (Date.now() - Date.parse(String(prev.updated_at))) / 1000 : Infinity;
+        duplicate = !!prev && age >= 0 && age < DUP_WINDOW_S && planKey(prev.payload as Json) === planKey(p);
+      }
+    } catch { /* không đọc được thì coi như không trùng */ }
     // 1. Lưu payload. Lỗi ở đây không dừng hẳn: vẫn vẽ ảnh + gửi Discord, cuối cùng trả 502.
     let dbError: Json | null = null;
     try {
@@ -169,7 +208,7 @@ export async function POST(req: Request) {
       dbError = { error: "supabase", status: 0, detail: errMsg(e).slice(0, 300) };
     }
 
-    const out: Json = { ok: !dbError, date, symbol, image: null, discord: null };
+    const out: Json = { ok: !dbError, date, symbol, image: null, discord: null, ...(warnings.length ? { warnings } : {}) };
     let plan: Plan | null = null, img: Buffer | null = null, objPath: string | null = null;
 
     // 2–3. Lập plan, vẽ ảnh, lưu Storage
@@ -197,15 +236,17 @@ export async function POST(req: Request) {
     }
 
     // 4. Discord
-    if (c.hook && p.notify !== false) {
+    if (c.hook && p.notify !== false && duplicate) {
+      out.discord = { sent: false, skipped: "duplicate" };
+    } else if (c.hook && p.notify !== false) {
       try {
         if (!plan || plan.error || !img || !objPath) throw new Error("không có ảnh plan để gửi");
-        out.discord = await sendDiscord(c.hook, plan, img, objPath.split("/").pop() as string, symbol);
+        out.discord = await sendDiscord(c.hook, plan, img, objPath.split("/").pop() as string, symbol, warnings);
       } catch (e) {
         out.discord = { error: errMsg(e) };
       }
     }
-    log(dbError ? "error" : "info", "POST xong", { via: c.via, date, symbol, db: dbError || "ok", image: out.image, discord: out.discord, notify: p.notify !== false, hook: !!c.hook });
+    log(dbError ? "error" : "info", "POST xong", { via: c.via, date, symbol, db: dbError || "ok", image: out.image, discord: out.discord, duplicate, warnings: warnings.length, notify: p.notify !== false, hook: !!c.hook });
     if (dbError) return json({ ...dbError, ...out }, 502);
     return json(out);
   } catch (e) {

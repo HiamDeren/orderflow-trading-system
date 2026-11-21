@@ -3,7 +3,7 @@
 Danh sách việc còn lại. Khi Deren nhắn "liệt kê các việc còn lại", trả lời từ file này.
 Hướng dài hạn: **web app cá nhân / dashboard** (xem [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md)).
 
-Cập nhật: 2026-11-21 (đối chiếu trạng thái thật, chốt đợt ship dashboard, phương án T12).
+Cập nhật: 2026-11-21 (đối chiếu trạng thái thật, chốt đợt ship dashboard, phương án T12, chẩn đoán Plan Sender).
 
 ## Đã xong
 - [x] Trade Plan · Composite × pRTH × OVN là system chính (2026-11-17): gộp Plan Builder cổ điển + Testing plan thành trang `plan.html`, Plan Builder vẽ ảnh TPO kèm plan chữ, copy ảnh.
@@ -17,16 +17,21 @@ Cập nhật: 2026-11-21 (đối chiếu trạng thái thật, chốt đợt shi
 - [x] Claude Code: hook, 7 subagent, lệnh `/viec-con-lai` `/kiem-tra` `/ship`, snapshot plan-core, prompt chuyển đổi web app.
 
 ## Việc còn lại · plan tự động
-1. [ ] **Indicator Plan Sender (tối 2026-11-17):** chart NQ M30 lookback 30 ngày, Claude Code build `docs/plan-sender/PlanSender.cs` theo `PROMPT_PlanSender.md`, kiểm số với 11/11 và 12/11.
-2. [ ] **Bật gửi web trong indicator:** API URL `https://zendojo-deren.vercel.app/api/plan` + `PLAN_TOKEN`; log phải có `HTTP 200`.
+1. [x] **Indicator Plan Sender build xong (2026-11-17):** offline khớp tuyệt đối 11/11 và 12/11 (`plans/VALIDATION.md` trên máy).
+1b. [ ] **Kiểm số trên chart ATAS** (Price scale = 1, "Tính như ngày" 12/11 và 11/11), điền bảng mục 2 của `VALIDATION.md`.
+1c. [ ] **Sửa indicator theo `docs/plan-sender/PROMPT_PlanSender_fix-2026-11-21.md`:** chặn gửi khi chart gộp giá, một lần gửi / ngày, không theo redirect, log khi tắt web; đưa source thật vào `indicators/plan-sender/` (repo đang giữ bản cũ). [CẦN XÁC NHẬN source nằm ở đâu trên máy]
+2. [ ] **Đổi API URL trong indicator** sang `https://zendojo-deren.vercel.app/api/plan` (đang là domain cũ, 307 → sẽ `401`); nhập lại token cho nút "Lấy plan mới nhất" trên domain mới (localStorage theo domain).
 3. [x] **Test đầu-cuối trên production (2026-11-18):** nút "Gửi plan lên web" với JSON ATAS 17/11 → database `trading.trade_plans`, ảnh WebP `trading/2026/11/17/plan/`, Discord nhận ảnh.
-3b. [ ] **Test buổi sáng thật:** 9:29 ET indicator gửi → Discord + Storage, nút "Lấy plan mới nhất" khớp.
-4. [ ] Xoá bucket cũ `trade-plans` (trống) trên Dashboard → Storage.
+3b. [ ] **Test buổi sáng thật:** 19/11 9:29 ET indicator gửi `HTTP 200` → DB + ảnh WebP + Discord đều có, nhưng số sai (Price scale 4) và Discord 2 tin (bấm tay + tự gửi). Làm lại sau 1c + 2: 1 tin Discord, số đúng, nút "Lấy plan mới nhất" khớp.
+3c. [ ] Merge API chống Discord trùng + đẩy cảnh báo indicator lên Discord (`development` 2026-11-21) sang `production`.
+4. [x] Bucket cũ `trade-plans`: đã mất cùng project Sydney (xoá 2026-11-18); project ZenDojo chỉ có bucket `trading`.
 
 ## Việc còn lại · dọn dẹp và an toàn
 - [x] Supabase: chuyển sang project Singapore, tách schema `trading` / `util`, `id` uuid (2026-11-18).
 - [x] Supabase: xoá project Sydney (Deren xoá 2026-11-18).
 - [x] Supabase: thu quyền `anon` / `authenticated` trên `trade_plans` (làm khi tạo lại bảng 2026-11-17).
+- [x] `public.rls_auto_enable()` (event trigger Supabase tự tạo, owner `postgres`): chỉ `postgres` + `service_role` có EXECUTE, advisor không còn cảnh báo (kiểm 2026-11-21).
+- [ ] Advisor còn WARN "Leaked password protection" (Auth): không ảnh hưởng vì chỉ đăng nhập Discord; bật nếu sau này có mật khẩu.
 - [ ] Khi có nhiều API: đổi `PLAN_TOKEN` thành token chung (ví dụ `API_TOKEN`) hoặc chuyển sang đăng nhập.
 - [x] Artifact đổi tên "NQ Trade Plan · Composite × pRTH × OVN", dùng chung `plan-core.js`, nguồn trong `artifact/`.
 - [x] Gỡ `i18n/__pycache__/` khỏi git (đã thêm vào `.gitignore`).
