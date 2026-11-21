@@ -3,7 +3,7 @@
 Danh sách việc còn lại. Khi Deren nhắn "liệt kê các việc còn lại", trả lời từ file này.
 Hướng dài hạn: **web app cá nhân / dashboard** (xem [07-chuyen-doi-web-app.md](07-chuyen-doi-web-app.md)).
 
-Cập nhật: 2026-11-19 (Dashboard đợt 5 · ý tưởng v2).
+Cập nhật: 2026-11-21 (đối chiếu trạng thái thật, chốt đợt ship dashboard, phương án T12).
 
 ## Đã xong
 - [x] Trade Plan · Composite × pRTH × OVN là system chính (2026-11-17): gộp Plan Builder cổ điển + Testing plan thành trang `plan.html`, Plan Builder vẽ ảnh TPO kèm plan chữ, copy ảnh.
@@ -116,7 +116,8 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [ ] Deren đổi tên app trên Discord Developer Portal thành "ZenDojo" (màn hình đồng ý khi đăng nhập), đặt icon server / app bằng PNG logo.
 - [x] Đổi tên dự án thành **ZenDojo** trong code và tài liệu (D50, 2026-11-20): `package.json`, `supabase/config.toml`, `CLAUDE.md`, `claude/`, subagent, hook, artifact.
 - [x] GitHub repo đổi tên `HiamDeren/zendojo`; Vercel project đổi tên `zendojo` (2026-11-20).
-- [ ] Còn lại theo `docs/dashboard-setup.md` → "Đổi tên sang ZenDojo": domain `zendojo-deren.vercel.app` (domain cũ chuyển hướng), Supabase project `ZenDojo` + Auth URL, `ApiUrl` của indicator ATAS.
+- [x] Vercel domain `zendojo-deren.vercel.app` (Production); `orderflow-trading-system.vercel.app` chuyển hướng **307** (docs ghi 308; 307 vẫn giữ POST) — kiểm 2026-11-21.
+- [ ] Còn lại theo `docs/dashboard-setup.md` → "Đổi tên sang ZenDojo": Supabase Auth Site URL + Redirect URLs domain mới, `ApiUrl` của indicator ATAS.
 - [ ] Publish lại artifact claude.ai (domain mới trong `artifact/index.html`).
 
 **Còn lại:**
@@ -124,6 +125,22 @@ Bản thiết kế (canvas): https://claude.ai/artifact/Bpk6CF9e83hZtGRdZeKTnw. 
 - [x] `/` chuyển hướng vào dashboard (đã đăng nhập) hoặc `/login`; trang chủ học cũ ở `/learn` (2026-11-18).
 - [ ] Test tự động (Vitest cho `lib/journal.ts`, `lib/econ.ts`; Playwright cho luồng đăng nhập bằng mock).
 - [ ] Menu "Sắp có": Options (GEX / DEX / OI khi có API).
+
+## Đợt đang làm · Ship dashboard lên production (chốt 2026-11-21)
+Thực tế: `production` vẫn ở PR #3 (2026-11-18); toàn bộ dashboard đợt 1–6 chỉ chạy trên Preview `development`. Giai đoạn 2–3 và một phần 5 của `claude/07` đã code xong theo hướng khác (Discord OAuth thay email allowlist) → đợt này = **Nghiệm thu + PR `development` → `production`**.
+- [x] Preview `48926cc` build READY; `check-plan-core` pass.
+- [ ] Áp migration `20261118120000_journal_images` (timestamp cũ hơn `access_members` đã áp → áp bằng MCP; `supabase db push` có thể báo lệch thứ tự).
+- [ ] Xác nhận Supabase Auth Redirect URLs có `zendojo-deren` + preview `zendojo-git-development-…`; `access` trong Exposed schemas.
+- [ ] POST/GET `/api/plan` trên Preview với JSON mẫu (`notify:false` vì `DISCORD_WEBHOOK_TRADE_PLAN` chỉ có ở Production), xoá dòng + ảnh test.
+- [ ] Mở mọi URL cũ + `.en` + hash chương trên Preview.
+- [ ] Advisor security: còn 7 INFO `rls_enabled_no_policy` (cố ý, chỉ service_role) + WARN leaked password (không dùng đăng nhập mật khẩu) — ghi nhận, không sửa.
+- [ ] Mở PR `development` → `production`, Deren duyệt.
+
+## T12 · Log phiên vào Journal (chờ Deren duyệt phương án)
+- Log phiên ở artifact lưu localStorage khoá **`cb-log`** (chưa có trong danh sách `claude/03`; khung cũ `ov-log`). Trường: date, p (vị trí composite), b (pRTH build), o (OVN), bias, ot (open type + hướng), ib, edge (phản ứng mép HVN), reach (tới HVN kế), setup, r, biasok, note.
+- Trùng với `journal_entries`: `open_type`, `bias_correct`; `r` tính được từ `journal_trades`. Đề xuất: thêm cột vào `journal_entries` thay vì bảng `session_logs` riêng (xem `claude/06` khi chốt).
+- [ ] Migration + form "Khung phiên" trong Journal + thống kê (bias đúng, mép HVN giữ, ra mép → tới HVN kế, R theo setup, khoảng tin cậy Wilson như artifact).
+- [ ] Nhập `cb-log` từ file sao lưu JSON / CSV.
 
 ## Quy ước
 - Mỗi thay đổi: sửa artifact (nếu liên quan) + push repo, Vercel tự deploy; cập nhật file này và [09-nhat-ky.md](09-nhat-ky.md).

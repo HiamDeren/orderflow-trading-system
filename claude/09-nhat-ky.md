@@ -2,6 +2,10 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-21 · Đối chiếu trạng thái, chốt đợt ship dashboard
+- Kiểm thật: production còn ở PR #3; Preview `development` READY; domain mới + redirect 307 đã chạy; `journal_images` chưa áp; thiếu `COINGECKO_API_KEY`.
+- Chốt đợt đang làm: nghiệm thu + PR `development` → `production`. Ghi phương án T12 (log phiên → cột trong `journal_entries`, khoá localStorage `cb-log`) vào `08`.
+
 ## 2026-11-20 · Dự án đổi tên thành ZenDojo (D50)
 - Code và tài liệu dùng tên mới: `package.json` (`zendojo`), `supabase/config.toml` (`project_id`), `CLAUDE.md`, `claude/01`, `02`, `04`, `08`, prompt chuyển đổi, subagent, hook SessionStart, artifact (domain mới, build lại `app.js`).
 - `docs/dashboard-setup.md`: thêm checklist đổi tên trên GitHub, Vercel, Supabase, Discord, ATAS. Domain chính mới `zendojo-deren.vercel.app` (`zendojo.vercel.app` đã có người dùng).
