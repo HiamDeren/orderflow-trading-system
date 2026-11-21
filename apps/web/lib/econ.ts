@@ -35,7 +35,7 @@ type Raw = { title?: string; country?: string; date?: string; impact?: string; f
 export async function getEconWeek(): Promise<EconWeek> {
   const src = process.env.ECON_CALENDAR_URL || DEFAULT_URL;
   try {
-    const r = await fetch(src, { next: { revalidate: REVALIDATE }, headers: { Accept: "application/json" } });
+    const r = await fetch(src, { next: { revalidate: REVALIDATE }, headers: { Accept: "application/json" }, signal: AbortSignal.timeout(8000) });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const raw = (await r.json()) as Raw[];
     if (!Array.isArray(raw)) throw new Error("dữ liệu không phải danh sách");

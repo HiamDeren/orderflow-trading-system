@@ -136,7 +136,7 @@ async function sendDiscord(webhook: string, plan: Plan, img: Buffer, fileName: s
   const fd = new FormData();
   fd.append("payload_json", JSON.stringify(payload));
   fd.append("files[0]", new Blob([new Uint8Array(img)], { type: IMAGE_MIME }), fileName);
-  const r = await fetch(webhook, { method: "POST", body: fd });
+  const r = await fetch(webhook, { method: "POST", body: fd, signal: AbortSignal.timeout(10_000) });
   if (!r.ok) throw new Error(`discord ${r.status}: ${(await r.text()).slice(0, 200)}`);
   return { sent: true };
 }

@@ -25,8 +25,8 @@
   --short: #e0947c;
   --short-bg: #281d1a;
   --short-ring: #4a2f28;
-  --sans: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --sans: var(--font-inter), Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: var(--font-jbmono), "JetBrains Mono", ui-monospace, monospace;
 }
 
 * { box-sizing: border-box; }

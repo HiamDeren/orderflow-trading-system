@@ -6,7 +6,7 @@
 //   /stock/recommendation  khuyến nghị analyst theo tháng
 //   /stock/peers      mã cùng ngành
 //   /search           tìm mã
-import { call, getEarnings, marketConfigured, type Earning } from "@/lib/market";
+import { call, type Earning, getEarnings, mapLimit, marketConfigured } from "@/lib/market";
 
 export const SYMBOL_RE = /^[A-Z][A-Z0-9.\-]{0,9}$/;
 
@@ -186,19 +186,22 @@ export function fmtBig(v: number | null | undefined) {
 
 export type MiniQuote = { symbol: string; c: number; dp: number | null };
 
-// Giá nhiều mã một lúc (watchlist, Markets). Mỗi mã 1 lệnh /quote, cache 2 phút; mã lỗi thì bỏ qua.
+const QUOTE_CONCURRENCY = 8;
+
+// Giá nhiều mã một lúc (watchlist, Markets). Mỗi mã 1 lệnh /quote (tối đa 8 lệnh cùng lúc), cache 2 phút; mã lỗi thì bỏ qua.
 export async function getQuotes(symbols: string[], revalidate = 120): Promise<MiniQuote[]> {
   if (!marketConfigured()) return [];
-  const out = await Promise.all(
-    symbols.map(async (symbol) => {
-      try {
-        const q = await call<Record<string, unknown>>(`/quote?symbol=${encodeURIComponent(symbol)}`, revalidate);
-        const c = n(q.c);
-        return c ? { symbol, c, dp: n(q.dp) } : null;
-      } catch {
-        return null;
-      }
-    }),
-  );
+  const errors: string[] = [];
+  const out = await mapLimit(symbols, QUOTE_CONCURRENCY, async (symbol) => {
+    try {
+      const q = await call<Record<string, unknown>>(`/quote?symbol=${encodeURIComponent(symbol)}`, revalidate, 0);
+      const c = n(q.c);
+      return c ? { symbol, c, dp: n(q.dp) } : null;
+    } catch (e) {
+      errors.push(`${symbol}: ${(e as Error).message}`);
+      return null;
+    }
+  });
+  if (errors.length) console.warn(`[stock] getQuotes thiếu ${errors.length}/${symbols.length} mã`, errors.slice(0, 3).join(" · "));
   return out.filter((x): x is MiniQuote => !!x);
 }
