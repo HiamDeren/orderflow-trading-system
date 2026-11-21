@@ -36,10 +36,10 @@ export default function DisplaySettings() {
           <span className="small dim">{t("Ghim mở rộng hoặc thu gọn thành cột icon")}</span>
         </span>
         <div className="seg seg-xs" role="group" aria-label="Sidebar">
-          <button aria-pressed={side === "pinned"} onClick={() => setSide("pinned")}>
+          <button type="button" aria-pressed={side === "pinned"} onClick={() => setSide("pinned")}>
             {t("Ghim")}
           </button>
-          <button aria-pressed={side === "collapsed"} onClick={() => setSide("collapsed")}>
+          <button type="button" aria-pressed={side === "collapsed"} onClick={() => setSide("collapsed")}>
             {t("Thu gọn")}
           </button>
         </div>

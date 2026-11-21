@@ -64,7 +64,7 @@ export default function MembersPanel() {
     <section className="card members" aria-label={t("Khách truy cập")}>
       <div className="row">
         <span className="lbl">{t("Khách truy cập")}</span>
-        <button className="btn sm" onClick={load}>
+        <button type="button" className="btn sm" onClick={load}>
           {t("Làm mới")}
         </button>
       </div>
@@ -114,17 +114,17 @@ export default function MembersPanel() {
                   </span>
                   <span className="hstack" style={{ gap: 6 }}>
                     {m.status !== "guest" && (
-                      <button className="btn primary sm" disabled={!!busy} onClick={() => act("approve", m.discord_id)}>
+                      <button type="button" className="btn primary sm" disabled={!!busy} onClick={() => act("approve", m.discord_id)}>
                         {t("Duyệt")}
                       </button>
                     )}
                     {m.status !== "blocked" && (
-                      <button className="btn sm" disabled={!!busy} onClick={() => act("block", m.discord_id)}>
+                      <button type="button" className="btn sm" disabled={!!busy} onClick={() => act("block", m.discord_id)}>
                         {m.status === "guest" ? t("Gỡ quyền") : t("Từ chối")}
                       </button>
                     )}
                     {m.status === "blocked" && (
-                      <button className="btn sm" disabled={!!busy} onClick={() => act("remove", m.discord_id)}>
+                      <button type="button" className="btn sm" disabled={!!busy} onClick={() => act("remove", m.discord_id)}>
                         {t("Xoá")}
                       </button>
                     )}
@@ -159,7 +159,7 @@ export default function MembersPanel() {
             maxLength={200}
             onChange={(e) => setNote(e.target.value)}
           />
-          <button className="btn" disabled={!!busy || id.length < 5}>
+          <button type="submit" className="btn" disabled={!!busy || id.length < 5}>
             {t("Thêm khách")}
           </button>
         </form>

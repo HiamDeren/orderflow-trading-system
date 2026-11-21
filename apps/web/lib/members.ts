@@ -52,7 +52,8 @@ export async function listMembers(): Promise<{ ok: true; rows: Member[] } | { ok
 const TTL = 30_000;
 // Đặt trên globalThis: Next.js tách module cho route API và trang, Map riêng thì gỡ quyền ở API không xoá được cache của trang.
 const G = globalThis as unknown as { __deskGuestCache?: Map<string, { ok: boolean; at: number }> };
-const cache = (G.__deskGuestCache ??= new Map());
+if (!G.__deskGuestCache) G.__deskGuestCache = new Map();
+const cache = G.__deskGuestCache;
 
 export async function isGuest(discordId: string): Promise<boolean> {
   const hit = cache.get(discordId);

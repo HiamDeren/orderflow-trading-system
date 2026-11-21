@@ -71,7 +71,9 @@ export default async function ProfilePage() {
           <span className="small dim">{t("Avatar, tên và ID lấy từ Discord mỗi lần đăng nhập")}</span>
         </div>
         <form action="/auth/logout" method="post">
-          <button className="btn">{t("Đăng xuất")}</button>
+          <button type="submit" className="btn">
+            {t("Đăng xuất")}
+          </button>
         </form>
       </section>
 
@@ -129,7 +131,9 @@ export default async function ProfilePage() {
             </span>
           </div>
           <form action="/auth/logout?scope=global" method="post">
-            <button className="btn danger">{t("Đăng xuất mọi thiết bị")}</button>
+            <button type="submit" className="btn danger">
+              {t("Đăng xuất mọi thiết bị")}
+            </button>
           </form>
         </section>
       </div>

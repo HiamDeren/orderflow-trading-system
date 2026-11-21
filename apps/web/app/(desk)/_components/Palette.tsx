@@ -85,6 +85,7 @@ export default function Palette({ open, onClose, guest = false }: { open: boolea
   };
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: bấm ra ngoài để đóng chỉ là tiện ích chuột; bàn phím dùng Esc trong ô tìm
     <div className="pal-scrim" onMouseDown={onClose}>
       <div className="pal" role="dialog" aria-modal="true" aria-label={t("Tìm nhanh")} onMouseDown={(e) => e.stopPropagation()}>
         <label className="pal-in">
@@ -113,10 +114,17 @@ export default function Palette({ open, onClose, guest = false }: { open: boolea
           />
           <kbd className="mono">Esc</kbd>
         </label>
-        <ul className="pal-list" role="listbox" aria-label={t("Kết quả")}>
+        {/* Danh sách nút thường (không dùng listbox: option không được chứa nút). Mũi tên lên / xuống trong ô tìm đổi mục đang chọn. */}
+        <ul className="pal-list" aria-label={t("Kết quả")}>
           {cmds.map((c, k) => (
-            <li key={c.id} role="option" aria-selected={k === i}>
-              <button className={k === i ? "on" : ""} onMouseEnter={() => setI(k)} onClick={() => go(c)}>
+            <li key={c.id}>
+              <button
+                type="button"
+                className={k === i ? "on" : ""}
+                aria-current={k === i ? "true" : undefined}
+                onMouseEnter={() => setI(k)}
+                onClick={() => go(c)}
+              >
                 <Icon name={c.icon} size={16} />
                 <span>{c.label}</span>
                 <span className="small dim">{c.hint}</span>

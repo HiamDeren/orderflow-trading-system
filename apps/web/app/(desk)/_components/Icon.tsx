@@ -41,6 +41,7 @@ export default function Icon({ name, size = 20 }: { name: string; size?: number 
       style={{ flex: "none" }}
     >
       {(P[name] || []).map((d, i) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: danh sách path cố định của icon
         <path key={i} d={d} />
       ))}
     </svg>

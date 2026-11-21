@@ -44,10 +44,10 @@ export default function PnlView({ weeks, today }: { weeks: PnlWeek[]; today: str
           />
         </div>
         <div className="seg" role="group" aria-label={t("Đơn vị")}>
-          <button aria-pressed={unit === "usd"} onClick={() => setUnit("usd")}>
+          <button type="button" aria-pressed={unit === "usd"} onClick={() => setUnit("usd")}>
             $
           </button>
-          <button aria-pressed={unit === "r"} onClick={() => setUnit("r")}>
+          <button type="button" aria-pressed={unit === "r"} onClick={() => setUnit("r")}>
             R
           </button>
         </div>
@@ -64,21 +64,22 @@ export default function PnlView({ weeks, today }: { weeks: PnlWeek[]; today: str
               ))}
             </div>
             {weeks.map((w, wi) => (
-              <div className="pnl-week" key={wi}>
+              <div className="pnl-week" key={w.days.find((d) => d.date)?.date ?? wi}>
                 {w.days.map((d, i) => {
-                  if (!d.date) return <span key={i} className="pnl-cell blank" />;
+                  // biome-ignore lint/suspicious/noArrayIndexKey: ô trống đầu / cuối tháng, chỉ có vị trí
+                  if (!d.date) return <span key={`b${i}`} className="pnl-cell blank" />;
                   const v = val(d.net, d.r);
                   const future = d.date > today;
                   const cls = "pnl-cell " + (d.n ? (v > 0 ? "win" : v < 0 ? "loss" : "") : "empty") + (d.date === today ? " today" : "");
                   const label = `${dm(d.date)}: ${d.n ? f(d.net, d.r) : d.has ? t("không trade") : t("chưa có journal")}`;
                   return future ? (
-                    <span key={i} className="pnl-cell empty" aria-label={label}>
+                    <span key={d.date} className="pnl-cell empty" role="group" aria-label={label}>
                       <span className="mono small" style={{ color: "var(--ghost)" }}>
                         {d.date.slice(8)}
                       </span>
                     </span>
                   ) : (
-                    <Link key={i} href={`/journal?date=${d.date}`} className={cls} aria-label={label}>
+                    <Link key={d.date} href={`/journal?date=${d.date}`} className={cls} aria-label={label}>
                       <span className="mono small" style={{ color: d.date === today ? "var(--accent)" : "var(--muted)" }}>
                         {d.date.slice(8)}
                       </span>

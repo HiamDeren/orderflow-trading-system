@@ -8,6 +8,7 @@ import { useUi } from "../_components/Ui";
 type TextField = readonly [string, string, string];
 type SessionField = readonly [string, string, readonly (readonly [string, string])[]];
 type Row = {
+  _k: string; // khoá React ổn định, không gửi lên API
   entry_time: string;
   side: string;
   qty: string;
@@ -22,7 +23,10 @@ type Row = {
 };
 
 const s = (v: unknown) => (v === null || v === undefined ? "" : String(v));
+let rowSeq = 0;
+const rowKey = () => `r${++rowSeq}`;
 const toRow = (t: Trade): Row => ({
+  _k: rowKey(),
   entry_time: s(t.entry_time).slice(0, 5),
   side: t.side || "Long",
   qty: s(t.qty || 1),
@@ -36,6 +40,7 @@ const toRow = (t: Trade): Row => ({
   mistakes: (t.mistakes || []).join(", "),
 });
 const empty = (): Row => ({
+  _k: rowKey(),
   entry_time: "",
   side: "Long",
   qty: "1",
@@ -132,7 +137,7 @@ export default function JournalEditor({
     try {
       const body = {
         day: { trade_date: date, ...Object.fromEntries(Object.entries(day).map(([k, v]) => [k, v || null])) },
-        trades: rows.map((r) => ({
+        trades: rows.map(({ _k, ...r }) => ({
           ...r,
           qty: Number(r.qty) || 1,
           r: r.r === "" ? null : Number(r.r),
@@ -192,7 +197,7 @@ export default function JournalEditor({
                       })
                     : t("Chưa lưu")}
             </span>
-            <button className="btn primary" onClick={save} disabled={saving} title="Ctrl + S">
+            <button type="button" className="btn primary" onClick={save} disabled={saving} title="Ctrl + S">
               {saving ? t("Đang lưu…") : t("Lưu journal")}
             </button>
           </div>
@@ -235,6 +240,7 @@ export default function JournalEditor({
             {t("Lệnh")} · {rows.length}
           </span>
           <button
+            type="button"
             className="btn sm"
             onClick={() => {
               setDirty(true);
@@ -268,7 +274,7 @@ export default function JournalEditor({
               </thead>
               <tbody>
                 {rows.map((r, i) => (
-                  <tr key={i}>
+                  <tr key={r._k}>
                     <td>
                       <input
                         className="input mono"
@@ -388,6 +394,7 @@ export default function JournalEditor({
                     </td>
                     <td>
                       <button
+                        type="button"
                         className="btn sm"
                         aria-label={t("Xoá lệnh {n}", { n: i + 1 })}
                         onClick={() => {
@@ -437,10 +444,10 @@ export default function JournalEditor({
         <div className="row wrap">
           <span className="lbl">{t("Recap chi tiết")}</span>
           <div className="seg seg-xs" role="group" aria-label={t("Kiểu xem recap")}>
-            <button aria-pressed={!allFields} onClick={() => setAllFields(false)}>
+            <button type="button" aria-pressed={!allFields} onClick={() => setAllFields(false)}>
               {t("Theo tab")}
             </button>
-            <button aria-pressed={allFields} onClick={() => setAllFields(true)}>
+            <button type="button" aria-pressed={allFields} onClick={() => setAllFields(true)}>
               {t("Tất cả")}
             </button>
           </div>
@@ -471,8 +478,9 @@ export default function JournalEditor({
                 >
                   {t(label)}
                   {String(day[k] || "").trim() && (
-                    <span className="long" aria-label={t("đã ghi")} style={{ marginLeft: 6 }}>
-                      ●
+                    <span className="long" style={{ marginLeft: 6 }}>
+                      <span className="sr-only">{t("đã ghi")}</span>
+                      <span aria-hidden="true">●</span>
                     </span>
                   )}
                 </a>

@@ -52,25 +52,10 @@
         "useOptionalChain": "warn"
       },
       "suspicious": {
-        "noArrayIndexKey": "warn",
-        "noAssignInExpressions": "warn",
-        "useIterableCallbackReturn": "warn",
         "noDocumentCookie": "off"
       },
-      "correctness": {
-        "useExhaustiveDependencies": "warn"
-      },
-      "security": {
-        "noDangerouslySetInnerHtml": "warn"
-      },
       "a11y": {
-        "useButtonType": "warn",
-        "useSemanticElements": "warn",
-        "useKeyWithClickEvents": "warn",
-        "noStaticElementInteractions": "warn",
-        "useAriaPropsSupportedByRole": "warn",
-        "useFocusableInteractive": "warn",
-        "noNoninteractiveElementToInteractiveRole": "warn"
+        "useSemanticElements": "off"
       }
     }
   },

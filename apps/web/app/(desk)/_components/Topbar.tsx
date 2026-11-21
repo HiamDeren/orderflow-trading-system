@@ -63,7 +63,7 @@ export default function Topbar({ events, onSearch, guest = false }: { events: Ne
         <span className="small dim">{t("Không còn tin mạnh trong tuần")}</span>
       )}
       <div className="tb-right">
-        <button className="tb-search" onClick={onSearch} aria-label={t("Tìm nhanh")}>
+        <button type="button" className="tb-search" onClick={onSearch} aria-label={t("Tìm nhanh")}>
           <Icon name="search" size={15} />
           <span>{guest ? t("Mã cổ phiếu, tên trang…") : t("Mã, trang, ngày journal…")}</span>
           <kbd className="mono">Ctrl K</kbd>

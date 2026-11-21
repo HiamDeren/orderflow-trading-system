@@ -65,10 +65,10 @@ export default function EarningsView({
     <>
       <div className="row wrap">
         <div className="seg" role="group" aria-label={t("Phạm vi")}>
-          <button aria-pressed={onlyNq} onClick={() => setOnlyNq(true)}>
+          <button type="button" aria-pressed={onlyNq} onClick={() => setOnlyNq(true)}>
             {t("NQ top ({n})", { n: nqCount })}
           </button>
-          <button aria-pressed={!onlyNq} onClick={() => setOnlyNq(false)}>
+          <button type="button" aria-pressed={!onlyNq} onClick={() => setOnlyNq(false)}>
             {t("Tất cả ({n})", { n: items.length })}
           </button>
         </div>
@@ -84,6 +84,7 @@ export default function EarningsView({
           </div>
           <div className="ern-grid">
             {cells.map((d, i) => {
+              // biome-ignore lint/suspicious/noArrayIndexKey: ô trống đầu tháng, chỉ có vị trí
               if (!d) return <span key={"x" + i} />;
               const evs = byDay.get(d) || [];
               const cls = "ern-cell" + (d === day ? " sel" : "") + (d === today ? " today" : "") + (evs.length ? "" : " empty");

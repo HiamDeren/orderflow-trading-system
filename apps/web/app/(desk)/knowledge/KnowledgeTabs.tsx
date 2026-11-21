@@ -71,7 +71,7 @@ export default function KnowledgeTabs() {
     <div className="stack" style={{ gap: 16 }}>
       <div className="seg" role="tablist" aria-label={t("Phần kiến thức")} style={{ alignSelf: "flex-start", padding: 4 }}>
         {TRACKS.map((x, i) => (
-          <button key={x.short} role="tab" aria-selected={i === tab} onClick={() => setTab(i)} style={{ minHeight: 40, padding: "0 16px" }}>
+          <button type="button" key={x.short} role="tab" aria-selected={i === tab} onClick={() => setTab(i)} style={{ minHeight: 40, padding: "0 16px" }}>
             <span className="mono" style={{ fontSize: 11, marginRight: 8, color: i === tab ? x.color : "var(--faint)" }}>
               0{i + 1}
             </span>

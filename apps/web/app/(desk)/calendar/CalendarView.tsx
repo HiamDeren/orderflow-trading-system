@@ -66,10 +66,10 @@ export default function CalendarView({
         <fieldset className="filter">
           <legend>
             <span className="lbl">{t("Mức tác động")}</span>
-            <button className="link" onClick={() => setPrefs({ ...prefs, imp: [...IMPACTS] })}>
+            <button type="button" className="link" onClick={() => setPrefs({ ...prefs, imp: [...IMPACTS] })}>
               {t("tất cả")}
             </button>
-            <button className="link" onClick={() => setPrefs({ ...prefs, imp: [] })}>
+            <button type="button" className="link" onClick={() => setPrefs({ ...prefs, imp: [] })}>
               {t("bỏ hết")}
             </button>
           </legend>
@@ -86,10 +86,10 @@ export default function CalendarView({
         <fieldset className="filter" style={{ flex: "1 1 420px" }}>
           <legend>
             <span className="lbl">Currencies</span>
-            <button className="link" onClick={() => setPrefs({ ...prefs, cur: [...CURRENCIES] })}>
+            <button type="button" className="link" onClick={() => setPrefs({ ...prefs, cur: [...CURRENCIES] })}>
               {t("tất cả")}
             </button>
-            <button className="link" onClick={() => setPrefs({ ...prefs, cur: [] })}>
+            <button type="button" className="link" onClick={() => setPrefs({ ...prefs, cur: [] })}>
               {t("bỏ hết")}
             </button>
           </legend>
@@ -97,7 +97,13 @@ export default function CalendarView({
             {CURRENCIES.map((c) => {
               const on = prefs.cur.includes(c);
               return (
-                <button key={c} className={"chip mono" + (on ? " on" : "")} aria-pressed={on} onClick={() => setPrefs({ ...prefs, cur: toggle(prefs.cur, c) })}>
+                <button
+                  type="button"
+                  key={c}
+                  className={"chip mono" + (on ? " on" : "")}
+                  aria-pressed={on}
+                  onClick={() => setPrefs({ ...prefs, cur: toggle(prefs.cur, c) })}
+                >
                   {c}
                   <span className="dim" style={{ fontSize: 11 }}>
                     {countByCur.get(c) || 0}
@@ -114,10 +120,10 @@ export default function CalendarView({
           <div className="row">
             <span style={{ fontSize: 16, fontWeight: 600 }}>{t("Tháng {m} · {y}", { m: Number(mo), y })}</span>
             <div className="seg seg-xs" role="group" aria-label={t("Kiểu xem")}>
-              <button aria-pressed={mode === "day"} onClick={() => setMode("day")}>
+              <button type="button" aria-pressed={mode === "day"} onClick={() => setMode("day")}>
                 {t("Ngày")}
               </button>
-              <button aria-pressed={mode === "week"} onClick={() => setMode("week")}>
+              <button type="button" aria-pressed={mode === "week"} onClick={() => setMode("week")}>
                 {t("Tuần")}
               </button>
             </div>
@@ -129,6 +135,7 @@ export default function CalendarView({
           </div>
           <div className="cal-grid">
             {cells.map((d, i) => {
+              // biome-ignore lint/suspicious/noArrayIndexKey: ô trống đầu tháng, chỉ có vị trí
               if (!d) return <span key={"x" + i} />;
               const evs = byDay.get(d) || [];
               const top = evs.reduce<Impact | null>((a, e) => (!a || IMPACT_RANK[e.impact] > IMPACT_RANK[a] ? e.impact : a), null);
@@ -143,6 +150,7 @@ export default function CalendarView({
               const cls = "cal-day" + (sel ? " sel" : "") + (d === today ? " today" : "");
               return (
                 <button
+                  type="button"
                   key={d}
                   className={cls}
                   onClick={() => setDay(d)}
@@ -156,7 +164,7 @@ export default function CalendarView({
             })}
           </div>
           {hasData.has(today) && day !== today && (
-            <button className="btn" onClick={() => setDay(today)}>
+            <button type="button" className="btn" onClick={() => setDay(today)}>
               {t("Về hôm nay")}
             </button>
           )}
@@ -205,6 +213,7 @@ export default function CalendarView({
                 return (
                   <section key={d} className={"wk-col" + (d === today ? " today" : "")} aria-label={`${DOW[lang][dowOf(d)]} ${viDayMonth(d)}`}>
                     <button
+                      type="button"
                       className="wk-col-head"
                       onClick={() => {
                         setDay(d);
@@ -219,7 +228,13 @@ export default function CalendarView({
                     </button>
                     {evs.length ? (
                       evs.map((e) => (
-                        <button key={e.id} className={"wk-ev" + (pick?.id === e.id ? " on" : "")} onClick={() => setPick(e)} aria-pressed={pick?.id === e.id}>
+                        <button
+                          type="button"
+                          key={e.id}
+                          className={"wk-ev" + (pick?.id === e.id ? " on" : "")}
+                          onClick={() => setPick(e)}
+                          aria-pressed={pick?.id === e.id}
+                        >
                           <span className={"bar imp-" + e.impact} aria-hidden="true" />
                           <span className="wk-ev-b">
                             <span className="mono small">
@@ -266,7 +281,7 @@ export default function CalendarView({
                     <b className="mono">{pick.previous || "—"}</b>
                   </span>
                 </div>
-                <button className="icon-btn" aria-label={t("Đóng")} onClick={() => setPick(null)}>
+                <button type="button" className="icon-btn" aria-label={t("Đóng")} onClick={() => setPick(null)}>
                   ✕
                 </button>
               </div>

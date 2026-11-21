@@ -58,6 +58,7 @@ export function BarChart({ data, unit = "", title, estLabel }: { data: Bar[]; un
               ? `M${cx - bw / 2},${y0} V${top + r} Q${cx - bw / 2},${top} ${cx - bw / 2 + r},${top} H${cx + bw / 2 - r} Q${cx + bw / 2},${top} ${cx + bw / 2},${top + r} V${y0} Z`
               : `M${cx - bw / 2},${y0} V${top + hgt - r} Q${cx - bw / 2},${top + hgt} ${cx - bw / 2 + r},${top + hgt} H${cx + bw / 2 - r} Q${cx + bw / 2},${top + hgt} ${cx + bw / 2},${top + hgt - r} V${y0} Z`;
           return (
+            // biome-ignore lint/a11y/noStaticElementInteractions: chỉ đổi cột được tô khi rê chuột; số liệu từng kỳ vẫn đọc được ở nhãn trục và bảng
             <g key={d.label} onMouseEnter={() => setHover(i)}>
               <rect x={cx - slot / 2} y={PAD.t} width={slot} height={ih} fill="transparent" />
               <path d={path} className={"bar" + (d.v < 0 ? " neg" : "") + (hover === i ? " on" : "")} />

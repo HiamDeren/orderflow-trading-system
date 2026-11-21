@@ -51,7 +51,7 @@ export default function StockDrawer({ symbol, onClose }: { symbol: string; onClo
   return (
     <div className="drawer stack" style={{ gap: 14 }}>
       <div className="row">
-        <button className="btn sm" onClick={onClose}>
+        <button type="button" className="btn sm" onClick={onClose}>
           ‹ {t("Danh sách ngày")}
         </button>
         <Link className="btn sm primary" href={`/stock/${symbol}`}>
