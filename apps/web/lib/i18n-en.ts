@@ -639,5 +639,11 @@ const EN: Record<string, string> = {
   "Lạc khỏi võ đường": "Lost outside the dojo",
   "Trang này không có trong ZenDojo. Hít một hơi, quay lại Dashboard.": "This page isn't in ZenDojo. Take a breath and head back to the Dashboard.",
   "Về Dashboard": "Back to Dashboard",
+  // trạng thái tải / lỗi (loading.tsx, error.tsx, Suspense)
+  "Thiếu {n} mã (nguồn giới hạn tần suất), tải lại sau ít phút.": "{n} symbol(s) missing (source rate limit), reload in a few minutes.",
+  "Trang gặp lỗi": "Something went wrong",
+  "Phần này không tải được. Dữ liệu đã lưu không bị ảnh hưởng.": "This section failed to load. Your saved data is not affected.",
+  "Mã lỗi": "Error ID",
+  "Đang đọc bài…": "Loading article…",
 };
 export default EN;

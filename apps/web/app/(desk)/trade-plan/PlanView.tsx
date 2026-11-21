@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DOW, MON_HEAD } from "@/lib/i18n";
 import { planImageSrc as imgSrc } from "@/lib/plan-url";
 import { addDays, dowOf, monthRange, shiftMonth, viDayMonth } from "@/lib/time";
@@ -8,7 +8,7 @@ import CopyImage from "../_components/CopyImage";
 import { useUi } from "../_components/Ui";
 
 type Summary = { bias?: string; conf?: string; location?: string; setup?: string; target?: number | null; price?: number; flip?: string };
-type PlanItem = { trade_date: string; symbol: string; summary: Summary | null; image_path: string | null; updated_at: string };
+export type PlanItem = { trade_date: string; symbol: string; summary: Summary | null; image_path: string | null; updated_at: string };
 type PlanDetail = PlanItem & { plan_text?: string | null };
 type Step = { name: string; state: "ok" | "err" | "skip" | "wait"; note: string };
 
@@ -17,7 +17,7 @@ const BIAS = { long: "Long", short: "Short", flat: "Trung tính" } as const;
 const DOTC = { long: "var(--long)", short: "var(--short)", flat: "var(--muted)" } as const;
 const etTime = (iso: string) => new Date(iso).toLocaleTimeString("en-GB", { timeZone: "America/New_York", hour: "2-digit", minute: "2-digit" }) + " ET";
 
-export default function PlanView({ today, initialDate }: { today: string; initialDate: string | null }) {
+export default function PlanView({ today, initialDate, initialPlans }: { today: string; initialDate: string | null; initialPlans: PlanItem[] | null }) {
   const { t, lang } = useUi();
   const [src, setSrc] = useState<"atas" | "json">("json");
   const [text, setText] = useState("");
@@ -27,7 +27,9 @@ export default function PlanView({ today, initialDate }: { today: string; initia
   const [status, setStatus] = useState("");
 
   const [month, setMonth] = useState((initialDate || today).slice(0, 7));
-  const [plans, setPlans] = useState<PlanItem[] | null>(null);
+  const [plans, setPlans] = useState<PlanItem[] | null>(initialPlans);
+  // Danh sách tháng đầu tiên server đã nạp sẵn (page.tsx) → bỏ lần fetch đầu khi mở trang
+  const preloaded = useRef<string | null>(initialPlans ? month : null);
   const [listErr, setListErr] = useState("");
   const [sel, setSel] = useState<string | null>(initialDate);
   const [detail, setDetail] = useState<PlanDetail | null>(null);
@@ -67,6 +69,10 @@ export default function PlanView({ today, initialDate }: { today: string; initia
   }, []);
 
   useEffect(() => {
+    if (preloaded.current === month) {
+      preloaded.current = null;
+      return;
+    }
     loadMonth(month);
   }, [month, loadMonth]);
   useEffect(() => {
@@ -148,10 +154,10 @@ export default function PlanView({ today, initialDate }: { today: string; initia
           <div className="row wrap">
             <span className="lbl">{t("Gửi plan")}</span>
             <div className="seg" role="tablist" aria-label={t("Nguồn plan")}>
-              <button role="tab" aria-selected={src === "atas"} onClick={() => setSrc("atas")}>
+              <button type="button" role="tab" aria-selected={src === "atas"} onClick={() => setSrc("atas")}>
                 ATAS X
               </button>
-              <button role="tab" aria-selected={src === "json"} onClick={() => setSrc("json")}>
+              <button type="button" role="tab" aria-selected={src === "json"} onClick={() => setSrc("json")}>
                 {t("Dán JSON")}
               </button>
             </div>
@@ -173,7 +179,7 @@ export default function PlanView({ today, initialDate }: { today: string; initia
                 <label className="check">
                   <input type="checkbox" checked={notify} onChange={(e) => setNotify(e.target.checked)} /> {t("Gửi kèm Discord")}
                 </label>
-                <button className="btn primary" onClick={send} disabled={sending || !text.trim()}>
+                <button type="button" className="btn primary" onClick={send} disabled={sending || !text.trim()}>
                   {sending ? t("Đang gửi…") : t("Gửi plan")}
                 </button>
               </div>
@@ -210,7 +216,7 @@ export default function PlanView({ today, initialDate }: { today: string; initia
                 )}
               </span>
               {steps.map((s, i) => (
-                <div key={i} className="row" style={{ minHeight: 34, alignItems: "flex-start", paddingTop: 6 }}>
+                <div key={s.name} className="row" style={{ minHeight: 34, alignItems: "flex-start", paddingTop: 6 }}>
                   <span className="hstack" style={{ gap: 10, flexWrap: "nowrap" }}>
                     <span
                       className={"dot " + (s.state === "ok" ? "ok" : s.state === "err" ? "err" : s.state === "wait" ? "wait" : "")}
@@ -311,11 +317,17 @@ export default function PlanView({ today, initialDate }: { today: string; initia
             <span className="small muted">{t("Chọn ngày để xem lại plan và ảnh của ngày đó")}</span>
           </div>
           <div className="hstack" style={{ gap: 6 }}>
-            <button className="btn icon" aria-label={t("Tháng trước")} onClick={() => setMonth(shiftMonth(month, -1))}>
+            <button type="button" className="btn icon" aria-label={t("Tháng trước")} onClick={() => setMonth(shiftMonth(month, -1))}>
               ‹
             </button>
             <span style={{ fontSize: 14, fontWeight: 600, minWidth: 120, textAlign: "center" }}>{t("Tháng {m} · {y}", { m: Number(mo), y })}</span>
-            <button className="btn icon" aria-label={t("Tháng sau")} onClick={() => setMonth(shiftMonth(month, 1))} disabled={month >= today.slice(0, 7)}>
+            <button
+              type="button"
+              className="btn icon"
+              aria-label={t("Tháng sau")}
+              onClick={() => setMonth(shiftMonth(month, 1))}
+              disabled={month >= today.slice(0, 7)}
+            >
               ›
             </button>
           </div>
@@ -329,6 +341,7 @@ export default function PlanView({ today, initialDate }: { today: string; initia
           </div>
           <div className="cal-grid">
             {Array.from({ length: lead }, (_, i) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: ô trống đầu tháng, chỉ có vị trí
               <span key={"x" + i} />
             ))}
             {Array.from({ length: days }, (_, i) => {
@@ -344,6 +357,7 @@ export default function PlanView({ today, initialDate }: { today: string; initia
               const pt = tone(p.summary?.bias);
               return (
                 <button
+                  type="button"
                   key={d}
                   className={"cal-day" + (d === sel ? " sel" : "") + (d === today ? " today" : "")}
                   onClick={() => loadDetail(d)}

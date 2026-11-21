@@ -1,3 +1,4 @@
+import { requireOwner } from "@/lib/auth";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { errText } from "@/lib/db";
@@ -11,6 +12,7 @@ export const metadata: Metadata = { title: "PnL Calendar · Journal" };
 export const dynamic = "force-dynamic";
 
 export default async function PnlPage({ searchParams }: { searchParams: Promise<{ month?: string }> }) {
+  await requireOwner("/journal/pnl"); // layout + page render song song: chặn trước khi đọc database
   const q = await searchParams;
   const { t } = await getT();
   const today = etNow().date;

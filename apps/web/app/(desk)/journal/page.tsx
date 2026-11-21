@@ -1,3 +1,4 @@
+import { requireOwner } from "@/lib/auth";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { errText } from "@/lib/db";
@@ -39,6 +40,7 @@ function lastWeekday(d: string) {
 const rFmt = (r: number) => (r > 0 ? "+" : r < 0 ? "−" : "") + Math.abs(r).toFixed(1) + "R";
 
 export default async function JournalPage({ searchParams }: { searchParams: Promise<{ date?: string }> }) {
+  await requireOwner("/journal"); // layout + page render song song: chặn trước khi đọc database
   const q = await searchParams;
   const { t, ui } = await getT();
   const today = etNow().date;
@@ -53,6 +55,11 @@ export default async function JournalPage({ searchParams }: { searchParams: Prom
   let plan: PlanRow | null = null;
   let images: JournalImage[] = [];
   let imgError = "";
+  // Ảnh chạy song song với các truy vấn journal (trước đây chạy sau), lỗi ảnh vẫn tách riêng
+  const imagesP = listImages(date).then(
+    (v) => ({ ok: true as const, v }),
+    (e: unknown) => ({ ok: false as const, e }),
+  );
   try {
     const [d, m, recent, p] = await Promise.all([getDay(date), getMonth(month), getRecentDays(250), getPlan(date).catch(() => null)]);
     day = d;
@@ -63,13 +70,11 @@ export default async function JournalPage({ searchParams }: { searchParams: Prom
   } catch (e) {
     error = errText(e);
   }
+  const img = await imagesP;
   if (!error) {
-    try {
-      images = await listImages(date);
-    } catch (e) {
-      // Bảng journal_images chưa có (chưa áp migration) → phần còn lại của Journal vẫn chạy
-      imgError = /journal_images|PGRST205|42P01/.test(errText(e)) ? "chưa áp migration journal_images" : errText(e);
-    }
+    if (img.ok) images = img.v;
+    // Bảng journal_images chưa có (chưa áp migration) → phần còn lại của Journal vẫn chạy
+    else imgError = /journal_images|PGRST205|42P01/.test(errText(img.e)) ? "chưa áp migration journal_images" : errText(img.e);
   }
 
   const { start, days } = monthRange(month);

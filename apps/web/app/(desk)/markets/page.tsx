@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { marketConfigured } from "@/lib/market";
 import { CRYPTO_CATS, INDEX_ETF, NQ_MAP, SECTORS, cryptoConfigured, fmtUsd, getCrypto, getOverview, sparkPath } from "@/lib/markets";
 import { getT } from "@/lib/prefs-server";
 import { getQuotes } from "@/lib/stock";
+import { CardSkeleton } from "../_components/Skeleton";
 import { NotConfigured } from "../_components/States";
 
 export const metadata: Metadata = { title: "Markets" };
@@ -51,20 +53,32 @@ export default async function MarketsPage({ searchParams }: { searchParams: Prom
           ))}
         </nav>
       </header>
-      {tab === "crypto" ? (
-        <Crypto cat={sp.cat || ""} t={t} href={href} />
-      ) : !marketConfigured() ? (
-        <NotConfigured what="Markets" />
-      ) : tab === "stocks" ? (
-        <Stocks sector={sp.sector || "tech"} t={t} href={href} />
-      ) : (
-        <Overview t={t} />
-      )}
+      {/* Tiêu đề + tab hiện ngay; phần dữ liệu (tới ~33 lệnh quote / CoinGecko) stream vào sau */}
+      <Suspense key={`${tab}-${sp.sector || ""}-${sp.cat || ""}`} fallback={<MarketsSkeleton />}>
+        {tab === "crypto" ? (
+          <Crypto cat={sp.cat || ""} t={t} href={href} />
+        ) : !marketConfigured() ? (
+          <NotConfigured what="Markets" />
+        ) : tab === "stocks" ? (
+          <Stocks sector={sp.sector || "tech"} t={t} href={href} />
+        ) : (
+          <Overview t={t} />
+        )}
+      </Suspense>
     </>
   );
 }
 
 type T = (s: string, v?: Record<string, string | number>) => string;
+
+function MarketsSkeleton() {
+  return (
+    <div className="dash-grid two" aria-busy="true">
+      <CardSkeleton lines={6} tall />
+      <CardSkeleton lines={6} tall />
+    </div>
+  );
+}
 
 async function Overview({ t }: { t: T }) {
   const { by } = await getOverview();

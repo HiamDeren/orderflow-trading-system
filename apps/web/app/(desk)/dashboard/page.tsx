@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { cookies } from "next/headers";
 import { getViewer } from "@/lib/auth";
 import { errText } from "@/lib/db";
 import { ECON_SOURCE_PAGE, getEconWeek, localize, topImpact, type EconEvent } from "@/lib/econ";
 import { IMPACT_RANK, PREFS_COOKIE, matches, parsePrefs } from "@/lib/econ-prefs";
 import { DOW, DOW_SHORT } from "@/lib/i18n";
-import { NQ_WATCH, getEarnings, getNews, marketConfigured } from "@/lib/market";
 import { planImageSrc } from "@/lib/plan-url";
 import { fmtPx, getPlan, planView, type PlanView } from "@/lib/plans";
 import { dayNet, getRecentDays } from "@/lib/journal";
 import { getT } from "@/lib/prefs-server";
-import { getQuotes } from "@/lib/stock";
 import { PLAN_SEND, addDays, dowOf, etNow, isWeekday, mondayOf, nowIn, viDate, viDayMonth } from "@/lib/time";
 import CopyImage from "../_components/CopyImage";
 import { EventLine } from "../_components/EventRow";
 import { Timeline } from "../_components/Live";
-import { NewsRow } from "../_components/MarketBits";
+import { CardSkeleton } from "../_components/Skeleton";
+import { EarningsWeekCard, NewsCard, WatchlistCard } from "./MarketCards";
 
 export const metadata: Metadata = { title: "Dashboard" };
 export const dynamic = "force-dynamic";
@@ -24,7 +24,6 @@ export const dynamic = "force-dynamic";
 type T = (s: string, v?: Record<string, string | number>) => string;
 const BIAS_LABEL = { long: "Long", short: "Short", flat: "Trung tính" } as const;
 const MAX_LINES = 6;
-const WATCH = ["NVDA", "MSFT", "AAPL", "AMZN", "META", "AVGO", "GOOGL", "TSLA"];
 
 async function safe<V>(p: Promise<V>): Promise<{ ok: true; v: V } | { ok: false; error: string }> {
   try {
@@ -44,12 +43,10 @@ export default async function DashboardPage() {
   // Khách (D48) không xem plan / journal: không đọc database
   const isOwner = (await getViewer())?.role === "owner";
 
-  const [planRes, econ, news, earn, quotes, recent] = await Promise.all([
+  // Card thị trường (Finnhub) tách ra MarketCards.tsx + <Suspense>: trang không còn chờ nguồn chậm nhất
+  const [planRes, econ, recent] = await Promise.all([
     isOwner ? safe(getPlan(today).then((r) => (r ? planView(r) : null))) : safe(Promise.resolve(null)),
     getEconWeek(),
-    getNews("general", 6),
-    getEarnings(mon, addDays(mon, 4)),
-    getQuotes(WATCH),
     isOwner ? safe(getRecentDays(5)) : safe(Promise.resolve([] as Awaited<ReturnType<typeof getRecentDays>>)),
   ]);
 
@@ -81,7 +78,6 @@ export default async function DashboardPage() {
         href: `/calendar?day=${e.dateLocal}`,
       };
     });
-  const nqEarn = earn.items.filter((e) => NQ_WATCH.includes(e.symbol));
 
   return (
     <>
@@ -171,92 +167,18 @@ export default async function DashboardPage() {
       </div>
 
       <div className="dash-row">
-        <section className="card" aria-label={t("Watchlist · NQ top")}>
-          <div className="row">
-            <span className="lbl">{t("Watchlist · NQ top")}</span>
-            <Link href="/markets" className="small" style={{ fontWeight: 600 }}>
-              Markets
-            </Link>
-          </div>
-          {!marketConfigured() ? (
-            <p className="small dim">{t("Chưa có FINNHUB_API_KEY trên Vercel.")}</p>
-          ) : quotes.length ? (
-            <div className="watch">
-              {quotes.map((q) => {
-                const e = nqEarn.find((x) => x.symbol === q.symbol && x.date >= today);
-                return (
-                  <Link key={q.symbol} href={`/stock/${q.symbol}`} className="watch-row">
-                    <span className="mono" style={{ fontWeight: 600 }}>
-                      {q.symbol}
-                    </span>
-                    <span className="small dim watch-note">{e ? t("Earnings {d}", { d: viDayMonth(e.date) }) : ""}</span>
-                    <span className="mono">{q.c.toFixed(2)}</span>
-                    <span className={"mono small " + (q.dp === null ? "dim" : q.dp >= 0 ? "long" : "short")}>
-                      {q.dp === null ? "—" : (q.dp >= 0 ? "+" : "") + q.dp.toFixed(2) + "%"}
-                    </span>
-                  </Link>
-                );
-              })}
-            </div>
-          ) : (
-            <p className="small dim">{t("Chưa lấy được giá.")}</p>
-          )}
-        </section>
-
-        <section className="card" aria-label={t("Earnings tuần này · NQ top")}>
-          <div className="row">
-            <span className="lbl">{t("Earnings tuần này · NQ top")}</span>
-            <Link href="/earnings" className="small" style={{ fontWeight: 600 }}>
-              {t("Lịch")}
-            </Link>
-          </div>
-          {!earn.ok ? (
-            <p className="small dim">{earn.configured ? earn.error : t("Chưa có FINNHUB_API_KEY trên Vercel.")}</p>
-          ) : (
-            <div className="ewk">
-              {[0, 1, 2, 3, 4]
-                .map((i) => addDays(mon, i))
-                .map((d) => (
-                  <div key={d} className={"ewk-d" + (d === today ? " today" : "")}>
-                    <span className="small dim">
-                      {DOW_SHORT[ui.lang][dowOf(d)]} <b className="mono">{d.slice(8)}</b>
-                    </span>
-                    {nqEarn
-                      .filter((e) => e.date === d)
-                      .map((e) => (
-                        <Link key={e.symbol} href={`/stock/${e.symbol}`} className={"ern-sym mono nq" + (e.hour === "amc" ? " amc" : "")}>
-                          {e.symbol}
-                        </Link>
-                      ))}
-                  </div>
-                ))}
-            </div>
-          )}
-        </section>
+        <Suspense fallback={<CardSkeleton label={t("Watchlist · NQ top")} lines={8} />}>
+          <WatchlistCard today={today} mon={mon} />
+        </Suspense>
+        <Suspense fallback={<CardSkeleton label={t("Earnings tuần này · NQ top")} lines={5} />}>
+          <EarningsWeekCard today={today} mon={mon} />
+        </Suspense>
       </div>
 
       <div className={"dash-row" + (isOwner ? "" : " solo")}>
-        <section className="card" aria-label="News">
-          <div className="row">
-            <span className="lbl">News</span>
-            <Link href="/news" className="small" style={{ fontWeight: 600 }}>
-              {t("Xem tất cả")}
-            </Link>
-          </div>
-          {!marketConfigured() ? (
-            <p className="small dim">{t("Chưa có FINNHUB_API_KEY trên Vercel.")}</p>
-          ) : !news.ok ? (
-            <p className="small short">{news.error}</p>
-          ) : news.items.length ? (
-            <div className="news-list">
-              {news.items.slice(0, 5).map((n) => (
-                <NewsRow key={n.id} n={n} now={nowMs} compact href={`/news?cat=general&id=${encodeURIComponent(n.id)}`} />
-              ))}
-            </div>
-          ) : (
-            <p className="small dim">{t("Chưa có tin.")}</p>
-          )}
-        </section>
+        <Suspense fallback={<CardSkeleton label="News" lines={5} />}>
+          <NewsCard nowMs={nowMs} />
+        </Suspense>
 
         {isOwner && (
           <section className="card" aria-label="Journal">
@@ -325,7 +247,7 @@ function PlanCard({ p, t }: { p: PlanView; t: T }) {
         </div>
       </div>
       <div className="split" style={{ gap: 18 }}>
-        <div style={{ flex: "1 1 300px", minWidth: 0 }} aria-label={t("Các level")}>
+        <div role="group" style={{ flex: "1 1 300px", minWidth: 0 }} aria-label={t("Các level")}>
           {p.levels.length ? <Ladder levels={p.levels} t={t} /> : <p className="small dim">{t("Không đọc được level từ payload.")}</p>}
         </div>
         <div style={{ flex: "1 1 300px", display: "flex", flexDirection: "column", gap: 12, minWidth: 0 }}>
@@ -464,14 +386,14 @@ function Ladder({ levels, t }: { levels: PlanView["levels"]; t: T }) {
       <svg className="ladder-svg" width="64" height={h} aria-hidden="true">
         <line x1="14" x2="14" y1="6" y2={h - 6} className="ladder-axis" />
         {sorted.map((l, i) => (
-          <g key={i} className={"lk-" + l.kind}>
+          <g key={`${l.kind}-${l.name}-${l.px}`} className={"lk-" + l.kind}>
             <line x1="6" x2="22" y1={real[i] - shift} y2={real[i] - shift} />
             <line x1="22" x2="62" y1={real[i] - shift} y2={lab[i] - shift} className="ladder-conn" />
           </g>
         ))}
       </svg>
       {sorted.map((l, i) => (
-        <div key={i} className={"lvl ladder-l " + l.kind} style={{ top: lab[i] - shift }}>
+        <div key={`${l.kind}-${l.name}-${l.px}`} className={"lvl ladder-l " + l.kind} style={{ top: lab[i] - shift }}>
           <span>{t(l.name)}</span>
           <span className="mono">{fmtPx(l.px)}</span>
         </div>

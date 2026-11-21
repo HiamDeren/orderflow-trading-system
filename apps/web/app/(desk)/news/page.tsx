@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { NEWS_CATEGORIES, getCompanyNews, getNews, type NewsCategory, type NewsItem } from "@/lib/market";
 import { SYMBOL_RE } from "@/lib/stock";
 import { getT } from "@/lib/prefs-server";
 import { readArticle } from "@/lib/reader";
 import Icon from "../_components/Icon";
+import { SkelLine } from "../_components/Skeleton";
 import { NewsRow } from "../_components/MarketBits";
 import { NotConfigured } from "../_components/States";
 
@@ -36,7 +38,6 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
   const nParam = count > STEP ? count : undefined;
   // Chỉ đọc bài có trong danh sách vừa tải (không nhận URL tuỳ ý)
   const sel: NewsItem | undefined = sp.id ? res.items.find((n) => n.id === sp.id) : undefined;
-  const article = sel ? await readArticle(sel.url) : null;
 
   return (
     <>
@@ -118,43 +119,76 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
                     <Icon name="external" size={14} /> {t("Mở bài gốc")}
                   </a>
                 </div>
-                <header className="reader-head">
-                  <span className="news-meta">
-                    <span>{article?.ok && article.site ? article.site : sel.source}</span>
-                    {article?.ok && article.byline && <span>· {article.byline}</span>}
-                    {article?.ok && <span className="dim">· {t("{n} phút đọc", { n: Math.max(1, Math.round(article.words / 220)) })}</span>}
-                  </span>
-                  <h2 className="reader-title">{sel.headline}</h2>
-                  {sel.related && (
-                    <div className="chips">
-                      {sel.related
-                        .split(",")
-                        .map((x) => x.trim().toUpperCase())
-                        .filter((x) => /^[A-Z][A-Z0-9.\-]{0,9}$/.test(x))
-                        .slice(0, 6)
-                        .map((x) => (
-                          <Link key={x} href={`/stock/${x}`} className="chip mono sm-chip">
-                            {x} ↗
-                          </Link>
-                        ))}
-                    </div>
-                  )}
-                </header>
-                {article?.ok ? (
-                  <div className="prose" dangerouslySetInnerHTML={{ __html: article.html }} />
-                ) : (
-                  <>
-                    {sel.summary && <p className="reader-summary">{sel.summary}</p>}
-                    <div className="notice small">
-                      {t("Không đọc được toàn văn trong app")}: {article ? t(article.error) : ""}. {t("Bấm “Mở bài gốc” để đọc trên trang nguồn.")}
-                    </div>
-                  </>
-                )}
+                <Suspense key={sel.id} fallback={<ReaderSkeleton sel={sel} label={t("Đang đọc bài…")} />}>
+                  <ReaderContent sel={sel} />
+                </Suspense>
               </>
             )}
           </article>
         </div>
       )}
     </>
+  );
+}
+
+// Thân bài đọc trong app (D42): tải + tách bài có thể mất vài giây, nên nằm trong <Suspense> riêng.
+async function ReaderContent({ sel }: { sel: NewsItem }) {
+  const { t } = await getT();
+  const article = await readArticle(sel.url);
+  return (
+    <>
+      <header className="reader-head">
+        <span className="news-meta">
+          <span>{article?.ok && article.site ? article.site : sel.source}</span>
+          {article?.ok && article.byline && <span>· {article.byline}</span>}
+          {article?.ok && <span className="dim">· {t("{n} phút đọc", { n: Math.max(1, Math.round(article.words / 220)) })}</span>}
+        </span>
+        <h2 className="reader-title">{sel.headline}</h2>
+        {sel.related && (
+          <div className="chips">
+            {sel.related
+              .split(",")
+              .map((x) => x.trim().toUpperCase())
+              .filter((x) => /^[A-Z][A-Z0-9.\-]{0,9}$/.test(x))
+              .slice(0, 6)
+              .map((x) => (
+                <Link key={x} href={`/stock/${x}`} className="chip mono sm-chip">
+                  {x} ↗
+                </Link>
+              ))}
+          </div>
+        )}
+      </header>
+      {article?.ok ? (
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: HTML đã lọc bằng sanitize-html trong lib/reader.ts (D42)
+        <div className="prose" dangerouslySetInnerHTML={{ __html: article.html }} />
+      ) : (
+        <>
+          {sel.summary && <p className="reader-summary">{sel.summary}</p>}
+          <div className="notice small">
+            {t("Không đọc được toàn văn trong app")}: {article ? t(article.error) : ""}. {t("Bấm “Mở bài gốc” để đọc trên trang nguồn.")}
+          </div>
+        </>
+      )}
+    </>
+  );
+}
+
+function ReaderSkeleton({ sel, label }: { sel: NewsItem; label: string }) {
+  return (
+    <div className="stack" aria-busy="true" style={{ gap: 12 }}>
+      <header className="reader-head">
+        <span className="news-meta">
+          <span>{sel.source}</span>
+          <span className="dim" role="status">
+            · {label}
+          </span>
+        </span>
+        <h2 className="reader-title">{sel.headline}</h2>
+      </header>
+      {[96, 88, 92, 70, 94, 84].map((w) => (
+        <SkelLine key={w} w={`${w}%`} h={14} />
+      ))}
+    </div>
   );
 }
