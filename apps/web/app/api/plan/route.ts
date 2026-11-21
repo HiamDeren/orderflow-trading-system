@@ -25,6 +25,8 @@ import core, { type Plan } from "@/lib/plan-core";
 import { TRADING_BUCKET, planImagePath } from "@/lib/storage";
 import { IMAGE_EXT, IMAGE_MIME, optimizeImage } from "@/lib/image";
 import { getOwner } from "@/lib/auth";
+import { bearer, crossOrigin, fail, json, methodNotAllowed, readJson, tokenEquals } from "@/lib/api";
+import { PlanPayloadV1, planPayloadError } from "@/lib/schemas";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -39,13 +41,12 @@ const FONT_FILES = ["BeVietnamPro-Regular.ttf", "BeVietnamPro-Bold.ttf", "JetBra
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const MONTH_RE = /^\d{4}-\d{2}$/;
 const DUP_WINDOW_S = 120;
+const MAX_BODY = 2 * 1024 * 1024; // JSON v1 thật ~15 KB
+// Timeout từng lệnh gọi Supabase: database treo thì vẫn kịp vẽ ảnh + gửi Discord trong maxDuration 30 giây (D35)
+const T_READ = 5_000;
+const T_WRITE = 8_000;
 
 type Json = Record<string, unknown>;
-type Payload = Json & { date?: string; symbol?: string; prth?: unknown; ovn?: unknown; notify?: boolean };
-
-function json(body: unknown, status = 200, extra: Record<string, string> = {}) {
-  return Response.json(body, { status, headers: { "Cache-Control": "no-store", ...extra } });
-}
 
 // Log từng bước cho Vercel Runtime Logs (không ghi token, key, webhook).
 function log(level: "info" | "warn" | "error", msg: string, data: Record<string, unknown> = {}) {
@@ -60,13 +61,6 @@ function supaHeaders(key: string): Record<string, string> {
   // Gửi key ở cả apikey lẫn Authorization như supabase-js. Với key mới "sb_secret_...", cổng API của Supabase
   // thay "Bearer sb_..." bằng JWT service_role nội bộ trước khi tới PostgREST / Storage; key JWT cũ thì dùng thẳng.
   return { apikey: key, Authorization: "Bearer " + key };
-}
-
-function safeEqual(a: string, b: string | undefined) {
-  if (typeof b !== "string" || a.length !== b.length) return false;
-  let diff = 0;
-  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  return diff === 0;
 }
 
 // So sánh payload không phụ thuộc thứ tự key (jsonb trong Postgres tự sắp lại key).
@@ -150,21 +144,24 @@ async function setup(req: Request) {
   const planToken = env.PLAN_TOKEN;
   if (!url || !key) {
     log("error", "thiếu biến môi trường", { url: !!url, key: !!key, planToken: !!planToken, env: process.env.VERCEL_ENV });
-    return { error: json({ error: "Thiếu biến môi trường SUPABASE_URL / SUPABASE_SERVICE_KEY / PLAN_TOKEN" }, 500) };
+    return { error: fail(500, "config", "Thiếu biến môi trường SUPABASE_URL / SUPABASE_SERVICE_KEY / PLAN_TOKEN") };
   }
-  const token = String(req.headers.get("authorization") || "")
-    .replace(/^Bearer\s+/i, "")
-    .trim();
-  const tokenOk = !!planToken && safeEqual(token, planToken);
+  const token = bearer(req);
+  const tokenOk = tokenEquals(token, planToken);
   // Không có token thì thử phiên đăng nhập dashboard (cookie). Có token mà sai thì từ chối luôn.
   const via = tokenOk ? "token" : !token && (await getOwner()) ? "session" : null;
   if (!via) {
     if (!planToken) {
       log("error", "thiếu PLAN_TOKEN và không có phiên đăng nhập", { method: req.method });
-      return { error: json({ error: "Thiếu biến môi trường SUPABASE_URL / SUPABASE_SERVICE_KEY / PLAN_TOKEN" }, 500) };
+      return { error: fail(500, "config", "Thiếu biến môi trường SUPABASE_URL / SUPABASE_SERVICE_KEY / PLAN_TOKEN") };
     }
     log("warn", "401 token sai", { method: req.method, hasToken: !!token, tokenLen: token.length });
-    return { error: json({ error: "unauthorized" }, 401) };
+    return { error: fail(401, "unauthorized", "unauthorized") };
+  }
+  // Ghi bằng phiên cookie (dashboard) thì Origin phải cùng host. Token (ATAS, Plan Builder) không cần.
+  if (via === "session" && req.method !== "GET") {
+    const bad = crossOrigin(req);
+    if (bad) return { error: bad };
   }
 
   const h = supaHeaders(key);
@@ -187,17 +184,13 @@ export async function POST(req: Request) {
   const c = await setup(req);
   if ("error" in c) return c.error;
   try {
-    let p: Payload | null = null;
-    try {
-      p = JSON.parse(await req.text());
-    } catch {
-      p = null;
+    const body = await readJson(req, PlanPayloadV1, { maxBytes: MAX_BODY, invalid: planPayloadError });
+    if (!body.ok) {
+      log("warn", `${body.response.status} payload không hợp lệ`, { via: c.via });
+      return body.response;
     }
-    if (!p || typeof p !== "object" || !DATE_RE.test(p.date || "") || !p.prth || !p.ovn) {
-      log("warn", "400 payload thiếu trường", { date: p && p.date, prth: !!(p && p.prth), ovn: !!(p && p.ovn) });
-      return json({ error: "Payload thiếu date (yyyy-MM-dd), prth hoặc ovn" }, 400);
-    }
-    const date = p.date as string;
+    const p = body.data;
+    const date = p.date;
     const symbol = String(p.symbol || "NQ").slice(0, 20);
     const warnings = warningsOf(p);
     // 0. Chống gửi trùng: cùng ngày + symbol, cùng số liệu (bỏ qua trigger / ts_et), lần trước < DUP_WINDOW_S giây
@@ -207,11 +200,12 @@ export async function POST(req: Request) {
       const r = await fetch(`${c.rest}?select=updated_at,payload&trade_date=eq.${date}&symbol=eq.${encodeURIComponent(symbol)}&limit=1`, {
         headers: c.hr,
         cache: "no-store",
+        signal: AbortSignal.timeout(T_READ),
       });
       if (r.ok) {
         const prev = ((await r.json()) as Json[])[0];
         const age = prev ? (Date.now() - Date.parse(String(prev.updated_at))) / 1000 : Infinity;
-        duplicate = !!prev && age >= 0 && age < DUP_WINDOW_S && planKey(prev.payload as Json) === planKey(p);
+        duplicate = !!prev && age >= 0 && age < DUP_WINDOW_S && planKey(prev.payload as Json) === planKey(p as Json);
       }
     } catch {
       /* không đọc được thì coi như không trùng */
@@ -223,6 +217,7 @@ export async function POST(req: Request) {
         method: "POST",
         headers: { ...c.hw, Prefer: "resolution=merge-duplicates,return=minimal" },
         body: JSON.stringify({ trade_date: date, symbol, payload: p }),
+        signal: AbortSignal.timeout(T_WRITE),
       });
       if (!r.ok) dbError = { error: "supabase", status: r.status, detail: (await r.text()).slice(0, 300) };
     } catch (e) {
@@ -244,6 +239,7 @@ export async function POST(req: Request) {
         method: "POST",
         headers: { ...c.h, "Content-Type": IMAGE_MIME, "x-upsert": "true", "cache-control": "no-cache" },
         body: new Uint8Array(img),
+        signal: AbortSignal.timeout(T_WRITE),
       });
       if (!up.ok) throw new Error(`storage ${up.status}: ${(await up.text()).slice(0, 200)}`);
       out.image = { path: objPath, bytes: img.length };
@@ -252,6 +248,7 @@ export async function POST(req: Request) {
         method: "PATCH",
         headers: { ...c.hw, Prefer: "return=minimal" },
         body: JSON.stringify({ image_path: objPath, plan_text: plan.text, summary: plan.summary }),
+        signal: AbortSignal.timeout(T_WRITE),
       });
       if (!upd.ok) throw new Error(`update ${upd.status}: ${(await upd.text()).slice(0, 200)}`);
     } catch (e) {
@@ -281,11 +278,11 @@ export async function POST(req: Request) {
       notify: p.notify !== false,
       hook: !!c.hook,
     });
-    if (dbError) return json({ ...dbError, ...out }, 502);
+    if (dbError) return json({ ...dbError, ...out, code: "upstream" }, 502);
     return json(out);
   } catch (e) {
     log("error", "POST lỗi không bắt được", { error: errMsg(e) });
-    return json({ error: errMsg(e) }, 500);
+    return fail(500, "internal", errMsg(e));
   }
 }
 
@@ -296,34 +293,34 @@ export async function GET(req: Request) {
     const q = new URL(req.url).searchParams;
     const month = q.get("month");
     if (month) {
-      if (!MONTH_RE.test(month)) return json({ error: "month phải dạng yyyy-MM" }, 400);
+      if (!MONTH_RE.test(month)) return fail(400, "bad_request", "month phải dạng yyyy-MM");
       const [y, m] = month.split("-").map(Number);
       const next = m === 12 ? `${y + 1}-01-01` : `${y}-${String(m + 1).padStart(2, "0")}-01`;
       const r = await fetch(
         `${c.rest}?select=trade_date,symbol,summary,image_path,updated_at&trade_date=gte.${month}-01&trade_date=lt.${next}&order=trade_date.asc`,
-        { headers: c.hr, cache: "no-store" },
+        { headers: c.hr, cache: "no-store", signal: AbortSignal.timeout(T_READ) },
       );
       if (!r.ok) {
         const detail = (await r.text()).slice(0, 300);
         log("error", "GET month supabase lỗi", { status: r.status, detail });
-        return json({ error: "supabase", status: r.status, detail }, 502);
+        return fail(502, "upstream", "supabase", { status: r.status, detail });
       }
       return json({ month, plans: await r.json() });
     }
     const date = q.get("date") || "";
-    if (date && !DATE_RE.test(date)) return json({ error: "date phải dạng yyyy-MM-dd" }, 400);
+    if (date && !DATE_RE.test(date)) return fail(400, "bad_request", "date phải dạng yyyy-MM-dd");
     const filter = date ? `&trade_date=eq.${date}` : "";
     const r = await fetch(
       `${c.rest}?select=trade_date,symbol,created_at,updated_at,summary,plan_text,image_path,payload${filter}&order=trade_date.desc,updated_at.desc&limit=1`,
-      { headers: c.hr, cache: "no-store" },
+      { headers: c.hr, cache: "no-store", signal: AbortSignal.timeout(T_READ) },
     );
     if (!r.ok) {
       const detail = (await r.text()).slice(0, 300);
       log("error", "GET supabase lỗi", { status: r.status, detail });
-      return json({ error: "supabase", status: r.status, detail }, 502);
+      return fail(502, "upstream", "supabase", { status: r.status, detail });
     }
     const rows = (await r.json()) as Json[];
-    if (!rows.length) return json({ error: "Chưa có plan" }, 404);
+    if (!rows.length) return fail(404, "not_found", "Chưa có plan");
     const row = rows[0];
     if (row.image_path) {
       try {
@@ -331,6 +328,7 @@ export async function GET(req: Request) {
           method: "POST",
           headers: c.hj,
           body: JSON.stringify({ expiresIn: 3600 }),
+          signal: AbortSignal.timeout(T_READ),
         });
         if (s.ok) {
           const j = (await s.json()) as { signedURL?: string; signedUrl?: string };
@@ -343,11 +341,9 @@ export async function GET(req: Request) {
     }
     return json(row);
   } catch (e) {
-    return json({ error: errMsg(e) }, 500);
+    return fail(500, "internal", errMsg(e));
   }
 }
 
-function notAllowed() {
-  return json({ error: "method not allowed" }, 405, { Allow: "GET, POST" });
-}
+const notAllowed = methodNotAllowed("GET, POST");
 export { notAllowed as PUT, notAllowed as PATCH, notAllowed as DELETE };

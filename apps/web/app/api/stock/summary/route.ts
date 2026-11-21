@@ -1,15 +1,16 @@
-// GET /api/stock/summary?symbol=NVDA → tóm tắt mã cho ngăn bên phải ở Earnings (chỉ chủ sở hữu).
-import { getViewer } from "@/lib/auth";
+// GET /api/stock/summary?symbol=NVDA → tóm tắt mã cho ngăn bên phải ở Earnings (chủ sở hữu + khách đã duyệt, D48).
+import { fail, requireViewerApi } from "@/lib/api";
 import { marketConfigured } from "@/lib/market";
-import { SYMBOL_RE, getStock } from "@/lib/stock";
+import { getStock, SYMBOL_RE } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
-  if (!(await getViewer())) return Response.json({ error: "unauthorized" }, { status: 401 });
-  if (!marketConfigured()) return Response.json({ error: "Chưa có FINNHUB_API_KEY" }, { status: 503 });
+  const viewer = await requireViewerApi();
+  if (viewer instanceof Response) return viewer;
+  if (!marketConfigured()) return fail(503, "config", "Chưa có FINNHUB_API_KEY");
   const symbol = (new URL(req.url).searchParams.get("symbol") || "").toUpperCase();
-  if (!SYMBOL_RE.test(symbol)) return Response.json({ error: "symbol không hợp lệ" }, { status: 400 });
+  if (!SYMBOL_RE.test(symbol)) return fail(400, "bad_request", "symbol không hợp lệ");
   const s = await getStock(symbol);
   const m = s.metric;
   const pick = (...k: string[]) => k.map((x) => m[x]).find((v) => v !== undefined) ?? null;
