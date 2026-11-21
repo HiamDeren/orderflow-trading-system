@@ -156,7 +156,10 @@ Thực tế: `production` vẫn ở PR #3 (2026-11-18); toàn bộ dashboard đ�
 - [ ] Xem console 1 tuần các vi phạm CSP Report-Only rồi bật `Content-Security-Policy` thật.
 - [ ] Thêm JSON thật 11/11 và 17/11 (file `plan_yyyyMMdd.json` trên máy ATAS) vào `scripts/plan-core.snapshot.json` + Vitest (repo mới có 12/11).
 - [ ] Rate limit (hạng 15): in-memory cho 401 hoặc Upstash / Vercel Firewall — chờ Deren chọn.
-- [ ] Hạ dần các rule Biome đang để `warn` (a11y `useButtonType`, `noArrayIndexKey`…) và sửa code tương ứng.
+- [x] Nhóm A (loading / Suspense / error) + nhóm B (a11y, tương phản, token theme theo brand kit) — 2026-11-21.
+- [ ] Brand kit (`ZenDojo-brand-kit/07-theme`): thêm `--faint` #848e9b, `--imp-high-text`, `--field-line`, `--hover`, `--text-strong`, `--on-accent` để kit và `desk.css` khớp; cân nhắc sinh `:root` của `desk.css` từ `zendojo-tokens.json`.
+- [ ] Ảnh plan / embed Discord (plan-core `COL`, `0x3fbf7f` / `0xef5350`) dùng màu khác theme dashboard (Long #8cc2a4, Short #e0947c) — Deren quyết có đồng bộ không (đổi SVG plan-core, cần cập nhật snapshot).
+- [ ] Còn 18 cảnh báo Biome complexity (`useOptionalChain`…) — dọn khi tiện.
 - [ ] Gộp code Supabase riêng của `/api/plan` vào `lib/db.ts` (A2) khi đã có test đầu-cuối cho route.
 - [ ] Sinh TypeScript types cho schema `trading` / `access` (S5).
 
